@@ -28,6 +28,7 @@ FAIT :
 RESTE A FAIRE :
 - Ajouter la modification du root
 - Ajouter le css et les infos pour les mentions légales et confidentialité
+- Ajouter la possibilité d'importer un fichier avec toutes les compétitions et ça ajoute automatiquement dans les actualités
 
 
 

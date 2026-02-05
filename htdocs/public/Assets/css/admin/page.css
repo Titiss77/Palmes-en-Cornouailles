@@ -350,3 +350,75 @@ input[type="file"]::file-selector-button:hover {
     margin-left: 7rem;
     text-decoration: none;
 }
+
+/* Style spécifique pour la page de modification Root */
+
+/* Grille pour aligner les blocs de paramètres */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+/* Bloc contenant chaque variable root */
+.form-group.border.rounded.bg-light {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 1.5rem !important;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+}
+
+.form-group.border.rounded.bg-light:hover {
+    border-color: var(--primary);
+}
+
+/* Label de la variable */
+.form-group label {
+    color: var(--primary);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Sélecteur de couleur (Color Picker) */
+.form-control-color {
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+}
+
+/* Champ de texte pour le code hexadécimal */
+.form-input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: monospace;
+    /* Pour une meilleure lecture des codes couleurs */
+    width: 100%;
+}
+
+/* Petit texte indicatif sous l'input */
+.text-muted code {
+    background: #eee;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Bouton d'enregistrement */
+.btn-home.btn-lg {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive pour mobiles */
+@media (max-width: 600px) {
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
