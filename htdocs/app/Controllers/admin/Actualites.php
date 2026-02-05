@@ -194,4 +194,72 @@ class Actualites extends BaseAdminController
 
         return redirect()->back()->with('success', 'Image supprimée avec succès.');
     }
+
+    // Ajoutez ces méthodes dans votre classe Actualites
+
+    public function import()
+    {
+        // Affiche la vue du formulaire d'import
+        $data = $this->getCommonData('Importer des Actualités', 'admin/page.css');
+        return view('admin/actualites/import', $data);
+    }
+
+    public function processImport()
+    {
+        // 1. Validation du fichier
+        $validationRule = [
+            'fichier_csv' => [
+                'label' => 'Fichier CSV',
+                'rules' => 'uploaded[fichier_csv]|ext_in[fichier_csv,csv]|max_size[fichier_csv,2048]',
+            ],
+        ];
+
+        if (!$this->validate($validationRule)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // 2. Récupération du fichier
+        $file = $this->request->getFile('fichier_csv');
+
+        if ($file->isValid() && !$file->hasMoved()) {
+            $filepath = $file->getTempName();
+            $csvData = array_map('str_getcsv', file($filepath));
+
+            // Supprimer la première ligne si c'est l'entête (Optionnel)
+            // array_shift($csvData);
+
+            $count = 0;
+
+            foreach ($csvData as $row) {
+                // ATTENTION : Adaptez les index ($row[0]) selon l'ordre des colonnes du CSV
+                // CSV attendu : Titre;Contenu;Date
+
+                // CodeIgniter 4 gère bien les CSV, mais attention au séparateur (souvent ; en France)
+                $dataRow = str_getcsv($row[0], ';');
+
+                if (count($dataRow) < 2)
+                    continue;  // Sauter les lignes vides ou malformées
+
+                $titre = $dataRow[0] ?? 'Sans titre';
+                $description = $dataRow[1] ?? '';
+                $date = $dataRow[2] ?? date('Y-m-d');
+
+                // Préparation pour insertion
+                $insertData = [
+                    'titre' => $titre,
+                    'description' => $description,
+                    'date' => $date,
+                    // Ajoutez les autres champs de votre base de données ici
+                ];
+
+                // Sauvegarde via le Modèle existant
+                $this->actuModel->insert($insertData);
+                $count++;
+            }
+
+            return redirect()->to('/admin/actualites')->with('success', "$count actualités ont été importées avec succès.");
+        }
+
+        return redirect()->back()->with('error', 'Erreur lors du téléchargement du fichier.');
+    }
 }

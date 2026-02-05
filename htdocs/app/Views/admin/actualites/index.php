@@ -102,5 +102,8 @@
             </table>
         </div>
     </div>
+    <a href="<?= base_url('admin/actualites/import') ?>" class="btn-home">
+        <i class="bi bi-plus-circle"></i> Importer des actualités
+    </a>
 </div>
 <?= $this->endSection() ?>

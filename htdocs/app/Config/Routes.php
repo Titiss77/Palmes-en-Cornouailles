@@ -30,7 +30,7 @@ $routes->get('politique-confidentialite', 'Public\Home::confidentialite');
 $routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\admin'], function ($routes) {
     // 1. Tableau de bord
     $routes->get('/', 'Dashboard::index');
-    
+
     $routes->get('contact', 'Dashboard::contact');
     $routes->get('root', 'Dashboard::root');
 
@@ -68,6 +68,9 @@ $routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\adm
     $routes->get('utilisateurs/(:num)/delete', 'Utilisateurs::delete/$1');
     $routes->get('utilisateurs/(:num)/deleteImage', 'Utilisateurs::deleteImage/$1');
 
+    $routes->get('admin/actualites/import', 'admin\Actualites::import');
+    $routes->post('admin/actualites/processImport', 'admin\Actualites::processImport');
+
     $routes->resource('actualites', ['controller' => 'Actualites']);
     $routes->resource('boutiques', ['controller' => 'Boutiques']);
     $routes->resource('membres', ['controller' => 'Membres']);
@@ -76,7 +79,7 @@ $routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\adm
     $routes->resource('piscines', ['controller' => 'Piscines']);
     $routes->resource('materiel', ['controller' => 'Materiel']);
     $routes->resource('partenaires', ['controller' => 'Partenaires']);
-    
-    $routes->resource('disciplines', ['controller' => 'Disciplines']); 
+
+    $routes->resource('disciplines', ['controller' => 'Disciplines']);
     $routes->resource('utilisateurs', ['controller' => 'Utilisateurs']);
 });
