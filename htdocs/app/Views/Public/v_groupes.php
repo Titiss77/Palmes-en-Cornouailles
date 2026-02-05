@@ -2,7 +2,7 @@
 <?= $this->section('contenu') ?>
 
 <div class="site-container">
-    <h3 class="title-section">Nos Groupes</h3>
+    <h3 class="title-section">Nos groupes</h3>
 
     <div class="grid-responsive">
         <?php if (!empty($groupes)): ?>
