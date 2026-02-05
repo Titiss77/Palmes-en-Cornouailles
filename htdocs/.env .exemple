@@ -1,0 +1,69 @@
+#--------------------------------------------------------------------
+# ENVIRONMENT
+#--------------------------------------------------------------------
+
+# Configuration pour le mode DEVELOPMENT
+CI_ENVIRONMENT = development
+
+# Configuration pour le mode PRODUCTION
+#CI_ENVIRONMENT = production
+
+#--------------------------------------------------------------------
+# APP
+#--------------------------------------------------------------------
+
+# Configuration pour le mode DEVELOPMENT
+app.baseURL = ''
+
+# Configuration pour le mode PRODUCTION
+#app.baseURL = ''
+
+#--------------------------------------------------------------------
+# DATABASE
+#--------------------------------------------------------------------
+
+# Configuration pour le mode DEVELOPMENT
+database.development.hostname = localhost
+database.development.database = 
+database.development.username = 
+database.development.password = 
+database.development.DBDriver = MySQLi
+
+# Configuration pour le mode PRODUCTION
+database.production.hostname = sql313.byethost13.com
+database.production.database = 
+database.production.username = 
+database.production.password = 
+database.production.DBDriver = MySQLi
+
+#--------------------------------------------------------------------
+# SESSION & SECURITE
+#--------------------------------------------------------------------
+
+security.csrfProtection = session
+security.tokenName = csrf_test_name
+security.headerName = X-CSRF-TOKEN
+
+#--------------------------------------------------------------------
+# EMAIL
+#--------------------------------------------------------------------
+
+email.protocol = smtp
+email.SMTPHost = smtp.gmail.com
+email.SMTPUser = 
+email.SMTPPass = 
+email.SMTPPort = 465
+email.SMTPCrypto = ssl
+email.mailType = html
+
+#--------------------------------------------------------------------
+# INFOS CLUB
+#--------------------------------------------------------------------
+
+ADMIN_LOGIN = 
+ADMIN_PASSWORD = 
+USER_LOGIN = 
+USER_PASSWORD = 
+
+CLUB_EMAIL = 
+CLUB_ADRESSE =

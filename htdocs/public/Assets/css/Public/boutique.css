@@ -1,0 +1,241 @@
+/* --- Mise en page globale Boutique --- */
+.site-container {
+    padding-bottom: 80px;
+}
+
+/* --- Grilles de la boutique --- */
+.grid-2,
+.grid-3 {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+    align-items: stretch;
+    justify-content: space-evenly;
+}
+
+/* --- Amélioration des cartes pour l'alignement --- */
+.shop-card-clean {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Important pour que les cartes soient alignées */
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.shop-card-content {
+    padding: 30px;
+    flex-grow: 1;
+    /* Pousse le bouton vers le bas pour qu'ils soient tous alignés */
+    display: flex;
+    flex-direction: column;
+}
+
+.price-box {
+    margin-top: auto;
+    /* Aligne le prix en bas de la zone de contenu */
+    padding-top: 20px;
+}
+
+/* Bouton collé en bas de la carte */
+.btn-shop-link {
+    width: 100%;
+    padding: 20px;
+    background: var(--bg-light);
+    color: var(--primary) !important;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+}
+
+.shop-card-clean:hover {
+    transform: translateY(-5px);
+}
+
+.shop-card-clean:hover .btn-shop-link {
+    background: var(--primary);
+    color: white !important;
+}
+
+/* --- Cartes Boutique (Version épurée sans images) --- */
+.shop-card-clean {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 !important;
+    background: var(--white);
+    border: 1px solid rgba(0, 45, 90, 0.08);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Petit liseré de couleur en haut pour différencier les articles */
+.shop-card-clean::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+}
+
+.shop-card-content {
+    padding: 35px 30px;
+    flex-grow: 1;
+}
+
+.shop-card-clean h5 {
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.shop-card-clean .txt-small {
+    color: #5a6b7d;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* --- Bloc Prix --- */
+.price-box {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.price-value {
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--secondary);
+    /* Ton rose/violet PEC */
+    display: block;
+}
+
+.price-value::before {
+    content: "Tarifs : ";
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #999;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+/* --- Boutons de Boutique --- */
+.btn-shop-link {
+    background: var(--bg-light);
+    color: var(--primary) !important;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.shop-card-clean:hover .btn-shop-link {
+    background: var(--secondary);
+    color: var(--white) !important;
+}
+
+.btn-shop-link i {
+    transition: transform 0.3s ease;
+}
+
+.btn-shop-link:hover i {
+    transform: translateX(5px);
+}
+
+/* --- Bourse & Partenariats --- */
+.text-left {
+    text-align: left !important;
+}
+
+.card-item h3 {
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-item h3 i {
+    color: var(--secondary);
+    font-size: 1.6rem;
+}
+
+/* Liste à puces Decathlon améliorée */
+.list-check {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.list-check li {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 12px;
+    font-weight: 500;
+    color: #444;
+}
+
+.list-check li::before {
+    content: "\F272";
+    /* Bootstrap Icon check-circle */
+    font-family: "bootstrap-icons";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: var(--secondary);
+    font-size: 1.1rem;
+}
+
+/* Lien Decathlon */
+.color-blue {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.color-blue:hover {
+    border-bottom-color: var(--secondary);
+}
+
+/* --- Utilitaires --- */
+.mt-2 {
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+
+    /* Transforme les grilles doubles en colonne simple */
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-card-clean {
+        margin-bottom: 20px;
+    }
+
+    .btn-shop-link {
+        font-size: 0.8rem;
+        padding: 15px;
+    }
+}

@@ -1,0 +1,276 @@
+/* --- Structure & Utilitaires --- */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.mb-5 {
+    margin-bottom: 3rem;
+}
+
+.mt-2 {
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.mt-3 {
+    margin-top: 1.5rem;
+}
+
+.mt-5 {
+    margin-top: 3rem;
+}
+
+/* --- Formulaires (Contact) --- */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.politique-form {
+    display: inline;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 15px;
+    border: 2px solid var(--bg-light);
+    border-radius: var(--radius);
+    background-color: #ececec;
+    color: var(--primary);
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--secondary);
+    background-color: var(--white);
+    box-shadow: 0 0 0 4px var(--secondary);
+}
+
+/* --- Boutons --- */
+.btn-home {
+    display: inline-block;
+    box-sizing: border-box;
+    background: var(--secondary);
+    color: var(--primary);
+    border: none;
+    padding: 15px 25px;
+    border-radius: var(--radius);
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.btn-home:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* --- Tableaux & Listes --- */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.custom-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--bg-light);
+    color: var(--primary);
+}
+
+.custom-table tr:last-child td {
+    border-bottom: none;
+}
+
+.custom-table strong {
+    color: var(--secondary);
+    font-size: 1.1rem;
+}
+
+.list-check {
+    list-style: none;
+    padding: 0;
+}
+
+.list-check li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 12px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.list-check li::before {
+    content: '\F272';
+    font-family: 'bootstrap-icons';
+    position: absolute;
+    left: 0;
+    color: var(--secondary);
+}
+
+/* --- Cartes Matériel (Style Bureau) --- */
+
+.grid-responsive {
+    display: grid;
+    grid-template-columns: var(--grid-template-columns);
+    gap: 30px;
+    padding: 10px;
+}
+
+.materiel-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 25px 0;
+}
+
+/* Conteneur photo circulaire identique au bureau */
+.materiel-photo-container {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 20px;
+}
+
+.materiel-photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* 'contain' est mieux pour du matériel que 'cover' */
+    border-radius: 50%;
+    border: 3px solid var(--secondary);
+    padding: 8px;
+    transition: var(--transition);
+}
+
+.materiel-card:hover .materiel-photo-container img {
+    border-color: var(--secondary);
+    background: var(--white);
+}
+
+/* Titres et textes */
+.materiel-card h3 {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+/* Badges de statut (style badge-fonction) */
+.badge-status {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.is-lent {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.is-personal {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+/* --- Trombinoscope --- */
+.trombi-container {
+    padding: 60px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.trombi-grid {
+    display: grid;
+    grid-template-columns: var(--grid-template-columns);
+    gap: 30px;
+    padding: 10px;
+}
+
+.trombi-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 280px;
+    /* Optionnel : pour uniformiser la hauteur des cartes */
+    padding-bottom: 10px !important;
+}
+
+.trombi-card .info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.trombi-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
+}
+
+.photo-container {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+}
+
+.photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--secondary);
+    padding: 3px;
+    background: var(--white);
+}
+
+.badge-fonction {
+    display: inline-block;
+    padding: 5px 15px;
+    background: var(--bg-light);
+    color: var(--primary);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: auto;
+    margin-bottom: 0;
+}

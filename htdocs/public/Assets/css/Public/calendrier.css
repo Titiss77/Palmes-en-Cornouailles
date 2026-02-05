@@ -1,0 +1,201 @@
+/* --- Mise en page spécifique Calendriers --- */
+
+.site-container {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.title {
+    font-size: 2.2rem;
+    color: var(--primary);
+    margin-bottom: 3rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Titres de section avec ligne de décoration */
+.title-section {
+    font-size: 1.2rem;
+}
+
+h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary);
+    padding-left: 15px;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Boîtes de Calendrier (Images) --- */
+.calendar-img-box {
+    background: var(--white);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.calendar-img-box a {
+    text-decoration: none;
+}
+
+.calendar-img-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 45, 90, 0.15);
+}
+
+.label-cal {
+    font-weight: bold;
+    color: var(--primary);
+    background: var(--bg-light);
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+/* Image zoomable */
+.img-zoom {
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--aspect-ratio);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border: 1px solid #eee;
+}
+
+/* Bouton de téléchargement */
+.btn-download {
+    background-color: var(--secondary);
+    color: var(--white);
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.btn-download:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* --- Section SPOND Spécifique --- */
+.spond-box {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a3a5a 100%);
+    color: white !important;
+    padding: 40px;
+    border-radius: var(--radius);
+    margin-top: 4rem;
+}
+
+.spond-text h4 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+.spond-text p {
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.qr-img {
+    width: 160px;
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.qr-img:hover {
+    transform: scale(1.05);
+}
+
+/* Grille pour les calendriers */
+.grid-2 {
+    display: grid;
+    grid-template-columns: var(--grid-template-columns);
+    gap: 30px;
+}
+
+/* Cas particulier pour l'image seule (Compétitions) */
+.calendar-img-box.single {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* --- Utilitaires --- */
+.mb-5 {
+    margin-bottom: 3.5rem;
+    display: grid;
+    justify-content: space-around;
+    gap: 15rem;
+    grid-template-columns: var(--grid-template-columns);
+}
+
+.txt-muted {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+/* Carte de téléchargement (Compétitions) */
+.download-card {
+    padding: 1.5rem;
+}
+
+.download-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f0f4f8;
+    color: #dc3545;
+    /* Rouge PDF */
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+/* Images des plannings */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: var(--grid-template-columns);
+    gap: 2rem;
+    max-width: 35rem;
+}
+
+.text-secondary {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+
+    /* Transforme les grilles doubles en colonne simple */
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-card-clean {
+        margin-bottom: 20px;
+    }
+
+    .btn-shop-link {
+        font-size: 0.8rem;
+        padding: 15px;
+    }
+}

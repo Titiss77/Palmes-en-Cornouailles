@@ -1,0 +1,36 @@
+FAIT : 
+- Accueil, nos groupes, ...
+- Mettre le matériel en colonnes
+- Ajouter les groupes après les stats et btn type sommaire modif bandeau triton, avec les catégories, tritons, jeunes + informations spécifiques
+- Lieux avec liens cliquables
+- Ajouter aquaform piscine
+- Recap decathlon pro club cumul point + benefices au club
+- Lien vers la fédé 
+- Coach en formation : Zach, Célian, Luca, Killian, Florie, Maëlys, Eloïse
+- Tarifs : tous les groupes détaillés code couleur
+- Conditions inscriptions + lien doc type (tybot)
+- Séparer planning vacance et année
+- Réfléchir au "votre demande s'adresse"
+- Materiel compet, en prêt, ...
+- Mettre un système de mot de passe pour gérer le listing
+- Prendre photo fete du club 2025
+- Enlever logo principal + agrandir header
+- Logo de la fédé pour le lien
+- Inverser les 2 calendriers
+- Master à la ligne description
+- Ajouter Maëlys
+- Sponsors
+- Faire afficher seulement les articles avec une date dans le futur
+- Ajout du lien decatlon pro dans la db, reste à l'afficher dans la modif et page boutique
+- Utiliser le header pour trouver efficacement les blocs d'admin
+
+
+RESTE A FAIRE :
+- Ajouter la modification du root
+- Ajouter le css et les infos pour les mentions légales et confidentialité
+
+
+
+
+
+

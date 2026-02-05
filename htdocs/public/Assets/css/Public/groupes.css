@@ -1,0 +1,151 @@
+/* --- GRILLE PRINCIPALE (CÔTE À CÔTE) --- */
+.grid-responsive {
+    display: grid;
+    grid-template-columns: var(--grid-template-columns);
+    gap: 30px;
+    /* Espace entre les cartes */
+    margin-bottom: 3rem;
+}
+
+/* --- STYLE DE LA CARTE --- */
+.group-card {
+    padding: 0 !important;
+    /* On retire le padding par défaut pour coller l'image aux bords */
+    overflow: hidden;
+    /* Empêche l'image de sortir des coins arrondis */
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* --- IMAGE D'EN-TÊTE --- */
+.group-img-header {
+    height: 200px;
+    width: 100%;
+    position: relative;
+    /* Pour positionner le prix par-dessus */
+    overflow: hidden;
+}
+
+.group-img-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Effet de zoom au survol */
+.group-card:hover .group-img-header img {
+    transform: scale(1.1);
+}
+
+/* PRIX FLOTTANT (BADGE) */
+.price-badge {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: var(--white);
+    color: var(--secondary);
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 8px 15px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* --- CORPS DE TEXTE --- */
+.group-body {
+    padding: 25px;
+}
+
+.group-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+.group-desc {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+
+    /* CORRECTION ZOOM : On retire la contrainte de 10rem qui écrasait le texte */
+    max-width: 100%;
+}
+
+/* --- BADGES (AGE / HORAIRE) --- */
+.group-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px dashed #eee;
+    /* Ligne de séparation discrète */
+}
+
+.meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f0f4f8;
+    /* Fond gris bleuté très clair */
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.meta-pill i {
+    color: var(--secondary);
+    /* Icône en couleur accent */
+}
+
+/* --- PLACEHOLDER (Image par défaut) --- */
+.group-img-placeholder {
+    width: 100%;
+    height: 100%;
+    /* Dégradé aux couleurs du club (Bleu foncé vers un bleu légèrement plus clair) */
+    background: linear-gradient(135deg, var(--primary), #004a8f);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.group-img-placeholder i {
+    font-size: 4rem;
+    /* Grande icône */
+    color: rgba(255, 255, 255, 0.15);
+    /* Blanc très transparent */
+    transform: rotate(-10deg);
+    /* Légère rotation pour le style */
+}
+
+/* Effet au survol sur le placeholder aussi */
+.group-card:hover .group-img-placeholder {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    /* Change de couleur au survol */
+    transition: background 0.5s ease;
+}
+
+@media (max-width: 768px) {
+
+    /* Transforme les grilles doubles en colonne simple */
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-card-clean {
+        margin-bottom: 20px;
+    }
+
+    .btn-shop-link {
+        font-size: 0.8rem;
+        padding: 15px;
+    }
+}

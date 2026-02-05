@@ -1,0 +1,414 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
+body {
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    color: var(--text-dark);
+    background: var(--bg-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+    user-select: none;
+}
+
+.site-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 70vh;
+}
+
+nav {
+    background: var(--white);
+    padding: 10px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 6rem;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+nav img {
+    height: var(--size-logo-top);
+    width: var(--size-logo-top);
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--secondary);
+}
+
+nav h2 {
+    text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    font-size: 1.7rem;
+    color: var(--primary);
+    font-weight: 700;
+    position: absolute;
+    margin-left: 6rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition);
+    padding: 8px 0;
+    position: relative;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--secondary);
+    transition: width 0.3s;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+nav ul li a:hover {
+    color: var(--secondary);
+}
+
+/* --- Typographie & Titres --- */
+.title-section {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin: 60px 0 30px;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.title-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--secondary);
+    border-radius: 2px;
+}
+
+h5 {
+    color: var(--primary);
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: larger;
+}
+
+footer {
+    background: var(--primary);
+    color: var(--white);
+    padding: 30px 20px 30px;
+    margin-top: 80px;
+    border-top: 4px solid var(--secondary);
+    text-align: center;
+}
+
+footer nav {
+    background-color: var(--primary);
+    border: none;
+    box-shadow: none;
+    justify-content: center;
+}
+
+footer nav ul {
+    justify-content: center;
+    background: transparent;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    background-color: var(--primary);
+}
+
+footer nav ul li a {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+}
+
+footer nav ul li a:hover {
+    color: var(--white);
+}
+
+footer p {
+    margin-top: 15px;
+    font-size: 0.85rem;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    align-content: flex-start;
+    align-items: center;
+}
+
+.social-links a {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.8rem;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.social-links .fede {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.8rem;
+    transition: var(--transition);
+    display: flex;
+    border-radius: var(--radius);
+    z-index: 1000;
+}
+
+.social-links a img {
+    width: 45px;
+    height: auto;
+    border-radius: var(--radius);
+}
+
+.social-links a:hover {
+    color: var(--secondary);
+    transform: translateY(-3px);
+}
+
+.admin-link a {
+    color: var(--white);
+}
+
+.admin-link a:hover {
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+img {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* --- Bouton de Déconnexion --- */
+.deconnexion-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.logout-btn {
+    display: flex;
+    width: 10%;
+    margin: 0 20px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--secondary);
+    /* Rose PEC */
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 15px;
+    /* Padding déjà présent pour éviter le "saut" au hover */
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.logout-btn i {
+    font-size: 1.3rem;
+    /* Taille de l'icône bootstrap */
+    display: flex;
+}
+
+.logout-btn:hover {
+    background: var(--secondary);
+    color: var(--white) !important;
+    /* Rappel de l'effet des autres liens du menu */
+    box-shadow: 0 4px 12px rgba(202, 37, 139, 0.2);
+}
+/* --- STYLES DU BOUTON HAMBURGER (Caché par défaut sur PC) --- */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    /* Au-dessus du menu déroulant */
+}
+
+.menu-toggle span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    margin: 6px auto;
+    background-color: var(--primary);
+    border-radius: 3px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* =========================================
+   RESPONSIVE (Tablette & Mobile)
+   ========================================= */
+
+@media (max-width: 1024px) {
+
+    /* Ajustements pour tablettes intermédiaires */
+    .site-container {
+        padding: 20px;
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    /* 1. CONFIGURATION DE LA BARRE NAV */
+    nav {
+        justify-content: space-between;
+        /* Ecarte le logo à gauche et le burger à droite */
+        padding: 15px 20px;
+        position: relative;
+        /* Nécessaire pour positionner le menu déroulant */
+    }
+
+    /* 2. AFFICHER LE BOUTON HAMBURGER */
+    .menu-toggle {
+        display: block;
+    }
+
+    /* Animation du bouton quand actif (transforme en croix) */
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+
+    /* 3. MENU DÉROULANT (Caché par défaut) */
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        /* Juste en dessous de la barre nav */
+        left: 0;
+        width: 100%;
+        background-color: var(--white);
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        border-top: 1px solid #eee;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+        /* Animation d'ouverture */
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        z-index: 999;
+    }
+
+    /* ÉTAT OUVERT */
+    .nav-menu.active {
+        max-height: 500px;
+        /* Assez grand pour tout afficher */
+        padding-bottom: 20px;
+        border-bottom: 4px solid var(--secondary);
+    }
+
+    .nav-menu li {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #f5f5f5;
+        opacity: 0;
+        /* Pour animation d'apparition */
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Animation en cascade des liens */
+    .nav-menu.active li {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Décalage de l'animation pour chaque lien */
+    .nav-menu.active li:nth-child(1) {
+        transition-delay: 0.1s;
+    }
+
+    .nav-menu.active li:nth-child(2) {
+        transition-delay: 0.2s;
+    }
+
+    .nav-menu.active li:nth-child(3) {
+        transition-delay: 0.3s;
+    }
+
+    .nav-menu.active li:nth-child(4) {
+        transition-delay: 0.4s;
+    }
+
+    .nav-menu.active li:nth-child(5) {
+        transition-delay: 0.5s;
+    }
+
+    .nav-menu li a {
+        display: block;
+        padding: 15px 0;
+        font-size: 1.1rem;
+        width: 100%;
+    }
+
+    .nav-menu li a::after {
+        display: none;
+        /* On retire la ligne de soulignement du hover PC */
+    }
+
+    .nav-menu li a:hover {
+        background-color: var(--bg-light);
+        color: var(--secondary);
+    }
+
+    /* 4. AJUSTEMENT DU HEADER (Marque) */
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    nav img {
+        height: 50px;
+        width: 50px;
+        margin-right: 0;
+    }
+
+    nav h2 {
+        font-size: 1.2rem;
+        position: static;
+        /* Annule l'ancien absolute */
+        margin: 0;
+    }
+}

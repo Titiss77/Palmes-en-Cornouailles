@@ -1,0 +1,89 @@
+/* --- Cartes de Navigation Admin --- */
+.admin-nav-card {
+    padding: 0 !important;
+    /* On gère via flex */
+    display: flex;
+    flex-direction: column;
+    text-align: left !important;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin: 20px 0;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.admin-nav-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 45, 90, 0.1);
+}
+
+.card-icon {
+    padding: 25px 25px 10px;
+    font-size: 2.2rem;
+    color: var(--secondary);
+}
+
+.card-info {
+    padding: 0 25px 25px;
+    flex-grow: 1;
+}
+
+.card-info h4 {
+    margin: 0 0 5px;
+    color: var(--primary);
+    font-size: 1.15rem;
+}
+
+.card-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #777;
+    line-height: 1.4;
+}
+
+/* --- Bouton d'action bas de carte --- */
+.btn-admin-nav {
+    background: #f8fbff;
+    color: var(--primary);
+    text-decoration: none;
+    padding: 15px 25px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #edf2f7;
+    transition: background 0.2s;
+    border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.btn-admin-nav:hover {
+    background: var(--secondary);
+    color: white !important;
+}
+
+
+
+/* Optionnel : alignement en bas de la sidebar si besoin */
+.admin-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.logout-container {
+    margin-top: auto;
+    /* Pousse le bouton vers le bas */
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.grey-text {
+    color: #80808080;
+}

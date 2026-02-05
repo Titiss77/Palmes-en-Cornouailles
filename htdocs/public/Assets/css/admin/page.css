@@ -1,0 +1,352 @@
+/* ==========================================================================
+   STYLE UNIFIÉ ADMIN (Index, Create, Edit)
+   Basé sur le thème Public (Contact, Global)
+   ========================================================================== */
+
+/* --- 1. CONTENEURS & TYPOGRAPHIE --- */
+.site-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.title-section {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.title-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 4px;
+    background: var(--secondary);
+    border-radius: 2px;
+}
+
+/* Carte conteneur style "Public" */
+.card-item {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    margin-bottom: 2rem;
+}
+
+/* --- 2. FORMULAIRES (Style "Contact.css") --- */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Inputs gris comme sur la page Contact */
+.form-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--primary);
+
+    /* Style Public : Fond gris et bordure épaisse */
+    background-color: #ececec;
+    border: 2px solid var(--bg-light);
+    border-radius: var(--radius);
+
+    transition: var(--transition);
+}
+
+.form-input:focus {
+    outline: none;
+    background-color: var(--white);
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(202, 37, 139, 0.15);
+    /* Lueur rose */
+}
+
+/* Textarea spécifique */
+textarea.form-input {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Input File personnalisé */
+input[type="file"].form-input {
+    padding: 8px !important;
+    background-color: #ececec;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 6px 15px;
+    border-radius: 6px;
+    margin-right: 15px;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: var(--secondary);
+}
+
+/* --- 3. BOUTONS (Style Public) --- */
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    /* Style Public : Couleur Secondaire par défaut */
+    background: var(--secondary);
+    color: var(--white);
+    /* ou var(--primary) selon préférence de contraste */
+
+    padding: 12px 25px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-home:hover {
+    background-color: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Petits boutons d'action */
+.btn-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    transition: var(--transition);
+    text-decoration: none;
+    background-color: #f0f4f8;
+    color: var(--primary);
+}
+
+.btn-icon:hover {
+    transform: translateY(-2px);
+    background-color: var(--secondary);
+    color: var(--white) !important;
+}
+
+.btn-icon.text-danger:hover {
+    background-color: #dc3545;
+}
+
+/* --- 4. TABLEAUX (Page Index) --- */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table-admin {
+    width: 100%;
+    border-collapse: separate;
+    /* Permet le radius sur les rangées si besoin */
+    border-spacing: 0;
+    white-space: nowrap;
+}
+
+.table-admin th {
+    background-color: #f8f9fa;
+    color: var(--primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.table-admin td {
+    padding: 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--text_dark);
+}
+
+.table-admin tr:hover td {
+    background-color: #fafbff;
+}
+
+/* Thumbnails & Badges */
+.actu-thumb {
+    width: 60px;
+    height: 45px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+.actu-placeholder {
+    width: 60px;
+    height: 45px;
+    border-radius: 6px;
+    background-color: #f0f4f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e0;
+    font-size: 1.2rem;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Informations Texte dans le tableau */
+.actu-title {
+    display: block;
+    font-size: 1rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.actu-meta {
+    font-size: 0.85rem;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- 5. LAYOUT GRILLES (Create/Edit) --- */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /*gap: 2rem;*/
+}
+
+.images-gen {
+    margin: 4rem;
+}
+
+/* --- 6. ALERTES & UTILITAIRES --- */
+.alert {
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+
+.alert-danger {
+    background-color: #fff5f5;
+    border-color: #feb2b2;
+    color: #c53030;
+}
+
+.alert-success {
+    background-color: #f0fff4;
+    border-color: #9ae6b4;
+    color: #276749;
+}
+
+/* Image prévisualisation (Edit) */
+.current-image-preview {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius);
+    background: #f8f9fa;
+    margin-bottom: 10px;
+}
+
+.current-image-preview img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.rounded-circle {
+    width: 80px;
+    height: auto;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.img-membres,
+.img-groupes,
+.img-calendriers,
+.img-piscines,
+.img-materiel,
+.img-partenaires,
+.img-disciplines,
+.img-favicon,
+.img-groupe,
+.img-fede {
+    width: 20rem;
+    max-width: 20rem;
+    object-fit: cover;
+}
+
+.img-membres,
+.img-materiel,
+.img-favicon,
+.img-fede {
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+}
+
+.img-groupes,
+.img-calendriers,
+.img-piscines,
+.img-disciplines {
+    aspect-ratio: 16 / 9;
+}
+
+.suppr-img {
+    margin-bottom: 15px;
+    display: grid;
+}
+
+.suppr-img .text-danger {
+    color: #dc3545;
+    padding: 10px;
+    margin-left: 7rem;
+    text-decoration: none;
+}
