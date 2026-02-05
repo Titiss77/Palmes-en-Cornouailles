@@ -154,8 +154,5 @@
             </div>
         </form>
     </div>
-    <p>* Je souhaite modifier les couleurs du site, cliquer
-        <a href="<?= base_url('admin/root') ?>" style="color:red; font-weight:bold; font-size:14px;">ici</a>.
-    </p>
 </div>
 <?= $this->endSection() ?>
