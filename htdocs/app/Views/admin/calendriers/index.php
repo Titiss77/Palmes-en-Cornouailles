@@ -78,5 +78,8 @@
             </table>
         </div>
     </div>
+    <a href="<?= base_url('admin/calendriers/pdf/new') ?>" class="btn btn-primary">
+        <i class="bi bi-file-pdf"></i> Générer PDF depuis CSV
+    </a>
 </div>
 <?= $this->endSection() ?>

@@ -4,6 +4,9 @@ namespace App\Controllers\admin;
 
 use App\Models\admin\CalendriersModel;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 class Calendriers extends BaseAdminController
 {
     protected $calModel;
@@ -144,5 +147,121 @@ class Calendriers extends BaseAdminController
         }
 
         return redirect()->back()->with('success', 'Fichier supprimé.');
+    }
+
+    public function formPdf()
+    {
+        $data = $this->getCommonData('Générer PDF', 'admin/page.css');
+        return view('admin/calendriers/form_pdf', $data);
+    }
+
+    // 2. TRAITER L'UPLOAD ET GÉNÉRER LE PDF
+    public function generatePdf()
+    {
+        // Validation basique
+        if (!$this->validate([
+            'csv_file' => 'uploaded[csv_file]|ext_in[csv_file,csv,txt]|max_size[csv_file,2048]',
+        ])) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // Récupération du fichier uploadé
+        $file = $this->request->getFile('csv_file');
+
+        if ($file->isValid() && !$file->hasMoved()) {
+            // C'EST ICI LA CORRECTION :
+            // On utilise le chemin temporaire du fichier uploadé
+            $filepath = $file->getTempName();
+
+            // Lecture des données
+            $events = $this->getEventsFromCsv($filepath);
+
+            // Si le CSV est vide ou illisible
+            if (empty($events)) {
+                return redirect()->back()->with('error', 'Impossible de lire les événements du CSV.');
+            }
+
+            // Grouper par MOIS
+            $eventsByMonth = [];
+            foreach ($events as $event) {
+                // Gestion de la date (Format attendu CSV: JJ/MM/AAAA ou AAAA-MM-JJ)
+                $rawDate = $event['date'];
+                $timestamp = false;
+
+                if (strpos($rawDate, '/') !== false) {
+                    $dt = \DateTime::createFromFormat('d/m/Y', $rawDate);
+                    if ($dt)
+                        $timestamp = $dt->getTimestamp();
+                } else {
+                    $timestamp = strtotime($rawDate);
+                }
+
+                if ($timestamp) {
+                    $moisAnnee = $this->nomMoisFr(date('n', $timestamp)) . ' ' . date('Y', $timestamp);
+                    $eventsByMonth[$moisAnnee][] = $event;
+                }
+            }
+
+            // Configuration DomPDF
+            $options = new Options();
+            $options->set('defaultFont', 'Helvetica');
+            $options->set('isRemoteEnabled', true);
+            $dompdf = new Dompdf($options);
+
+            // Génération HTML
+            $html = view('admin/calendriers/pdf_template', [
+                'eventsByMonth' => $eventsByMonth,
+                'title' => 'Calendrier des Compétitions'
+            ]);
+
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
+
+            ob_end_clean();
+
+            // Téléchargement direct
+            return $dompdf->stream('Calendrier_Competitions.pdf', ['Attachment' => true]);
+        }
+
+        return redirect()->back()->with('error', "Erreur lors de l'upload du fichier.");
+    }
+
+    // Fonction utilitaire de lecture (inchangée, mais appelée avec le bon chemin maintenant)
+    private function getEventsFromCsv($filepath)
+    {
+        $data = [];
+        // On vérifie que le fichier existe bien à l'emplacement temporaire
+        if (file_exists($filepath) && ($handle = fopen($filepath, 'r')) !== FALSE) {
+            // Détection du séparateur (Point-virgule souvent pour Excel FR)
+            $separator = ';';
+
+            // On passe la première ligne (entêtes)
+            fgetcsv($handle, 0, $separator);
+
+            while (($row = fgetcsv($handle, 0, $separator)) !== FALSE) {
+                // On saute les lignes vides
+                if (count($row) < 2)
+                    continue;
+
+                // Mapping manuel selon votre CSV "Calendrier.csv"
+                // Ordre supposé : Date ; Lieu ; Bassin ; Niveau ; Nom
+                $data[] = [
+                    'date' => $row[0] ?? '',
+                    'lieu' => $row[1] ?? '',
+                    'bassin' => $row[2] ?? '',
+                    'niveau' => $row[3] ?? '',
+                    'nom' => $row[4] ?? '',
+                ];
+            }
+            fclose($handle);
+        }
+        return $data;
+    }
+
+    private function nomMoisFr($numMois)
+    {
+        $mois = [1 => 'Janvier', 2 => 'Février', 3 => 'Mars', 4 => 'Avril', 5 => 'Mai', 6 => 'Juin', 7 => 'Juillet', 8 => 'Août', 9 => 'Septembre', 10 => 'Octobre', 11 => 'Novembre', 12 => 'Décembre'];
+        return $mois[(int) $numMois];
     }
 }
