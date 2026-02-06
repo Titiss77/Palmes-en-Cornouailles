@@ -241,18 +241,35 @@ class Actualites extends BaseAdminController
                 $description = stripslashes($description);
                 $titre = stripslashes($titre);
 
-                // Gestion de la date
-                $dateEvenement = date('Y-m-d');
+                $dateEvenement = date('Y-m-d');  // Par défaut : aujourd'hui
+
                 if (!empty($rawDate)) {
+                    // CAS 1 : Format numérique Excel (ex: 46047)
                     if (is_numeric($rawDate)) {
-                        // Date Excel numérique
-                        $dateEvenement = date('Y-m-d', ($rawDate - 25569) * 86400);
-                    } else {
-                        // Date texte
+                        $unixDate = ($rawDate - 25569) * 86400;
+                        $dateEvenement = date('Y-m-d', $unixDate);
+                    }
+                    // CAS 2 : Format Français avec slash (ex: 07/02/2026)
+                    elseif (strpos($rawDate, '/') !== false) {
+                        // On essaie d'abord le format complet JJ/MM/AAAA
+                        $dt = \DateTime::createFromFormat('d/m/Y', $rawDate);
+
+                        // Si ça échoue, on essaie JJ/MM/AA (année courte)
+                        if (!$dt) {
+                            $dt = \DateTime::createFromFormat('d/m/y', $rawDate);
+                        }
+
+                        if ($dt) {
+                            $dateEvenement = $dt->format('Y-m-d');
+                        }
+                    }
+                    // CAS 3 : Format Standard ISO (ex: 2026-02-07)
+                    else {
                         try {
                             $dt = new \DateTime($rawDate);
                             $dateEvenement = $dt->format('Y-m-d');
                         } catch (\Exception $e) {
+                            // En cas d'erreur, on garde la date du jour
                         }
                     }
                 }
