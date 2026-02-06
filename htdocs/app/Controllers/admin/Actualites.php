@@ -3,6 +3,7 @@
 namespace App\Controllers\admin;
 
 use App\Models\admin\ActualiteModel;
+use CodeIgniter\Controller;
 
 class Actualites extends BaseAdminController
 {
@@ -10,256 +11,274 @@ class Actualites extends BaseAdminController
 
     public function __construct()
     {
-        // On instancie le modèle
         $this->actuModel = new ActualiteModel();
     }
 
-    // 1. LISTE DES ACTUALITÉS
+    // -------------------------------------------------------------------------
+    //  MÉTHODES UTILITAIRES (NETTOYAGE & SLUG)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Nettoie une chaîne pour en faire un slug (URL) propre
+     */
+    private function nettoyer_chaine($chaine)
+    {
+        // 1. On s'assure d'avoir de l'UTF-8 propre (normalisation)
+        if (!mb_check_encoding($chaine, 'UTF-8')) {
+            $chaine = mb_convert_encoding($chaine, 'UTF-8', 'Windows-1252');
+        }
+
+        // 2. Translitérer : convertit les accents (é -> e, à -> a)
+        // setlocale aide iconv à comprendre les caractères régionaux
+        setlocale(LC_ALL, 'en_US.utf8');
+        $chaine = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $chaine);
+
+        // 3. Supprimer tout ce qui n'est pas alphanumérique ou tiret
+        $chaine = preg_replace('/[^a-zA-Z0-9 -]/', '', $chaine);
+
+        // 4. Minuscules et tirets
+        $chaine = strtolower(trim($chaine));
+        $chaine = str_replace(' ', '-', $chaine);
+        $chaine = preg_replace('/-+/', '-', $chaine);  // Évite les tirets multiples
+
+        return $chaine;
+    }
+
+    /**
+     * Génère un slug unique (ajoute -1, -2 si nécessaire)
+     */
+    private function genererSlugUnique($slugBase)
+    {
+        $slug = $slugBase;
+        $compteur = 1;
+
+        // Tant que le slug existe dans la base, on incrémente
+        while ($this->actuModel->where('slug', $slug)->countAllResults() > 0) {
+            $slug = $slugBase . '-' . $compteur;
+            $compteur++;
+        }
+
+        return $slug;
+    }
+
+    // -------------------------------------------------------------------------
+    //  CRUD STANDARD
+    // -------------------------------------------------------------------------
+
     public function index()
     {
         $data = $this->getCommonData('Gestion Actualités', 'admin/page.css');
-
-        // Récupération via le modèle
         $data['actualites'] = $this->actuModel->getActualitesWithRelations();
-
         return view('admin/actualites/index', $data);
     }
 
-    // 2. pageULAIRE DE CRÉATION
     public function new()
     {
         $data = $this->getCommonData('Nouvelle Actualité', 'admin/page.css');
         return view('admin/actualites/create', $data);
     }
 
-    function nettoyer_chaine($chaine)
-    {
-        // 1. Translitérer les accents (é -> e, ç -> c)
-        $chaine = iconv('UTF-8', 'ASCII//TRANSLIT', $chaine);
-
-        // 2. Supprimer tout ce qui n'est pas lettre, chiffre ou tiret
-        $chaine = preg_replace('/[^a-zA-Z0-9 -]/', '', $chaine);
-
-        // 3. Mettre en minuscule
-        $chaine = strtolower($chaine);
-
-        // 4. Remplacer les espaces par des tirets
-        $chaine = str_replace(' ', '-', $chaine);
-
-        return $chaine;
-    }
-
-    // 3. TRAITEMENT DE CRÉATION
     public function create()
     {
-        // Règles de validation
-        if (!$this->validate([
-            'titre' => 'required|min_length[3]|max_length[150]',
-            'description' => 'required',
-        ])) {
+        if (!$this->validate(['titre' => 'required|min_length[3]|max_length[150]', 'description' => 'required'])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Upload de l'image via la méthode du BaseadminController
-        $imageId = $this->handleImageUpload('image', 'actualites');
+        $titre = $this->request->getPost('titre');
+        $slug = $this->genererSlugUnique($this->nettoyer_chaine($titre));
 
         $data = [
-            'titre' => $this->request->getPost('titre'),
-            'slug' => $this->nettoyer_chaine($this->request->getPost('titre')),
+            'titre' => $titre,
+            'slug' => $slug,
             'description' => $this->request->getPost('description'),
             'date_evenement' => $this->request->getPost('date_evenement') ?: null,
             'statut' => $this->request->getPost('statut'),
             'type' => 'actualite',
-            'id_auteur' => session()->get('user_id') ?? 1,  // ID de l'admin connecté
-            'image_id' => $imageId
+            'id_auteur' => session()->get('user_id') ?? 1,
+            'image_id' => $this->handleImageUpload('image', 'actualites')
         ];
 
         $this->actuModel->insert($data);
-
         return redirect()->to('/admin/actualites')->with('success', 'Actualité créée avec succès.');
     }
 
-    // 4. pageULAIRE D'ÉDITION
     public function edit($id = null)
     {
         $data = $this->getCommonData('Modifier Actualité', 'admin/page.css');
-
         $item = $this->actuModel->getActualitesWithRelations($id);
 
-        if (!$item) {
+        if (!$item)
             return redirect()->to('/admin/actualites')->with('error', 'Article introuvable.');
-        }
 
         $data['item'] = $item;
-
         return view('admin/actualites/edit', $data);
     }
 
-    // 5. TRAITEMENT DE MISE À JOUR
     public function update($id = null)
     {
-        // Validation
-        if (!$this->validate([
-            'titre' => 'required|min_length[3]',
-        ])) {
+        if (!$this->validate(['titre' => 'required|min_length[3]'])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Upload nouvelle image (si présente)
-        $imageId = $this->handleImageUpload('image', 'actualites');
+        $titre = $this->request->getPost('titre');
+
+        // Note: On ne met généralement pas à jour le slug pour ne pas casser les liens SEO,
+        // mais si vous le souhaitez, vous pouvez décommenter :
+        // $slug = $this->genererSlugUnique($this->nettoyer_chaine($titre));
 
         $data = [
-            'titre' => $this->request->getPost('titre'),
-            'slug' => url_title($this->request->getPost('titre'), '-', true),
+            'titre' => $titre,
+            // 'slug'        => $slug,
+            'slug' => url_title($titre, '-', true),  // Version simple si update
             'description' => $this->request->getPost('description'),
             'date_evenement' => $this->request->getPost('date_evenement') ?: null,
             'statut' => $this->request->getPost('statut'),
         ];
 
-        // On ne met à jour l'image que si une nouvelle a été envoyée
+        $imageId = $this->handleImageUpload('image', 'actualites');
         if ($imageId) {
             $data['image_id'] = $imageId;
         }
 
         $this->actuModel->update($id, $data);
-
         return redirect()->to('/admin/actualites')->with('success', 'Actualité mise à jour.');
     }
 
-    // 6. SUPPRESSION COMPLÈTE (BDD + FICHIER)
     public function delete($id = null)
     {
-        // 1. Récupérer les infos de l'actualité pour obtenir le chemin de l'image
-        // On utilise la méthode existante qui fait la jointure avec la table images
         $actualite = $this->actuModel->getActualitesWithRelations($id);
-
         if ($actualite) {
-            // 2. Si une image est associée, on la supprime physiquement
             if (!empty($actualite['image_path'])) {
-                // FCPATH pointe vers la racine du dossier 'public'
-                $cheminFichier = FCPATH . 'uploads/' . $actualite['image_path'];
+                $path = FCPATH . 'uploads/' . $actualite['image_path'];
+                if (file_exists($path))
+                    unlink($path);
 
-                if (file_exists($cheminFichier)) {
-                    unlink($cheminFichier);  // Suppression du fichier
-                }
-
-                // 3. (Optionnel) Supprimer aussi la ligne dans la table 'images' pour éviter les orphelins
-                // Si vous ne le faites pas, le fichier disparaît mais la ligne reste en BDD 'images'
                 if (!empty($actualite['image_id'])) {
                     $db = \Config\Database::connect();
                     $db->table('images')->where('id', $actualite['image_id'])->delete();
                 }
             }
-
-            // 4. Suppression de l'actualité elle-même
             $this->actuModel->delete($id);
-
-            return redirect()->to('/admin/actualites')->with('success', 'Actualité et image supprimées avec succès.');
+            return redirect()->to('/admin/actualites')->with('success', 'Suppression réussie.');
         }
-
-        return redirect()->to('/admin/actualites')->with('error', 'Impossible de trouver cet article.');
+        return redirect()->to('/admin/actualites')->with('error', 'Introuvable.');
     }
 
-    // 7. SUPPRESSION UNIQUEMENT DE L'IMAGE
     public function deleteImage($id = null)
     {
-        // Récupère l'article
         $article = $this->actuModel->getActualitesWithRelations($id);
+        if (!$article || empty($article['image_id']))
+            return redirect()->back()->with('error', 'Aucune image.');
 
-        if (!$article || empty($article['image_id'])) {
-            return redirect()->back()->with('error', 'Aucune image à supprimer.');
-        }
-
-        // Sauvegarde des infos avant de modifier la BDD
-        $imageId = $article['image_id'];
-        $imagePath = $article['image_path'];
-
-        // ÉTAPE 1 (CRUCIALE) : On détache d'abord l'image de l'article
-        // Cela empêche la suppression en cascade de l'article
         $this->actuModel->update($id, ['image_id' => null]);
 
-        // ÉTAPE 2 : On supprime l'entrée dans la table 'images'
         $db = \Config\Database::connect();
-        $db->table('images')->where('id', $imageId)->delete();
+        $db->table('images')->where('id', $article['image_id'])->delete();
 
-        // ÉTAPE 3 : Suppression physique du fichier
-        // Note : On utilise directement image_path car il contient déjà "uploads/..." (voir BaseadminController)
-        if (!empty($imagePath)) {
-            $cheminFichier = FCPATH . 'uploads/' . $imagePath;
-
-            if (file_exists($cheminFichier)) {
-                unlink($cheminFichier);
-            }
+        if (file_exists(FCPATH . 'uploads/' . $article['image_path'])) {
+            unlink(FCPATH . 'uploads/' . $article['image_path']);
         }
 
-        return redirect()->back()->with('success', 'Image supprimée avec succès.');
+        return redirect()->back()->with('success', 'Image supprimée.');
     }
 
-    // Ajoutez ces méthodes dans votre classe Actualites
+    // -------------------------------------------------------------------------
+    //  IMPORT CSV (CORRIGÉ ET ROBUSTE)
+    // -------------------------------------------------------------------------
 
     public function import()
     {
-        // Affiche la vue du formulaire d'import
-        $data = $this->getCommonData('Importer des Actualités', 'admin/page.css');
+        $data = $this->getCommonData('Importer des Actualités', 'admin/import.css');
         return view('admin/actualites/import', $data);
     }
 
     public function processImport()
     {
-        // 1. Validation du fichier
-        $validationRule = [
-            'fichier_csv' => [
-                'label' => 'Fichier CSV',
-                'rules' => 'uploaded[fichier_csv]|ext_in[fichier_csv,csv]|max_size[fichier_csv,2048]',
-            ],
-        ];
-
-        if (!$this->validate($validationRule)) {
+        // 1. Validation
+        if (!$this->validate([
+            'fichier_csv' => 'uploaded[fichier_csv]|ext_in[fichier_csv,csv,txt]|max_size[fichier_csv,2048]',
+        ])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // 2. Récupération du fichier
         $file = $this->request->getFile('fichier_csv');
 
         if ($file->isValid() && !$file->hasMoved()) {
+            // 2. Lecture brute et conversion UTF-8
+            // C'est ici que la magie opère pour corriger les accents
             $filepath = $file->getTempName();
-            $csvData = array_map('str_getcsv', file($filepath));
+            $content = file_get_contents($filepath);
 
-            // Supprimer la première ligne si c'est l'entête (Optionnel)
-            // array_shift($csvData);
+            // Détection de l'encodage (Windows-1252 est le défaut d'Excel)
+            $encoding = mb_detect_encoding($content, ['UTF-8', 'Windows-1252', 'ISO-8859-1'], true);
+
+            if (!$encoding || $encoding !== 'UTF-8') {
+                // On convertit tout le contenu en UTF-8 proprement
+                $content = mb_convert_encoding($content, 'UTF-8', $encoding ?: 'Windows-1252');
+            }
+
+            // 3. Traitement via un flux mémoire (plus besoin du fichier temporaire)
+            $handle = fopen('php://memory', 'r+');
+            fwrite($handle, $content);
+            rewind($handle);  // Retour au début du flux
 
             $count = 0;
+            $rowIdx = 0;
 
-            foreach ($csvData as $row) {
-                // ATTENTION : Adaptez les index ($row[0]) selon l'ordre des colonnes du CSV
-                // CSV attendu : Titre;Contenu;Date
+            while (($data = fgetcsv($handle, 0, ';')) !== FALSE) {
+                $rowIdx++;
 
-                // CodeIgniter 4 gère bien les CSV, mais attention au séparateur (souvent ; en France)
-                $dataRow = str_getcsv($row[0], ';');
+                // Ignorer les lignes vides ou entêtes
+                if (count($data) < 2)
+                    continue;
+                if ($rowIdx === 1 && strtolower(trim($data[0])) === 'titre')
+                    continue;
 
-                if (count($dataRow) < 2)
-                    continue;  // Sauter les lignes vides ou malformées
+                $titre = $data[0] ?? 'Sans titre';
+                $description = $data[1] ?? '';
+                $rawDate = $data[2] ?? null;
 
-                $titre = $dataRow[0] ?? 'Sans titre';
-                $description = $dataRow[1] ?? '';
-                $date = $dataRow[2] ?? date('Y-m-d');
+                $description = stripslashes($description);
+                $titre = stripslashes($titre);
 
-                // Préparation pour insertion
-                $insertData = [
+                // Gestion de la date
+                $dateEvenement = date('Y-m-d');
+                if (!empty($rawDate)) {
+                    if (is_numeric($rawDate)) {
+                        // Date Excel numérique
+                        $dateEvenement = date('Y-m-d', ($rawDate - 25569) * 86400);
+                    } else {
+                        // Date texte
+                        try {
+                            $dt = new \DateTime($rawDate);
+                            $dateEvenement = $dt->format('Y-m-d');
+                        } catch (\Exception $e) {
+                        }
+                    }
+                }
+
+                // Génération du SLUG UNIQUE
+                $slugBase = $this->nettoyer_chaine($titre);
+                $slugFinal = $this->genererSlugUnique($slugBase);
+
+                // Insertion
+                $this->actuModel->insert([
                     'titre' => $titre,
+                    'slug' => $slugFinal,
                     'description' => $description,
-                    'date' => $date,
-                    // Ajoutez les autres champs de votre base de données ici
-                ];
+                    'date_evenement' => $dateEvenement,
+                    'statut' => 'publie',
+                    'type' => 'actualite',
+                    'id_auteur' => session()->get('user_id') ?? 1
+                ]);
 
-                // Sauvegarde via le Modèle existant
-                $this->actuModel->insert($insertData);
                 $count++;
             }
 
-            return redirect()->to('/admin/actualites')->with('success', "$count actualités ont été importées avec succès.");
+            fclose($handle);
+            return redirect()->to('/admin/actualites')->with('success', "$count actualités importées avec succès.");
         }
 
-        return redirect()->back()->with('error', 'Erreur lors du téléchargement du fichier.');
+        return redirect()->back()->with('error', "Erreur lors de l'upload.");
     }
 }

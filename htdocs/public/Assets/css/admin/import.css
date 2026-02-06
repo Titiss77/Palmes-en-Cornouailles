@@ -1,0 +1,163 @@
+:root {
+    --primary: #002d5a;
+    --secondary: #ca258b;
+    --accent: #ffcc00;
+    --text-dark: #1a1a1a;
+    --text-muted: #666;
+    --bg-light: #f8fbff;
+    --white: #ffffff;
+    --shadow: 0 4px 15px rgba(0, 45, 90, 0.1);
+    --radius: 12px;
+    --transition: all 0.3s ease;
+    --grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    --aspect-ratio: 2 / 1;
+    --size-logo-top: 80px;
+}
+
+/* --- Conteneur Principal --- */
+.import-actu-container {
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    /* Centré horizontalement */
+    border: 1px solid #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- En-tête --- */
+.import-actu-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+.import-actu-title {
+    color: var(--text-dark);
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.import-actu-description {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* --- Étape Téléchargement --- */
+.import-actu-step {
+    background-color: var(--white);
+    border-left: 4px solid var(--secondary);
+    /* Couleur bleu info */
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+}
+
+.import-actu-step-text {
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.import-actu-btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--white);
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.import-actu-btn-download:hover {
+    background-color: var(--secondary);
+    color: var(--white);
+}
+
+/* --- Formulaire --- */
+.import-actu-form {
+    margin-top: 1rem;
+}
+
+.import-actu-group {
+    margin-bottom: 1.5rem;
+}
+
+.import-actu-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.import-actu-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    background-color: var(--white);
+}
+
+.import-actu-input:focus {
+    border-color: var(--secondary);
+    outline: none;
+    box-shadow: var(--shadow);
+}
+
+.import-actu-hint {
+    display: block;
+    margin-top: 0.5rem;
+    color: #95a5a6;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* --- Boutons d'action --- */
+.import-actu-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bg-light);
+}
+
+.import-actu-btn-submit {
+    background-color: var(--secondary);
+    /* Vert validation */
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.import-actu-btn-cancel {
+    color: #7f8c8d;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.import-actu-btn-cancel:hover {
+    background-color: #f1f2f6;
+    color: #2c3e50;
+}

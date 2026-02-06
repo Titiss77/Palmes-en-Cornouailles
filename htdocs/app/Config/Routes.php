@@ -68,8 +68,10 @@ $routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\adm
     $routes->get('utilisateurs/(:num)/delete', 'Utilisateurs::delete/$1');
     $routes->get('utilisateurs/(:num)/deleteImage', 'Utilisateurs::deleteImage/$1');
 
-    $routes->get('admin/actualites/import', 'admin\Actualites::import');
-    $routes->post('admin/actualites/processImport', 'admin\Actualites::processImport');
+    $routes->get('actualites/import', 'Actualites::import');
+    $routes->post('actualites/processImport', 'Actualites::processImport');
+    $routes->get('actualites/(:num)/delete', 'Actualites::delete/$1');
+    $routes->get('actualites/(:num)/deleteImage', 'Actualites::deleteImage/$1');
 
     $routes->resource('actualites', ['controller' => 'Actualites']);
     $routes->resource('boutiques', ['controller' => 'Boutiques']);
