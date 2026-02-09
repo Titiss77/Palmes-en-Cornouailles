@@ -1,56 +1,47 @@
 <?= $this->extend('Public/Layout/l_global') ?>
 
 <?php
-
 /**
  * ============================================================================
  * VUE : INSCRIPTIONS & CONTACT
  * ============================================================================
- * Cette vue gère la page de renseignements administratifs et de contact.
- * Elle est composée de 4 blocs principaux :
- * 1. Informations (Conditions d'âge, niveau requis, tarifs).
- * 2. Formulaire de contact (Sécurisé avec CSRF + Honeypot).
- * 3. Matériel nécessaire (Liste avec statut Prêt/Achat).
- * 4. Trombinoscope (Membres du bureau).
- *
- * Les données ($tarifs, $materiel, $membres) proviennent du Contrôleur 'Contact'.
- */
-?>
-
-<?= $this->section('contenu') ?>
-
-<?php
-
-/**
- * ----------------------------------------------------------------------------
- * 1. CONFIGURATION LOCALE (Données Statiques)
- * ----------------------------------------------------------------------------
- * Nous définissons ici les listes qui ne nécessitent pas de base de données.
- * Cela permet de modifier les conditions ou les destinataires directement ici
- * sans toucher au code HTML plus bas.
  */
 
-// Liste des pré-requis affichés en haut de page
+// --- CONFIGURATION LOCALE ---
 $conditions = [
     'Être âgé de 6 ans minimum.',
     'Savoir nager 25 mètres sans aide.',
     'Certificat médical de non contre-indication indispensable.'
 ];
 
-// Liste des destinataires pour le menu déroulant du formulaire
-// Format : 'valeur_technique' => 'Libellé affiché à l'utilisateur'
 $destinataires = [
     'pas_choisi' => '-- Veuillez choisir --',
-    'tresorier' => '(Facturation/Tarifs)',
-    'secretaire' => '(Licences/Dossiers)',
+    '(Facturation/Tarifs)'  => '(Facturation/Tarifs)',
+    '(Licences/Dossiers)' => '(Licences/Dossiers)',
 ];
 ?>
 
+<?= $this->section('contenu') ?>
+
 <div class="site-container">
+
+    <?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success"
+        style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; border: 1px solid #c3e6cb; margin: 20px 0; text-align: center;">
+        <i class="bi bi-check-circle-fill"></i> <?= session()->getFlashdata('success') ?>
+    </div>
+    <?php endif; ?>
+
+    <?php if (session()->getFlashdata('error')): ?>
+    <div class="alert alert-danger"
+        style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; border: 1px solid #f5c6cb; margin: 20px 0; text-align: center;">
+        <i class="bi bi-exclamation-triangle-fill"></i> <?= session()->getFlashdata('error') ?>
+    </div>
+    <?php endif; ?>
+
     <h2 class="title-section">Inscriptions & Contact</h2>
 
     <div class="grid-2 mb-5">
-
         <section class="card-item border-blue">
             <h3><i class="bi bi-info-circle"></i> Conditions d'inscription</h3>
             <ul class="list-check">
@@ -78,123 +69,18 @@ $destinataires = [
                 </tr>
                 <?php endforeach; ?>
                 <?php else: ?>
-                <p>Aucuns groupes pour le moment. Revenez bientôt !</p>
+                <p>Aucun groupe pour le moment.</p>
                 <?php endif; ?>
             </table>
             <p>*Via Hello asso, paiement en 3x, passport et chèques vacances</p>
         </section>
     </div>
 
-    <h3 class="title-section">Matériel à avoir</h3>
-    <div class="grid-responsive">
-        <?php if (!empty($materiel)): ?>
-        <?php foreach ($materiel as $m): ?>
-        <?php if ($m['idPret'] == 2): ?>
-        <div class="materiel-card card-item h-100">
-
-            <?php if (!empty($m['image'])): ?>
-            <div class="materiel-photo-container">
-                <img src="<?= base_url('uploads/' . esc($m['image'])); ?>" alt="<?= esc($m['nom']) ?>"
-                    class="materiel-img">
-            </div>
-            <?php endif; ?>
-
-            <div class="info p-3">
-                <h3><?= esc($m['nom']) ?></h3>
-                <p class="txt-small text-muted"><?= esc($m['description']) ?></p>
-            </div>
-            <div class="mt-2">
-                <?php if ($m['idPret'] == 1): ?>
-                <span class="badge-status is-lent">
-                    <i class="bi bi-arrow-repeat"></i> <?= esc($m['nomPret']) ?>
-                </span>
-                <?php else: ?>
-                <span class="badge-status is-personal">
-                    <i class="bi bi-cart"></i> <?= esc($m['nomPret']) ?>
-                </span>
-                <?php endif; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-        <?php endforeach; ?>
-        <?php else: ?>
-        <p>Aucuns materiels pour le moment. Revenez bientôt !</p>
-        <?php endif; ?>
-    </div>
-
-    <h3 class="title-section">Matériel supplémentaire (prété pour essais)</h3>
-    <div class="grid-responsive">
-        <?php if (!empty($materiel)): ?>
-        <?php foreach ($materiel as $m): ?>
-        <?php if ($m['idPret'] == 1): ?>
-        <div class="materiel-card card-item h-100">
-
-            <?php if (!empty($m['image'])): ?>
-            <div class="materiel-photo-container">
-                <img src="<?= base_url('uploads/' . esc($m['image'])); ?>" alt="<?= esc($m['nom']) ?>"
-                    class="materiel-img">
-            </div>
-            <?php endif; ?>
-
-            <div class="info p-3">
-                <h3><?= esc($m['nom']) ?></h3>
-                <p class="txt-small text-muted"><?= esc($m['description']) ?></p>
-            </div>
-            <div class="mt-2">
-                <?php if ($m['idPret'] == 1): ?>
-                <span class="badge-status is-lent">
-                    <i class="bi bi-arrow-repeat"></i> <?= esc($m['nomPret']) ?>
-                </span>
-                <?php else: ?>
-                <span class="badge-status is-personal">
-                    <i class="bi bi-cart"></i> <?= esc($m['nomPret']) ?>
-                </span>
-                <?php endif; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-        <?php endforeach; ?>
-        <?php else: ?>
-        <p>Aucuns materiels pour le moment. Revenez bientôt !</p>
-        <?php endif; ?>
-    </div>
-
-    <section class="trombi-container mt-5">
-        <h2 class="title-section">L'équipe du bureau</h2>
-        <div class="trombi-grid">
-
-            <?php if (!empty($membres)): ?>
-            <?php foreach ($membres as $m): ?>
-            <div class="trombi-card">
-                <div class="photo-container">
-                    <img src="<?= base_url('uploads/' . esc($m['photo'])); ?>" alt="<?= esc($m['nom']); ?>">
-                </div>
-                <div class="info">
-                    <h3><?= esc($m['nom']); ?></h3>
-                    <p class="badge-fonction"><?= esc($m['fonctions']); ?></p>
-                </div>
-            </div>
-            <?php endforeach; ?>
-
-            <?php else: ?>
-            <p class="text-center">Aucun membre n'est enregistré pour le moment.</p>
-            <?php endif; ?>
-
-        </div>
-    </section>
-
     <div class="grid-1 mb-5">
         <section class="card-item highlight-section">
             <h3 class="text-center"><i class="bi bi-envelope"></i> Une question ? Contactez-nous</h3>
 
-            <?php if (session()->getFlashdata('success')): ?>
-            <div class="alert-success-popup">
-                <i class="bi bi-check-all"></i> <?= session()->getFlashdata('success') ?>
-            </div>
-            <?php endif; ?>
-
             <form action="<?= base_url('contact/envoyer') ?>" method="post" class="mt-3">
-
                 <?= csrf_field() ?>
 
                 <div style="display:none;">
@@ -223,6 +109,7 @@ $destinataires = [
                     <textarea name="message" id="message" placeholder="Détaillez votre demande ici..." rows="4"
                         class="form-input" required></textarea>
                 </div>
+
                 <div class="politique-form" style="margin: 20px 0;">
                     <input type="checkbox" name="rgpd_consent" id="rgpd_consent" required>
                     <label for="rgpd_consent" style="display:inline;">

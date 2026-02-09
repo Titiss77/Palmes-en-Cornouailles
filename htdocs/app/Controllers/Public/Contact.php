@@ -43,9 +43,9 @@ class Contact extends BaseController
         // Clé basée sur l'IP (hachée pour le RGPD)
         $key = md5($this->request->getIPAddress());
         
-        // Autorise 2 envois toutes les 3600 secondes (1 heure)
+        // Autorise 3 envois toutes les 3600 secondes (1 heure)
         if ($throttler->check($key, 3, 3600) === false) {
-            return redirect()->back()->with('error', "Trop de messages envoyés. Veuillez réessayer dans une heure.");
+            return redirect()->back()->with('error', "Trop de messages envoyés. Une limite vous est fixée de 3 messages par heure.");
         }
 
         // 2. Anti-spam Honeypot

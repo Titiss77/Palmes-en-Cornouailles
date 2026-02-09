@@ -6,10 +6,14 @@
     </div>
     <div style="padding: 30px;">
         <p><strong>Expéditeur :</strong> <?= esc($email_user) ?></p>
-        <p><strong>Destinataire :</strong> <?= esc($destinataireNom) ?></p>
+        <p><strong>Motif du mail :</strong> <?= esc($destinataireNom) ?></p>
         <hr>
         <div style="background-color: #fcfcfc; padding: 20px; border-left: 5px solid #002d5a;">
             <?= $messageContenu ?>
         </div>
+
     </div>
+    <p style="color:red; padding: 30px;">* Attention : Ce message est automatique, merci de ne pas répondre directement
+        à cet email.
+    </p>
 </div>
