@@ -14,7 +14,7 @@ $sections = [
             ],
             [
                 'count' => $count['actualites'],
-                'label' => 'Actualités',
+                'label' => 'Événements',
                 'desc' => 'Articles',
                 'icon' => 'bi-newspaper',
                 'url' => 'admin/actualites',

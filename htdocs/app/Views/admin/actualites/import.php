@@ -4,7 +4,7 @@
 
 <div class="import-actu-container">
     <header class="import-actu-header">
-        <h3 class="import-actu-title">Importer des actualités (CSV)</h3>
+        <h3 class="import-actu-title">Importer des Événements (CSV)</h3>
         <p class="import-actu-description">
             Utilisez cette page pour importer massivement vos articles.
         </p>

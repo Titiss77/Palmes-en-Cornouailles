@@ -55,7 +55,7 @@
             <?php endforeach; ?>
         </div>
 
-        <h3 class="title-section">Actualités</h3>
+        <h3 class="title-section">Événements</h3>
         <div class="card-item news-card">
             <?php if (!empty($actualites)): ?>
             <?php foreach ($actualites as $item): ?>

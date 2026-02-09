@@ -7,7 +7,7 @@
         <i class="bi bi-arrow-left-circle"></i>
     </a>
 
-    <h3 class="title-section">Actualités</h3>
+    <h3 class="title-section">Événements</h3>
     <div class="card-item news-card">
         <?php foreach ($actualites as $item): ?>
 

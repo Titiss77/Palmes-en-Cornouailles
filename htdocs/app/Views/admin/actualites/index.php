@@ -7,9 +7,9 @@
 
 <div class="site-container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="title-section mb-0">Gestion des Actualités</h3>
+        <h3 class="title-section mb-0">Gestion des Événements</h3>
         <a href="<?= base_url('admin/actualites/new') ?>" class="btn-home">
-            <i class="bi bi-plus-circle"></i> Créer une actualité
+            <i class="bi bi-plus-circle"></i> Créer un Événement
         </a>
     </div>
 
@@ -94,7 +94,7 @@
                     <tr>
                         <td colspan="4" class="text-center p-5 text-muted">
                             <i class="bi bi-inbox fs-1 d-block mb-3"></i>
-                            Aucune actualité pour le moment.
+                            Aucun Événement pour le moment.
                         </td>
                     </tr>
                     <?php endif; ?>
@@ -103,7 +103,7 @@
         </div>
     </div>
     <a href="<?= base_url('admin/actualites/import') ?>" class="btn-home">
-        <i class="bi bi-plus-circle"></i> Importer des actualités
+        <i class="bi bi-plus-circle"></i> Importer des Événements
     </a>
 </div>
 <?= $this->endSection() ?>
