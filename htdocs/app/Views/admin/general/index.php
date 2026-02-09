@@ -135,19 +135,6 @@
                 </div>
             </div>
 
-            <div class="mb-4 border p-3 rounded bg-light images-gen">
-                <label class="fw-bold mb-2 d-block">Logo FFESSM</label>
-                <div class="d-flex align-items-center mb-2">
-                    <?php if (!empty($item['ffessm_path'])): ?>
-                    <img src="<?= base_url('uploads/' . $item['ffessm_path']) ?>"
-                        class="me-3 bg-white border rounded p-1 img-fede">
-                    <?php else: ?>
-                    <span class="text-muted me-3">Aucun logo</span>
-                    <?php endif; ?>
-                    <input type="file" name="image_ffessm" class="form-input flex-grow-1 p-2" accept="image/*">
-                </div>
-            </div>
-
             <div class="text-end">
                 <button type="submit" class="btn-home btn-lg"><i class="bi bi-check-circle"></i> Enregistrer les
                     modifications</button>
