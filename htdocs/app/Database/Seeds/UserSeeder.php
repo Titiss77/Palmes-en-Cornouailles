@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             [
                 'username' => getenv('ADMIN_LOGIN') ?: NULL,
                 'nom' => 'Responsable PEC',
-                'password' => password_hash($adminPass, PASSWORD_DEFAULT),
+                'password' => "Pas de droits d'accès pour ce compte, mot de passe non défini.",
                 'role' => 'admin',
                 'is_active' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
