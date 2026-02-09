@@ -25,10 +25,11 @@ FAIT :
 - Utiliser le header pour trouver efficacement les blocs d'admin
 - Ajouter le css et les infos pour les mentions légales et confidentialité
 - Ajouter la possibilité d'importer un fichier avec toutes les compétitions et ça ajoute automatiquement dans les actualités
+- Régler les problèmes liés à l'envoie de mail
 
 
 RESTE A FAIRE :
-- Régler les problèmes liés à l'envoie de mail
+
 
 
 
