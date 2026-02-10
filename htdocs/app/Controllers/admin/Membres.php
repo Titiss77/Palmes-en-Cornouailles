@@ -11,7 +11,7 @@ class Membres extends BaseAdminController
     protected $fonctionsModel;
 
     // CHEMIN EXACT DE L'IMAGE PAR DÉFAUT (relatif au dossier uploads/)
-    const DEFAULT_IMAGE_PATH = 'personnel/vide.jpg';
+    const DEFAULT_IMAGE_PATH = 'membres/vide.jpg';
 
     public function __construct()
     {
@@ -168,7 +168,7 @@ class Membres extends BaseAdminController
         $oldImageId = $membre['image_id'];
         $oldImagePath = $membre['image_path'];
 
-        // Récupère l'ID de l'image par défaut "personnel/vide.jpg"
+        // Récupère l'ID de l'image par défaut "membres/vide.jpg"
         $defaultId = $this->getDefaultImageId();
 
         // Si l'utilisateur a déjà l'image par défaut, on ne fait rien
@@ -186,7 +186,7 @@ class Membres extends BaseAdminController
     }
 
     /**
-     * Récupère l'ID de l'image 'personnel/vide.jpg'.
+     * Récupère l'ID de l'image 'membres/vide.jpg'.
      * La crée en BDD si elle n'existe pas encore.
      */
     private function getDefaultImageId()
@@ -194,7 +194,7 @@ class Membres extends BaseAdminController
         $db = \Config\Database::connect();
         $builder = $db->table('images');
 
-        // On cherche le chemin exact "personnel/vide.jpg"
+        // On cherche le chemin exact "membres/vide.jpg"
         $path = self::DEFAULT_IMAGE_PATH;
 
         $row = $builder->where('path', $path)->get()->getRow();
@@ -217,7 +217,7 @@ class Membres extends BaseAdminController
     /**
      * Supprime une image physiquement et en BDD seulement si :
      * 1. Elle n'est plus utilisée par aucun membre
-     * 2. Ce n'est PAS l'image par défaut (personnel/vide.jpg)
+     * 2. Ce n'est PAS l'image par défaut (membres/vide.jpg)
      */
     private function nettoyerImageOrpheline($imageId, $imagePath)
     {
