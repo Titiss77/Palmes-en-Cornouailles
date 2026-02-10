@@ -17,14 +17,7 @@ $sections = array_filter($sections, function ($s) use ($targetSection) {
     return $s['section'] === $targetSection;
 });
 
-// 2. Ensuite on modifie les données si besoin (via une boucle par référence &$section)
-foreach ($sections as &$section) {
-    if ($targetSection == 'contact') {
-        // CORRECTION SYNTAXE : On utilise la concaténation pour base_url()
-        $section['plus'] = "* Les tarifs sont modifiables dans la section nos groupes et pour les membres du bureau, c'est
-        <a href='" . base_url('admin/membres') . "' style='color:red; font-weight:bold; font-size:14px;'>ici</a>.";
-    }
-}
+
 unset($section);  // Bonnes pratiques : on détruit la référence
 ?>
 
@@ -70,10 +63,6 @@ unset($section);  // Bonnes pratiques : on détruit la référence
             </a>
         </div>
         <?php endforeach; ?>
-
-        <?php if (isset($section['plus'])): ?>
-        <p><?= $section['plus'] ?></p>
-        <?php endif; ?>
 
     </div>
     <?php endforeach; ?>

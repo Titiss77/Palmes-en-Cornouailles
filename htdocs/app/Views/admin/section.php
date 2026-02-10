@@ -60,13 +60,29 @@ $sections = [
         'icon' => 'bi-gear',
         'cards' => [
             [
+                'count' => $count['groupes'],
+                'label' => 'Groupes',
+                'desc' => 'Configuration des tarifs de chaques groupes',
+                'icon' => 'bi-sliders',
+                'url' => 'admin/groupes',
+                'btn' => 'Modifier les infos'
+            ],
+            [
                 'count' => $count['materiel'],
                 'label' => 'Matériel',
                 'desc' => 'Inventaire & Prêts de palmes',
                 'icon' => 'bi-tools',
                 'url' => 'admin/materiel',
                 'btn' => 'Gérer le stock'
-            ]
+            ],
+            [
+                'count' => $count['membres'],
+                'label' => 'Membres',
+                'desc' => 'Modifications des membres en général',
+                'icon' => 'bi-people',
+                'url' => 'admin/membres',
+                'btn' => "Gérer l'équipe"
+            ],
         ]
     ]
 ];
