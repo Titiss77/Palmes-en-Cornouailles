@@ -3,10 +3,11 @@
 namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
-use App\Controllers\Root;  // Note: Ensure this is intended to be used as a library object
+use App\Controllers\Root;
 use App\Models\Public\Donnees;
 use App\Models\Public\GroupeModel;
-use \App\Models\Public\PartenaireModel;
+use App\Models\Public\PartenaireModel;
+use App\Models\admin\PalmaresModel;
 
 class Home extends BaseController
 {
@@ -15,6 +16,7 @@ class Home extends BaseController
     protected $root;
     protected $generalData;
     protected $partenaireModel;
+    protected $palmaresModel;  // AJOUT
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class Home extends BaseController
         $this->groupeModel = new GroupeModel();
         $this->root = new Root();
         $this->partenaireModel = new PartenaireModel();
+        $this->palmaresModel = new PalmaresModel();  // AJOUT
 
         $this->generalData = $this->donneesModel->getGeneral();
     }
@@ -42,6 +45,9 @@ class Home extends BaseController
 
     public function index()
     {
+        $derniersResultats = $this->palmaresModel->getPalmaresWithRelations();
+        $derniersResultats = array_slice($derniersResultats, 0, 4);
+        
         $data = [
             'cssPage' => 'Public/accueil.css',
             'disciplines' => $this->donneesModel->getDisciplines(),
@@ -50,7 +56,8 @@ class Home extends BaseController
             'piscines' => $this->donneesModel->getPiscines(),
             'actualites' => $this->donneesModel->getActualites(),
             'groupes' => $this->groupeModel->getGroupes(),
-            'partenaires' => $this->partenaireModel->getPartenaires()
+            'partenaires' => $this->partenaireModel->getPartenaires(),
+            'palmares' => $derniersResultats
         ];
 
         return $this->_render('Public/v_accueil', $data);

@@ -73,6 +73,10 @@ $routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\adm
     $routes->get('actualites/(:num)/delete', 'Actualites::delete/$1');
     $routes->get('actualites/(:num)/deleteImage', 'Actualites::deleteImage/$1');
 
+    $routes->get('palmares/(:num)/delete', 'Palmares::delete/$1');
+    $routes->get('palmares/(:num)/deleteImage', 'Palmares::deleteImage/$1');
+    $routes->resource('palmares', ['controller' => 'Palmares']);
+
     $routes->resource('actualites', ['controller' => 'Actualites']);
     $routes->resource('boutiques', ['controller' => 'Boutiques']);
     $routes->resource('membres', ['controller' => 'Membres']);
