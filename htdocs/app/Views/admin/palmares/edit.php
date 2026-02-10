@@ -6,23 +6,23 @@
         <h3>Modifier une performance</h3>
     </div>
     <div class="card-body">
-        <form action="<?= base_url('admin/palmares/update/' . $item['id']) ?>" method="post"
-            enctype="multipart/form-data">
+        <form action="<?= base_url('admin/palmares/' . $item['id']) ?>" method="post" enctype="multipart/form-data">
+
+            <input type="hidden" name="_method" value="PUT">
 
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label>Nageur *</label>
-                    <select name="membre_id" class="form-control" required>
-                        <option value="">-- Choisir un nageur --</option>
-                        <?php foreach($membres as $m): ?>
-                        <option value="<?= $m['id'] ?>" <?= ($m['id'] == $item['membre_id']) ? 'selected' : '' ?>>
-                            <?= esc($m['nom']) ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
+                <div class="col-md-4 mb-3">
+                    <label>Nom du nageur *</label>
+                    <input type="text" name="nom_nageur" class="form-control" value="<?= esc($item['nom_nageur']) ?>"
+                        required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Prénom du nageur *</label>
+                    <input type="text" name="prenom_nageur" class="form-control"
+                        value="<?= esc($item['prenom_nageur']) ?>" required>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <label>Date de l'épreuve *</label>
                     <input type="date" name="date_epreuve" class="form-control"
                         value="<?= esc($item['date_epreuve']) ?>" required>
@@ -53,20 +53,13 @@
             </div>
 
             <div class="mb-3">
-                <label>Photo du podium (Laisser vide pour ne pas changer)</label>
+                <label>Photo du podium</label>
                 <input type="file" name="image" class="form-control">
-
                 <?php if (!empty($item['image_path'])): ?>
-                <div class="mt-2 p-2 border rounded bg-light">
-                    <p class="mb-1">Image actuelle :</p>
-                    <img src="<?= base_url('uploads/' . $item['image_path']) ?>" alt="Aperçu"
-                        style="max-height: 150px;">
-                    <br>
+                <div class="mt-2">
+                    <img src="<?= base_url('uploads/' . $item['image_path']) ?>" width="100">
                     <a href="<?= base_url('admin/palmares/' . $item['id'] . '/deleteImage') ?>"
-                        class="btn btn-sm btn-outline-danger mt-2"
-                        onclick="return confirm('Supprimer définitivement cette image ?')">
-                        <i class="bi bi-trash"></i> Supprimer l'image
-                    </a>
+                        class="text-danger">Supprimer image</a>
                 </div>
                 <?php endif; ?>
             </div>

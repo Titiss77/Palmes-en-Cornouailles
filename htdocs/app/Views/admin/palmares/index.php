@@ -25,7 +25,7 @@
                 <?php foreach ($palmares as $p): ?>
                 <tr>
                     <td><?= date('d/m/Y', strtotime($p['date_epreuve'])) ?></td>
-                    <td><?= esc($p['nom_nageur']) ?></td>
+                    <td><?= esc($p['prenom_nageur'] . ' ' . $p['nom_nageur']) ?></td>
                     <td><?= esc($p['competition']) ?></td>
                     <td><?= esc($p['epreuve']) ?></td>
                     <td>
