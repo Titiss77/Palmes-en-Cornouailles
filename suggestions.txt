@@ -21,7 +21,7 @@ FAIT :
 - Ajouter Maëlys
 - Sponsors
 - Faire afficher seulement les articles avec une date dans le futur
-- Ajout du lien decatlon pro dans la db, reste à l'afficher dans la modif et page boutique
+- Ajout du lien décathlon pro dans la db, reste à l'afficher dans la modif et page boutique
 - Utiliser le header pour trouver efficacement les blocs d'admin
 - Ajouter le css et les infos pour les mentions légales et confidentialité
 - Ajouter la possibilité d'importer un fichier avec toutes les compétitions et ça ajoute automatiquement dans les actualités
@@ -29,6 +29,7 @@ FAIT :
 
 
 RESTE A FAIRE :
+- Réfléchir à l'integration des palmarès, podiums...
 
 
 
