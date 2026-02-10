@@ -42,7 +42,7 @@ class Materiel extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $imageId = $this->handleImageUpload('image', 'materiel');
+        $imageId = $this->handleImageUpload('image', 'materiel', $this->request->getPost('nom'));
 
         $data = [
             'nom'         => $this->request->getPost('nom'),
@@ -82,7 +82,8 @@ class Materiel extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $imageId = $this->handleImageUpload('image', 'materiel');
+        $imageId = $this->handleImageUpload('image', 'materiel', $this->request->getPost('nom'));
+        
 
         $data = [
             'nom'         => $this->request->getPost('nom'),

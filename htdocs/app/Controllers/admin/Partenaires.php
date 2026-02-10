@@ -40,7 +40,7 @@ class Partenaires extends BaseAdminController
         }
 
         // Upload logo dans le dossier 'partenaires'
-        $imageId = $this->handleImageUpload('image', 'partenaires');
+        $imageId = $this->handleImageUpload('image', 'partenaires', $this->request->getPost('description'));
 
         $data = [
             'description' => $this->request->getPost('description'),
@@ -78,7 +78,7 @@ class Partenaires extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $imageId = $this->handleImageUpload('image', 'partenaires');
+        $imageId = $this->handleImageUpload('image', 'partenaires', $this->request->getPost('description'));
 
         $data = [
             'description' => $this->request->getPost('description'),

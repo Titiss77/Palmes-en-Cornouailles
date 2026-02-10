@@ -44,7 +44,7 @@ class Membres extends BaseAdminController
         }
 
         // 1. Gestion de l'image
-        $imageId = $this->handleImageUpload('image', 'membres');
+        $imageId = $this->handleImageUpload('image', 'membres', $this->request->getPost('nom'));
 
         // SI AUCUNE IMAGE : On assigne l'image par défaut
         if (!$imageId) {
@@ -111,7 +111,7 @@ class Membres extends BaseAdminController
         $oldImageId = $oldMembre['image_id'] ?? null;
 
         // Tentative upload nouvelle image
-        $newImageId = $this->handleImageUpload('image', 'membres');
+        $newImageId = $this->handleImageUpload('image', 'membres', $this->request->getPost('nom'));
 
         $data = ['nom' => $this->request->getPost('nom')];
 

@@ -41,7 +41,7 @@ class Piscines extends BaseadminController
         }
 
         // Upload de l'image (dossier 'piscines')
-        $imageId = $this->handleImageUpload('image', 'piscines');
+        $imageId = $this->handleImageUpload('image', 'piscines', $this->request->getPost('nom'));
 
         $data = [
             'nom' => $this->request->getPost('nom'),
@@ -80,7 +80,8 @@ class Piscines extends BaseadminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $imageId = $this->handleImageUpload('image', 'piscines');
+        $imageId = $this->handleImageUpload('image', 'piscines', $this->request->getPost('nom'));
+        
 
         $data = [
             'nom' => $this->request->getPost('nom'),

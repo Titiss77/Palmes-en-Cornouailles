@@ -135,7 +135,7 @@ class Actualites extends BaseAdminController
             'statut' => $this->request->getPost('statut'),
         ];
 
-        $imageId = $this->handleImageUpload('image', 'actualites');
+        $imageId = $this->handleImageUpload('image', 'actualites', $titre);
         if ($imageId) {
             $data['image_id'] = $imageId;
         }

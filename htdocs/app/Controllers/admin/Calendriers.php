@@ -41,7 +41,7 @@ class Calendriers extends BaseAdminController
 
         // Upload (Image ou PDF) dans le dossier 'calendriers'
         // BaseadminController gère l'insertion en BDD "images"
-        $imageId = $this->handleImageUpload('image', 'calendriers');
+        $imageId = $this->handleImageUpload('image', 'calendriers', $this->request->getPost('nom'));
 
         $data = [
             'categorie' => $this->request->getPost('categorie'),
@@ -78,7 +78,8 @@ class Calendriers extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $imageId = $this->handleImageUpload('image', 'calendriers');
+        $imageId = $this->handleImageUpload('image', 'calendriers', $this->request->getPost('nom'));
+        
 
         $data = [
             'categorie' => $this->request->getPost('categorie'),

@@ -39,7 +39,7 @@ class Disciplines extends BaseAdminController
         }
 
         // Upload de l'image (dossier 'disciplines')
-        $imageId = $this->handleImageUpload('image', 'disciplines');
+        $imageId = $this->handleImageUpload('image', 'disciplines', $this->request->getPost('nom'));
 
         $data = [
             'nom'         => $this->request->getPost('nom'),
@@ -75,7 +75,7 @@ class Disciplines extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $imageId = $this->handleImageUpload('image', 'disciplines');
+        $imageId = $this->handleImageUpload('image', 'disciplines', $this->request->getPost('nom'));
 
         $data = [
             'nom'         => $this->request->getPost('nom'),

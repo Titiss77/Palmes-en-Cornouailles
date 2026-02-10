@@ -41,7 +41,7 @@ class Groupes extends BaseAdminController
         }
 
         // Upload de l'image dans le dossier 'groupes'
-        $imageId = $this->handleImageUpload('image', 'groupes');
+        $imageId = $this->handleImageUpload('image', 'groupes', $this->request->getPost('nom'));
 
         $data = [
             'nom' => $this->request->getPost('nom'),
@@ -84,7 +84,7 @@ class Groupes extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $imageId = $this->handleImageUpload('image', 'groupes');
+        $imageId = $this->handleImageUpload('image', 'groupes', $this->request->getPost('nom'));
 
         $data = [
             'nom' => $this->request->getPost('nom'),
