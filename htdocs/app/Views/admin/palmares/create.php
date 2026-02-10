@@ -1,59 +1,91 @@
 <?= $this->extend('admin/Layout/l_global') ?>
+
 <?= $this->section('contenu') ?>
+<?= $this->include('admin/retour') ?>
 
-<div class="card">
-    <div class="card-header">
-        <h3>Ajouter une performance</h3>
+<div class="site-container">
+    <div class="d-flex align-items-center mb-4">
+        <a href="<?= base_url('admin/palmares') ?>" class="text-decoration-none me-3 text-dark">
+            <i class="bi bi-arrow-left-circle"></i>
+        </a>
+        <h3 class="title-section mb-0">Ajouter une performance</h3>
     </div>
-    <div class="card-body">
+
+    <?php if (session()->getFlashdata('errors')): ?>
+    <div class="alert alert-danger mb-4 p-3">
+        <ul class="mb-0 ps-3">
+            <?php foreach (session()->getFlashdata('errors') as $error): ?>
+            <li><?= esc($error) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php endif; ?>
+
+    <div class="card-item p-4">
         <form action="<?= base_url('admin/palmares') ?>" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
+
+            <div class="grid-2 gap-4">
+                <div class="form-group mb-3">
+                    <label class="fw-bold mb-1">Nom du nageur *</label>
+                    <input type="text" name="nom_nageur" class="form-input w-100 p-2" value="<?= old('nom_nageur') ?>"
+                        required>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="fw-bold mb-1">Prénom du nageur *</label>
+                    <input type="text" name="prenom_nageur" class="form-input w-100 p-2"
+                        value="<?= old('prenom_nageur') ?>" required>
+                </div>
+            </div>
+
+            <div class="grid-2 gap-4">
+                <div class="form-group mb-3">
+                    <label class="fw-bold mb-1">Lieu de la compétition *</label>
+                    <input type="text" name="competition" class="form-input w-100 p-2"
+                        placeholder="Ex: Championnats Départementaux" value="<?= old('competition') ?>" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="fw-bold mb-1">Date de la compétition *</label>
+                    <input type="date" name="date_epreuve" class="form-input w-100 p-2"
+                        value="<?= old('date_epreuve') ?>" required>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label>Nom du nageur *</label>
-                    <input type="text" name="nom_nageur" class="form-control" placeholder="ex: LE BIGOT" required>
+                    <div class="form-group">
+                        <label class="fw-bold mb-1">Course *</label>
+                        <input type="text" name="epreuve" class="form-input w-100 p-2" value="<?= old('epreuve') ?>"
+                            required>
+                    </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label>Prénom du nageur *</label>
-                    <input type="text" name="prenom_nageur" class="form-control" placeholder="ex: Maëlys" required>
+                    <div class="form-group">
+                        <label class="fw-bold mb-1">Classement *</label>
+                        <input type="number" name="classement" class="form-input w-100 p-2" placeholder="1, 2, 3..."
+                            value="<?= old('classement') ?>" required>
+                    </div>
                 </div>
-
                 <div class="col-md-4 mb-3">
-                    <label>Date de l'épreuve *</label>
-                    <input type="date" name="date_epreuve" class="form-control" required>
+                    <div class="form-group">
+                        <label class="fw-bold mb-1">Temps (Optionnel)</label>
+                        <input type="text" name="temps" class="form-input w-100 p-2" placeholder="mm:ss.ms"
+                            value="<?= old('temps') ?>">
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label>Nom de la compétition *</label>
-                <input type="text" name="competition" class="form-control" placeholder="Ex: Championnats Départementaux"
-                    required>
+            <div class="form-group mb-4">
+                <label class="fw-bold mb-1">Photo du podium (Optionnel)</label>
+                <input type="file" name="image" class="form-input w-100 p-2" accept="image/*">
             </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label>Épreuve *</label>
-                    <input type="text" name="epreuve" class="form-control" placeholder="Ex: 50m Papillon" required>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label>Classement (Place) *</label>
-                    <input type="number" name="classement" class="form-control" placeholder="1, 2, 3..." required>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label>Temps (Optionnel)</label>
-                    <input type="text" name="temps" class="form-control" placeholder="Ex: 00:32.45">
-                </div>
+            <div class="text-end">
+                <button type="submit" class="btn-home">
+                    <i class="bi bi-save"></i> Enregistrer
+                </button>
             </div>
-
-            <div class="mb-3">
-                <label>Photo du podium (Optionnel)</label>
-                <input type="file" name="image" class="form-control">
-            </div>
-
-            <button type="submit" class="btn btn-success">Enregistrer</button>
-            <a href="<?= base_url('admin/palmares') ?>" class="btn btn-secondary">Annuler</a>
         </form>
     </div>
 </div>
-
 <?= $this->endSection() ?>

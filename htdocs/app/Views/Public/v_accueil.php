@@ -55,7 +55,39 @@
             <?php endforeach; ?>
         </div>
 
-        <h3 class="title-section">Derniers Podiums & Résultats 🏆</h3>
+        <h3 class="title-section">Événements</h3>
+        <div class="card-item news-card">
+            <?php if (!empty($actualites)): ?>
+            <?php foreach ($actualites as $item): ?>
+
+            <div class="news-item mb-3 border-bottom pb-3">
+                <div class="news-content">
+                    <h5 class="mb-1" style="font-size: 1.1rem; color: var(--primary);">
+                        <?= esc($item['titre']); ?>
+                    </h5>
+
+                    <?php
+                    // Pas besoin d'esc ici car ce sont des dates générées par PHP, mais bonne pratique de vérifier si null
+                    $dateRef = $item['date_evenement'] ?? $item['created_at'];
+                    $dateLabel = !empty($item['date_evenement']) ? 'Le' : 'Publié le';
+                    ?>
+                    <p class="small text-muted mb-2">
+                        <i class="bi bi-calendar3"></i> <?= $dateLabel ?> <?= date('d/m/Y', strtotime($dateRef)); ?>
+                    </p>
+
+                    <a href="<?= base_url('actu/' . esc($item['slug'], 'url')) ?>"
+                        class="text-decoration-none small fw-bold" style="color: var(--secondary);">
+                        Plus de détails <i class="bi bi-arrow-right-short"></i>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <p>Aucune actualité pour le moment. Revenez bientôt !</p>
+            <?php endif; ?>
+        </div>
+
+        <h3 class="title-section">Derniers podiums & résultats</h3>
         <?php if (!empty($palmares)): ?>
         <div class="grid-responsive">
             <?php foreach ($palmares as $p): ?>
@@ -64,10 +96,6 @@
                 <img src="<?= esc(base_url('uploads/' . $p['image_path']), 'attr'); ?>"
                     alt="<?= esc($p['competition'], 'attr') ?>" class="img-card"
                     style="height: 200px; object-fit: cover;" />
-                <?php else: ?>
-                <div class="d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
-                    <i class="bi bi-trophy" style="font-size: 3rem; color: #ccc;"></i>
-                </div>
                 <?php endif; ?>
 
                 <div class="p-3">
@@ -104,40 +132,8 @@
             <?php endforeach; ?>
         </div>
         <?php else: ?>
-        <p class="text-center text-muted">Aucun résultat récent à afficher.</p>
+        <p class="text-center text-muted">Aucun résultat récent affichés.</p>
         <?php endif; ?>
-
-        <h3 class="title-section">Événements</h3>
-        <div class="card-item news-card">
-            <?php if (!empty($actualites)): ?>
-            <?php foreach ($actualites as $item): ?>
-
-            <div class="news-item mb-3 border-bottom pb-3">
-                <div class="news-content">
-                    <h5 class="mb-1" style="font-size: 1.1rem; color: var(--primary);">
-                        <?= esc($item['titre']); ?>
-                    </h5>
-
-                    <?php
-                    // Pas besoin d'esc ici car ce sont des dates générées par PHP, mais bonne pratique de vérifier si null
-                    $dateRef = $item['date_evenement'] ?? $item['created_at'];
-                    $dateLabel = !empty($item['date_evenement']) ? 'Le' : 'Publié le';
-                    ?>
-                    <p class="small text-muted mb-2">
-                        <i class="bi bi-calendar3"></i> <?= $dateLabel ?> <?= date('d/m/Y', strtotime($dateRef)); ?>
-                    </p>
-
-                    <a href="<?= base_url('actu/' . esc($item['slug'], 'url')) ?>"
-                        class="text-decoration-none small fw-bold" style="color: var(--secondary);">
-                        Plus de détails <i class="bi bi-arrow-right-short"></i>
-                    </a>
-                </div>
-            </div>
-            <?php endforeach; ?>
-            <?php else: ?>
-            <p>Aucune actualité pour le moment. Revenez bientôt !</p>
-            <?php endif; ?>
-        </div>
 
         <h3 class="title-section">Nos disciplines</h3>
         <div class="grid-responsive">
