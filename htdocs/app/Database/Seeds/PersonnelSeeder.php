@@ -12,20 +12,20 @@ class PersonnelSeeder extends Seeder
 
         // 1. Insertion des membres (Migration de 'photo' vers 'image_id')
         $membres = [
-            ['nom' => 'Yves PRIGENT', 'photo' => 'personnel/Yves_PRIGENT.jpg'],
-            ['nom' => 'Marie LANDOLSI', 'photo' => 'personnel/Marie_LANDOLSI.jpg'],
-            ['nom' => 'Tifenn GAUDIN', 'photo' => 'personnel/Tifenn_GAUDIN.jpg'],
-            ['nom' => 'Anne Catherine CAPITAINE', 'photo' => 'personnel/Anne_Catherine_CAPITAINE.jpg'],
-            ['nom' => 'Rodolphe LESPAGNOL', 'photo' => 'personnel/Rodolphe_LESPAGNOL.jpg'],
-            ['nom' => 'Thierry HENRI', 'photo' => 'personnel/Thierry_HENRI.jpg'],
-            ['nom' => 'Martin LESPAGNOL', 'photo' => 'personnel/Martin_LESPAGNOL.jpg'],
-            ['nom' => 'Zacharie LEDUC', 'photo' => 'personnel/Zacharie_LEDUC.jpg'],
-            ['nom' => 'Célian PRIGENT', 'photo' => 'personnel/Celian_PRIGENT.jpg'],
-            ['nom' => 'Luca SOLLAZZO LE MOIGNE', 'photo' => 'personnel/Luca_SOLLAZZO_LE_MOIGNE.jpg'],
-            ['nom' => 'Killian TORCH', 'photo' => 'personnel/Killian_TORCH.jpg'],
-            ['nom' => 'Florie BOUTOUILLER', 'photo' => 'personnel/vide.jpg'],
-            ['nom' => 'Eloise KERJEAN', 'photo' => 'personnel/Eloise_KERJEAN.jpg'],
-            ['nom' => 'Maëlys LE BIGOT', 'photo' => 'personnel/vide.jpg'],
+            ['nom' => 'Yves PRIGENT', 'photo' => 'membres/Yves_PRIGENT.jpg'],
+            ['nom' => 'Marie LANDOLSI', 'photo' => 'membres/Marie_LANDOLSI.jpg'],
+            ['nom' => 'Tifenn GAUDIN', 'photo' => 'membres/Tifenn_GAUDIN.jpg'],
+            ['nom' => 'Anne Catherine CAPITAINE', 'photo' => 'membres/Anne_Catherine_CAPITAINE.jpg'],
+            ['nom' => 'Rodolphe LESPAGNOL', 'photo' => 'membres/Rodolphe_LESPAGNOL.jpg'],
+            ['nom' => 'Thierry HENRI', 'photo' => 'membres/Thierry_HENRI.jpg'],
+            ['nom' => 'Martin LESPAGNOL', 'photo' => 'membres/Martin_LESPAGNOL.jpg'],
+            ['nom' => 'Zacharie LEDUC', 'photo' => 'membres/Zacharie_LEDUC.jpg'],
+            ['nom' => 'Célian PRIGENT', 'photo' => 'membres/Celian_PRIGENT.jpg'],
+            ['nom' => 'Luca SOLLAZZO LE MOIGNE', 'photo' => 'membres/Luca_SOLLAZZO_LE_MOIGNE.jpg'],
+            ['nom' => 'Killian TORCH', 'photo' => 'membres/Killian_TORCH.jpg'],
+            ['nom' => 'Florie BOUTOUILLER', 'photo' => 'membres/Florie_BOUTOUILLER.jpg'],
+            ['nom' => 'Eloise KERJEAN', 'photo' => 'membres/Eloise_KERJEAN.jpg'],
+            ['nom' => 'Maëlys LE BIGOT', 'photo' => 'membres/vide.jpg'],
         ];
 
         $membresData = [];
