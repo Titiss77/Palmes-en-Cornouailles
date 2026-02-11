@@ -24,20 +24,20 @@ class Donnees extends Model
         // Si la table est vide, on renvoie des fausses données
         if (empty($result)) {
             return [
-                'image'         => 'default_general.jpg',
-                'image_groupe'  => 'default_group.jpg',
-                'logoffessm'    => 'default_logo.jpg',
-                'nomClub'       => 'Nom du Club',
-                'description'   => 'Ceci est une description par défaut car la base de données est vide.',
-                'philosophie'   => 'Philosophie par défaut.',
+                'image' => 'default_general.jpg',
+                'image_groupe' => 'default_group.jpg',
+                'logoffessm' => 'default_logo.jpg',
+                'nomClub' => 'Nom du Club',
+                'description' => 'Ceci est une description par défaut car la base de données est vide.',
+                'philosophie' => 'Philosophie par défaut.',
                 'nombreNageurs' => 0,
                 'projetSportif' => 'Projet sportif par défaut',
-                'lienFacebook'  => '#',
+                'lienFacebook' => '#',
                 'lienInstagram' => '#',
-                'lienffessm'    => '#',
-                'lienDrive'     => '#',
-                'pourcentH'     => 50,
-                'pourcentF'     => 50
+                'lienffessm' => '#',
+                'lienDrive' => '#',
+                'pourcentH' => 50,
+                'pourcentF' => 50
             ];
         }
 
@@ -60,7 +60,8 @@ class Donnees extends Model
         return $result;
     }
 
-    public function getPresident() {
+    public function getPresident()
+    {
         $result = $this
             ->db
             ->table('membres m')
@@ -102,8 +103,6 @@ class Donnees extends Model
             ->select('d.nom, d.description, i.path as image')
             ->get()
             ->getResultArray();
-
-        
 
         return $result;
     }
@@ -235,5 +234,40 @@ class Donnees extends Model
             ->getResultArray();
 
         return $result;
+    }
+
+    public function getPalmares($id = null)
+    {
+        $result = $this
+            ->db
+            ->table('palmares p')
+            ->select('p.*, images.path as image_path, images.alt as image_alt')
+            ->join('images', 'images.id = p.image_id', 'left')
+            ->orderBy('date_epreuve', 'DESC')
+            ->orderBy('classement', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        $palmaresFiltres = [];
+        $dateLimite = date('Y-m-d', strtotime('-3 months'));
+
+        foreach ($result as $item) {
+            $dateEpreuve = $item['date_epreuve'];
+            if (!empty($dateEpreuve) && $dateEpreuve < $dateLimite) {
+                if (isset($item['id']) && $item['id'] > 0) {
+                    if (isset($item['statut']) && $item['statut'] !== 'archive') {
+                        $this
+                            ->db
+                            ->table('palmares')
+                            ->where('id', $item['id'])
+                            ->update(['statut' => 'archive']);
+                    }
+                }
+                continue;
+            }
+            $palmaresFiltres[] = $item;
+        }
+
+        return $palmaresFiltres;
     }
 }

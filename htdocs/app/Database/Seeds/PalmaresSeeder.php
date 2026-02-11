@@ -39,7 +39,7 @@ class PalmaresSeeder extends Seeder
         foreach ($data as $entry) {
             $entry += [
                 'competition' => 'Lorient',
-                'date_epreuve' => '2025-02-07',
+                'date_epreuve' => '2026-02-07',
                 'image_id' => NULL,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),

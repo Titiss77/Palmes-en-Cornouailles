@@ -7,7 +7,6 @@ use App\Controllers\Root;
 use App\Models\Public\Donnees;
 use App\Models\Public\GroupeModel;
 use App\Models\Public\PartenaireModel;
-use App\Models\admin\PalmaresModel;
 
 class Home extends BaseController
 {
@@ -24,7 +23,6 @@ class Home extends BaseController
         $this->groupeModel = new GroupeModel();
         $this->root = new Root();
         $this->partenaireModel = new PartenaireModel();
-        $this->palmaresModel = new PalmaresModel();  // AJOUT
 
         $this->generalData = $this->donneesModel->getGeneral();
     }
@@ -55,7 +53,7 @@ class Home extends BaseController
             'actualites' => $this->donneesModel->getActualites(),
             'groupes' => $this->groupeModel->getGroupes(),
             'partenaires' => $this->partenaireModel->getPartenaires(),
-            'palmares' => $this->palmaresModel->getPalmaresWithRelations(),
+            'palmares' => $this->donneesModel->getPalmares(),
         ];
 
         return $this->_render('Public/v_accueil', $data);
@@ -135,7 +133,7 @@ class Home extends BaseController
         
         $data = [
             'cssPage' => 'Public/accueil.css',
-            'palmares' => $this->palmaresModel->getPalmaresWithRelations(),
+            'palmares' => $this->donneesModel->getPalmares(),
         ];
 
         return $this->_render('Public/v_palmares', $data);
