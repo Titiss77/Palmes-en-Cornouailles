@@ -89,50 +89,17 @@
 
         <h3 class="title-section">Derniers podiums & résultats</h3>
         <?php if (!empty($palmares)): ?>
-        <div class="grid-responsive">
-            <?php foreach ($palmares as $p): ?>
-            <div class="card-item hover-effect result-card">
-                <?php if (!empty($p['image_path'])): ?>
-                <img src="<?= esc(base_url('uploads/' . $p['image_path']), 'attr'); ?>"
-                    alt="<?= esc($p['competition'], 'attr') ?>" class="img-card"
-                    style="height: 200px; object-fit: cover;" />
-                <?php endif; ?>
-
-                <div class="p-3">
-                    <h5 class="text-primary mb-1">
-                        <?= esc($p['prenom_nageur']) ?> <?= esc($p['nom_nageur']) ?>
-                    </h5>
-                    <strong class="d-block mb-2"><?= esc($p['competition']); ?></strong>
-
-                    <p class="mb-1">
-                        <i class="bi bi-stopwatch"></i> <?= esc($p['epreuve']); ?>
-                        <?php if (!empty($p['temps'])): ?>
-                        - <strong><?= esc($p['temps']); ?></strong>
-                        <?php endif; ?>
-                    </p>
-
-                    <div class="badge bg-warning text-dark mt-2 p-2 w-100">
-                        <?php
-                        if ($p['classement'] == 1)
-                            echo '🥇 1ère Place';
-                        elseif ($p['classement'] == 2)
-                            echo '🥈 2ème Place';
-                        elseif ($p['classement'] == 3)
-                            echo '🥉 3ème Place';
-                        else
-                            echo esc($p['classement']) . 'ème Place';
-                        ?>
-                    </div>
-
-                    <small class="text-muted d-block mt-2 text-end">
-                        Le <?= date('d/m/Y', strtotime($p['date_epreuve'])); ?>
-                    </small>
-                </div>
-            </div>
-            <?php endforeach; ?>
+        <div class="card-item news-card">
+            <p class="small text-muted mb-2">
+                La liste est trops longue ! Cliquez pour voir tous les résultats de nos nageurs et nageuses.
+            </p>
+            <a href="<?= base_url('palmares') ?>" class="text-decoration-none small fw-bold"
+                style="color: var(--secondary);">
+                Afficher tous les résultats <i class="bi bi-arrow-right-short"></i>
+            </a>
         </div>
         <?php else: ?>
-        <p class="text-center text-muted">Aucun résultat récent affichés.</p>
+        <p class=" text-center text-muted">Aucun résultat récent affichés.</p>
         <?php endif; ?>
 
         <h3 class="title-section">Nos disciplines</h3>

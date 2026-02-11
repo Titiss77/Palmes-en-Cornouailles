@@ -131,4 +131,17 @@ class Home extends BaseController
         ];
         return $this->_render('Public/v_confidentialite', $data);
     }
+
+    public function palmares()
+    {
+        $derniersResultats = $this->palmaresModel->getPalmaresWithRelations();
+        $derniersResultats = array_slice($derniersResultats, 0, 4);
+        
+        $data = [
+            'cssPage' => 'Public/accueil.css',
+            'palmares' => $derniersResultats
+        ];
+
+        return $this->_render('Public/v_palmares', $data);
+    }
 }
