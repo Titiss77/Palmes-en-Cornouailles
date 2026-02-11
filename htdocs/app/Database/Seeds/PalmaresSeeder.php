@@ -38,7 +38,6 @@ class PalmaresSeeder extends Seeder
         $newData = [];
         foreach ($data as $entry) {
             $entry += [
-                'temps' => '00:00.00',
                 'competition' => 'Lorient',
                 'date_epreuve' => '2025-02-07',
                 'image_id' => NULL,
