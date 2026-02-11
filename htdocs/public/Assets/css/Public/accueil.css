@@ -302,6 +302,16 @@ a:hover {
     align-content: center;
 }
 
+.group-card {
+    display: grid;
+    align-content: space-between;
+    text-align: center;
+}
+
+.discipline-card, .piscine-card {
+    text-align: center;
+}
+
 /* --- RESPONSIVE ACCUEIL --- */
 
 @media (max-width: 768px) {
