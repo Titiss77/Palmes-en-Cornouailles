@@ -30,8 +30,7 @@ class Palmares extends BaseAdminController
     {
         // Validation des nouveaux champs
         if (!$this->validate([
-            'nom_nageur'    => 'required|min_length[2]',
-            'prenom_nageur' => 'required|min_length[2]',
+            'prenom_nageur'    => 'required|min_length[2]',
             'competition'   => 'required|max_length[150]',
             'epreuve'       => 'required|max_length[100]',
             'classement'    => 'required',
@@ -81,9 +80,12 @@ class Palmares extends BaseAdminController
     public function update($id = null)
     {
         if (!$this->validate([
-            'nom_nageur'    => 'required|min_length[2]',
-            'prenom_nageur' => 'required|min_length[2]',
-            'competition'   => 'required',
+            'prenom_nageur'    => 'required|min_length[2]',
+            'competition'   => 'required|max_length[150]',
+            'epreuve'       => 'required|max_length[100]',
+            'classement'    => 'required',
+            'date_epreuve'  => 'required|valid_date',
+            
         ])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }

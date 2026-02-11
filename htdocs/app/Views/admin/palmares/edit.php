@@ -28,9 +28,9 @@
 
             <div class="grid-2 gap-4">
                 <div class="form-group mb-3">
-                    <label class="fw-bold mb-1">Nom du nageur *</label>
+                    <label class="fw-bold mb-1">Nom du nageur</label>
                     <input type="text" name="nom_nageur" class="form-input w-100 p-2"
-                        value="<?= old('nom_nageur', $item['nom_nageur']) ?>" required>
+                        value="<?= old('nom_nageur', $item['nom_nageur']) ?>">
                 </div>
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Prénom du nageur *</label>

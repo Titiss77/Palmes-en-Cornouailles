@@ -25,7 +25,7 @@ class Dashboard extends BaseAdminController
 
         $data['count'] = [
             'path' => '/sectionAccueil.php',
-            'actualites' => $db->table('actualites')->countAll(),
+            'actualites' => $db->table('actualites')->where('statut', 'publie')->countAll(),
             'boutique' => $db->table('boutique')->countAll(),
             'membres' => $db->table('membres')->countAll(),
             'groupes' => $db->table('groupes')->countAll(),
@@ -35,6 +35,7 @@ class Dashboard extends BaseAdminController
             'materiel' => $db->table('materiel')->countAll(),
             'disciplines' => $db->table('disciplines')->countAll(),
             'utilisateurs' => $db->table('utilisateurs')->countAll(),
+            'palmares' => $db->table('palmares')->countAll(),
         ];
 
         return view('admin/v_dashboard', $data);
@@ -61,6 +62,7 @@ class Dashboard extends BaseAdminController
             'materiel' => $db->table('materiel')->countAll(),
             'disciplines' => $db->table('disciplines')->countAll(),
             'utilisateurs' => $db->table('utilisateurs')->countAll(),
+            
         ];
 
         return view('admin/v_dashboard', $data);

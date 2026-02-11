@@ -21,6 +21,7 @@ $sections = [
                 'btn' => 'Gérer les contenus'
             ],
             [
+                'count' => $count['palmares'],
                 'label' => 'Palmares',
                 'desc' => 'Résultats des compétitions',
                 'icon' => 'bi-trophy',

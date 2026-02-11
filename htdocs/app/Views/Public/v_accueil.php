@@ -91,7 +91,7 @@
         <?php if (!empty($palmares)): ?>
         <div class="card-item news-card">
             <p class="small text-muted mb-2">
-                La liste est trops longue ! Cliquez pour voir tous les résultats de nos nageurs et nageuses.
+                Cliquez pour voir tous les résultats de nos nageurs et nageuses.
             </p>
             <a href="<?= base_url('palmares') ?>" class="text-decoration-none small fw-bold"
                 style="color: var(--secondary);">

@@ -26,6 +26,7 @@
                         <th width="30%">Nageur</th>
                         <th width="30%">Compétition / Épreuve</th>
                         <th width="15%">Résultat</th>
+                        <th width="15%">Statut</th>
                         <th width="15%" class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -75,6 +76,22 @@
                                 <i class="bi bi-stopwatch"></i> <?= esc($p['temps']) ?>
                             </div>
                             <?php endif; ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            // Définition des couleurs spécifiques au statut
+                            $colors = [
+                                'publie' => '#28a745',
+                                'brouillon' => '#ffc107',
+                                'archive' => '#6c757d'
+                            ];
+                            // Fallback sur la variable secondary du seed si statut inconnu, ou gris
+                            $bgStatus = $colors[$p['statut']] ?? '#ccc';
+                            ?>
+                            <span class="status-badge" style="background-color: <?= $bgStatus ?>;">
+                                <?= ucfirst($p['statut']) ?>
+                            </span>
                         </td>
 
                         <td class="text-end">

@@ -296,6 +296,12 @@ a:hover {
     width: 100%;
 }
 
+.result-card {
+    display: grid;
+    text-align: center;
+    align-content: center;
+}
+
 /* --- RESPONSIVE ACCUEIL --- */
 
 @media (max-width: 768px) {

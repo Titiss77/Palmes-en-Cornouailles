@@ -25,7 +25,7 @@ class PalmaresModel extends Model
 
     public function getPalmaresWithRelations($id = null)
     {
-        $builder = $this->select('palmares.*, images.path as image_path, images.alt as image_alt')
+        $builder = $this->select('palmares.*, images.path as image_path, images.alt as image_alt, statut')
                         ->join('images', 'images.id = palmares.image_id', 'left');
 
         if ($id) {
