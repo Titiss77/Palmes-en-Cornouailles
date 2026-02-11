@@ -51,6 +51,7 @@ class Palmares extends Migration
                 'unsigned'   => true,
                 'null'       => true,
             ],
+            'statut' => ['type' => 'ENUM', 'constraint' => ['brouillon', 'publie', 'archive'], 'default' => 'publie'],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,

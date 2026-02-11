@@ -45,8 +45,6 @@ class Home extends BaseController
 
     public function index()
     {
-        $derniersResultats = $this->palmaresModel->getPalmaresWithRelations();
-        $derniersResultats = array_slice($derniersResultats, 0, 4);
         
         $data = [
             'cssPage' => 'Public/accueil.css',
@@ -57,7 +55,7 @@ class Home extends BaseController
             'actualites' => $this->donneesModel->getActualites(),
             'groupes' => $this->groupeModel->getGroupes(),
             'partenaires' => $this->partenaireModel->getPartenaires(),
-            'palmares' => $derniersResultats
+            'palmares' => $this->palmaresModel->getPalmaresWithRelations(),
         ];
 
         return $this->_render('Public/v_accueil', $data);
@@ -134,12 +132,10 @@ class Home extends BaseController
 
     public function palmares()
     {
-        $derniersResultats = $this->palmaresModel->getPalmaresWithRelations();
-        $derniersResultats = array_slice($derniersResultats, 0, 4);
         
         $data = [
             'cssPage' => 'Public/accueil.css',
-            'palmares' => $derniersResultats
+            'palmares' => $this->palmaresModel->getPalmaresWithRelations(),
         ];
 
         return $this->_render('Public/v_palmares', $data);

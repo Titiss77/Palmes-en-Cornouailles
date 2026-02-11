@@ -25,14 +25,14 @@ class PalmaresModel extends Model
 
     public function getPalmaresWithRelations($id = null)
     {
-        // On joint seulement l'image, plus les membres
         $builder = $this->select('palmares.*, images.path as image_path, images.alt as image_alt')
-                        ->join('images', 'images.id = palmares.image_id', 'left');
+                        ->join('images', 'images.id = palmares.image_id', 'left')
+                        ->where('statut', 'publie');
 
         if ($id) {
             return $builder->where('palmares.id', $id)->first();
         }
 
-        return $builder->orderBy('date_epreuve', 'DESC')->findAll();
+        return $builder->orderBy('date_epreuve', 'DESC')->orderBy('classement', 'ASC')->findAll();
     }
 }

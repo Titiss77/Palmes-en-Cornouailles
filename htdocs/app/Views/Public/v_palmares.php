@@ -18,11 +18,23 @@
                 style="height: 200px; object-fit: cover;" />
             <?php endif; ?>
 
+            <div class="badge bg-warning text-dark mt-2 p-2 w-100">
+                <?php
+                if ($p['classement'] == 1)
+                    echo '🥇 1ère Place';
+                elseif ($p['classement'] == 2)
+                    echo '🥈 2ème Place';
+                elseif ($p['classement'] == 3)
+                    echo '🥉 3ème Place';
+                else
+                    echo esc($p['classement']) . 'ème Place';
+                ?>
+            </div>
+
             <div class="p-3">
                 <h5 class="text-primary mb-1">
                     <?= esc($p['prenom_nageur']) ?> <?= esc($p['nom_nageur']) ?>
                 </h5>
-                <strong class="d-block mb-2"><?= esc($p['competition']); ?></strong>
 
                 <p class="mb-1">
                     <i class="bi bi-stopwatch"></i> <?= esc($p['epreuve']); ?>
@@ -31,21 +43,9 @@
                     <?php endif; ?>
                 </p>
 
-                <div class="badge bg-warning text-dark mt-2 p-2 w-100">
-                    <?php
-                    if ($p['classement'] == 1)
-                        echo '🥇 1ère Place';
-                    elseif ($p['classement'] == 2)
-                        echo '🥈 2ème Place';
-                    elseif ($p['classement'] == 3)
-                        echo '🥉 3ème Place';
-                    else
-                        echo esc($p['classement']) . 'ème Place';
-                    ?>
-                </div>
-
                 <small class="text-muted d-block mt-2 text-end">
                     Le <?= date('d/m/Y', strtotime($p['date_epreuve'])); ?>
+                    à <?= esc($p['competition']); ?>
                 </small>
             </div>
         </div>
