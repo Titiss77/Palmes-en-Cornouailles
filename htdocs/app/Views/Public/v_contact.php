@@ -1,6 +1,7 @@
 <?= $this->extend('Public/Layout/l_global') ?>
 
 <?php
+
 /**
  * ============================================================================
  * VUE : INSCRIPTIONS & CONTACT
@@ -16,7 +17,7 @@ $conditions = [
 
 $destinataires = [
     'pas_choisi' => '-- Veuillez choisir --',
-    '(Facturation/Tarifs)'  => '(Facturation/Tarifs)',
+    '(Facturation/Tarifs)' => '(Facturation/Tarifs)',
     '(Licences/Dossiers)' => '(Licences/Dossiers)',
 ];
 ?>
@@ -75,6 +76,29 @@ $destinataires = [
             <p>*Via Hello asso, paiement en 3x, passport et chèques vacances</p>
         </section>
     </div>
+    <section class="trombi-container mt-5">
+        <h2 class="title-section">L'équipe du bureau</h2>
+        <div class="trombi-grid">
+
+            <?php if (!empty($membres)): ?>
+            <?php foreach ($membres as $m): ?>
+            <div class="trombi-card">
+                <div class="photo-container">
+                    <img src="<?= base_url('uploads/' . esc($m['photo'])); ?>" alt="<?= esc($m['nom']); ?>">
+                </div>
+                <div class="info">
+                    <h3><?= esc($m['nom']); ?></h3>
+                    <p class="badge-fonction"><?= esc($m['fonctions']); ?></p>
+                </div>
+            </div>
+            <?php endforeach; ?>
+
+            <?php else: ?>
+            <p class="text-center">Aucun membre n'est enregistré pour le moment.</p>
+            <?php endif; ?>
+
+        </div>
+    </section>
 
     <div class="grid-1 mb-5">
         <section class="card-item highlight-section">
