@@ -43,10 +43,10 @@ class Palmares extends BaseAdminController
         // 1. Génération du nom pour l'image via les inputs
         $nom = $this->request->getPost('nom_nageur');
         $prenom = $this->request->getPost('prenom_nageur');
-        $competition = $this->request->getPost('competition');
+        $epreuve = $this->request->getPost('epreuve');
         
         // Ex: LE_BIGOT_Maelys_Championnats_France
-        $customImageName = $nom . '_' . $prenom . '_' . $competition;
+        $customImageName = $nom . '_' . $prenom . '_' . $epreuve;
 
         // 2. Upload
         $imageId = $this->handleImageUpload('image', 'palmares', $customImageName);
@@ -54,8 +54,8 @@ class Palmares extends BaseAdminController
         $data = [
             'nom_nageur'    => $nom,
             'prenom_nageur' => $prenom,
-            'competition'   => $competition,
-            'epreuve'       => $this->request->getPost('epreuve'),
+            'competition'   => $this->request->getPost('competition'),
+            'epreuve'       => $epreuve,
             'temps'         => $this->request->getPost('temps'),
             'classement'    => $this->request->getPost('classement'),
             'date_epreuve'  => $this->request->getPost('date_epreuve'),
@@ -90,17 +90,17 @@ class Palmares extends BaseAdminController
 
         $nom = $this->request->getPost('nom_nageur');
         $prenom = $this->request->getPost('prenom_nageur');
-        $competition = $this->request->getPost('competition');
+        $epreuve = $this->request->getPost('epreuve');
         
-        $customImageName = $nom . '_' . $prenom . '_' . $competition;
+        $customImageName = $nom . '_' . $prenom . '_' . $epreuve;
 
         $imageId = $this->handleImageUpload('image', 'palmares', $customImageName);
 
         $data = [
             'nom_nageur'    => $nom,
             'prenom_nageur' => $prenom,
-            'competition'   => $competition,
-            'epreuve'       => $this->request->getPost('epreuve'),
+            'competition'   => $this->request->getPost('competition'),
+            'epreuve'       => $epreuve,
             'temps'         => $this->request->getPost('temps'),
             'classement'    => $this->request->getPost('classement'),
             'date_epreuve'  => $this->request->getPost('date_epreuve'),
