@@ -24,35 +24,35 @@ class ConfigGenerator extends BaseCommand
     use GeneratorTrait;
 
     /**
-     * The Command's Group
+     * The Command's Group.
      *
      * @var string
      */
     protected $group = 'Generators';
 
     /**
-     * The Command's Name
+     * The Command's Name.
      *
      * @var string
      */
     protected $name = 'make:config';
 
     /**
-     * The Command's Description
+     * The Command's Description.
      *
      * @var string
      */
     protected $description = 'Generates a new config file.';
 
     /**
-     * The Command's Usage
+     * The Command's Usage.
      *
      * @var string
      */
     protected $usage = 'make:config <name> [options]';
 
     /**
-     * The Command's Arguments
+     * The Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -61,24 +61,24 @@ class ConfigGenerator extends BaseCommand
     ];
 
     /**
-     * The Command's Options
+     * The Command's Options.
      *
      * @var array<string, string>
      */
     protected $options = [
         '--namespace' => 'Set root namespace. Default: "APP_NAMESPACE".',
-        '--suffix'    => 'Append the component title to the class name (e.g. User => UserConfig).',
-        '--force'     => 'Force overwrite existing file.',
+        '--suffix' => 'Append the component title to the class name (e.g. User => UserConfig).',
+        '--force' => 'Force overwrite existing file.',
     ];
 
     /**
      * Actually execute a command.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $this->component = 'Config';
         $this->directory = 'Config';
-        $this->template  = 'config.tpl.php';
+        $this->template = 'config.tpl.php';
 
         $this->classNameLang = 'CLI.generator.className.config';
         $this->generateClass($params);
@@ -91,8 +91,8 @@ class ConfigGenerator extends BaseCommand
     {
         $namespace = $this->getOption('namespace') ?? APP_NAMESPACE;
 
-        if ($namespace === APP_NAMESPACE) {
-            $class = substr($class, strlen($namespace . '\\'));
+        if (APP_NAMESPACE === $namespace) {
+            $class = substr($class, strlen($namespace.'\\'));
         }
 
         return $this->parseTemplate($class);

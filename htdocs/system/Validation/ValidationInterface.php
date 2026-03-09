@@ -17,7 +17,7 @@ use CodeIgniter\Database\BaseConnection;
 use CodeIgniter\HTTP\RequestInterface;
 
 /**
- * Expected behavior of a validator
+ * Expected behavior of a validator.
  */
 interface ValidationInterface
 {
@@ -25,9 +25,9 @@ interface ValidationInterface
      * Runs the validation process, returning true/false determining whether
      * validation was successful or not.
      *
-     * @param array|null                                 $data    The array of data to validate.
-     * @param string|null                                $group   The predefined group of rules to apply.
-     * @param array|BaseConnection|non-empty-string|null $dbGroup The database group to use.
+     * @param null|array                                 $data    the array of data to validate
+     * @param null|string                                $group   the predefined group of rules to apply
+     * @param null|array|BaseConnection|non-empty-string $dbGroup the database group to use
      */
     public function run(?array $data = null, ?string $group = null, $dbGroup = null): bool;
 
@@ -35,12 +35,12 @@ interface ValidationInterface
      * Check; runs the validation process, returning true or false
      * determining whether or not validation was successful.
      *
-     * @param array|bool|float|int|object|string|null $value   Value to validate.
+     * @param null|array|bool|float|int|object|string $value   value to validate
      * @param array|string                            $rules
      * @param list<string>                            $errors
-     * @param string|null                             $dbGroup The database group to use.
+     * @param null|string                             $dbGroup the database group to use
      *
-     * @return bool True if valid, else false.
+     * @return bool true if valid, else false
      */
     public function check($value, $rules, array $errors = [], $dbGroup = null): bool;
 
@@ -85,20 +85,18 @@ interface ValidationInterface
     /**
      * Get rule group.
      *
-     * @param string $group Group.
+     * @param string $group group
      *
-     * @return list<string> Rule group.
+     * @return list<string> rule group
      */
     public function getRuleGroup(string $group): array;
 
     /**
      * Set rule group.
      *
-     * @param string $group Group.
-     *
-     * @return void
+     * @param string $group group
      */
-    public function setRuleGroup(string $group);
+    public function setRuleGroup(string $group): void;
 
     /**
      * Returns the error for a specified $field (or empty string if not set).
@@ -137,7 +135,7 @@ interface ValidationInterface
      * same format used with setRules(). Additionally, check
      * for {group}_errors for an array of custom error messages.
      *
-     * @param non-empty-string|null $group
+     * @param null|non-empty-string $group
      *
      * @return array
      */

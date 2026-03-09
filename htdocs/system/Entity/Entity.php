@@ -29,16 +29,13 @@ use CodeIgniter\Entity\Cast\URICast;
 use CodeIgniter\Entity\Exceptions\CastException;
 use CodeIgniter\I18n\Time;
 use DateTime;
-use Exception;
-use JsonSerializable;
-use ReturnTypeWillChange;
 
 /**
- * Entity encapsulation, for use with CodeIgniter\Model
+ * Entity encapsulation, for use with CodeIgniter\Model.
  *
- * @see \CodeIgniter\Entity\EntityTest
+ * @see EntityTest
  */
-class Entity implements JsonSerializable
+class Entity implements \JsonSerializable
 {
     /**
      * Maps names used in sets and gets against unique
@@ -74,34 +71,11 @@ class Entity implements JsonSerializable
     protected $casts = [];
 
     /**
-     * Custom convert handlers
+     * Custom convert handlers.
      *
      * @var array<string, string>
      */
     protected $castHandlers = [];
-
-    /**
-     * Default convert handlers
-     *
-     * @var array<string, string>
-     */
-    private array $defaultCastHandlers = [
-        'array'     => ArrayCast::class,
-        'bool'      => BooleanCast::class,
-        'boolean'   => BooleanCast::class,
-        'csv'       => CSVCast::class,
-        'datetime'  => DatetimeCast::class,
-        'double'    => FloatCast::class,
-        'float'     => FloatCast::class,
-        'int'       => IntegerCast::class,
-        'integer'   => IntegerCast::class,
-        'int-bool'  => IntBoolCast::class,
-        'json'      => JsonCast::class,
-        'object'    => ObjectCast::class,
-        'string'    => StringCast::class,
-        'timestamp' => TimestampCast::class,
-        'uri'       => URICast::class,
-    ];
 
     /**
      * Holds the current values of all class vars.
@@ -125,7 +99,30 @@ class Entity implements JsonSerializable
     protected DataCaster $dataCaster;
 
     /**
-     * Holds info whenever properties have to be casted
+     * Default convert handlers.
+     *
+     * @var array<string, string>
+     */
+    private array $defaultCastHandlers = [
+        'array' => ArrayCast::class,
+        'bool' => BooleanCast::class,
+        'boolean' => BooleanCast::class,
+        'csv' => CSVCast::class,
+        'datetime' => DatetimeCast::class,
+        'double' => FloatCast::class,
+        'float' => FloatCast::class,
+        'int' => IntegerCast::class,
+        'integer' => IntegerCast::class,
+        'int-bool' => IntBoolCast::class,
+        'json' => JsonCast::class,
+        'object' => ObjectCast::class,
+        'string' => StringCast::class,
+        'timestamp' => TimestampCast::class,
+        'uri' => URICast::class,
+    ];
+
+    /**
+     * Holds info whenever properties have to be casted.
      */
     private bool $_cast = true;
 
@@ -147,267 +144,6 @@ class Entity implements JsonSerializable
     }
 
     /**
-     * Takes an array of key/value pairs and sets them as class
-     * properties, using any `setCamelCasedProperty()` methods
-     * that may or may not exist.
-     *
-     * @param array<string, array|bool|float|int|object|string|null> $data
-     *
-     * @return $this
-     */
-    public function fill(?array $data = null)
-    {
-        if (! is_array($data)) {
-            return $this;
-        }
-
-        foreach ($data as $key => $value) {
-            $this->__set($key, $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * General method that will return all public and protected values
-     * of this entity as an array. All values are accessed through the
-     * __get() magic method so will have any casts, etc applied to them.
-     *
-     * @param bool $onlyChanged If true, only return values that have changed since object creation
-     * @param bool $cast        If true, properties will be cast.
-     * @param bool $recursive   If true, inner entities will be cast as array as well.
-     */
-    public function toArray(bool $onlyChanged = false, bool $cast = true, bool $recursive = false): array
-    {
-        $this->_cast = $cast;
-
-        $keys = array_filter(array_keys($this->attributes), static fn ($key): bool => ! str_starts_with($key, '_'));
-
-        if (is_array($this->datamap)) {
-            $keys = array_unique(
-                [...array_diff($keys, $this->datamap), ...array_keys($this->datamap)],
-            );
-        }
-
-        $return = [];
-
-        // Loop over the properties, to allow magic methods to do their thing.
-        foreach ($keys as $key) {
-            if ($onlyChanged && ! $this->hasChanged($key)) {
-                continue;
-            }
-
-            $return[$key] = $this->__get($key);
-
-            if ($recursive) {
-                if ($return[$key] instanceof self) {
-                    $return[$key] = $return[$key]->toArray($onlyChanged, $cast, $recursive);
-                } elseif (is_callable([$return[$key], 'toArray'])) {
-                    $return[$key] = $return[$key]->toArray();
-                }
-            }
-        }
-
-        $this->_cast = true;
-
-        return $return;
-    }
-
-    /**
-     * Returns the raw values of the current attributes.
-     *
-     * @param bool $onlyChanged If true, only return values that have changed since object creation
-     * @param bool $recursive   If true, inner entities will be cast as array as well.
-     */
-    public function toRawArray(bool $onlyChanged = false, bool $recursive = false): array
-    {
-        $return = [];
-
-        if (! $onlyChanged) {
-            if ($recursive) {
-                return array_map(static function ($value) use ($onlyChanged, $recursive) {
-                    if ($value instanceof self) {
-                        $value = $value->toRawArray($onlyChanged, $recursive);
-                    } elseif (is_callable([$value, 'toRawArray'])) {
-                        $value = $value->toRawArray();
-                    }
-
-                    return $value;
-                }, $this->attributes);
-            }
-
-            return $this->attributes;
-        }
-
-        foreach ($this->attributes as $key => $value) {
-            if (! $this->hasChanged($key)) {
-                continue;
-            }
-
-            if ($recursive) {
-                if ($value instanceof self) {
-                    $value = $value->toRawArray($onlyChanged, $recursive);
-                } elseif (is_callable([$value, 'toRawArray'])) {
-                    $value = $value->toRawArray();
-                }
-            }
-
-            $return[$key] = $value;
-        }
-
-        return $return;
-    }
-
-    /**
-     * Ensures our "original" values match the current values.
-     *
-     * @return $this
-     */
-    public function syncOriginal()
-    {
-        $this->original = $this->attributes;
-
-        return $this;
-    }
-
-    /**
-     * Checks a property to see if it has changed since the entity
-     * was created. Or, without a parameter, checks if any
-     * properties have changed.
-     *
-     * @param string|null $key class property
-     */
-    public function hasChanged(?string $key = null): bool
-    {
-        // If no parameter was given then check all attributes
-        if ($key === null) {
-            return $this->original !== $this->attributes;
-        }
-
-        $dbColumn = $this->mapProperty($key);
-
-        // Key doesn't exist in either
-        if (! array_key_exists($dbColumn, $this->original) && ! array_key_exists($dbColumn, $this->attributes)) {
-            return false;
-        }
-
-        // It's a new element
-        if (! array_key_exists($dbColumn, $this->original) && array_key_exists($dbColumn, $this->attributes)) {
-            return true;
-        }
-
-        return $this->original[$dbColumn] !== $this->attributes[$dbColumn];
-    }
-
-    /**
-     * Set raw data array without any mutations
-     *
-     * @return $this
-     */
-    public function injectRawData(array $data)
-    {
-        $this->attributes = $data;
-
-        $this->syncOriginal();
-
-        return $this;
-    }
-
-    /**
-     * Set raw data array without any mutations
-     *
-     * @return $this
-     *
-     * @deprecated Use injectRawData() instead.
-     */
-    public function setAttributes(array $data)
-    {
-        return $this->injectRawData($data);
-    }
-
-    /**
-     * Checks the datamap to see if this property name is being mapped,
-     * and returns the db column name, if any, or the original property name.
-     *
-     * @return string db column name
-     */
-    protected function mapProperty(string $key)
-    {
-        if ($this->datamap === []) {
-            return $key;
-        }
-
-        if (! empty($this->datamap[$key])) {
-            return $this->datamap[$key];
-        }
-
-        return $key;
-    }
-
-    /**
-     * Converts the given string|timestamp|DateTime|Time instance
-     * into the "CodeIgniter\I18n\Time" object.
-     *
-     * @param DateTime|float|int|string|Time $value
-     *
-     * @return Time
-     *
-     * @throws Exception
-     */
-    protected function mutateDate($value)
-    {
-        return DatetimeCast::get($value);
-    }
-
-    /**
-     * Provides the ability to cast an item as a specific data type.
-     * Add ? at the beginning of the type (i.e. ?string) to get `null`
-     * instead of casting $value when $value is null.
-     *
-     * @param bool|float|int|string|null $value     Attribute value
-     * @param string                     $attribute Attribute name
-     * @param string                     $method    Allowed to "get" and "set"
-     *
-     * @return array|bool|float|int|object|string|null
-     *
-     * @throws CastException
-     */
-    protected function castAs($value, string $attribute, string $method = 'get')
-    {
-        return $this->dataCaster
-            // @TODO if $casts is readonly, we don't need the setTypes() method.
-            ->setTypes($this->casts)
-            ->castAs($value, $attribute, $method);
-    }
-
-    /**
-     * Support for json_encode()
-     *
-     * @return array
-     */
-    #[ReturnTypeWillChange]
-    public function jsonSerialize()
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * Change the value of the private $_cast property
-     *
-     * @return bool|Entity
-     */
-    public function cast(?bool $cast = null)
-    {
-        if ($cast === null) {
-            return $this->_cast;
-        }
-
-        $this->_cast = $cast;
-
-        return $this;
-    }
-
-    /**
      * Magic method to all protected/private class properties to be
      * easily set, either through a direct access or a
      * `setCamelCasedProperty()` method.
@@ -416,13 +152,11 @@ class Entity implements JsonSerializable
      *  $this->my_property = $p;
      *  $this->setMyProperty() = $p;
      *
-     * @param array|bool|float|int|object|string|null $value
+     * @param null|array|bool|float|int|object|string $value
      *
-     * @return void
-     *
-     * @throws Exception
+     * @throws \Exception
      */
-    public function __set(string $key, $value = null)
+    public function __set(string $key, $value = null): void
     {
         $dbColumn = $this->mapProperty($key);
 
@@ -436,17 +170,17 @@ class Entity implements JsonSerializable
         // if a setter method exists for this key, use that method to
         // insert this value. should be outside $isNullable check,
         // so maybe wants to do sth with null value automatically
-        $method = 'set' . str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $dbColumn)));
+        $method = 'set'.str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $dbColumn)));
 
         // If a "`_set` + $key" method exists, it is a setter.
-        if (method_exists($this, '_' . $method)) {
-            $this->{'_' . $method}($value);
+        if (method_exists($this, '_'.$method)) {
+            $this->{'_'.$method}($value);
 
             return;
         }
 
         // If a "`set` + $key" method exists, it is also a setter.
-        if (method_exists($this, $method) && $method !== 'setAttributes') {
+        if (method_exists($this, $method) && 'setAttributes' !== $method) {
             $this->{$method}($value);
 
             return;
@@ -467,9 +201,9 @@ class Entity implements JsonSerializable
      *  $p = $this->my_property
      *  $p = $this->getMyProperty()
      *
-     * @return array|bool|float|int|object|string|null
+     * @return null|array|bool|float|int|object|string
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @params string $key class property
      */
@@ -480,13 +214,13 @@ class Entity implements JsonSerializable
         $result = null;
 
         // Convert to CamelCase for the method
-        $method = 'get' . str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $dbColumn)));
+        $method = 'get'.str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $dbColumn)));
 
         // if a getter method exists for this key,
         // use that method to insert this value.
-        if (method_exists($this, '_' . $method)) {
+        if (method_exists($this, '_'.$method)) {
             // If a "`_get` + $key" method exists, it is a getter.
-            $result = $this->{'_' . $method}();
+            $result = $this->{'_'.$method}();
         } elseif (method_exists($this, $method)) {
             // If a "`get` + $key" method exists, it is also a getter.
             $result = $this->{$method}();
@@ -522,7 +256,7 @@ class Entity implements JsonSerializable
 
         $dbColumn = $this->mapProperty($key);
 
-        $method = 'get' . str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $dbColumn)));
+        $method = 'get'.str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $dbColumn)));
 
         if (method_exists($this, $method)) {
             return true;
@@ -543,6 +277,268 @@ class Entity implements JsonSerializable
         $dbColumn = $this->mapProperty($key);
 
         unset($this->attributes[$dbColumn]);
+    }
+
+    /**
+     * Takes an array of key/value pairs and sets them as class
+     * properties, using any `setCamelCasedProperty()` methods
+     * that may or may not exist.
+     *
+     * @param array<string, null|array|bool|float|int|object|string> $data
+     *
+     * @return $this
+     */
+    public function fill(?array $data = null)
+    {
+        if (!is_array($data)) {
+            return $this;
+        }
+
+        foreach ($data as $key => $value) {
+            $this->__set($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * General method that will return all public and protected values
+     * of this entity as an array. All values are accessed through the
+     * __get() magic method so will have any casts, etc applied to them.
+     *
+     * @param bool $onlyChanged If true, only return values that have changed since object creation
+     * @param bool $cast        if true, properties will be cast
+     * @param bool $recursive   if true, inner entities will be cast as array as well
+     */
+    public function toArray(bool $onlyChanged = false, bool $cast = true, bool $recursive = false): array
+    {
+        $this->_cast = $cast;
+
+        $keys = array_filter(array_keys($this->attributes), static fn ($key): bool => !str_starts_with($key, '_'));
+
+        if (is_array($this->datamap)) {
+            $keys = array_unique(
+                [...array_diff($keys, $this->datamap), ...array_keys($this->datamap)],
+            );
+        }
+
+        $return = [];
+
+        // Loop over the properties, to allow magic methods to do their thing.
+        foreach ($keys as $key) {
+            if ($onlyChanged && !$this->hasChanged($key)) {
+                continue;
+            }
+
+            $return[$key] = $this->__get($key);
+
+            if ($recursive) {
+                if ($return[$key] instanceof self) {
+                    $return[$key] = $return[$key]->toArray($onlyChanged, $cast, $recursive);
+                } elseif (is_callable([$return[$key], 'toArray'])) {
+                    $return[$key] = $return[$key]->toArray();
+                }
+            }
+        }
+
+        $this->_cast = true;
+
+        return $return;
+    }
+
+    /**
+     * Returns the raw values of the current attributes.
+     *
+     * @param bool $onlyChanged If true, only return values that have changed since object creation
+     * @param bool $recursive   if true, inner entities will be cast as array as well
+     */
+    public function toRawArray(bool $onlyChanged = false, bool $recursive = false): array
+    {
+        $return = [];
+
+        if (!$onlyChanged) {
+            if ($recursive) {
+                return array_map(static function ($value) use ($onlyChanged, $recursive) {
+                    if ($value instanceof self) {
+                        $value = $value->toRawArray($onlyChanged, $recursive);
+                    } elseif (is_callable([$value, 'toRawArray'])) {
+                        $value = $value->toRawArray();
+                    }
+
+                    return $value;
+                }, $this->attributes);
+            }
+
+            return $this->attributes;
+        }
+
+        foreach ($this->attributes as $key => $value) {
+            if (!$this->hasChanged($key)) {
+                continue;
+            }
+
+            if ($recursive) {
+                if ($value instanceof self) {
+                    $value = $value->toRawArray($onlyChanged, $recursive);
+                } elseif (is_callable([$value, 'toRawArray'])) {
+                    $value = $value->toRawArray();
+                }
+            }
+
+            $return[$key] = $value;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Ensures our "original" values match the current values.
+     *
+     * @return $this
+     */
+    public function syncOriginal()
+    {
+        $this->original = $this->attributes;
+
+        return $this;
+    }
+
+    /**
+     * Checks a property to see if it has changed since the entity
+     * was created. Or, without a parameter, checks if any
+     * properties have changed.
+     *
+     * @param null|string $key class property
+     */
+    public function hasChanged(?string $key = null): bool
+    {
+        // If no parameter was given then check all attributes
+        if (null === $key) {
+            return $this->original !== $this->attributes;
+        }
+
+        $dbColumn = $this->mapProperty($key);
+
+        // Key doesn't exist in either
+        if (!array_key_exists($dbColumn, $this->original) && !array_key_exists($dbColumn, $this->attributes)) {
+            return false;
+        }
+
+        // It's a new element
+        if (!array_key_exists($dbColumn, $this->original) && array_key_exists($dbColumn, $this->attributes)) {
+            return true;
+        }
+
+        return $this->original[$dbColumn] !== $this->attributes[$dbColumn];
+    }
+
+    /**
+     * Set raw data array without any mutations.
+     *
+     * @return $this
+     */
+    public function injectRawData(array $data)
+    {
+        $this->attributes = $data;
+
+        $this->syncOriginal();
+
+        return $this;
+    }
+
+    /**
+     * Set raw data array without any mutations.
+     *
+     * @return $this
+     *
+     * @deprecated use injectRawData() instead
+     */
+    public function setAttributes(array $data)
+    {
+        return $this->injectRawData($data);
+    }
+
+    /**
+     * Support for json_encode().
+     *
+     * @return array
+     */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Change the value of the private $_cast property.
+     *
+     * @return bool|Entity
+     */
+    public function cast(?bool $cast = null)
+    {
+        if (null === $cast) {
+            return $this->_cast;
+        }
+
+        $this->_cast = $cast;
+
+        return $this;
+    }
+
+    /**
+     * Checks the datamap to see if this property name is being mapped,
+     * and returns the db column name, if any, or the original property name.
+     *
+     * @return string db column name
+     */
+    protected function mapProperty(string $key)
+    {
+        if ([] === $this->datamap) {
+            return $key;
+        }
+
+        if (!empty($this->datamap[$key])) {
+            return $this->datamap[$key];
+        }
+
+        return $key;
+    }
+
+    /**
+     * Converts the given string|timestamp|DateTime|Time instance
+     * into the "CodeIgniter\I18n\Time" object.
+     *
+     * @param \DateTime|float|int|string|Time $value
+     *
+     * @return Time
+     *
+     * @throws \Exception
+     */
+    protected function mutateDate($value)
+    {
+        return DatetimeCast::get($value);
+    }
+
+    /**
+     * Provides the ability to cast an item as a specific data type.
+     * Add ? at the beginning of the type (i.e. ?string) to get `null`
+     * instead of casting $value when $value is null.
+     *
+     * @param null|bool|float|int|string $value     Attribute value
+     * @param string                     $attribute Attribute name
+     * @param string                     $method    Allowed to "get" and "set"
+     *
+     * @return null|array|bool|float|int|object|string
+     *
+     * @throws CastException
+     */
+    protected function castAs($value, string $attribute, string $method = 'get')
+    {
+        return $this->dataCaster
+            // @TODO if $casts is readonly, we don't need the setTypes() method.
+            ->setTypes($this->casts)
+            ->castAs($value, $attribute, $method)
+        ;
     }
 
     /**
@@ -567,6 +563,6 @@ class Entity implements JsonSerializable
     {
         $property = array_search($key, $this->datamap, true);
 
-        return $property !== false;
+        return false !== $property;
     }
 }

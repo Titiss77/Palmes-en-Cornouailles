@@ -19,7 +19,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Config\App;
 
 /**
- * Force HTTPS filter
+ * Force HTTPS filter.
  */
 class ForceHTTPS implements FilterInterface
 {
@@ -30,15 +30,15 @@ class ForceHTTPS implements FilterInterface
      * as set the HTTP Strict Transport Security (HSTS) header for those browsers
      * that support it.
      *
-     * @param array|null $arguments
+     * @param null|array $arguments
      *
-     * @return ResponseInterface|null
+     * @return null|ResponseInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
         $config = config(App::class);
 
-        if ($config->forceGlobalSecureRequests !== true) {
+        if (true !== $config->forceGlobalSecureRequests) {
             return null;
         }
 
@@ -56,7 +56,7 @@ class ForceHTTPS implements FilterInterface
     /**
      * We don't have anything to do here.
      *
-     * @param array|null $arguments
+     * @param null|array $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {

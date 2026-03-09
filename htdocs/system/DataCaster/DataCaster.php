@@ -38,31 +38,31 @@ final class DataCaster
     private array $types = [];
 
     /**
-     * Convert handlers
+     * Convert handlers.
      *
      * @var array<string, class-string> [type => classname]
      */
     private array $castHandlers = [
-        'array'     => ArrayCast::class,
-        'bool'      => BooleanCast::class,
-        'boolean'   => BooleanCast::class,
-        'csv'       => CSVCast::class,
-        'datetime'  => DatetimeCast::class,
-        'double'    => FloatCast::class,
-        'float'     => FloatCast::class,
-        'int'       => IntegerCast::class,
-        'integer'   => IntegerCast::class,
-        'int-bool'  => IntBoolCast::class,
-        'json'      => JsonCast::class,
+        'array' => ArrayCast::class,
+        'bool' => BooleanCast::class,
+        'boolean' => BooleanCast::class,
+        'csv' => CSVCast::class,
+        'datetime' => DatetimeCast::class,
+        'double' => FloatCast::class,
+        'float' => FloatCast::class,
+        'int' => IntegerCast::class,
+        'integer' => IntegerCast::class,
+        'int-bool' => IntBoolCast::class,
+        'json' => JsonCast::class,
         'timestamp' => TimestampCast::class,
-        'uri'       => URICast::class,
+        'uri' => URICast::class,
     ];
 
     /**
-     * @param array<string, class-string>|null $castHandlers Custom convert handlers
-     * @param array<string, string>|null       $types        [field => type]
-     * @param object|null                      $helper       Helper object.
-     * @param bool                             $strict       Strict mode? Set to false for casts for Entity.
+     * @param null|array<string, class-string> $castHandlers Custom convert handlers
+     * @param null|array<string, string>       $types        [field => type]
+     * @param null|object                      $helper       helper object
+     * @param bool                             $strict       strict mode? Set to false for casts for Entity
      */
     public function __construct(
         ?array $castHandlers = null,
@@ -72,18 +72,18 @@ final class DataCaster
     ) {
         $this->castHandlers = array_merge($this->castHandlers, $castHandlers);
 
-        if ($types !== null) {
+        if (null !== $types) {
             $this->setTypes($types);
         }
 
         if ($this->strict) {
             foreach ($this->castHandlers as $handler) {
                 if (
-                    ! is_subclass_of($handler, CastInterface::class)
-                    && ! is_subclass_of($handler, EntityCastInterface::class)
+                    !is_subclass_of($handler, CastInterface::class)
+                    && !is_subclass_of($handler, EntityCastInterface::class)
                 ) {
                     throw new InvalidArgumentException(
-                        'Invalid class type. It must implement CastInterface. class: ' . $handler,
+                        'Invalid class type. It must implement CastInterface. class: '.$handler,
                     );
                 }
             }
@@ -113,15 +113,16 @@ final class DataCaster
      * Add ? at the beginning of the type (i.e. ?string) to get `null`
      * instead of casting $value when $value is null.
      *
-     * @param         mixed       $value  The value to convert
-     * @param         string      $field  The field name
-     * @param         string      $method Allowed to "get" and "set"
+     * @param mixed  $value  The value to convert
+     * @param string $field  The field name
+     * @param string $method Allowed to "get" and "set"
+     *
      * @phpstan-param 'get'|'set' $method
      */
     public function castAs(mixed $value, string $field, string $method = 'get'): mixed
     {
         // If the type is not defined, return as it is.
-        if (! isset($this->types[$field])) {
+        if (!isset($this->types[$field])) {
             return $value;
         }
 
@@ -133,14 +134,14 @@ final class DataCaster
         if (str_starts_with($type, '?')) {
             $isNullable = true;
 
-            if ($value === null) {
+            if (null === $value) {
                 return null;
             }
 
             $type = substr($type, 1);
-        } elseif ($value === null) {
+        } elseif (null === $value) {
             if ($this->strict) {
-                $message = 'Field "' . $field . '" is not nullable, but null was passed.';
+                $message = 'Field "'.$field.'" is not nullable, but null was passed.';
 
                 throw new InvalidArgumentException($message);
             }
@@ -148,18 +149,18 @@ final class DataCaster
 
         // In order not to create a separate handler for the
         // json-array type, we transform the required one.
-        $type = ($type === 'json-array') ? 'json[array]' : $type;
+        $type = ('json-array' === $type) ? 'json[array]' : $type;
 
         $params = [];
 
         // Attempt to retrieve additional parameters if specified
         // type[param, param2,param3]
         if (preg_match('/\A(.+)\[(.+)\]\z/', $type, $matches)) {
-            $type   = $matches[1];
+            $type = $matches[1];
             $params = array_map(trim(...), explode(',', $matches[2]));
         }
 
-        if ($isNullable && ! $this->strict) {
+        if ($isNullable && !$this->strict) {
             $params[] = 'nullable';
         }
 
@@ -167,18 +168,18 @@ final class DataCaster
 
         $handlers = $this->castHandlers;
 
-        if (! isset($handlers[$type])) {
+        if (!isset($handlers[$type])) {
             throw new InvalidArgumentException(
-                'No such handler for "' . $field . '". Invalid type: ' . $type,
+                'No such handler for "'.$field.'". Invalid type: '.$type,
             );
         }
 
         $handler = $handlers[$type];
 
         if (
-            ! $this->strict
-            && ! is_subclass_of($handler, CastInterface::class)
-            && ! is_subclass_of($handler, EntityCastInterface::class)
+            !$this->strict
+            && !is_subclass_of($handler, CastInterface::class)
+            && !is_subclass_of($handler, EntityCastInterface::class)
         ) {
             throw CastException::forInvalidInterface($handler);
         }

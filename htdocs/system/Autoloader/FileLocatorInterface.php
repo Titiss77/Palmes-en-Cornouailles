@@ -26,13 +26,13 @@ interface FileLocatorInterface
      * @param string                $file   The relative file path or namespaced file to
      *                                      locate. If not namespaced, search in the app
      *                                      folder.
-     * @param non-empty-string|null $folder The folder within the namespace that we should
+     * @param null|non-empty-string $folder The folder within the namespace that we should
      *                                      look for the file. If $file does not contain
      *                                      this value, it will be appended to the namespace
      *                                      folder.
-     * @param string                $ext    The file extension the file should have.
+     * @param string                $ext    the file extension the file should have
      *
-     * @return false|string The path to the file, or false if not found.
+     * @return false|string the path to the file, or false if not found
      */
     public function locateFile(string $file, ?string $folder = null, string $ext = 'php');
 

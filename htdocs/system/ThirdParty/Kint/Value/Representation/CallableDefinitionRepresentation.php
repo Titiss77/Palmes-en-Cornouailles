@@ -27,14 +27,14 @@ declare(strict_types=1);
 
 namespace Kint\Value\Representation;
 
-use InvalidArgumentException;
-
 class CallableDefinitionRepresentation extends AbstractRepresentation
 {
     /** @psalm-readonly */
     protected string $filename;
+
     /** @psalm-readonly */
     protected int $line;
+
     /**
      * @psalm-readonly
      *
@@ -47,8 +47,8 @@ class CallableDefinitionRepresentation extends AbstractRepresentation
      */
     public function __construct(string $filename, int $line, ?string $docstring)
     {
-        if (null !== $docstring && !\preg_match('%^/\\*\\*.+\\*/$%s', $docstring)) {
-            throw new InvalidArgumentException('Docstring is invalid');
+        if (null !== $docstring && !\preg_match('%^/\*\*.+\*/$%s', $docstring)) {
+            throw new \InvalidArgumentException('Docstring is invalid');
         }
 
         parent::__construct('Callable definition', null, true);
@@ -105,7 +105,7 @@ class CallableDefinitionRepresentation extends AbstractRepresentation
         }
 
         $string = \substr($ds, 3, -2);
-        $string = \preg_replace('/^\\s*\\*\\s*?(\\S|$)/m', '\\1', $string);
+        $string = \preg_replace('/^\s*\*\s*?(\S|$)/m', '\1', $string);
 
         return \trim($string);
     }

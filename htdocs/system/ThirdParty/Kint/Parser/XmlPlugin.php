@@ -30,14 +30,11 @@ namespace Kint\Parser;
 use Dom\Node;
 use Dom\XMLDocument;
 use DOMDocument;
-use DOMException;
 use DOMNode;
-use InvalidArgumentException;
 use Kint\Value\AbstractValue;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\Context\ContextInterface;
 use Kint\Value\Representation\ValueRepresentation;
-use Throwable;
 
 class XmlPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -91,12 +88,13 @@ class XmlPlugin extends AbstractPlugin implements PluginCompleteInterface
     protected function xmlToSimpleXML(string $var, ContextInterface $c): ?AbstractValue
     {
         $errors = \libxml_use_internal_errors(true);
+
         try {
             $xml = \simplexml_load_string($var);
             if (!(bool) $xml) {
-                throw new InvalidArgumentException('Bad XML parse in XmlPlugin::xmlToSimpleXML');
+                throw new \InvalidArgumentException('Bad XML parse in XmlPlugin::xmlToSimpleXML');
             }
-        } catch (Throwable $t) {
+        } catch (\Throwable $t) {
             return null;
         } finally {
             \libxml_use_internal_errors($errors);
@@ -124,13 +122,13 @@ class XmlPlugin extends AbstractPlugin implements PluginCompleteInterface
     protected function xmlToDOMDocument(string $var, ContextInterface $c): ?AbstractValue
     {
         try {
-            $xml = new DOMDocument();
+            $xml = new \DOMDocument();
             $check = $xml->loadXML($var, LIBXML_NOWARNING | LIBXML_NOERROR);
 
             if (false === $check) {
-                throw new InvalidArgumentException('Bad XML parse in XmlPlugin::xmlToDOMDocument');
+                throw new \InvalidArgumentException('Bad XML parse in XmlPlugin::xmlToDOMDocument');
             }
-        } catch (Throwable $t) {
+        } catch (\Throwable $t) {
             return null;
         }
 
@@ -143,7 +141,7 @@ class XmlPlugin extends AbstractPlugin implements PluginCompleteInterface
         $base = new BaseContext($xml->nodeName);
         $base->depth = $c->getDepth() + 1;
         if (null !== ($ap = $c->getAccessPath())) {
-            $base->access_path = '(function($s){$x = new \\DomDocument(); $x->loadXML($s); return $x;})('.$ap.')->firstChild';
+            $base->access_path = '(function($s){$x = new \DomDocument(); $x->loadXML($s); return $x;})('.$ap.')->firstChild';
         }
 
         return $this->getParser()->parse($xml, $base);
@@ -158,7 +156,7 @@ class XmlPlugin extends AbstractPlugin implements PluginCompleteInterface
 
         try {
             $xml = XMLDocument::createFromString($var, LIBXML_NOWARNING | LIBXML_NOERROR);
-        } catch (DOMException $e) {
+        } catch (\DOMException $e) {
             return null;
         }
 
@@ -171,7 +169,7 @@ class XmlPlugin extends AbstractPlugin implements PluginCompleteInterface
         $base = new BaseContext($xml->nodeName);
         $base->depth = $c->getDepth() + 1;
         if (null !== ($ap = $c->getAccessPath())) {
-            $base->access_path = '\\Dom\\XMLDocument::createFromString('.$ap.')->firstChild';
+            $base->access_path = '\Dom\XMLDocument::createFromString('.$ap.')->firstChild';
         }
 
         return $this->getParser()->parse($xml, $base);

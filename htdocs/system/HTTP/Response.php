@@ -30,14 +30,14 @@ use Config\Cookie as CookieConfig;
  * - Headers
  * - Message body
  *
- * @see \CodeIgniter\HTTP\ResponseTest
+ * @see ResponseTest
  */
 class Response extends Message implements ResponseInterface
 {
     use ResponseTrait;
 
     /**
-     * HTTP status codes
+     * HTTP status codes.
      *
      * @var array
      */
@@ -142,7 +142,7 @@ class Response extends Message implements ResponseInterface
     protected $pretend = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param App $config
      *
@@ -177,7 +177,8 @@ class Response extends Message implements ResponseInterface
      *
      * @return $this
      *
-     * @internal For testing purposes only.
+     * @internal for testing purposes only
+     *
      * @testTag only available to test code
      */
     public function pretend(bool $pretend = true)
@@ -193,7 +194,7 @@ class Response extends Message implements ResponseInterface
      * The status code is a 3-digit integer result code of the server's attempt
      * to understand and satisfy the request.
      *
-     * @return int Status code.
+     * @return int status code
      */
     public function getStatusCode(): int
     {
@@ -216,12 +217,12 @@ class Response extends Message implements ResponseInterface
      * @see http://tools.ietf.org/html/rfc7231#section-6
      * @see http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
      *
-     * @return string Reason phrase; must return an empty string if none present.
+     * @return string reason phrase; must return an empty string if none present
      */
     public function getReasonPhrase()
     {
-        if ($this->reason === '') {
-            return ! empty($this->statusCode) ? static::$statusCodes[$this->statusCode] : '';
+        if ('' === $this->reason) {
+            return !empty($this->statusCode) ? static::$statusCodes[$this->statusCode] : '';
         }
 
         return $this->reason;

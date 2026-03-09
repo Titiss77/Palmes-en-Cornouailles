@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
 /**
- * Cross-Origin Resource Sharing (CORS) Configuration
+ * Cross-Origin Resource Sharing (CORS) Configuration.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
  */
@@ -25,7 +27,7 @@ class Cors extends BaseConfig
      *  }
      */
     public array $default = [
-        /**
+        /*
          * Origins for the `Access-Control-Allow-Origin` header.
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
@@ -36,7 +38,7 @@ class Cors extends BaseConfig
          */
         'allowedOrigins' => [],
 
-        /**
+        /*
          * Origin regex patterns for the `Access-Control-Allow-Origin` header.
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
@@ -49,7 +51,7 @@ class Cors extends BaseConfig
          */
         'allowedOriginsPatterns' => [],
 
-        /**
+        /*
          * Weather to send the `Access-Control-Allow-Credentials` header.
          *
          * The Access-Control-Allow-Credentials response header tells browsers whether
@@ -59,7 +61,7 @@ class Cors extends BaseConfig
          */
         'supportsCredentials' => false,
 
-        /**
+        /*
          * Set headers to allow.
          *
          * The Access-Control-Allow-Headers response header is used in response to
@@ -70,7 +72,7 @@ class Cors extends BaseConfig
          */
         'allowedHeaders' => [],
 
-        /**
+        /*
          * Set headers to expose.
          *
          * The Access-Control-Expose-Headers response header allows a server to
@@ -81,7 +83,7 @@ class Cors extends BaseConfig
          */
         'exposedHeaders' => [],
 
-        /**
+        /*
          * Set methods to allow.
          *
          * The Access-Control-Allow-Methods response header specifies one or more
@@ -95,7 +97,7 @@ class Cors extends BaseConfig
          */
         'allowedMethods' => [],
 
-        /**
+        /*
          * Set how many seconds the results of a preflight request can be cached.
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age

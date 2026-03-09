@@ -22,11 +22,9 @@ use CodeIgniter\HTTP\SiteURI;
 use CodeIgniter\HTTP\URI;
 use Config\App;
 use Config\Services;
-use Exception;
-use ReflectionException;
 
 /**
- * Trait FeatureTestTrait
+ * Trait FeatureTestTrait.
  *
  * Provides additional utilities for doing full HTTP testing
  * against your application in trait format.
@@ -34,57 +32,9 @@ use ReflectionException;
 trait FeatureTestTrait
 {
     /**
-     * Sets a RouteCollection that will override
-     * the application's route collection.
-     *
-     * Example routes:
-     * [
-     *    ['GET', 'home', 'Home::index'],
-     * ]
-     *
-     * @param array|null $routes Array to set routes
-     *
-     * @return $this
-     */
-    protected function withRoutes(?array $routes = null)
-    {
-        $collection = service('routes');
-
-        if ($routes !== null) {
-            $collection->resetRoutes();
-
-            foreach ($routes as $route) {
-                if ($route[0] === strtolower($route[0])) {
-                    @trigger_error(
-                        'Passing lowercase HTTP method "' . $route[0] . '" is deprecated.'
-                        . ' Use uppercase HTTP method like "' . strtoupper($route[0]) . '".',
-                        E_USER_DEPRECATED,
-                    );
-                }
-
-                /**
-                 * @TODO For backward compatibility. Remove strtolower() in the future.
-                 * @deprecated 4.5.0
-                 */
-                $method = strtolower($route[0]);
-
-                if (isset($route[3])) {
-                    $collection->{$method}($route[1], $route[2], $route[3]);
-                } else {
-                    $collection->{$method}($route[1], $route[2]);
-                }
-            }
-        }
-
-        $this->routes = $collection;
-
-        return $this;
-    }
-
-    /**
      * Sets any values that should exist during this session.
      *
-     * @param array|null $values Array of values, or null to use the current $_SESSION
+     * @param null|array $values Array of values, or null to use the current $_SESSION
      *
      * @return $this
      */
@@ -96,7 +46,7 @@ trait FeatureTestTrait
     }
 
     /**
-     * Set request's headers
+     * Set request's headers.
      *
      * Example of use
      * withHeaders([
@@ -129,7 +79,7 @@ trait FeatureTestTrait
     }
 
     /**
-     * Set the raw body for the request
+     * Set the raw body for the request.
      *
      * @param string $body
      *
@@ -166,14 +116,15 @@ trait FeatureTestTrait
     {
         if ($method === strtolower($method)) {
             @trigger_error(
-                'Passing lowercase HTTP method "' . $method . '" is deprecated.'
-                . ' Use uppercase HTTP method like "' . strtoupper($method) . '".',
+                'Passing lowercase HTTP method "'.$method.'" is deprecated.'
+                .' Use uppercase HTTP method like "'.strtoupper($method).'".',
                 E_USER_DEPRECATED,
             );
         }
 
         /**
          * @deprecated 4.5.0
+         *
          * @TODO remove this in the future.
          */
         $method = strtoupper($method);
@@ -184,14 +135,14 @@ trait FeatureTestTrait
 
         $request = $this->setupRequest($method, $path);
         $request = $this->setupHeaders($request);
-        $name    = strtolower($method);
+        $name = strtolower($method);
         $request = $this->populateGlobals($name, $request, $params);
         $request = $this->setRequestBody($request, $params);
 
         // Initialize the RouteCollection
         $routes = $this->routes;
 
-        if ($routes !== []) {
+        if ([] !== $routes) {
             $routes = service('routes')->loadRoutes();
         }
 
@@ -210,7 +161,8 @@ trait FeatureTestTrait
         $response = $this->app
             ->setContext('web')
             ->setRequest($request)
-            ->run($routes, true);
+            ->run($routes, true)
+        ;
 
         // Reset directory if it has been set
         service('router')->setDirectory(null);
@@ -226,7 +178,7 @@ trait FeatureTestTrait
      * @return TestResponse
      *
      * @throws RedirectException
-     * @throws Exception
+     * @throws \Exception
      */
     public function get(string $path, ?array $params = null)
     {
@@ -239,7 +191,7 @@ trait FeatureTestTrait
      * @return TestResponse
      *
      * @throws RedirectException
-     * @throws Exception
+     * @throws \Exception
      */
     public function post(string $path, ?array $params = null)
     {
@@ -247,12 +199,12 @@ trait FeatureTestTrait
     }
 
     /**
-     * Performs a PUT request
+     * Performs a PUT request.
      *
      * @return TestResponse
      *
      * @throws RedirectException
-     * @throws Exception
+     * @throws \Exception
      */
     public function put(string $path, ?array $params = null)
     {
@@ -260,12 +212,12 @@ trait FeatureTestTrait
     }
 
     /**
-     * Performss a PATCH request
+     * Performss a PATCH request.
      *
      * @return TestResponse
      *
      * @throws RedirectException
-     * @throws Exception
+     * @throws \Exception
      */
     public function patch(string $path, ?array $params = null)
     {
@@ -278,7 +230,7 @@ trait FeatureTestTrait
      * @return TestResponse
      *
      * @throws RedirectException
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete(string $path, ?array $params = null)
     {
@@ -291,11 +243,60 @@ trait FeatureTestTrait
      * @return TestResponse
      *
      * @throws RedirectException
-     * @throws Exception
+     * @throws \Exception
      */
     public function options(string $path, ?array $params = null)
     {
         return $this->call(Method::OPTIONS, $path, $params);
+    }
+
+    /**
+     * Sets a RouteCollection that will override
+     * the application's route collection.
+     *
+     * Example routes:
+     * [
+     *    ['GET', 'home', 'Home::index'],
+     * ]
+     *
+     * @param null|array $routes Array to set routes
+     *
+     * @return $this
+     */
+    protected function withRoutes(?array $routes = null)
+    {
+        $collection = service('routes');
+
+        if (null !== $routes) {
+            $collection->resetRoutes();
+
+            foreach ($routes as $route) {
+                if ($route[0] === strtolower($route[0])) {
+                    @trigger_error(
+                        'Passing lowercase HTTP method "'.$route[0].'" is deprecated.'
+                        .' Use uppercase HTTP method like "'.strtoupper($route[0]).'".',
+                        E_USER_DEPRECATED,
+                    );
+                }
+
+                /**
+                 * @TODO For backward compatibility. Remove strtolower() in the future.
+                 *
+                 * @deprecated 4.5.0
+                 */
+                $method = strtolower($route[0]);
+
+                if (isset($route[3])) {
+                    $collection->{$method}($route[1], $route[2], $route[3]);
+                } else {
+                    $collection->{$method}($route[1], $route[2]);
+                }
+            }
+        }
+
+        $this->routes = $collection;
+
+        return $this;
     }
 
     /**
@@ -307,12 +308,12 @@ trait FeatureTestTrait
     protected function setupRequest(string $method, ?string $path = null): IncomingRequest
     {
         $config = config(App::class);
-        $uri    = new SiteURI($config);
+        $uri = new SiteURI($config);
 
         // $path may have a query in it
-        $path  = URI::removeDotSegments($path);
+        $path = URI::removeDotSegments($path);
         $parts = explode('?', $path);
-        $path  = $parts[0];
+        $path = $parts[0];
         $query = $parts[1] ?? '';
 
         $superglobals = service('superglobals');
@@ -330,8 +331,8 @@ trait FeatureTestTrait
 
         if ($config->forceGlobalSecureRequests) {
             $_SERVER['HTTPS'] = 'test';
-            $server           = $request->getServer();
-            $server['HTTPS']  = 'test';
+            $server = $request->getServer();
+            $server['HTTPS'] = 'test';
             $request->setGlobal('server', $server);
         }
 
@@ -339,13 +340,13 @@ trait FeatureTestTrait
     }
 
     /**
-     * Setup the custom request's headers
+     * Setup the custom request's headers.
      *
      * @return IncomingRequest
      */
     protected function setupHeaders(IncomingRequest $request)
     {
-        if (! empty($this->headers)) {
+        if (!empty($this->headers)) {
             foreach ($this->headers as $name => $value) {
                 $request->setHeader($name, $value);
             }
@@ -361,27 +362,27 @@ trait FeatureTestTrait
      * Always populate the GET vars based on the URI.
      *
      * @param string               $name   Superglobal name (lowercase)
-     * @param non-empty-array|null $params
+     * @param null|non-empty-array $params
      *
      * @return Request
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     protected function populateGlobals(string $name, Request $request, ?array $params = null)
     {
         // $params should set the query vars if present,
         // otherwise set it from the URL.
-        $get = ($params !== null && $params !== [] && $name === 'get')
+        $get = (null !== $params && [] !== $params && 'get' === $name)
             ? $params
             : $this->getPrivateProperty($request->getUri(), 'query');
 
         $request->setGlobal('get', $get);
 
-        if ($name === 'get') {
+        if ('get' === $name) {
             $request->setGlobal('request', $request->fetchGlobal('get'));
         }
 
-        if ($name === 'post') {
+        if ('post' === $name) {
             $request->setGlobal($name, $params);
             $request->setGlobal(
                 'request',
@@ -399,27 +400,27 @@ trait FeatureTestTrait
      * This allows the body to be formatted in a way that the controller is going to
      * expect as in the case of testing a JSON or XML API.
      *
-     * @param array|null $params The parameters to be formatted and put in the body.
+     * @param null|array $params the parameters to be formatted and put in the body
      */
     protected function setRequestBody(Request $request, ?array $params = null): Request
     {
-        if ($this->requestBody !== '') {
+        if ('' !== $this->requestBody) {
             $request->setBody($this->requestBody);
         }
 
-        if ($this->bodyFormat !== '') {
+        if ('' !== $this->bodyFormat) {
             $formatMime = '';
-            if ($this->bodyFormat === 'json') {
+            if ('json' === $this->bodyFormat) {
                 $formatMime = 'application/json';
-            } elseif ($this->bodyFormat === 'xml') {
+            } elseif ('xml' === $this->bodyFormat) {
                 $formatMime = 'application/xml';
             }
 
-            if ($formatMime !== '') {
+            if ('' !== $formatMime) {
                 $request->setHeader('Content-Type', $formatMime);
             }
 
-            if ($params !== null && $formatMime !== '') {
+            if (null !== $params && '' !== $formatMime) {
                 $formatted = service('format')->getFormatter($formatMime)->format($params);
                 // "withBodyFormat() and $params of call()" has higher priority than withBody().
                 $request->setBody($formatted);

@@ -30,28 +30,28 @@ class ClearLogs extends BaseCommand
     protected $group = 'Housekeeping';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'logs:clear';
 
     /**
-     * The Command's short description
+     * The Command's short description.
      *
      * @var string
      */
     protected $description = 'Clears all log files.';
 
     /**
-     * The Command's usage
+     * The Command's usage.
      *
      * @var string
      */
     protected $usage = 'logs:clear [option';
 
     /**
-     * The Command's options
+     * The Command's options.
      *
      * @var array<string, string>
      */
@@ -62,11 +62,11 @@ class ClearLogs extends BaseCommand
     /**
      * Actually execute a command.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $force = array_key_exists('force', $params) || CLI::getOption('force');
 
-        if (! $force && CLI::prompt('Are you sure you want to delete the logs?', ['n', 'y']) === 'n') {
+        if (!$force && 'n' === CLI::prompt('Are you sure you want to delete the logs?', ['n', 'y'])) {
             // @codeCoverageIgnoreStart
             CLI::error('Deleting logs aborted.', 'light_gray', 'red');
             CLI::error('If you want, use the "-force" option to force delete all log files.', 'light_gray', 'red');
@@ -78,7 +78,7 @@ class ClearLogs extends BaseCommand
 
         helper('filesystem');
 
-        if (! delete_files(WRITEPATH . 'logs', false, true)) {
+        if (!delete_files(WRITEPATH.'logs', false, true)) {
             // @codeCoverageIgnoreStart
             CLI::error('Error in deleting the logs files.', 'light_gray', 'red');
             CLI::newLine();

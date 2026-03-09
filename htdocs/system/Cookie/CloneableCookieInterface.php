@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Cookie;
 
-use DateTimeInterface;
-
 /**
  * Interface for a fresh Cookie instance with selected attribute(s)
  * only changed from the original instance.
@@ -45,7 +43,7 @@ interface CloneableCookieInterface extends CookieInterface
     /**
      * Creates a new Cookie with a new cookie expires time.
      *
-     * @param DateTimeInterface|int|string $expires
+     * @param \DateTimeInterface|int|string $expires
      *
      * @return static
      */
@@ -80,7 +78,7 @@ interface CloneableCookieInterface extends CookieInterface
     public function withSecure(bool $secure = true);
 
     /**
-     * Creates a new Cookie with a new "HttpOnly" attribute
+     * Creates a new Cookie with a new "HttpOnly" attribute.
      *
      * @return static
      */

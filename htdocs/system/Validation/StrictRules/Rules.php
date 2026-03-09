@@ -19,7 +19,7 @@ use CodeIgniter\Validation\Rules as NonStrictRules;
 /**
  * Validation Rules.
  *
- * @see \CodeIgniter\Validation\StrictRules\RulesTest
+ * @see RulesTest
  */
 class Rules
 {
@@ -33,7 +33,7 @@ class Rules
     /**
      * The value does not match another field in $data.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      * @param array                                   $data Other field/value pairs
      */
     public function differs(
@@ -47,15 +47,15 @@ class Rules
             return $str !== dot_array_search($otherField, $data);
         }
 
-        if (! array_key_exists($otherField, $data)) {
+        if (!array_key_exists($otherField, $data)) {
             return false;
         }
 
         if (str_contains($field, '.')) {
-            if (! ArrayHelper::dotKeyExists($field, $data)) {
+            if (!ArrayHelper::dotKeyExists($field, $data)) {
                 return false;
             }
-        } elseif (! array_key_exists($field, $data)) {
+        } elseif (!array_key_exists($field, $data)) {
             return false;
         }
 
@@ -65,7 +65,7 @@ class Rules
     /**
      * Equals the static value provided.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function equals($str, string $val): bool
     {
@@ -74,9 +74,9 @@ class Rules
 
     /**
      * Returns true if $str is $val characters long.
-     * $val = "5" (one) | "5,8,12" (multiple values)
+     * $val = "5" (one) | "5,8,12" (multiple values).
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function exact_length($str, string $val): bool
     {
@@ -84,7 +84,7 @@ class Rules
             $str = (string) $str;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
@@ -92,9 +92,9 @@ class Rules
     }
 
     /**
-     * Greater than
+     * Greater than.
      *
-     * @param array|bool|float|int|object|string|null $str expects int|string
+     * @param null|array|bool|float|int|object|string $str expects int|string
      */
     public function greater_than($str, string $min): bool
     {
@@ -102,7 +102,7 @@ class Rules
             $str = (string) $str;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
@@ -110,9 +110,9 @@ class Rules
     }
 
     /**
-     * Equal to or Greater than
+     * Equal to or Greater than.
      *
-     * @param array|bool|float|int|object|string|null $str expects int|string
+     * @param null|array|bool|float|int|object|string $str expects int|string
      */
     public function greater_than_equal_to($str, string $min): bool
     {
@@ -120,7 +120,7 @@ class Rules
             $str = (string) $str;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
@@ -137,7 +137,7 @@ class Rules
      *    is_not_unique[table.field,where_field,where_value]
      *    is_not_unique[menu.id,active,1]
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function is_not_unique($str, string $field, array $data): bool
     {
@@ -149,9 +149,9 @@ class Rules
     }
 
     /**
-     * Value should be within an array of values
+     * Value should be within an array of values.
      *
-     * @param array|bool|float|int|object|string|null $value
+     * @param null|array|bool|float|int|object|string $value
      */
     public function in_list($value, string $list): bool
     {
@@ -159,7 +159,7 @@ class Rules
             $value = (string) $value;
         }
 
-        if (! is_string($value)) {
+        if (!is_string($value)) {
             return false;
         }
 
@@ -176,7 +176,7 @@ class Rules
      *    is_unique[table.field,ignore_field,ignore_value]
      *    is_unique[users.email,id,5]
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function is_unique($str, string $field, array $data): bool
     {
@@ -188,9 +188,9 @@ class Rules
     }
 
     /**
-     * Less than
+     * Less than.
      *
-     * @param array|bool|float|int|object|string|null $str expects int|string
+     * @param null|array|bool|float|int|object|string $str expects int|string
      */
     public function less_than($str, string $max): bool
     {
@@ -198,7 +198,7 @@ class Rules
             $str = (string) $str;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
@@ -206,9 +206,9 @@ class Rules
     }
 
     /**
-     * Equal to or Less than
+     * Equal to or Less than.
      *
-     * @param array|bool|float|int|object|string|null $str expects int|string
+     * @param null|array|bool|float|int|object|string $str expects int|string
      */
     public function less_than_equal_to($str, string $max): bool
     {
@@ -216,7 +216,7 @@ class Rules
             $str = (string) $str;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
@@ -226,7 +226,7 @@ class Rules
     /**
      * Matches the value of another field in $data.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      * @param array                                   $data Other field/value pairs
      */
     public function matches(
@@ -240,15 +240,15 @@ class Rules
             return $str === dot_array_search($otherField, $data);
         }
 
-        if (! array_key_exists($otherField, $data)) {
+        if (!array_key_exists($otherField, $data)) {
             return false;
         }
 
         if (str_contains($field, '.')) {
-            if (! ArrayHelper::dotKeyExists($field, $data)) {
+            if (!ArrayHelper::dotKeyExists($field, $data)) {
                 return false;
             }
-        } elseif (! array_key_exists($field, $data)) {
+        } elseif (!array_key_exists($field, $data)) {
             return false;
         }
 
@@ -258,7 +258,7 @@ class Rules
     /**
      * Returns true if $str is $val or fewer characters in length.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function max_length($str, string $val): bool
     {
@@ -266,7 +266,7 @@ class Rules
             $str = (string) $str;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
@@ -276,7 +276,7 @@ class Rules
     /**
      * Returns true if $str is at least $val length.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function min_length($str, string $val): bool
     {
@@ -284,7 +284,7 @@ class Rules
             $str = (string) $str;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
@@ -294,7 +294,7 @@ class Rules
     /**
      * Does not equal the static value provided.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function not_equals($str, string $val): bool
     {
@@ -304,7 +304,7 @@ class Rules
     /**
      * Value should not be within an array of values.
      *
-     * @param array|bool|float|int|object|string|null $value
+     * @param null|array|bool|float|int|object|string $value
      */
     public function not_in_list($value, string $list): bool
     {
@@ -316,7 +316,7 @@ class Rules
             $value = (string) $value;
         }
 
-        if (! is_string($value)) {
+        if (!is_string($value)) {
             return false;
         }
 
@@ -324,7 +324,7 @@ class Rules
     }
 
     /**
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function required($str = null): bool
     {
@@ -339,8 +339,8 @@ class Rules
      *
      *     required_with[password]
      *
-     * @param array|bool|float|int|object|string|null $str
-     * @param string|null                             $fields List of fields that we should check if present
+     * @param null|array|bool|float|int|object|string $str
+     * @param null|string                             $fields List of fields that we should check if present
      * @param array                                   $data   Complete list of fields from the form
      */
     public function required_with($str = null, ?string $fields = null, array $data = []): bool
@@ -356,9 +356,9 @@ class Rules
      *
      *     required_without[id,email]
      *
-     * @param array|bool|float|int|object|string|null $str
-     * @param string|null                             $otherFields The param fields of required_without[].
-     * @param string|null                             $field       This rule param fields aren't present, this field is required.
+     * @param null|array|bool|float|int|object|string $str
+     * @param null|string                             $otherFields the param fields of required_without[]
+     * @param null|string                             $field       this rule param fields aren't present, this field is required
      */
     public function required_without(
         $str = null,
@@ -373,10 +373,10 @@ class Rules
     /**
      * The field exists in $data.
      *
-     * @param array|bool|float|int|object|string|null $value The field value.
-     * @param string|null                             $param The rule's parameter.
-     * @param array                                   $data  The data to be validated.
-     * @param string|null                             $field The field name.
+     * @param null|array|bool|float|int|object|string $value the field value
+     * @param null|string                             $param the rule's parameter
+     * @param array                                   $data  the data to be validated
+     * @param null|string                             $field the field name
      */
     public function field_exists(
         $value = null,

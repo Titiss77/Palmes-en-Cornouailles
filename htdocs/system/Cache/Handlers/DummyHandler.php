@@ -13,57 +13,36 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Cache\Handlers;
 
-use Closure;
-
 /**
- * Dummy cache handler
+ * Dummy cache handler.
  *
- * @see \CodeIgniter\Cache\Handlers\DummyHandlerTest
+ * @see DummyHandlerTest
  */
 class DummyHandler extends BaseHandler
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function initialize()
-    {
-    }
+    public function initialize(): void {}
 
-    /**
-     * {@inheritDoc}
-     */
     public function get(string $key)
     {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function remember(string $key, int $ttl, Closure $callback)
+    public function remember(string $key, int $ttl, \Closure $callback)
     {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function save(string $key, $value, int $ttl = 60)
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function delete(string $key)
     {
         return true;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return int
      */
     public function deleteMatching(string $pattern)
@@ -71,49 +50,31 @@ class DummyHandler extends BaseHandler
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function increment(string $key, int $offset = 1)
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function decrement(string $key, int $offset = 1)
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function clean()
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCacheInfo()
     {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMetaData(string $key)
     {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isSupported(): bool
     {
         return true;

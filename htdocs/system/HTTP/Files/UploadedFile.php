@@ -56,7 +56,7 @@ class UploadedFile extends File implements UploadedFileInterface
     protected $name;
 
     /**
-     * The type of file as provided by PHP
+     * The type of file as provided by PHP.
      *
      * @var string
      */
@@ -64,7 +64,7 @@ class UploadedFile extends File implements UploadedFileInterface
 
     /**
      * The error constant of the upload
-     * (one of PHP's UPLOADERRXXX constants)
+     * (one of PHP's UPLOADERRXXX constants).
      *
      * @var int
      */
@@ -80,22 +80,22 @@ class UploadedFile extends File implements UploadedFileInterface
     /**
      * Accepts the file information as would be filled in from the $_FILES array.
      *
-     * @param string      $path         The temporary location of the uploaded file.
-     * @param string      $originalName The client-provided filename.
-     * @param string|null $mimeType     The type of file as provided by PHP
-     * @param int|null    $size         The size of the file, in bytes
-     * @param int|null    $error        The error constant of the upload (one of PHP's UPLOADERRXXX constants)
-     * @param string|null $clientPath   The webkit relative path of the uploaded file.
+     * @param string      $path         the temporary location of the uploaded file
+     * @param string      $originalName the client-provided filename
+     * @param null|string $mimeType     The type of file as provided by PHP
+     * @param null|int    $size         The size of the file, in bytes
+     * @param null|int    $error        The error constant of the upload (one of PHP's UPLOADERRXXX constants)
+     * @param null|string $clientPath   the webkit relative path of the uploaded file
      */
     public function __construct(string $path, string $originalName, ?string $mimeType = null, ?int $size = null, ?int $error = null, ?string $clientPath = null)
     {
-        $this->path             = $path;
-        $this->name             = $originalName;
-        $this->originalName     = $originalName;
+        $this->path = $path;
+        $this->name = $originalName;
+        $this->originalName = $originalName;
         $this->originalMimeType = $mimeType;
-        $this->size             = $size;
-        $this->error            = $error;
-        $this->clientPath       = $clientPath;
+        $this->size = $size;
+        $this->error = $error;
+        $this->clientPath = $clientPath;
 
         parent::__construct($path, false);
     }
@@ -122,71 +122,51 @@ class UploadedFile extends File implements UploadedFileInterface
      * @see http://php.net/is_uploaded_file
      * @see http://php.net/move_uploaded_file
      *
-     * @param string      $targetPath Path to which to move the uploaded file.
-     * @param string|null $name       the name to rename the file to.
-     * @param bool        $overwrite  State for indicating whether to overwrite the previously generated file with the same
-     *                                name or not.
+     * @param string      $targetPath path to which to move the uploaded file
+     * @param null|string $name       the name to rename the file to
+     * @param bool        $overwrite  state for indicating whether to overwrite the previously generated file with the same
+     *                                name or not
      *
      * @return bool
      */
     public function move(string $targetPath, ?string $name = null, bool $overwrite = false)
     {
-        $targetPath = rtrim($targetPath, '/') . '/';
+        $targetPath = rtrim($targetPath, '/').'/';
         $targetPath = $this->setPath($targetPath); // set the target path
 
         if ($this->hasMoved) {
             throw HTTPException::forAlreadyMoved();
         }
 
-        if (! $this->isValid()) {
+        if (!$this->isValid()) {
             throw HTTPException::forInvalidFile();
         }
 
         $name ??= $this->getName();
-        $destination = $overwrite ? $targetPath . $name : $this->getDestination($targetPath . $name);
+        $destination = $overwrite ? $targetPath.$name : $this->getDestination($targetPath.$name);
 
         try {
             $this->hasMoved = move_uploaded_file($this->path, $destination);
-        } catch (Exception) {
-            $error   = error_get_last();
+        } catch (\Exception) {
+            $error = error_get_last();
             $message = strip_tags($error['message'] ?? '');
 
             throw HTTPException::forMoveFailed(basename($this->path), $targetPath, $message);
         }
 
-        if ($this->hasMoved === false) {
+        if (false === $this->hasMoved) {
             $message = 'move_uploaded_file() returned false';
 
             throw HTTPException::forMoveFailed(basename($this->path), $targetPath, $message);
         }
 
-        @chmod($targetPath, 0777 & ~umask());
+        @chmod($targetPath, 0o777 & ~umask());
 
         // Success, so store our new information
         $this->path = $targetPath;
         $this->name = basename($destination);
 
         return true;
-    }
-
-    /**
-     * create file target path if
-     * the set path does not exist
-     *
-     * @return string The path set or created.
-     */
-    protected function setPath(string $path): string
-    {
-        if (! is_dir($path)) {
-            mkdir($path, 0777, true);
-            // create the index.html file
-            if (! is_file($path . 'index.html')) {
-                $file = fopen($path . 'index.html', 'x+b');
-                fclose($file);
-            }
-        }
-
-        return $path;
     }
 
     /**
@@ -212,7 +192,7 @@ class UploadedFile extends File implements UploadedFileInterface
      *
      * @see    http://php.net/manual/en/features.file-upload.errors.php
      *
-     * @return int One of PHP's UPLOAD_ERR_XXX constants.
+     * @return int one of PHP's UPLOAD_ERR_XXX constants
      */
     public function getError(): int
     {
@@ -220,19 +200,19 @@ class UploadedFile extends File implements UploadedFileInterface
     }
 
     /**
-     * Get error string
+     * Get error string.
      */
     public function getErrorString(): string
     {
         $errors = [
-            UPLOAD_ERR_OK         => lang('HTTP.uploadErrOk'),
-            UPLOAD_ERR_INI_SIZE   => lang('HTTP.uploadErrIniSize'),
-            UPLOAD_ERR_FORM_SIZE  => lang('HTTP.uploadErrFormSize'),
-            UPLOAD_ERR_PARTIAL    => lang('HTTP.uploadErrPartial'),
-            UPLOAD_ERR_NO_FILE    => lang('HTTP.uploadErrNoFile'),
+            UPLOAD_ERR_OK => lang('HTTP.uploadErrOk'),
+            UPLOAD_ERR_INI_SIZE => lang('HTTP.uploadErrIniSize'),
+            UPLOAD_ERR_FORM_SIZE => lang('HTTP.uploadErrFormSize'),
+            UPLOAD_ERR_PARTIAL => lang('HTTP.uploadErrPartial'),
+            UPLOAD_ERR_NO_FILE => lang('HTTP.uploadErrNoFile'),
             UPLOAD_ERR_CANT_WRITE => lang('HTTP.uploadErrCantWrite'),
             UPLOAD_ERR_NO_TMP_DIR => lang('HTTP.uploadErrNoTmpDir'),
-            UPLOAD_ERR_EXTENSION  => lang('HTTP.uploadErrExtension'),
+            UPLOAD_ERR_EXTENSION => lang('HTTP.uploadErrExtension'),
         ];
 
         $error = $this->error ?? UPLOAD_ERR_OK;
@@ -245,7 +225,7 @@ class UploadedFile extends File implements UploadedFileInterface
      * This is NOT a trusted value.
      * For a trusted version, use getMimeType() instead.
      *
-     * @return string The media type sent by the client or null if none was provided.
+     * @return string the media type sent by the client or null if none was provided
      */
     public function getClientMimeType(): string
     {
@@ -257,7 +237,7 @@ class UploadedFile extends File implements UploadedFileInterface
      * by the client, and should not be trusted. If the file has been
      * moved, this will return the final name of the moved file.
      *
-     * @return string The filename sent by the client or null if none was provided.
+     * @return string the filename sent by the client or null if none was provided
      */
     public function getName(): string
     {
@@ -304,7 +284,7 @@ class UploadedFile extends File implements UploadedFileInterface
     {
         $guessExtension = $this->guessExtension();
 
-        return $guessExtension !== '' ? $guessExtension : $this->getClientExtension();
+        return '' !== $guessExtension ? $guessExtension : $this->getClientExtension();
     }
 
     /**
@@ -334,7 +314,7 @@ class UploadedFile extends File implements UploadedFileInterface
      */
     public function isValid(): bool
     {
-        return is_uploaded_file($this->path) && $this->error === UPLOAD_ERR_OK;
+        return is_uploaded_file($this->path) && UPLOAD_ERR_OK === $this->error;
     }
 
     /**
@@ -343,19 +323,39 @@ class UploadedFile extends File implements UploadedFileInterface
      * By default, upload files are saved in writable/uploads directory. The YYYYMMDD folder
      * and random file name will be created.
      *
-     * @param string|null $folderName the folder name to writable/uploads directory.
-     * @param string|null $fileName   the name to rename the file to.
+     * @param null|string $folderName the folder name to writable/uploads directory
+     * @param null|string $fileName   the name to rename the file to
      *
      * @return string file full path
      */
     public function store(?string $folderName = null, ?string $fileName = null): string
     {
-        $folderName = rtrim($folderName ?? date('Ymd'), '/') . '/';
+        $folderName = rtrim($folderName ?? date('Ymd'), '/').'/';
         $fileName ??= $this->getRandomName();
 
         // Move the uploaded file to a new location.
-        $this->move(WRITEPATH . 'uploads/' . $folderName, $fileName);
+        $this->move(WRITEPATH.'uploads/'.$folderName, $fileName);
 
-        return $folderName . $this->name;
+        return $folderName.$this->name;
+    }
+
+    /**
+     * create file target path if
+     * the set path does not exist.
+     *
+     * @return string the path set or created
+     */
+    protected function setPath(string $path): string
+    {
+        if (!is_dir($path)) {
+            mkdir($path, 0o777, true);
+            // create the index.html file
+            if (!is_file($path.'index.html')) {
+                $file = fopen($path.'index.html', 'x+b');
+                fclose($file);
+            }
+        }
+
+        return $path;
     }
 }

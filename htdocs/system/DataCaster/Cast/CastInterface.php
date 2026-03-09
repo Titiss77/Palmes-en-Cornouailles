@@ -20,7 +20,7 @@ interface CastInterface
      *
      * @param mixed        $value  Data from database driver
      * @param list<string> $params Additional param
-     * @param object|null  $helper Helper object. E.g., database connection
+     * @param null|object  $helper Helper object. E.g., database connection
      *
      * @return mixed PHP native value
      */
@@ -35,7 +35,7 @@ interface CastInterface
      *
      * @param mixed        $value  PHP native value
      * @param list<string> $params Additional param
-     * @param object|null  $helper Helper object. E.g., database connection
+     * @param null|object  $helper Helper object. E.g., database connection
      *
      * @return mixed Data to pass to database driver
      */

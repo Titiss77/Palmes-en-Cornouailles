@@ -7,7 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class {class} extends {extends}
 {
-<?php if ($type === 'controller'): ?>
+<?php if ('controller' === $type) { ?>
     /**
      * Return an array of resource objects, themselves in array format.
      *
@@ -85,7 +85,7 @@ class {class} extends {extends}
     {
         //
     }
-<?php elseif ($type === 'presenter'): ?>
+<?php } elseif ('presenter' === $type) { ?>
     /**
      * Present a view of resource objects.
      *
@@ -177,10 +177,10 @@ class {class} extends {extends}
     {
         //
     }
-<?php else: ?>
+<?php } else { ?>
     public function index()
     {
         //
     }
-<?php endif ?>
+<?php } ?>
 }

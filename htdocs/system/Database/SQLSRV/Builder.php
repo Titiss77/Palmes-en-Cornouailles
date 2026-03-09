@@ -21,7 +21,7 @@ use CodeIgniter\Database\ResultInterface;
 use Config\Feature;
 
 /**
- * Builder for SQLSRV
+ * Builder for SQLSRV.
  *
  * @todo auto check for TextCastToInt
  * @todo auto check for InsertIndexValue
@@ -30,7 +30,21 @@ use Config\Feature;
 class Builder extends BaseBuilder
 {
     /**
-     * ORDER BY random keyword
+     * Handle increment/decrement on text.
+     *
+     * @var bool
+     */
+    public $castTextToInt = true;
+
+    /**
+     * Handle IDENTITY_INSERT property/.
+     *
+     * @var bool
+     */
+    public $keyPermission = false;
+
+    /**
+     * ORDER BY random keyword.
      *
      * @var array
      */
@@ -40,7 +54,7 @@ class Builder extends BaseBuilder
     ];
 
     /**
-     * Quoted identifier flag
+     * Quoted identifier flag.
      *
      * Whether to use SQL-92 standard quoted identifier
      * (double quotes) or brackets for identifier escaping.
@@ -50,47 +64,7 @@ class Builder extends BaseBuilder
     protected $_quoted_identifier = true;
 
     /**
-     * Handle increment/decrement on text
-     *
-     * @var bool
-     */
-    public $castTextToInt = true;
-
-    /**
-     * Handle IDENTITY_INSERT property/
-     *
-     * @var bool
-     */
-    public $keyPermission = false;
-
-    /**
-     * Groups tables in FROM clauses if needed, so there is no confusion
-     * about operator precedence.
-     */
-    protected function _fromTables(): string
-    {
-        $from = [];
-
-        foreach ($this->QBFrom as $value) {
-            $from[] = str_starts_with($value, '(SELECT') ? $value : $this->getFullName($value);
-        }
-
-        return implode(', ', $from);
-    }
-
-    /**
-     * Generates a platform-specific truncate string from the supplied data
-     *
-     * If the database does not support the truncate() command,
-     * then this method maps to 'DELETE FROM table'
-     */
-    protected function _truncate(string $table): string
-    {
-        return 'TRUNCATE TABLE ' . $this->getFullName($table);
-    }
-
-    /**
-     * Generates the JOIN portion of the query
+     * Generates the JOIN portion of the query.
      *
      * @param RawSql|string $cond
      *
@@ -98,10 +72,10 @@ class Builder extends BaseBuilder
      */
     public function join(string $table, $cond, string $type = '', ?bool $escape = null)
     {
-        if ($type !== '') {
+        if ('' !== $type) {
             $type = strtoupper(trim($type));
 
-            if (! in_array($type, $this->joinTypes, true)) {
+            if (!in_array($type, $this->joinTypes, true)) {
                 $type = '';
             } else {
                 $type .= ' ';
@@ -112,32 +86,32 @@ class Builder extends BaseBuilder
         // in the protectIdentifiers to know whether to add a table prefix
         $this->trackAliases($table);
 
-        if (! is_bool($escape)) {
+        if (!is_bool($escape)) {
             $escape = $this->db->protectIdentifiers;
         }
 
-        if (! $this->hasOperator($cond)) {
-            $cond = ' USING (' . ($escape ? $this->db->escapeIdentifiers($cond) : $cond) . ')';
-        } elseif ($escape === false) {
-            $cond = ' ON ' . $cond;
+        if (!$this->hasOperator($cond)) {
+            $cond = ' USING ('.($escape ? $this->db->escapeIdentifiers($cond) : $cond).')';
+        } elseif (false === $escape) {
+            $cond = ' ON '.$cond;
         } else {
             // Split multiple conditions
             if (preg_match_all('/\sAND\s|\sOR\s/i', $cond, $joints, PREG_OFFSET_CAPTURE) >= 1) {
                 $conditions = [];
-                $joints     = $joints[0];
+                $joints = $joints[0];
                 array_unshift($joints, ['', 0]);
 
-                for ($i = count($joints) - 1, $pos = strlen($cond); $i >= 0; $i--) {
+                for ($i = count($joints) - 1, $pos = strlen($cond); $i >= 0; --$i) {
                     $joints[$i][1] += strlen($joints[$i][0]); // offset
                     $conditions[$i] = substr($cond, $joints[$i][1], $pos - $joints[$i][1]);
-                    $pos            = $joints[$i][1] - strlen($joints[$i][0]);
-                    $joints[$i]     = $joints[$i][0];
+                    $pos = $joints[$i][1] - strlen($joints[$i][0]);
+                    $joints[$i] = $joints[$i][0];
                 }
 
                 ksort($conditions);
             } else {
                 $conditions = [$cond];
-                $joints     = [''];
+                $joints = [''];
             }
 
             $cond = ' ON ';
@@ -146,89 +120,26 @@ class Builder extends BaseBuilder
                 $operator = $this->getOperator($condition);
 
                 // Workaround for BETWEEN
-                if ($operator === false) {
-                    $cond .= $joints[$i] . $condition;
+                if (false === $operator) {
+                    $cond .= $joints[$i].$condition;
 
                     continue;
                 }
 
                 $cond .= $joints[$i];
-                $cond .= preg_match('/(\(*)?([\[\]\w\.\'-]+)' . preg_quote($operator, '/') . '(.*)/i', $condition, $match) ? $match[1] . $this->db->protectIdentifiers($match[2]) . $operator . $this->db->protectIdentifiers($match[3]) : $condition;
+                $cond .= preg_match('/(\(*)?([\[\]\w\.\'-]+)'.preg_quote($operator, '/').'(.*)/i', $condition, $match) ? $match[1].$this->db->protectIdentifiers($match[2]).$operator.$this->db->protectIdentifiers($match[3]) : $condition;
             }
         }
 
         // Do we want to escape the table name?
-        if ($escape === true) {
+        if (true === $escape) {
             $table = $this->db->protectIdentifiers($table, true, null, false);
         }
 
         // Assemble the JOIN statement
-        $this->QBJoin[] = $type . 'JOIN ' . $this->getFullName($table) . $cond;
+        $this->QBJoin[] = $type.'JOIN '.$this->getFullName($table).$cond;
 
         return $this;
-    }
-
-    /**
-     * Generates a platform-specific insert string from the supplied data
-     *
-     * @todo implement check for this instead static $insertKeyPermission
-     */
-    protected function _insert(string $table, array $keys, array $unescapedKeys): string
-    {
-        $fullTableName = $this->getFullName($table);
-
-        // insert statement
-        $statement = 'INSERT INTO ' . $fullTableName . ' (' . implode(',', $keys) . ') VALUES (' . implode(', ', $unescapedKeys) . ')';
-
-        return $this->keyPermission ? $this->addIdentity($fullTableName, $statement) : $statement;
-    }
-
-    /**
-     * Insert batch statement
-     *
-     * Generates a platform-specific insert string from the supplied data.
-     */
-    protected function _insertBatch(string $table, array $keys, array $values): string
-    {
-        $sql = $this->QBOptions['sql'] ?? '';
-
-        // if this is the first iteration of batch then we need to build skeleton sql
-        if ($sql === '') {
-            $sql = 'INSERT ' . $this->compileIgnore('insert') . 'INTO ' . $this->getFullName($table)
-                . ' (' . implode(', ', $keys) . ")\n{:_table_:}";
-
-            $this->QBOptions['sql'] = $sql;
-        }
-
-        if (isset($this->QBOptions['setQueryAsData'])) {
-            $data = $this->QBOptions['setQueryAsData'];
-        } else {
-            $data = 'VALUES ' . implode(', ', $this->formatValues($values));
-        }
-
-        return str_replace('{:_table_:}', $data, $sql);
-    }
-
-    /**
-     * Generates a platform-specific update string from the supplied data
-     */
-    protected function _update(string $table, array $values): string
-    {
-        $valstr = [];
-
-        foreach ($values as $key => $val) {
-            $valstr[] = $key . ' = ' . $val;
-        }
-
-        $fullTableName = $this->getFullName($table);
-
-        $statement = sprintf('UPDATE %s%s SET ', empty($this->QBLimit) ? '' : 'TOP(' . $this->QBLimit . ') ', $fullTableName);
-
-        $statement .= implode(', ', $valstr)
-            . $this->compileWhereHaving('QBWhere')
-            . $this->compileOrderBy();
-
-        return $this->keyPermission ? $this->addIdentity($fullTableName, $statement) : $statement;
     }
 
     /**
@@ -248,7 +159,7 @@ class Builder extends BaseBuilder
 
         $sql = $this->_update($this->QBFrom[0], $values);
 
-        if (! $this->testMode) {
+        if (!$this->testMode) {
             $this->resetWrite();
 
             return $this->db->query($sql, $this->binds, false);
@@ -274,7 +185,7 @@ class Builder extends BaseBuilder
 
         $sql = $this->_update($this->QBFrom[0], $values);
 
-        if (! $this->testMode) {
+        if (!$this->testMode) {
             $this->resetWrite();
 
             return $this->db->query($sql, $this->binds, false);
@@ -284,79 +195,7 @@ class Builder extends BaseBuilder
     }
 
     /**
-     * Get full name of the table
-     */
-    private function getFullName(string $table): string
-    {
-        $alias = '';
-
-        if (str_contains($table, ' ')) {
-            $alias = explode(' ', $table);
-            $table = array_shift($alias);
-            $alias = ' ' . implode(' ', $alias);
-        }
-
-        if ($this->db->escapeChar === '"') {
-            if (str_contains($table, '.') && ! str_starts_with($table, '.') && ! str_ends_with($table, '.')) {
-                $dbInfo   = explode('.', $table);
-                $database = $this->db->getDatabase();
-                $table    = $dbInfo[0];
-
-                if (count($dbInfo) === 3) {
-                    $database  = str_replace('"', '', $dbInfo[0]);
-                    $schema    = str_replace('"', '', $dbInfo[1]);
-                    $tableName = str_replace('"', '', $dbInfo[2]);
-                } else {
-                    $schema    = str_replace('"', '', $dbInfo[0]);
-                    $tableName = str_replace('"', '', $dbInfo[1]);
-                }
-
-                return '"' . $database . '"."' . $schema . '"."' . str_replace('"', '', $tableName) . '"' . $alias;
-            }
-
-            return '"' . $this->db->getDatabase() . '"."' . $this->db->schema . '"."' . str_replace('"', '', $table) . '"' . $alias;
-        }
-
-        return '[' . $this->db->getDatabase() . '].[' . $this->db->schema . '].[' . str_replace('"', '', $table) . ']' . str_replace('"', '', $alias);
-    }
-
-    /**
-     * Add permision statements for index value inserts
-     */
-    private function addIdentity(string $fullTable, string $insert): string
-    {
-        return 'SET IDENTITY_INSERT ' . $fullTable . " ON\n" . $insert . "\nSET IDENTITY_INSERT " . $fullTable . ' OFF';
-    }
-
-    /**
-     * Local implementation of limit
-     */
-    protected function _limit(string $sql, bool $offsetIgnore = false): string
-    {
-        // SQL Server cannot handle `LIMIT 0`.
-        // DatabaseException:
-        //   [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The number of
-        //   rows provided for a FETCH clause must be greater then zero.
-        $limitZeroAsAll = config(Feature::class)->limitZeroAsAll ?? true;
-        if (! $limitZeroAsAll && $this->QBLimit === 0) {
-            return "SELECT * \nFROM " . $this->_fromTables() . ' WHERE 1=0 ';
-        }
-
-        if (empty($this->QBOrderBy)) {
-            $sql .= ' ORDER BY (SELECT NULL) ';
-        }
-
-        if ($offsetIgnore) {
-            $sql .= ' OFFSET 0 ';
-        } else {
-            $sql .= is_int($this->QBOffset) ? ' OFFSET ' . $this->QBOffset : ' OFFSET 0 ';
-        }
-
-        return $sql . ' ROWS FETCH NEXT ' . $this->QBLimit . ' ROWS ONLY ';
-    }
-
-    /**
-     * Compiles a replace into string and runs the query
+     * Compiles a replace into string and runs the query.
      *
      * @return mixed
      *
@@ -364,11 +203,11 @@ class Builder extends BaseBuilder
      */
     public function replace(?array $set = null)
     {
-        if ($set !== null) {
+        if (null !== $set) {
             $this->set($set);
         }
 
-        if ($this->QBSet === []) {
+        if ([] === $this->QBSet) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('You must use the "set" method to update an entry.');
             }
@@ -386,113 +225,16 @@ class Builder extends BaseBuilder
             return $sql;
         }
 
-        $this->db->simpleQuery('SET IDENTITY_INSERT ' . $this->getFullName($table) . ' ON');
+        $this->db->simpleQuery('SET IDENTITY_INSERT '.$this->getFullName($table).' ON');
 
         $result = $this->db->query($sql, $this->binds, false);
-        $this->db->simpleQuery('SET IDENTITY_INSERT ' . $this->getFullName($table) . ' OFF');
+        $this->db->simpleQuery('SET IDENTITY_INSERT '.$this->getFullName($table).' OFF');
 
         return $result;
     }
 
     /**
-     * Generates a platform-specific replace string from the supplied data
-     * on match delete and insert
-     */
-    protected function _replace(string $table, array $keys, array $values): string
-    {
-        // check whether the existing keys are part of the primary key.
-        // if so then use them for the "ON" part and exclude them from the $values and $keys
-        $pKeys     = $this->db->getIndexData($table);
-        $keyFields = [];
-
-        foreach ($pKeys as $key) {
-            if ($key->type === 'PRIMARY') {
-                $keyFields = array_merge($keyFields, $key->fields);
-            }
-
-            if ($key->type === 'UNIQUE') {
-                $keyFields = array_merge($keyFields, $key->fields);
-            }
-        }
-
-        // Get the unique field names
-        $escKeyFields = array_map(fn (string $field): string => $this->db->protectIdentifiers($field), array_values(array_unique($keyFields)));
-
-        // Get the binds
-        $binds = $this->binds;
-        array_walk($binds, static function (&$item): void {
-            $item = $item[0];
-        });
-
-        // Get the common field and values from the keys data and index fields
-        $common = array_intersect($keys, $escKeyFields);
-        $bingo  = [];
-
-        foreach ($common as $v) {
-            $k = array_search($v, $keys, true);
-
-            $bingo[$keys[$k]] = $binds[trim($values[$k], ':')];
-        }
-
-        // Querying existing data
-        $builder = $this->db->table($table);
-
-        foreach ($bingo as $k => $v) {
-            $builder->where($k, $v);
-        }
-
-        $q = $builder->get()->getResult();
-
-        // Delete entries if we find them
-        if ($q !== []) {
-            $delete = $this->db->table($table);
-
-            foreach ($bingo as $k => $v) {
-                $delete->where($k, $v);
-            }
-
-            $delete->delete();
-        }
-
-        return sprintf('INSERT INTO %s (%s) VALUES (%s);', $this->getFullName($table), implode(',', $keys), implode(',', $values));
-    }
-
-    /**
-     * SELECT [MAX|MIN|AVG|SUM|COUNT]()
-     *
-     * Handle float return value
-     *
-     * @return BaseBuilder
-     */
-    protected function maxMinAvgSum(string $select = '', string $alias = '', string $type = 'MAX')
-    {
-        // int functions can be handled by parent
-        if ($type !== 'AVG') {
-            return parent::maxMinAvgSum($select, $alias, $type);
-        }
-
-        if ($select === '') {
-            throw DataException::forEmptyInputGiven('Select');
-        }
-
-        if (str_contains($select, ',')) {
-            throw DataException::forInvalidArgument('Column name not separated by comma');
-        }
-
-        if ($alias === '') {
-            $alias = $this->createAliasFromTable(trim($select));
-        }
-
-        $sql = $type . '( CAST( ' . $this->db->protectIdentifiers(trim($select)) . ' AS FLOAT ) ) AS ' . $this->db->escapeIdentifiers(trim($alias));
-
-        $this->QBSelect[]   = $sql;
-        $this->QBNoEscape[] = null;
-
-        return $this;
-    }
-
-    /**
-     * "Count All" query
+     * "Count All" query.
      *
      * Generates a platform-specific query string that counts all records in
      * the particular table
@@ -505,7 +247,7 @@ class Builder extends BaseBuilder
     {
         $table = $this->QBFrom[0];
 
-        $sql = $this->countString . $this->db->escapeIdentifiers('numrows') . ' FROM ' . $this->getFullName($table);
+        $sql = $this->countString.$this->db->escapeIdentifiers('numrows').' FROM '.$this->getFullName($table);
 
         if ($this->testMode) {
             return $sql;
@@ -526,15 +268,7 @@ class Builder extends BaseBuilder
     }
 
     /**
-     * Delete statement
-     */
-    protected function _delete(string $table): string
-    {
-        return 'DELETE' . (empty($this->QBLimit) ? '' : ' TOP (' . $this->QBLimit . ') ') . ' FROM ' . $this->getFullName($table) . $this->compileWhereHaving('QBWhere');
-    }
-
-    /**
-     * Compiles a delete string and runs the query
+     * Compiles a delete string and runs the query.
      *
      * @param mixed $where
      *
@@ -546,11 +280,11 @@ class Builder extends BaseBuilder
     {
         $table = $this->db->protectIdentifiers($this->QBFrom[0], true, null, false);
 
-        if ($where !== '') {
+        if ('' !== $where) {
             $this->where($where);
         }
 
-        if ($this->QBWhere === []) {
+        if ([] === $this->QBWhere) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('Deletes are not allowed unless they contain a "where" or "like" clause.');
             }
@@ -558,7 +292,7 @@ class Builder extends BaseBuilder
             return false; // @codeCoverageIgnore
         }
 
-        if ($limit !== null && $limit !== 0) {
+        if (null !== $limit && 0 !== $limit) {
             $this->QBLimit = $limit;
         }
 
@@ -572,84 +306,19 @@ class Builder extends BaseBuilder
     }
 
     /**
-     * Compile the SELECT statement
-     *
-     * Generates a query string based on which functions were used.
-     *
-     * @param bool $selectOverride
-     */
-    protected function compileSelect($selectOverride = false): string
-    {
-        // Write the "select" portion of the query
-        if ($selectOverride !== false) {
-            $sql = $selectOverride;
-        } else {
-            $sql = (! $this->QBDistinct) ? 'SELECT ' : 'SELECT DISTINCT ';
-
-            // SQL Server can't work with select * if group by is specified
-            if (empty($this->QBSelect) && $this->QBGroupBy !== [] && is_array($this->QBGroupBy)) {
-                foreach ($this->QBGroupBy as $field) {
-                    $this->QBSelect[] = is_array($field) ? $field['field'] : $field;
-                }
-            }
-
-            if (empty($this->QBSelect)) {
-                $sql .= '*';
-            } else {
-                // Cycle through the "select" portion of the query and prep each column name.
-                // The reason we protect identifiers here rather than in the select() function
-                // is because until the user calls the from() function we don't know if there are aliases
-                foreach ($this->QBSelect as $key => $val) {
-                    $noEscape             = $this->QBNoEscape[$key] ?? null;
-                    $this->QBSelect[$key] = $this->db->protectIdentifiers($val, false, $noEscape);
-                }
-
-                $sql .= implode(', ', $this->QBSelect);
-            }
-        }
-
-        // Write the "FROM" portion of the query
-        if ($this->QBFrom !== []) {
-            $sql .= "\nFROM " . $this->_fromTables();
-        }
-
-        // Write the "JOIN" portion of the query
-        if (! empty($this->QBJoin)) {
-            $sql .= "\n" . implode("\n", $this->QBJoin);
-        }
-
-        $sql .= $this->compileWhereHaving('QBWhere')
-            . $this->compileGroupBy()
-            . $this->compileWhereHaving('QBHaving')
-            . $this->compileOrderBy(); // ORDER BY
-
-        // LIMIT
-        $limitZeroAsAll = config(Feature::class)->limitZeroAsAll ?? true;
-        if ($limitZeroAsAll) {
-            if ($this->QBLimit) {
-                $sql = $this->_limit($sql . "\n");
-            }
-        } elseif ($this->QBLimit !== false || $this->QBOffset) {
-            $sql = $this->_limit($sql . "\n");
-        }
-
-        return $this->unionInjection($sql);
-    }
-
-    /**
      * Compiles the select statement based on the other functions called
-     * and runs the query
+     * and runs the query.
      *
      * @return ResultInterface
      */
     public function get(?int $limit = null, int $offset = 0, bool $reset = true)
     {
         $limitZeroAsAll = config(Feature::class)->limitZeroAsAll ?? true;
-        if ($limitZeroAsAll && $limit === 0) {
+        if ($limitZeroAsAll && 0 === $limit) {
             $limit = null;
         }
 
-        if ($limit !== null) {
+        if (null !== $limit) {
             $this->limit($limit, $offset);
         }
 
@@ -666,7 +335,293 @@ class Builder extends BaseBuilder
     }
 
     /**
-     * Generates a platform-specific upsertBatch string from the supplied data
+     * Groups tables in FROM clauses if needed, so there is no confusion
+     * about operator precedence.
+     */
+    protected function _fromTables(): string
+    {
+        $from = [];
+
+        foreach ($this->QBFrom as $value) {
+            $from[] = str_starts_with($value, '(SELECT') ? $value : $this->getFullName($value);
+        }
+
+        return implode(', ', $from);
+    }
+
+    /**
+     * Generates a platform-specific truncate string from the supplied data.
+     *
+     * If the database does not support the truncate() command,
+     * then this method maps to 'DELETE FROM table'
+     */
+    protected function _truncate(string $table): string
+    {
+        return 'TRUNCATE TABLE '.$this->getFullName($table);
+    }
+
+    /**
+     * Generates a platform-specific insert string from the supplied data.
+     *
+     * @todo implement check for this instead static $insertKeyPermission
+     */
+    protected function _insert(string $table, array $keys, array $unescapedKeys): string
+    {
+        $fullTableName = $this->getFullName($table);
+
+        // insert statement
+        $statement = 'INSERT INTO '.$fullTableName.' ('.implode(',', $keys).') VALUES ('.implode(', ', $unescapedKeys).')';
+
+        return $this->keyPermission ? $this->addIdentity($fullTableName, $statement) : $statement;
+    }
+
+    /**
+     * Insert batch statement.
+     *
+     * Generates a platform-specific insert string from the supplied data.
+     */
+    protected function _insertBatch(string $table, array $keys, array $values): string
+    {
+        $sql = $this->QBOptions['sql'] ?? '';
+
+        // if this is the first iteration of batch then we need to build skeleton sql
+        if ('' === $sql) {
+            $sql = 'INSERT '.$this->compileIgnore('insert').'INTO '.$this->getFullName($table)
+                .' ('.implode(', ', $keys).")\n{:_table_:}";
+
+            $this->QBOptions['sql'] = $sql;
+        }
+
+        if (isset($this->QBOptions['setQueryAsData'])) {
+            $data = $this->QBOptions['setQueryAsData'];
+        } else {
+            $data = 'VALUES '.implode(', ', $this->formatValues($values));
+        }
+
+        return str_replace('{:_table_:}', $data, $sql);
+    }
+
+    /**
+     * Generates a platform-specific update string from the supplied data.
+     */
+    protected function _update(string $table, array $values): string
+    {
+        $valstr = [];
+
+        foreach ($values as $key => $val) {
+            $valstr[] = $key.' = '.$val;
+        }
+
+        $fullTableName = $this->getFullName($table);
+
+        $statement = sprintf('UPDATE %s%s SET ', empty($this->QBLimit) ? '' : 'TOP('.$this->QBLimit.') ', $fullTableName);
+
+        $statement .= implode(', ', $valstr)
+            .$this->compileWhereHaving('QBWhere')
+            .$this->compileOrderBy();
+
+        return $this->keyPermission ? $this->addIdentity($fullTableName, $statement) : $statement;
+    }
+
+    /**
+     * Local implementation of limit.
+     */
+    protected function _limit(string $sql, bool $offsetIgnore = false): string
+    {
+        // SQL Server cannot handle `LIMIT 0`.
+        // DatabaseException:
+        //   [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The number of
+        //   rows provided for a FETCH clause must be greater then zero.
+        $limitZeroAsAll = config(Feature::class)->limitZeroAsAll ?? true;
+        if (!$limitZeroAsAll && 0 === $this->QBLimit) {
+            return "SELECT * \nFROM ".$this->_fromTables().' WHERE 1=0 ';
+        }
+
+        if (empty($this->QBOrderBy)) {
+            $sql .= ' ORDER BY (SELECT NULL) ';
+        }
+
+        if ($offsetIgnore) {
+            $sql .= ' OFFSET 0 ';
+        } else {
+            $sql .= is_int($this->QBOffset) ? ' OFFSET '.$this->QBOffset : ' OFFSET 0 ';
+        }
+
+        return $sql.' ROWS FETCH NEXT '.$this->QBLimit.' ROWS ONLY ';
+    }
+
+    /**
+     * Generates a platform-specific replace string from the supplied data
+     * on match delete and insert.
+     */
+    protected function _replace(string $table, array $keys, array $values): string
+    {
+        // check whether the existing keys are part of the primary key.
+        // if so then use them for the "ON" part and exclude them from the $values and $keys
+        $pKeys = $this->db->getIndexData($table);
+        $keyFields = [];
+
+        foreach ($pKeys as $key) {
+            if ('PRIMARY' === $key->type) {
+                $keyFields = array_merge($keyFields, $key->fields);
+            }
+
+            if ('UNIQUE' === $key->type) {
+                $keyFields = array_merge($keyFields, $key->fields);
+            }
+        }
+
+        // Get the unique field names
+        $escKeyFields = array_map(fn (string $field): string => $this->db->protectIdentifiers($field), array_values(array_unique($keyFields)));
+
+        // Get the binds
+        $binds = $this->binds;
+        array_walk($binds, static function (&$item): void {
+            $item = $item[0];
+        });
+
+        // Get the common field and values from the keys data and index fields
+        $common = array_intersect($keys, $escKeyFields);
+        $bingo = [];
+
+        foreach ($common as $v) {
+            $k = array_search($v, $keys, true);
+
+            $bingo[$keys[$k]] = $binds[trim($values[$k], ':')];
+        }
+
+        // Querying existing data
+        $builder = $this->db->table($table);
+
+        foreach ($bingo as $k => $v) {
+            $builder->where($k, $v);
+        }
+
+        $q = $builder->get()->getResult();
+
+        // Delete entries if we find them
+        if ([] !== $q) {
+            $delete = $this->db->table($table);
+
+            foreach ($bingo as $k => $v) {
+                $delete->where($k, $v);
+            }
+
+            $delete->delete();
+        }
+
+        return sprintf('INSERT INTO %s (%s) VALUES (%s);', $this->getFullName($table), implode(',', $keys), implode(',', $values));
+    }
+
+    /**
+     * SELECT [MAX|MIN|AVG|SUM|COUNT]().
+     *
+     * Handle float return value
+     *
+     * @return BaseBuilder
+     */
+    protected function maxMinAvgSum(string $select = '', string $alias = '', string $type = 'MAX')
+    {
+        // int functions can be handled by parent
+        if ('AVG' !== $type) {
+            return parent::maxMinAvgSum($select, $alias, $type);
+        }
+
+        if ('' === $select) {
+            throw DataException::forEmptyInputGiven('Select');
+        }
+
+        if (str_contains($select, ',')) {
+            throw DataException::forInvalidArgument('Column name not separated by comma');
+        }
+
+        if ('' === $alias) {
+            $alias = $this->createAliasFromTable(trim($select));
+        }
+
+        $sql = $type.'( CAST( '.$this->db->protectIdentifiers(trim($select)).' AS FLOAT ) ) AS '.$this->db->escapeIdentifiers(trim($alias));
+
+        $this->QBSelect[] = $sql;
+        $this->QBNoEscape[] = null;
+
+        return $this;
+    }
+
+    /**
+     * Delete statement.
+     */
+    protected function _delete(string $table): string
+    {
+        return 'DELETE'.(empty($this->QBLimit) ? '' : ' TOP ('.$this->QBLimit.') ').' FROM '.$this->getFullName($table).$this->compileWhereHaving('QBWhere');
+    }
+
+    /**
+     * Compile the SELECT statement.
+     *
+     * Generates a query string based on which functions were used.
+     *
+     * @param bool $selectOverride
+     */
+    protected function compileSelect($selectOverride = false): string
+    {
+        // Write the "select" portion of the query
+        if (false !== $selectOverride) {
+            $sql = $selectOverride;
+        } else {
+            $sql = (!$this->QBDistinct) ? 'SELECT ' : 'SELECT DISTINCT ';
+
+            // SQL Server can't work with select * if group by is specified
+            if (empty($this->QBSelect) && [] !== $this->QBGroupBy && is_array($this->QBGroupBy)) {
+                foreach ($this->QBGroupBy as $field) {
+                    $this->QBSelect[] = is_array($field) ? $field['field'] : $field;
+                }
+            }
+
+            if (empty($this->QBSelect)) {
+                $sql .= '*';
+            } else {
+                // Cycle through the "select" portion of the query and prep each column name.
+                // The reason we protect identifiers here rather than in the select() function
+                // is because until the user calls the from() function we don't know if there are aliases
+                foreach ($this->QBSelect as $key => $val) {
+                    $noEscape = $this->QBNoEscape[$key] ?? null;
+                    $this->QBSelect[$key] = $this->db->protectIdentifiers($val, false, $noEscape);
+                }
+
+                $sql .= implode(', ', $this->QBSelect);
+            }
+        }
+
+        // Write the "FROM" portion of the query
+        if ([] !== $this->QBFrom) {
+            $sql .= "\nFROM ".$this->_fromTables();
+        }
+
+        // Write the "JOIN" portion of the query
+        if (!empty($this->QBJoin)) {
+            $sql .= "\n".implode("\n", $this->QBJoin);
+        }
+
+        $sql .= $this->compileWhereHaving('QBWhere')
+            .$this->compileGroupBy()
+            .$this->compileWhereHaving('QBHaving')
+            .$this->compileOrderBy(); // ORDER BY
+
+        // LIMIT
+        $limitZeroAsAll = config(Feature::class)->limitZeroAsAll ?? true;
+        if ($limitZeroAsAll) {
+            if ($this->QBLimit) {
+                $sql = $this->_limit($sql."\n");
+            }
+        } elseif (false !== $this->QBLimit || $this->QBOffset) {
+            $sql = $this->_limit($sql."\n");
+        }
+
+        return $this->unionInjection($sql);
+    }
+
+    /**
+     * Generates a platform-specific upsertBatch string from the supplied data.
      *
      * @throws DatabaseException
      */
@@ -675,20 +630,20 @@ class Builder extends BaseBuilder
         $sql = $this->QBOptions['sql'] ?? '';
 
         // if this is the first iteration of batch then we need to build skeleton sql
-        if ($sql === '') {
+        if ('' === $sql) {
             $fullTableName = $this->getFullName($table);
 
             $constraints = $this->QBOptions['constraints'] ?? [];
 
             $tableIdentity = $this->QBOptions['tableIdentity'] ?? '';
-            $sql           = "SELECT name from syscolumns where id = Object_ID('" . $table . "') and colstat = 1";
+            $sql = "SELECT name from syscolumns where id = Object_ID('".$table."') and colstat = 1";
             if (($query = $this->db->query($sql)) === false) {
                 throw new DatabaseException('Failed to get table identity');
             }
             $query = $query->getResultObject();
 
             foreach ($query as $row) {
-                $tableIdentity = '"' . $row->name . '"';
+                $tableIdentity = '"'.$row->name.'"';
             }
             $this->QBOptions['tableIdentity'] = $tableIdentity;
 
@@ -702,21 +657,22 @@ class Builder extends BaseBuilder
                 $uniqueIndexes = array_filter($tableIndexes, static function ($index) use ($fieldNames): bool {
                     $hasAllFields = count(array_intersect($index->fields, $fieldNames)) === count($index->fields);
 
-                    return $index->type === 'PRIMARY' && $hasAllFields;
+                    return 'PRIMARY' === $index->type && $hasAllFields;
                 });
 
                 // if no primary found then look for unique - since indexes have no order
-                if ($uniqueIndexes === []) {
+                if ([] === $uniqueIndexes) {
                     $uniqueIndexes = array_filter($tableIndexes, static function ($index) use ($fieldNames): bool {
                         $hasAllFields = count(array_intersect($index->fields, $fieldNames)) === count($index->fields);
 
-                        return $index->type === 'UNIQUE' && $hasAllFields;
+                        return 'UNIQUE' === $index->type && $hasAllFields;
                     });
                 }
 
                 // only take first index
                 foreach ($uniqueIndexes as $index) {
                     $constraints = $index->fields;
+
                     break;
                 }
 
@@ -735,7 +691,7 @@ class Builder extends BaseBuilder
 
             $updateFields = $this->QBOptions['updateFields'] ?? $this->updateFields($keys, false, $constraints)->QBOptions['updateFields'] ?? [];
 
-            $sql = 'MERGE INTO ' . $fullTableName . "\nUSING (\n";
+            $sql = 'MERGE INTO '.$fullTableName."\nUSING (\n";
 
             $sql .= '{:_table_:}';
 
@@ -750,51 +706,47 @@ class Builder extends BaseBuilder
             $sql .= implode(
                 ' AND ',
                 array_map(
-                    static fn ($key, $value) => (
-                        ($value instanceof RawSql && is_string($key))
-                        ?
-                        $fullTableName . '.' . $key . ' = ' . $value
-                        :
-                        (
+                    static fn ($key, $value)
+                        => ($value instanceof RawSql && is_string($key))
+                        ? $fullTableName.'.'.$key.' = '.$value
+                        : (
                             $value instanceof RawSql
-                            ?
-                            $value
-                            :
-                            $fullTableName . '.' . $value . ' = ' . $alias . '.' . $value
+                            ? $value
+                            : $fullTableName.'.'.$value.' = '.$alias.'.'.$value
                         )
-                    ),
+                    ,
                     array_keys($constraints),
                     $constraints,
                 ),
-            ) . ")\n";
+            ).")\n";
 
             $sql .= "WHEN MATCHED THEN UPDATE SET\n";
 
             $sql .= implode(
                 ",\n",
                 array_map(
-                    static fn ($key, $value): string => $key . ($value instanceof RawSql ?
-                        ' = ' . $value :
-                    " = {$alias}.{$value}"),
+                    static fn ($key, $value): string => $key.($value instanceof RawSql
+                        ? ' = '.$value
+                    : " = {$alias}.{$value}"),
                     array_keys($updateFields),
                     $updateFields,
                 ),
             );
 
-            $sql .= "\nWHEN NOT MATCHED THEN INSERT (" . implode(', ', $keys) . ")\nVALUES ";
+            $sql .= "\nWHEN NOT MATCHED THEN INSERT (".implode(', ', $keys).")\nVALUES ";
 
             $sql .= (
-                '(' . implode(
+                '('.implode(
                     ', ',
                     array_map(
                         static fn ($columnName): string => $columnName === $tableIdentity
                     ? "CASE WHEN {$alias}.{$columnName} IS NULL THEN (SELECT "
-                    . 'isnull(IDENT_CURRENT(\'' . $fullTableName . '\')+IDENT_INCR(\''
-                    . $fullTableName . "'),1)) ELSE {$alias}.{$columnName} END"
+                    .'isnull(IDENT_CURRENT(\''.$fullTableName.'\')+IDENT_INCR(\''
+                    .$fullTableName."'),1)) ELSE {$alias}.{$columnName} END"
                     : "{$alias}.{$columnName}",
                         $keys,
                     ),
-                ) . ');'
+                ).');'
             );
 
             $sql = $identityInFields ? $this->addIdentity($fullTableName, $sql) : $sql;
@@ -805,17 +757,62 @@ class Builder extends BaseBuilder
         if (isset($this->QBOptions['setQueryAsData'])) {
             $data = $this->QBOptions['setQueryAsData'];
         } else {
-            $data = 'VALUES ' . implode(', ', $this->formatValues($values)) . "\n";
+            $data = 'VALUES '.implode(', ', $this->formatValues($values))."\n";
         }
 
         return str_replace('{:_table_:}', $data, $sql);
     }
 
     /**
-     * Gets column names from a select query
+     * Gets column names from a select query.
      */
     protected function fieldsFromQuery(string $sql): array
     {
-        return $this->db->query('SELECT TOP 1 * FROM (' . $sql . ') _u_')->getFieldNames();
+        return $this->db->query('SELECT TOP 1 * FROM ('.$sql.') _u_')->getFieldNames();
+    }
+
+    /**
+     * Get full name of the table.
+     */
+    private function getFullName(string $table): string
+    {
+        $alias = '';
+
+        if (str_contains($table, ' ')) {
+            $alias = explode(' ', $table);
+            $table = array_shift($alias);
+            $alias = ' '.implode(' ', $alias);
+        }
+
+        if ('"' === $this->db->escapeChar) {
+            if (str_contains($table, '.') && !str_starts_with($table, '.') && !str_ends_with($table, '.')) {
+                $dbInfo = explode('.', $table);
+                $database = $this->db->getDatabase();
+                $table = $dbInfo[0];
+
+                if (3 === count($dbInfo)) {
+                    $database = str_replace('"', '', $dbInfo[0]);
+                    $schema = str_replace('"', '', $dbInfo[1]);
+                    $tableName = str_replace('"', '', $dbInfo[2]);
+                } else {
+                    $schema = str_replace('"', '', $dbInfo[0]);
+                    $tableName = str_replace('"', '', $dbInfo[1]);
+                }
+
+                return '"'.$database.'"."'.$schema.'"."'.str_replace('"', '', $tableName).'"'.$alias;
+            }
+
+            return '"'.$this->db->getDatabase().'"."'.$this->db->schema.'"."'.str_replace('"', '', $table).'"'.$alias;
+        }
+
+        return '['.$this->db->getDatabase().'].['.$this->db->schema.'].['.str_replace('"', '', $table).']'.str_replace('"', '', $alias);
+    }
+
+    /**
+     * Add permision statements for index value inserts.
+     */
+    private function addIdentity(string $fullTable, string $insert): string
+    {
+        return 'SET IDENTITY_INSERT '.$fullTable." ON\n".$insert."\nSET IDENTITY_INSERT ".$fullTable.' OFF';
     }
 }

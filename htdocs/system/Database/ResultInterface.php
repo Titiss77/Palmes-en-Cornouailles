@@ -33,7 +33,7 @@ interface ResultInterface
     /**
      * Returns the results as an array of custom objects.
      *
-     * @param string $className The name of the class to use.
+     * @param string $className the name of the class to use
      *
      * @return array
      */
@@ -61,11 +61,13 @@ interface ResultInterface
      *
      * @template T of object
      *
-     * @param         int|string                       $n    The index of the results to return, or column name.
-     * @param         string                           $type The type of result object. 'array', 'object' or class name.
+     * @param int|string $n    the index of the results to return, or column name
+     * @param string     $type The type of result object. 'array', 'object' or class name.
+     *
      * @phpstan-param class-string<T>|'array'|'object' $type
      *
-     * @return         array|float|int|object|stdClass|string|null
+     * @return null|array|float|int|object|\stdClass|string
+     *
      * @phpstan-return ($n is string ? float|int|string|null : ($type is 'object' ? stdClass|null : ($type is 'array' ? array|null : T|null)))
      */
     public function getRow($n = 0, string $type = 'object');
@@ -77,10 +79,12 @@ interface ResultInterface
      *
      * @template T of object
      *
-     * @param         int             $n         The index of the results to return.
+     * @param int $n the index of the results to return
+     *
      * @phpstan-param class-string<T> $className
      *
-     * @return         object|null
+     * @return null|object
+     *
      * @phpstan-return T|null
      */
     public function getCustomRowObject(int $n, string $className);
@@ -90,7 +94,7 @@ interface ResultInterface
      *
      * If row doesn't exist, returns null.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getRowArray(int $n = 0);
 
@@ -99,45 +103,43 @@ interface ResultInterface
      *
      * If row doesn't exist, returns null.
      *
-     * @return object|stdClass|null
+     * @return null|object|\stdClass
      */
     public function getRowObject(int $n = 0);
 
     /**
      * Assigns an item into a particular column slot.
      *
-     * @param array|string               $key
-     * @param array|object|stdClass|null $value
-     *
-     * @return void
+     * @param array|string                $key
+     * @param null|array|object|\stdClass $value
      */
-    public function setRow($key, $value = null);
+    public function setRow($key, $value = null): void;
 
     /**
      * Returns the "first" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getFirstRow(string $type = 'object');
 
     /**
      * Returns the "last" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getLastRow(string $type = 'object');
 
     /**
      * Returns the "next" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getNextRow(string $type = 'object');
 
     /**
      * Returns the "previous" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getPreviousRow(string $type = 'object');
 
@@ -149,7 +151,7 @@ interface ResultInterface
     /**
      * Returns an unbuffered row and move the pointer to the next row.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getUnbufferedRow(string $type = 'object');
 
@@ -170,10 +172,8 @@ interface ResultInterface
 
     /**
      * Frees the current result.
-     *
-     * @return void
      */
-    public function freeResult();
+    public function freeResult(): void;
 
     /**
      * Moves the internal pointer to the desired offset. This is called

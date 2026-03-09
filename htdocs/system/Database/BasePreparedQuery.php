@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Database;
 
-use ArgumentCountError;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Events\Events;
 use CodeIgniter\Exceptions\BadMethodCallException;
-use ErrorException;
 
 /**
  * @template TConnection
@@ -31,7 +29,8 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
     /**
      * The prepared statement itself.
      *
-     * @var         object|resource|null
+     * @var null|object|resource
+     *
      * @phpstan-var TStatement|null
      */
     protected $statement;
@@ -61,7 +60,8 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
     /**
      * A reference to the db connection to use.
      *
-     * @var         BaseConnection
+     * @var BaseConnection
+     *
      * @phpstan-var BaseConnection<TConnection, TResult>
      */
     protected $db;
@@ -92,7 +92,7 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
 
         $query->setQuery($sql);
 
-        if (! empty($this->db->swapPre) && ! empty($this->db->DBPrefix)) {
+        if (!empty($this->db->swapPre) && !empty($this->db->DBPrefix)) {
             $query->swapPrefix($this->db->DBPrefix, $this->db->swapPre);
         }
 
@@ -112,7 +112,8 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
      * Takes a new set of data and runs it against the currently
      * prepared query. Upon success, will return a Results object.
      *
-     * @return         bool|ResultInterface
+     * @return bool|ResultInterface
+     *
      * @phpstan-return bool|ResultInterface<TConnection, TResult>
      *
      * @throws DatabaseException
@@ -124,8 +125,8 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
 
         try {
             $exception = null;
-            $result    = $this->_execute($data);
-        } catch (ArgumentCountError|ErrorException $exception) {
+            $result = $this->_execute($data);
+        } catch (\ArgumentCountError|\ErrorException $exception) {
             $result = false;
         }
 
@@ -133,11 +134,11 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
         $query = clone $this->query;
         $query->setBinds($data);
 
-        if ($result === false) {
+        if (false === $result) {
             $query->setDuration($startTime, $startTime);
 
             // This will trigger a rollback if transactions are being used
-            if ($this->db->transDepth !== 0) {
+            if (0 !== $this->db->transDepth) {
                 $this->db->transStatus = false;
             }
 
@@ -146,12 +147,13 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
                 // if transactions are enabled. If we don't call this here
                 // the error message will trigger an exit, causing the
                 // transactions to remain in limbo.
-                while ($this->db->transDepth !== 0) {
+                while (0 !== $this->db->transDepth) {
                     $transDepth = $this->db->transDepth;
                     $this->db->transComplete();
 
                     if ($transDepth === $this->db->transDepth) {
                         log_message('error', 'Database: Failure during an automated transaction commit/rollback!');
+
                         break;
                     }
                 }
@@ -159,7 +161,7 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
                 // Let others do something with this query.
                 Events::trigger('DBQuery', $query);
 
-                if ($exception !== null) {
+                if (null !== $exception) {
                     throw new DatabaseException($exception->getMessage(), $exception->getCode(), $exception);
                 }
 
@@ -197,7 +199,7 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
     /**
      * Returns the result object for the prepared query.
      *
-     * @return object|resource|null
+     * @return null|object|resource
      */
     abstract public function _getResult();
 
@@ -208,7 +210,7 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
      */
     public function close(): bool
     {
-        if (! isset($this->statement)) {
+        if (!isset($this->statement)) {
             throw new BadMethodCallException('Cannot call close on a non-existing prepared statement.');
         }
 
@@ -220,16 +222,11 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
     }
 
     /**
-     * The database-dependent version of the close method.
-     */
-    abstract protected function _close(): bool;
-
-    /**
      * Returns the SQL that has been prepared.
      */
     public function getQueryString(): string
     {
-        if (! $this->query instanceof QueryInterface) {
+        if (!$this->query instanceof QueryInterface) {
             throw new BadMethodCallException('Cannot call getQueryString on a prepared query until after the query has been prepared.');
         }
 
@@ -241,7 +238,7 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
      */
     public function hasError(): bool
     {
-        return ! empty($this->errorString);
+        return !empty($this->errorString);
     }
 
     /**
@@ -261,10 +258,15 @@ abstract class BasePreparedQuery implements PreparedQueryInterface
     }
 
     /**
+     * The database-dependent version of the close method.
+     */
+    abstract protected function _close(): bool;
+
+    /**
      * Whether the input contain binary data.
      */
     protected function isBinary(string $input): bool
     {
-        return mb_detect_encoding($input, 'UTF-8', true) === false;
+        return false === mb_detect_encoding($input, 'UTF-8', true);
     }
 }

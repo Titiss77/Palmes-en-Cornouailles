@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace CodeIgniter\DataCaster\Cast;
 
 use CodeIgniter\DataCaster\Exceptions\CastException;
-use JsonException;
 use stdClass;
 
 /**
- * Class JsonCast
+ * Class JsonCast.
  *
  * (PHP) [array|stdClass --> string] --> (DB driver) --> (DB column) string
  *       [               <-- string] <-- (DB driver) <-- (DB column) string
@@ -29,18 +28,18 @@ class JsonCast extends BaseCast
         mixed $value,
         array $params = [],
         ?object $helper = null,
-    ): array|stdClass {
-        if (! is_string($value)) {
+    ): array|\stdClass {
+        if (!is_string($value)) {
             self::invalidTypeValueError($value);
         }
 
         $associative = in_array('array', $params, true);
 
-        $output = ($associative ? [] : new stdClass());
+        $output = ($associative ? [] : new \stdClass());
 
         try {
             $output = json_decode($value, $associative, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             throw CastException::forInvalidJsonFormat($e->getCode());
         }
 
@@ -54,7 +53,7 @@ class JsonCast extends BaseCast
     ): string {
         try {
             $output = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             throw CastException::forInvalidJsonFormat($e->getCode());
         }
 

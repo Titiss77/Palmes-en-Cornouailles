@@ -24,7 +24,7 @@ class MockCodeIgniter extends CodeIgniter
      *
      * @deprecated 4.4.0 No longer Used. Moved to index.php.
      */
-    protected function callExit($code)
+    protected function callExit($code): void
     {
         // Do not call exit() in testing.
     }

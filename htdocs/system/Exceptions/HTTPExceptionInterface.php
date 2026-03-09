@@ -16,6 +16,4 @@ namespace CodeIgniter\Exceptions;
 /**
  * Interface for Exceptions that has exception code as HTTP status code.
  */
-interface HTTPExceptionInterface extends ExceptionInterface
-{
-}
+interface HTTPExceptionInterface extends ExceptionInterface {}

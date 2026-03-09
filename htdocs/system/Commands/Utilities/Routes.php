@@ -40,55 +40,55 @@ class Routes extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'routes';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Displays all routes.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'routes';
 
     /**
-     * the Command's Arguments
+     * the Command's Arguments.
      *
      * @var array<string, string>
      */
     protected $arguments = [];
 
     /**
-     * the Command's Options
+     * the Command's Options.
      *
      * @var array<string, string>
      */
     protected $options = [
-        '-h'     => 'Sort by Handler.',
+        '-h' => 'Sort by Handler.',
         '--host' => 'Specify hostname in request URI.',
     ];
 
     /**
      * Displays the help for the spark cli script itself.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $sortByHandler = array_key_exists('h', $params);
-        $host          = $params['host'] ?? null;
+        $host = $params['host'] ?? null;
 
         // Set HTTP_HOST
-        if ($host !== null) {
-            $request              = service('request');
-            $_SERVER              = $request->getServer();
+        if (null !== $host) {
+            $request = service('request');
+            $_SERVER = $request->getServer();
             $_SERVER['HTTP_HOST'] = $host;
             $request->setGlobal('server', $_SERVER);
         }
@@ -96,21 +96,21 @@ class Routes extends BaseCommand
         $collection = service('routes')->loadRoutes();
 
         // Reset HTTP_HOST
-        if ($host !== null) {
+        if (null !== $host) {
             unset($_SERVER['HTTP_HOST']);
         }
 
         $methods = Router::HTTP_METHODS;
 
-        $tbody           = [];
-        $uriGenerator    = new SampleURIGenerator();
+        $tbody = [];
+        $uriGenerator = new SampleURIGenerator();
         $filterCollector = new FilterCollector();
 
         $definedRouteCollector = new DefinedRouteCollector($collection);
 
         foreach ($definedRouteCollector->collect() as $route) {
             $sampleUri = $uriGenerator->get($route['route']);
-            $filters   = $filterCollector->get($route['method'], $sampleUri);
+            $filters = $filterCollector->get($route['method'], $sampleUri);
 
             $routeName = ($route['route'] === $route['name']) ? '»' : $route['name'];
 
@@ -190,8 +190,8 @@ class Routes extends BaseCommand
             usort($tbody, static fn ($handler1, $handler2): int => strcmp($handler1[3], $handler2[3]));
         }
 
-        if ($host !== null) {
-            CLI::write('Host: ' . $host);
+        if (null !== $host) {
+            CLI::write('Host: '.$host);
         }
 
         CLI::table($tbody, $thead);
@@ -211,7 +211,7 @@ class Routes extends BaseCommand
             $filters[] = CLI::color($filter, 'yellow');
         }
 
-        CLI::write('Required Before Filters: ' . implode(', ', $filters));
+        CLI::write('Required Before Filters: '.implode(', ', $filters));
 
         $filters = [];
 
@@ -219,6 +219,6 @@ class Routes extends BaseCommand
             $filters[] = CLI::color($filter, 'yellow');
         }
 
-        CLI::write(' Required After Filters: ' . implode(', ', $filters));
+        CLI::write(' Required After Filters: '.implode(', ', $filters));
     }
 }

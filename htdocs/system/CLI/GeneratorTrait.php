@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace CodeIgniter\CLI;
 
 use Config\Generators;
-use Throwable;
 
 /**
  * GeneratorTrait contains a collection of methods
@@ -23,21 +22,21 @@ use Throwable;
 trait GeneratorTrait
 {
     /**
-     * Component Name
+     * Component Name.
      *
      * @var string
      */
     protected $component;
 
     /**
-     * File directory
+     * File directory.
      *
      * @var string
      */
     protected $directory;
 
     /**
-     * (Optional) View template path
+     * (Optional) View template path.
      *
      * We use special namespaced paths like:
      *      `CodeIgniter\Commands\Generators\Views\cell.tpl.php`.
@@ -45,7 +44,7 @@ trait GeneratorTrait
     protected ?string $templatePath = null;
 
     /**
-     * View template name for fallback
+     * View template name for fallback.
      *
      * @var string
      */
@@ -96,14 +95,14 @@ trait GeneratorTrait
      *
      * @internal
      *
-     * @var array<int|string, string|null>
+     * @var array<int|string, null|string>
      */
     private $params = [];
 
     /**
      * Execute the command.
      *
-     * @param array<int|string, string|null> $params
+     * @param array<int|string, null|string> $params
      *
      * @deprecated use generateClass() instead
      */
@@ -115,7 +114,7 @@ trait GeneratorTrait
     /**
      * Generates a class file from an existing template.
      *
-     * @param array<int|string, string|null> $params
+     * @param array<int|string, null|string> $params
      */
     protected function generateClass(array $params): void
     {
@@ -128,7 +127,7 @@ trait GeneratorTrait
         $target = $this->buildPath($class);
 
         // Check if path is empty.
-        if ($target === '') {
+        if ('' === $target) {
             return;
         }
 
@@ -139,7 +138,7 @@ trait GeneratorTrait
      * Generate a view file from an existing template.
      *
      * @param string                         $view   namespaced view name that is generated
-     * @param array<int|string, string|null> $params
+     * @param array<int|string, null|string> $params
      */
     protected function generateView(string $view, array $params): void
     {
@@ -148,7 +147,7 @@ trait GeneratorTrait
         $target = $this->buildPath($view);
 
         // Check if path is empty.
-        if ($target === '') {
+        if ('' === $target) {
             return;
         }
 
@@ -156,95 +155,9 @@ trait GeneratorTrait
     }
 
     /**
-     * Handles writing the file to disk, and all of the safety checks around that.
-     *
-     * @param string $target file path
-     */
-    private function generateFile(string $target, string $content): void
-    {
-        if ($this->getOption('namespace') === 'CodeIgniter') {
-            // @codeCoverageIgnoreStart
-            CLI::write(lang('CLI.generator.usingCINamespace'), 'yellow');
-            CLI::newLine();
-
-            if (
-                CLI::prompt(
-                    'Are you sure you want to continue?',
-                    ['y', 'n'],
-                    'required',
-                ) === 'n'
-            ) {
-                CLI::newLine();
-                CLI::write(lang('CLI.generator.cancelOperation'), 'yellow');
-                CLI::newLine();
-
-                return;
-            }
-
-            CLI::newLine();
-            // @codeCoverageIgnoreEnd
-        }
-
-        $isFile = is_file($target);
-
-        // Overwriting files unknowingly is a serious annoyance, So we'll check if
-        // we are duplicating things, If 'force' option is not supplied, we bail.
-        if (! $this->getOption('force') && $isFile) {
-            CLI::error(
-                lang('CLI.generator.fileExist', [clean_path($target)]),
-                'light_gray',
-                'red',
-            );
-            CLI::newLine();
-
-            return;
-        }
-
-        // Check if the directory to save the file is existing.
-        $dir = dirname($target);
-
-        if (! is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
-
-        helper('filesystem');
-
-        // Build the class based on the details we have, We'll be getting our file
-        // contents from the template, and then we'll do the necessary replacements.
-        if (! write_file($target, $content)) {
-            // @codeCoverageIgnoreStart
-            CLI::error(
-                lang('CLI.generator.fileError', [clean_path($target)]),
-                'light_gray',
-                'red',
-            );
-            CLI::newLine();
-
-            return;
-            // @codeCoverageIgnoreEnd
-        }
-
-        if ($this->getOption('force') && $isFile) {
-            CLI::write(
-                lang('CLI.generator.fileOverwrite', [clean_path($target)]),
-                'yellow',
-            );
-            CLI::newLine();
-
-            return;
-        }
-
-        CLI::write(
-            lang('CLI.generator.fileCreate', [clean_path($target)]),
-            'green',
-        );
-        CLI::newLine();
-    }
-
-    /**
      * Prepare options and do the necessary replacements.
      *
-     * @param string $class namespaced classname or namespaced view.
+     * @param string $class namespaced classname or namespaced view
      *
      * @return string generated file content
      */
@@ -271,66 +184,15 @@ trait GeneratorTrait
         $class = $this->normalizeInputClassName();
 
         // Gets the namespace from input. Don't forget the ending backslash!
-        $namespace = $this->getNamespace() . '\\';
+        $namespace = $this->getNamespace().'\\';
 
         if (str_starts_with($class, $namespace)) {
             return $class; // @codeCoverageIgnore
         }
 
-        $directoryString = ($this->directory !== null) ? $this->directory . '\\' : '';
+        $directoryString = (null !== $this->directory) ? $this->directory.'\\' : '';
 
-        return $namespace . $directoryString . str_replace('/', '\\', $class);
-    }
-
-    /**
-     * Normalize input classname.
-     */
-    private function normalizeInputClassName(): string
-    {
-        // Gets the class name from input.
-        $class = $this->params[0] ?? CLI::getSegment(2);
-
-        if ($class === null && $this->hasClassName) {
-            // @codeCoverageIgnoreStart
-            $nameLang = $this->classNameLang !== ''
-                ? $this->classNameLang
-                : 'CLI.generator.className.default';
-            $class = CLI::prompt(lang($nameLang), null, 'required');
-            CLI::newLine();
-            // @codeCoverageIgnoreEnd
-        }
-
-        helper('inflector');
-
-        $component = singular($this->component);
-
-        /**
-         * @see https://regex101.com/r/a5KNCR/2
-         */
-        $pattern = sprintf('/([a-z][a-z0-9_\/\\\\]+)(%s)$/i', $component);
-
-        if (preg_match($pattern, $class, $matches) === 1) {
-            $class = $matches[1] . ucfirst($matches[2]);
-        }
-
-        if (
-            $this->enabledSuffixing && $this->getOption('suffix')
-            && preg_match($pattern, $class) !== 1
-        ) {
-            $class .= ucfirst($component);
-        }
-
-        // Trims input, normalize separators, and ensure that all paths are in Pascalcase.
-        return ltrim(
-            implode(
-                '\\',
-                array_map(
-                    pascalize(...),
-                    explode('\\', str_replace('/', '\\', trim($class))),
-                ),
-            ),
-            '\\/',
-        );
+        return $namespace.$directoryString.str_replace('/', '\\', $class);
     }
 
     /**
@@ -345,7 +207,7 @@ trait GeneratorTrait
             $template = $this->templatePath ?? config(Generators::class)->views[$this->name];
 
             return view($template, $data, ['debug' => false]);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             log_message('error', (string) $e);
 
             return view(
@@ -359,10 +221,10 @@ trait GeneratorTrait
     /**
      * Performs pseudo-variables contained within view file.
      *
-     * @param string                          $class   namespaced classname or namespaced view.
+     * @param string                          $class   namespaced classname or namespaced view
      * @param list<string>                    $search
      * @param list<string>                    $replace
-     * @param array<string, bool|string|null> $data
+     * @param array<string, null|bool|string> $data
      *
      * @return string generated file content
      */
@@ -380,12 +242,12 @@ trait GeneratorTrait
             ),
             '\\',
         );
-        $search[]  = '<@php';
-        $search[]  = '{namespace}';
-        $search[]  = '{class}';
+        $search[] = '<@php';
+        $search[] = '{namespace}';
+        $search[] = '{class}';
         $replace[] = '<?php';
         $replace[] = $namespace;
-        $replace[] = str_replace($namespace . '\\', '', $class);
+        $replace[] = str_replace($namespace.'\\', '', $class);
 
         return str_replace($search, $replace, $this->renderTemplate($data));
     }
@@ -419,7 +281,7 @@ trait GeneratorTrait
     /**
      * Builds the file path from the class name.
      *
-     * @param string $class namespaced classname or namespaced view.
+     * @param string $class namespaced classname or namespaced view
      */
     protected function buildPath(string $class): string
     {
@@ -428,7 +290,7 @@ trait GeneratorTrait
         // Check if the namespace is actually defined and we are not just typing gibberish.
         $base = service('autoloader')->getNamespace($namespace);
 
-        if (! $base = reset($base)) {
+        if (!$base = reset($base)) {
             CLI::error(
                 lang('CLI.namespaceNotDefined', [$namespace]),
                 'light_gray',
@@ -440,14 +302,14 @@ trait GeneratorTrait
         }
 
         $realpath = realpath($base);
-        $base     = ($realpath !== false) ? $realpath : $base;
+        $base = (false !== $realpath) ? $realpath : $base;
 
-        $file = $base . DIRECTORY_SEPARATOR
-            . str_replace(
+        $file = $base.DIRECTORY_SEPARATOR
+            .str_replace(
                 '\\',
                 DIRECTORY_SEPARATOR,
-                trim(str_replace($namespace . '\\', '', $class), '\\'),
-            ) . '.php';
+                trim(str_replace($namespace.'\\', '', $class), '\\'),
+            ).'.php';
 
         return implode(
             DIRECTORY_SEPARATOR,
@@ -456,7 +318,7 @@ trait GeneratorTrait
                 0,
                 -1,
             ),
-        ) . DIRECTORY_SEPARATOR . $this->basename($file);
+        ).DIRECTORY_SEPARATOR.$this->basename($file);
     }
 
     /**
@@ -518,10 +380,147 @@ trait GeneratorTrait
      */
     protected function getOption(string $name): bool|string|null
     {
-        if (! array_key_exists($name, $this->params)) {
+        if (!array_key_exists($name, $this->params)) {
             return CLI::getOption($name);
         }
 
         return $this->params[$name] ?? true;
+    }
+
+    /**
+     * Handles writing the file to disk, and all of the safety checks around that.
+     *
+     * @param string $target file path
+     */
+    private function generateFile(string $target, string $content): void
+    {
+        if ('CodeIgniter' === $this->getOption('namespace')) {
+            // @codeCoverageIgnoreStart
+            CLI::write(lang('CLI.generator.usingCINamespace'), 'yellow');
+            CLI::newLine();
+
+            if (
+                'n' === CLI::prompt(
+                    'Are you sure you want to continue?',
+                    ['y', 'n'],
+                    'required',
+                )
+            ) {
+                CLI::newLine();
+                CLI::write(lang('CLI.generator.cancelOperation'), 'yellow');
+                CLI::newLine();
+
+                return;
+            }
+
+            CLI::newLine();
+            // @codeCoverageIgnoreEnd
+        }
+
+        $isFile = is_file($target);
+
+        // Overwriting files unknowingly is a serious annoyance, So we'll check if
+        // we are duplicating things, If 'force' option is not supplied, we bail.
+        if (!$this->getOption('force') && $isFile) {
+            CLI::error(
+                lang('CLI.generator.fileExist', [clean_path($target)]),
+                'light_gray',
+                'red',
+            );
+            CLI::newLine();
+
+            return;
+        }
+
+        // Check if the directory to save the file is existing.
+        $dir = dirname($target);
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0o755, true);
+        }
+
+        helper('filesystem');
+
+        // Build the class based on the details we have, We'll be getting our file
+        // contents from the template, and then we'll do the necessary replacements.
+        if (!write_file($target, $content)) {
+            // @codeCoverageIgnoreStart
+            CLI::error(
+                lang('CLI.generator.fileError', [clean_path($target)]),
+                'light_gray',
+                'red',
+            );
+            CLI::newLine();
+
+            return;
+            // @codeCoverageIgnoreEnd
+        }
+
+        if ($this->getOption('force') && $isFile) {
+            CLI::write(
+                lang('CLI.generator.fileOverwrite', [clean_path($target)]),
+                'yellow',
+            );
+            CLI::newLine();
+
+            return;
+        }
+
+        CLI::write(
+            lang('CLI.generator.fileCreate', [clean_path($target)]),
+            'green',
+        );
+        CLI::newLine();
+    }
+
+    /**
+     * Normalize input classname.
+     */
+    private function normalizeInputClassName(): string
+    {
+        // Gets the class name from input.
+        $class = $this->params[0] ?? CLI::getSegment(2);
+
+        if (null === $class && $this->hasClassName) {
+            // @codeCoverageIgnoreStart
+            $nameLang = '' !== $this->classNameLang
+                ? $this->classNameLang
+                : 'CLI.generator.className.default';
+            $class = CLI::prompt(lang($nameLang), null, 'required');
+            CLI::newLine();
+            // @codeCoverageIgnoreEnd
+        }
+
+        helper('inflector');
+
+        $component = singular($this->component);
+
+        /**
+         * @see https://regex101.com/r/a5KNCR/2
+         */
+        $pattern = sprintf('/([a-z][a-z0-9_\/\\\]+)(%s)$/i', $component);
+
+        if (1 === preg_match($pattern, $class, $matches)) {
+            $class = $matches[1].ucfirst($matches[2]);
+        }
+
+        if (
+            $this->enabledSuffixing && $this->getOption('suffix')
+            && 1 !== preg_match($pattern, $class)
+        ) {
+            $class .= ucfirst($component);
+        }
+
+        // Trims input, normalize separators, and ensure that all paths are in Pascalcase.
+        return ltrim(
+            implode(
+                '\\',
+                array_map(
+                    pascalize(...),
+                    explode('\\', str_replace('/', '\\', trim($class))),
+                ),
+            ),
+            '\/',
+        );
     }
 }

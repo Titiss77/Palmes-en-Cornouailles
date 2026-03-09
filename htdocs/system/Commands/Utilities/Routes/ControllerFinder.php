@@ -18,7 +18,7 @@ use CodeIgniter\Autoloader\FileLocatorInterface;
 /**
  * Finds all controllers in a namespace for auto route listing.
  *
- * @see \CodeIgniter\Commands\Utilities\Routes\ControllerFinderTest
+ * @see ControllerFinderTest
  */
 final class ControllerFinder
 {
@@ -39,17 +39,17 @@ final class ControllerFinder
     public function find(): array
     {
         $nsArray = explode('\\', trim($this->namespace, '\\'));
-        $count   = count($nsArray);
-        $ns      = '';
-        $files   = [];
+        $count = count($nsArray);
+        $ns = '';
+        $files = [];
 
-        for ($i = 0; $i < $count; $i++) {
-            $ns .= '\\' . array_shift($nsArray);
+        for ($i = 0; $i < $count; ++$i) {
+            $ns .= '\\'.array_shift($nsArray);
             $path = implode('\\', $nsArray);
 
             $files = $this->locator->listNamespaceFiles($ns, $path);
 
-            if ($files !== []) {
+            if ([] !== $files) {
                 break;
             }
         }
@@ -60,7 +60,7 @@ final class ControllerFinder
             if (\is_file($file)) {
                 $classnameOrEmpty = $this->locator->getClassname($file);
 
-                if ($classnameOrEmpty !== '') {
+                if ('' !== $classnameOrEmpty) {
                     /** @var class-string $classname */
                     $classname = $classnameOrEmpty;
 

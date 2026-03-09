@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Kint\Parser;
 
 use Dom\HTMLDocument;
-use DOMException;
 use Kint\Value\AbstractValue;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\Representation\ContainerRepresentation;
@@ -58,7 +57,7 @@ class HtmlPlugin extends AbstractPlugin implements PluginCompleteInterface
 
         try {
             $html = HTMLDocument::createFromString($var, LIBXML_NOERROR);
-        } catch (DOMException $e) { // @codeCoverageIgnore
+        } catch (\DOMException $e) { // @codeCoverageIgnore
             return $v; // @codeCoverageIgnore
         }
 
@@ -68,7 +67,7 @@ class HtmlPlugin extends AbstractPlugin implements PluginCompleteInterface
         $base->depth = $c->getDepth();
 
         if (null !== ($ap = $c->getAccessPath())) {
-            $base->access_path = '\\Dom\\HTMLDocument::createFromString('.$ap.')->childNodes';
+            $base->access_path = '\Dom\HTMLDocument::createFromString('.$ap.')->childNodes';
         }
 
         $out = $this->getParser()->parse($html->childNodes, $base);

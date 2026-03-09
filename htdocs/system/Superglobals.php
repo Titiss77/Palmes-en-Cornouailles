@@ -17,7 +17,8 @@ namespace CodeIgniter;
  * Superglobals manipulation.
  *
  * @internal
- * @see \CodeIgniter\SuperglobalsTest
+ *
+ * @see SuperglobalsTest
  */
 final class Superglobals
 {
@@ -27,7 +28,7 @@ final class Superglobals
     public function __construct(?array $server = null, ?array $get = null)
     {
         $this->server = $server ?? $_SERVER;
-        $this->get    = $get ?? $_GET;
+        $this->get = $get ?? $_GET;
     }
 
     public function server(string $key): ?string
@@ -38,11 +39,11 @@ final class Superglobals
     public function setServer(string $key, string $value): void
     {
         $this->server[$key] = $value;
-        $_SERVER[$key]      = $value;
+        $_SERVER[$key] = $value;
     }
 
     /**
-     * @return array|string|null
+     * @return null|array|string
      */
     public function get(string $key)
     {
@@ -52,12 +53,12 @@ final class Superglobals
     public function setGet(string $key, string $value): void
     {
         $this->get[$key] = $value;
-        $_GET[$key]      = $value;
+        $_GET[$key] = $value;
     }
 
     public function setGetArray(array $array): void
     {
         $this->get = $array;
-        $_GET      = $array;
+        $_GET = $array;
     }
 }

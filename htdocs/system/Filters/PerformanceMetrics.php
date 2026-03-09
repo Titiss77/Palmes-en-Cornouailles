@@ -17,14 +17,14 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Performance Metrics filter
+ * Performance Metrics filter.
  */
 class PerformanceMetrics implements FilterInterface
 {
     /**
      * We don't need to do anything here.
      *
-     * @param array|null $arguments
+     * @param null|array $arguments
      */
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -34,13 +34,13 @@ class PerformanceMetrics implements FilterInterface
     /**
      * Replaces the performance metrics.
      *
-     * @param array|null $arguments
+     * @param null|array $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
         $body = $response->getBody();
 
-        if ($body !== null) {
+        if (null !== $body) {
             $benchmark = service('timer');
 
             $output = str_replace(

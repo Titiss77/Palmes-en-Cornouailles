@@ -32,28 +32,28 @@ class Help extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'help';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Displays basic usage information.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'help [<command_name>]';
 
     /**
-     * the Command's Arguments
+     * the Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -62,7 +62,7 @@ class Help extends BaseCommand
     ];
 
     /**
-     * the Command's Options
+     * the Command's Options.
      *
      * @var array<string, string>
      */
@@ -71,13 +71,13 @@ class Help extends BaseCommand
     /**
      * Displays the help for spark commands.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $command = array_shift($params);
         $command ??= 'help';
         $commands = $this->commands->getCommands();
 
-        if (! $this->commands->verifyCommand($command, $commands)) {
+        if (!$this->commands->verifyCommand($command, $commands)) {
             return;
         }
 

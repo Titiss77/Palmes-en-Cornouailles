@@ -32,28 +32,28 @@ final class Environment extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'env';
 
     /**
-     * The Command's short description
+     * The Command's short description.
      *
      * @var string
      */
     protected $description = 'Retrieves the current environment, or set a new one.';
 
     /**
-     * The Command's usage
+     * The Command's usage.
      *
      * @var string
      */
     protected $usage = 'env [<environment>]';
 
     /**
-     * The Command's arguments
+     * The Command's arguments.
      *
      * @var array<string, string>
      */
@@ -62,7 +62,7 @@ final class Environment extends BaseCommand
     ];
 
     /**
-     * The Command's options
+     * The Command's options.
      *
      * @var array<string, string>
      */
@@ -84,7 +84,7 @@ final class Environment extends BaseCommand
      */
     public function run(array $params)
     {
-        if ($params === []) {
+        if ([] === $params) {
             CLI::write(sprintf('Your environment is currently set as %s.', CLI::color($_SERVER['CI_ENVIRONMENT'] ?? ENVIRONMENT, 'green')));
             CLI::newLine();
 
@@ -93,7 +93,7 @@ final class Environment extends BaseCommand
 
         $env = strtolower(array_shift($params));
 
-        if ($env === 'testing') {
+        if ('testing' === $env) {
             CLI::error('The "testing" environment is reserved for PHPUnit testing.', 'light_gray', 'red');
             CLI::error('You will not be able to run spark under a "testing" environment.', 'light_gray', 'red');
             CLI::newLine();
@@ -101,14 +101,14 @@ final class Environment extends BaseCommand
             return EXIT_ERROR;
         }
 
-        if (! in_array($env, self::$knownTypes, true)) {
+        if (!in_array($env, self::$knownTypes, true)) {
             CLI::error(sprintf('Invalid environment type "%s". Expected one of "%s".', $env, implode('" and "', self::$knownTypes)), 'light_gray', 'red');
             CLI::newLine();
 
             return EXIT_ERROR;
         }
 
-        if (! $this->writeNewEnvironmentToEnvFile($env)) {
+        if (!$this->writeNewEnvironmentToEnvFile($env)) {
             CLI::error('Error in writing new environment to .env file.', 'light_gray', 'red');
             CLI::newLine();
 
@@ -133,11 +133,11 @@ final class Environment extends BaseCommand
      */
     private function writeNewEnvironmentToEnvFile(string $newEnv): bool
     {
-        $baseEnv = ROOTPATH . 'env';
-        $envFile = ROOTPATH . '.env';
+        $baseEnv = ROOTPATH.'env';
+        $envFile = ROOTPATH.'.env';
 
-        if (! is_file($envFile)) {
-            if (! is_file($baseEnv)) {
+        if (!is_file($envFile)) {
+            if (!is_file($baseEnv)) {
                 CLI::write('Both default shipped `env` file and custom `.env` are missing.', 'yellow');
                 CLI::write('It is impossible to write the new environment type.', 'yellow');
                 CLI::newLine();
@@ -151,9 +151,9 @@ final class Environment extends BaseCommand
         $pattern = preg_quote($_SERVER['CI_ENVIRONMENT'] ?? ENVIRONMENT, '/');
         $pattern = sprintf('/^[#\s]*CI_ENVIRONMENT[=\s]+%s$/m', $pattern);
 
-        return file_put_contents(
+        return false !== file_put_contents(
             $envFile,
             preg_replace($pattern, "\nCI_ENVIRONMENT = {$newEnv}", file_get_contents($envFile), -1, $count),
-        ) !== false && $count > 0;
+        ) && $count > 0;
     }
 }

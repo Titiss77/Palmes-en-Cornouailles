@@ -13,10 +13,6 @@ declare(strict_types=1);
 
 namespace CodeIgniter\I18n;
 
-use DateTime;
-use Exception;
-use ReturnTypeWillChange;
-
 /**
  * Legacy Time class.
  *
@@ -43,10 +39,10 @@ use ReturnTypeWillChange;
  *
  * @phpstan-consistent-constructor
  *
- * @deprecated Use Time instead.
- * @see \CodeIgniter\I18n\TimeLegacyTest
+ * @deprecated use Time instead
+ * @see TimeLegacyTest
  */
-class TimeLegacy extends DateTime
+class TimeLegacy extends \DateTime
 {
     use TimeTrait;
 
@@ -57,9 +53,9 @@ class TimeLegacy extends DateTime
      *
      * @return static
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function setTimestamp($timestamp)
     {
         $time = date('Y-m-d H:i:s', $timestamp);

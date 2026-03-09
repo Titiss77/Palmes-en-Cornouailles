@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\DataCaster\Cast;
 
 /**
- * Int Bool Cast
+ * Int Bool Cast.
  *
  * (PHP) [bool --> int       ] --> (DB driver) --> (DB column) int(0/1)
  *       [     <-- int|string] <-- (DB driver) <-- (DB column) int(0/1)
@@ -26,7 +26,7 @@ final class IntBoolCast extends BaseCast
         array $params = [],
         ?object $helper = null,
     ): bool {
-        if (! is_int($value) && ! is_string($value)) {
+        if (!is_int($value) && !is_string($value)) {
             self::invalidTypeValueError($value);
         }
 
@@ -38,7 +38,7 @@ final class IntBoolCast extends BaseCast
         array $params = [],
         ?object $helper = null,
     ): int {
-        if (! is_bool($value)) {
+        if (!is_bool($value)) {
             self::invalidTypeValueError($value);
         }
 

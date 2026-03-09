@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Config;
 
 use Kint\Parser\ConstructablePluginInterface;
@@ -9,7 +11,7 @@ use Kint\Renderer\Rich\ValuePluginInterface;
 /**
  * --------------------------------------------------------------------------
  * Kint
- * --------------------------------------------------------------------------
+ * --------------------------------------------------------------------------.
  *
  * We use Kint's `RichRenderer` and `CLIRenderer`. This area contains options
  * that you can set to customize how Kint works for you.
@@ -25,13 +27,13 @@ class Kint
     */
 
     /**
-     * @var list<class-string<ConstructablePluginInterface>|ConstructablePluginInterface>|null
+     * @var null|list<class-string<ConstructablePluginInterface>|ConstructablePluginInterface>
      */
     public $plugins;
 
-    public int $maxDepth           = 6;
+    public int $maxDepth = 6;
     public bool $displayCalledFrom = true;
-    public bool $expanded          = false;
+    public bool $expanded = false;
 
     /*
     |--------------------------------------------------------------------------
@@ -39,15 +41,15 @@ class Kint
     |--------------------------------------------------------------------------
     */
     public string $richTheme = 'aante-light.css';
-    public bool $richFolder  = false;
+    public bool $richFolder = false;
 
     /**
-     * @var array<string, class-string<ValuePluginInterface>>|null
+     * @var null|array<string, class-string<ValuePluginInterface>>
      */
     public $richObjectPlugins;
 
     /**
-     * @var array<string, class-string<TabPluginInterface>>|null
+     * @var null|array<string, class-string<TabPluginInterface>>
      */
     public $richTabPlugins;
 
@@ -56,8 +58,8 @@ class Kint
     | CLI Settings
     |--------------------------------------------------------------------------
     */
-    public bool $cliColors      = true;
-    public bool $cliForceUTF8   = false;
+    public bool $cliColors = true;
+    public bool $cliForceUTF8 = false;
     public bool $cliDetectWidth = true;
-    public int $cliMinWidth     = 40;
+    public int $cliMinWidth = 40;
 }

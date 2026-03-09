@@ -18,7 +18,7 @@ use CodeIgniter\RESTful\ResourceController;
 class MockResourceController extends ResourceController
 {
     /**
-     * @return object|null
+     * @return null|object
      */
     public function getModel()
     {
@@ -26,7 +26,7 @@ class MockResourceController extends ResourceController
     }
 
     /**
-     * @return class-string|null
+     * @return null|class-string
      */
     public function getModelName()
     {
@@ -34,7 +34,7 @@ class MockResourceController extends ResourceController
     }
 
     /**
-     * @return 'json'|'xml'|null
+     * @return null|'json'|'xml'
      */
     public function getFormat()
     {

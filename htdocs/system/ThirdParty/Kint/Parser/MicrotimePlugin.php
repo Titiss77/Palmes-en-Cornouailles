@@ -57,7 +57,7 @@ class MicrotimePlugin extends AbstractPlugin implements PluginCompleteInterface
         }
 
         if (\is_string($var)) {
-            if ('microtime()' !== $c->getName() || !\preg_match('/^0\\.[0-9]{8} [0-9]{10}$/', $var)) {
+            if ('microtime()' !== $c->getName() || !\preg_match('/^0\.[0-9]{8} [0-9]{10}$/', $var)) {
                 return $v;
             }
 

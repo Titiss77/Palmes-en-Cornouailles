@@ -17,7 +17,7 @@ use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 
 /**
- * ClearDebugbar Command
+ * ClearDebugbar Command.
  */
 class ClearDebugbar extends BaseCommand
 {
@@ -30,14 +30,14 @@ class ClearDebugbar extends BaseCommand
     protected $group = 'Housekeeping';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'debugbar:clear';
 
     /**
-     * The Command's usage
+     * The Command's usage.
      *
      * @var string
      */
@@ -53,11 +53,11 @@ class ClearDebugbar extends BaseCommand
     /**
      * Actually runs the command.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         helper('filesystem');
 
-        if (! delete_files(WRITEPATH . 'debugbar', false, true)) {
+        if (!delete_files(WRITEPATH.'debugbar', false, true)) {
             // @codeCoverageIgnoreStart
             CLI::error('Error deleting the debugbar JSON files.');
             CLI::newLine();

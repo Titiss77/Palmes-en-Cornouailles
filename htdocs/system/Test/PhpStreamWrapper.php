@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Test;
 
 /**
- * StreamWrapper for php protocol
+ * StreamWrapper for php protocol.
  *
  * This class is used for mocking `php://stdin`.
  *
@@ -23,34 +23,25 @@ namespace CodeIgniter\Test;
 final class PhpStreamWrapper
 {
     /**
-     * @var resource|null
+     * @var null|resource
      */
     public $context;
 
     private static string $content = '';
-    private int $position          = 0;
+    private int $position = 0;
 
-    /**
-     * @return void
-     */
-    public static function setContent(string $content)
+    public static function setContent(string $content): void
     {
         self::$content = $content;
     }
 
-    /**
-     * @return void
-     */
-    public static function register()
+    public static function register(): void
     {
         stream_wrapper_unregister('php');
         stream_wrapper_register('php', self::class);
     }
 
-    /**
-     * @return void
-     */
-    public static function restore()
+    public static function restore(): void
     {
         stream_wrapper_restore('php');
     }

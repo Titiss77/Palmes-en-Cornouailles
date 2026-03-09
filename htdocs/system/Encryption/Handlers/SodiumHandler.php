@@ -19,14 +19,14 @@ use CodeIgniter\Encryption\Exceptions\EncryptionException;
  * SodiumHandler uses libsodium in encryption.
  *
  * @see https://github.com/jedisct1/libsodium/issues/392
- * @see \CodeIgniter\Encryption\Handlers\SodiumHandlerTest
+ * @see SodiumHandlerTest
  */
 class SodiumHandler extends BaseHandler
 {
     /**
-     * Starter key
+     * Starter key.
      *
-     * @var string|null Null is used for buffer cleanup.
+     * @var null|string null is used for buffer cleanup
      */
     protected $key = '';
 
@@ -37,9 +37,6 @@ class SodiumHandler extends BaseHandler
      */
     protected $blockSize = 16;
 
-    /**
-     * {@inheritDoc}
-     */
     public function encrypt($data, $params = null)
     {
         $this->parseParams($params);
@@ -59,7 +56,7 @@ class SodiumHandler extends BaseHandler
         $data = sodium_pad($data, $this->blockSize);
 
         // encrypt message and combine with nonce
-        $ciphertext = $nonce . sodium_crypto_secretbox($data, $nonce, $this->key);
+        $ciphertext = $nonce.sodium_crypto_secretbox($data, $nonce, $this->key);
 
         // cleanup buffers
         sodium_memzero($data);
@@ -68,9 +65,6 @@ class SodiumHandler extends BaseHandler
         return $ciphertext;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function decrypt($data, $params = null)
     {
         $this->parseParams($params);
@@ -85,13 +79,13 @@ class SodiumHandler extends BaseHandler
         }
 
         // Extract info from encrypted data
-        $nonce      = self::substr($data, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $nonce = self::substr($data, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $ciphertext = self::substr($data, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
 
         // decrypt data
         $data = sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
 
-        if ($data === false) {
+        if (false === $data) {
             // message was tampered in transit
             throw EncryptionException::forAuthenticationFailed(); // @codeCoverageIgnore
         }
@@ -113,15 +107,13 @@ class SodiumHandler extends BaseHandler
     /**
      * Parse the $params before doing assignment.
      *
-     * @param array|string|null $params
-     *
-     * @return void
+     * @param null|array|string $params
      *
      * @throws EncryptionException If key is empty
      */
-    protected function parseParams($params)
+    protected function parseParams($params): void
     {
-        if ($params === null) {
+        if (null === $params) {
             return;
         }
 

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Exceptions;
 
 /**
- * Class FrameworkException
+ * Class FrameworkException.
  *
  * A collection of exceptions thrown by the framework
  * that can only be determined at run time.
@@ -68,7 +68,7 @@ class FrameworkException extends RuntimeException
                 'The framework needs the following extension(s) installed and loaded: %s.',
                 $extension,
             );
-            // @codeCoverageIgnoreEnd
+        // @codeCoverageIgnoreEnd
         } else {
             $message = lang('Core.missingExtension', [$extension]);
         }

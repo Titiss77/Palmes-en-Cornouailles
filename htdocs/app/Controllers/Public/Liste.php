@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
-use App\Models\Public\Donnees;
-use App\Models\Public\UtilisateurModel; // Ajout du modèle utilisateur
 use App\Controllers\Root;
+use App\Models\Public\Donnees; // Ajout du modèle utilisateur
+use App\Models\Public\UtilisateurModel;
 
 class Liste extends BaseController
 {
@@ -16,38 +18,38 @@ class Liste extends BaseController
     public function __construct()
     {
         $this->donneesModel = new Donnees();
-        $this->userModel    = new UtilisateurModel(); // Instanciation
-        $this->root         = new Root();
+        $this->userModel = new UtilisateurModel(); // Instanciation
+        $this->root = new Root();
     }
 
     /**
-     * Affiche le formulaire de connexion
+     * Affiche le formulaire de connexion.
      */
     public function index()
     {
         // Si l'admin est déjà connecté, on le redirige directement vers le dashboard
-        if (session()->get('isLoggedIn') && session()->get('role') === 'user') {
+        if (session()->get('isLoggedIn') && 'user' === session()->get('role')) {
             return redirect()->to(base_url('/'));
         }
 
         $data = [
-            'root'      => $this->root->getRootStyles(),
+            'root' => $this->root->getRootStyles(),
             'titrePage' => 'Connexion Licenciés',
-            'cssPage'   => 'Public/contact.css',
-            'general'   => $this->donneesModel->getGeneral(),
+            'cssPage' => 'Public/contact.css',
+            'general' => $this->donneesModel->getGeneral(),
         ];
 
         return view('Public/v_listeLogin', $data);
     }
 
     /**
-     * Gère la tentative d'authentification
+     * Gère la tentative d'authentification.
      */
     public function authenticate()
     {
         $general = $this->donneesModel->getGeneral()['lienDrive'];
-        
-        $username    = $this->request->getPost('identifiant');
+
+        $username = $this->request->getPost('identifiant');
         $passwordRaw = $this->request->getPost('password');
 
         // 1. Recherche via le Modèle (plus propre)
@@ -65,7 +67,7 @@ class Liste extends BaseController
     }
 
     /**
-     * Déconnecte l'utilisateur
+     * Déconnecte l'utilisateur.
      */
     public function logout()
     {
@@ -73,7 +75,7 @@ class Liste extends BaseController
 
         // Gestion de l'URL de retour
         $returnUrl = $this->request->getGet('return') ?? '/';
-        
+
         return redirect()->to(base_url($returnUrl))->with('success', 'Vous avez été déconnecté.');
     }
 }

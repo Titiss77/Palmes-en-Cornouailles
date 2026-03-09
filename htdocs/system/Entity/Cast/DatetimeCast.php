@@ -14,20 +14,16 @@ declare(strict_types=1);
 namespace CodeIgniter\Entity\Cast;
 
 use CodeIgniter\I18n\Time;
-use DateTime;
-use Exception;
 
 /**
- * Class DatetimeCast
+ * Class DatetimeCast.
  */
 class DatetimeCast extends BaseCast
 {
     /**
-     * {@inheritDoc}
-     *
      * @return Time
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function get($value, array $params = [])
     {
@@ -35,7 +31,7 @@ class DatetimeCast extends BaseCast
             return $value;
         }
 
-        if ($value instanceof DateTime) {
+        if ($value instanceof \DateTime) {
             return Time::createFromInstance($value);
         }
 

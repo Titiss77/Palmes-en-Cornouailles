@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Controllers\Root;
+use Config\Database;
 
 class Dashboard extends BaseAdminController
 {
@@ -21,7 +24,7 @@ class Dashboard extends BaseAdminController
         // Note: count($this->donneesModel->get...) n'est pas très optimisé mais fonctionne pour l'instant.
         // Idéalement : $db->table('actualites')->countAll();
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $data['count'] = [
             'path' => '/sectionAccueil.php',
@@ -48,7 +51,7 @@ class Dashboard extends BaseAdminController
         // Note: count($this->donneesModel->get...) n'est pas très optimisé mais fonctionne pour l'instant.
         // Idéalement : $db->table('actualites')->countAll();
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         $data['count'] = [
             'actualites' => $db->table('actualites')->countAll(),

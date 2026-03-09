@@ -31,28 +31,28 @@ class ClearCache extends BaseCommand
     protected $group = 'Cache';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'cache:clear';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Clears the current system caches.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'cache:clear [<driver>]';
 
     /**
-     * the Command's Arguments
+     * the Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -61,23 +61,23 @@ class ClearCache extends BaseCommand
     ];
 
     /**
-     * Clears the cache
+     * Clears the cache.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
-        $config  = config(Cache::class);
+        $config = config(Cache::class);
         $handler = $params[0] ?? $config->handler;
 
-        if (! array_key_exists($handler, $config->validHandlers)) {
-            CLI::error($handler . ' is not a valid cache handler.');
+        if (!array_key_exists($handler, $config->validHandlers)) {
+            CLI::error($handler.' is not a valid cache handler.');
 
             return;
         }
 
         $config->handler = $handler;
-        $cache           = CacheFactory::getHandler($config);
+        $cache = CacheFactory::getHandler($config);
 
-        if (! $cache->clean()) {
+        if (!$cache->clean()) {
             // @codeCoverageIgnoreStart
             CLI::error('Error while clearing the cache.');
 

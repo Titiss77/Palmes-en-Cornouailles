@@ -27,10 +27,38 @@ declare(strict_types=1);
 
 namespace Kint;
 
-use InvalidArgumentException;
+use Kint\Parser\ArrayLimitPlugin;
+use Kint\Parser\ArrayObjectPlugin;
+use Kint\Parser\Base64Plugin;
+use Kint\Parser\BinaryPlugin;
+use Kint\Parser\BlacklistPlugin;
+use Kint\Parser\ClassHooksPlugin;
+use Kint\Parser\ClassMethodsPlugin;
+use Kint\Parser\ClassStaticsPlugin;
+use Kint\Parser\ClassStringsPlugin;
+use Kint\Parser\ClosurePlugin;
+use Kint\Parser\ColorPlugin;
 use Kint\Parser\ConstructablePluginInterface;
+use Kint\Parser\DateTimePlugin;
+use Kint\Parser\DomPlugin;
+use Kint\Parser\EnumPlugin;
+use Kint\Parser\FsPathPlugin;
+use Kint\Parser\HtmlPlugin;
+use Kint\Parser\IteratorPlugin;
+use Kint\Parser\JsonPlugin;
+use Kint\Parser\MicrotimePlugin;
+use Kint\Parser\MysqliPlugin;
 use Kint\Parser\Parser;
 use Kint\Parser\PluginInterface;
+use Kint\Parser\SimpleXMLElementPlugin;
+use Kint\Parser\SplFileInfoPlugin;
+use Kint\Parser\StreamPlugin;
+use Kint\Parser\TablePlugin;
+use Kint\Parser\ThrowablePlugin;
+use Kint\Parser\TimestampPlugin;
+use Kint\Parser\ToStringPlugin;
+use Kint\Parser\TracePlugin;
+use Kint\Parser\XmlPlugin;
 use Kint\Renderer\ConstructableRendererInterface;
 use Kint\Renderer\RendererInterface;
 use Kint\Renderer\TextRenderer;
@@ -132,36 +160,36 @@ class Kint implements FacadeInterface
      * @psalm-var array<PluginInterface|class-string<ConstructablePluginInterface>>
      */
     public static array $plugins = [
-        \Kint\Parser\ArrayLimitPlugin::class,
-        \Kint\Parser\ArrayObjectPlugin::class,
-        \Kint\Parser\Base64Plugin::class,
-        \Kint\Parser\BinaryPlugin::class,
-        \Kint\Parser\BlacklistPlugin::class,
-        \Kint\Parser\ClassHooksPlugin::class,
-        \Kint\Parser\ClassMethodsPlugin::class,
-        \Kint\Parser\ClassStaticsPlugin::class,
-        \Kint\Parser\ClassStringsPlugin::class,
-        \Kint\Parser\ClosurePlugin::class,
-        \Kint\Parser\ColorPlugin::class,
-        \Kint\Parser\DateTimePlugin::class,
-        \Kint\Parser\DomPlugin::class,
-        \Kint\Parser\EnumPlugin::class,
-        \Kint\Parser\FsPathPlugin::class,
-        \Kint\Parser\HtmlPlugin::class,
-        \Kint\Parser\IteratorPlugin::class,
-        \Kint\Parser\JsonPlugin::class,
-        \Kint\Parser\MicrotimePlugin::class,
-        \Kint\Parser\MysqliPlugin::class,
+        ArrayLimitPlugin::class,
+        ArrayObjectPlugin::class,
+        Base64Plugin::class,
+        BinaryPlugin::class,
+        BlacklistPlugin::class,
+        ClassHooksPlugin::class,
+        ClassMethodsPlugin::class,
+        ClassStaticsPlugin::class,
+        ClassStringsPlugin::class,
+        ClosurePlugin::class,
+        ColorPlugin::class,
+        DateTimePlugin::class,
+        DomPlugin::class,
+        EnumPlugin::class,
+        FsPathPlugin::class,
+        HtmlPlugin::class,
+        IteratorPlugin::class,
+        JsonPlugin::class,
+        MicrotimePlugin::class,
+        MysqliPlugin::class,
         // \Kint\Parser\SerializePlugin::class,
-        \Kint\Parser\SimpleXMLElementPlugin::class,
-        \Kint\Parser\SplFileInfoPlugin::class,
-        \Kint\Parser\StreamPlugin::class,
-        \Kint\Parser\TablePlugin::class,
-        \Kint\Parser\ThrowablePlugin::class,
-        \Kint\Parser\TimestampPlugin::class,
-        \Kint\Parser\ToStringPlugin::class,
-        \Kint\Parser\TracePlugin::class,
-        \Kint\Parser\XmlPlugin::class,
+        SimpleXMLElementPlugin::class,
+        SplFileInfoPlugin::class,
+        StreamPlugin::class,
+        TablePlugin::class,
+        ThrowablePlugin::class,
+        TimestampPlugin::class,
+        ToStringPlugin::class,
+        TracePlugin::class,
+        XmlPlugin::class,
     ];
 
     protected Parser $parser;
@@ -219,9 +247,9 @@ class Kint implements FacadeInterface
         foreach ($plugins as $plugin) {
             try {
                 $this->parser->addPlugin($plugin);
-            } catch (InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException $e) {
                 \trigger_error(
-                    'Plugin '.Utils::errorSanitizeString(\get_class($plugin)).' could not be added to a Kint parser: '.Utils::errorSanitizeString($e->getMessage()),
+                    'Plugin '.Utils::errorSanitizeString($plugin::class).' could not be added to a Kint parser: '.Utils::errorSanitizeString($e->getMessage()),
                     E_USER_WARNING
                 );
             }
@@ -242,7 +270,7 @@ class Kint implements FacadeInterface
     public function dumpAll(array $vars, array $base): string
     {
         if (\array_keys($vars) !== \array_keys($base)) {
-            throw new InvalidArgumentException('Kint::dumpAll requires arrays of identical size and keys as arguments');
+            throw new \InvalidArgumentException('Kint::dumpAll requires arrays of identical size and keys as arguments');
         }
 
         if ([] === $vars) {
@@ -253,7 +281,7 @@ class Kint implements FacadeInterface
 
         foreach ($vars as $key => $_) {
             if (!$base[$key] instanceof ContextInterface) {
-                throw new InvalidArgumentException('Kint::dumpAll requires all elements of the second argument to be ContextInterface instances');
+                throw new \InvalidArgumentException('Kint::dumpAll requires all elements of the second argument to be ContextInterface instances');
             }
             $output .= $this->dumpVar($vars[$key], $base[$key]);
         }
@@ -261,27 +289,6 @@ class Kint implements FacadeInterface
         $output .= $this->renderer->postRender();
 
         return $output;
-    }
-
-    protected function dumpNothing(): string
-    {
-        $output = $this->renderer->preRender();
-        $output .= $this->renderer->render(new UninitializedValue(new BaseContext('No argument')));
-        $output .= $this->renderer->postRender();
-
-        return $output;
-    }
-
-    /**
-     * Dumps and renders a var.
-     *
-     * @param mixed &$var Data to dump
-     */
-    protected function dumpVar(&$var, ContextInterface $c): string
-    {
-        return $this->renderer->render(
-            $this->parser->parse($var, $c)
-        );
     }
 
     /**
@@ -396,9 +403,9 @@ class Kint implements FacadeInterface
      * @param array[] $trace   Backtrace
      * @param array   $args    Arguments
      *
-     * @return array Call info
-     *
      * @psalm-param list<non-empty-array> $trace
+     *
+     * @return array Call info
      */
     public static function getCallInfo(array $aliases, array $trace, array $args): array
     {
@@ -502,7 +509,7 @@ class Kint implements FacadeInterface
 
         \array_shift($trimmed_trace);
 
-        $base = new BaseContext('Kint\\Kint::trace()');
+        $base = new BaseContext('Kint\Kint::trace()');
         $base->access_path = 'debug_backtrace()';
         $output = $kintstance->dumpAll([$trimmed_trace], [$base]);
 
@@ -574,6 +581,27 @@ class Kint implements FacadeInterface
         return 0;
     }
 
+    protected function dumpNothing(): string
+    {
+        $output = $this->renderer->preRender();
+        $output .= $this->renderer->render(new UninitializedValue(new BaseContext('No argument')));
+        $output .= $this->renderer->postRender();
+
+        return $output;
+    }
+
+    /**
+     * Dumps and renders a var.
+     *
+     * @param mixed &$var Data to dump
+     */
+    protected function dumpVar(&$var, ContextInterface $c): string
+    {
+        return $this->renderer->render(
+            $this->parser->parse($var, $c)
+        );
+    }
+
     /**
      * Returns specific function call info from a stack trace frame, or null if no match could be found.
      *
@@ -585,9 +613,9 @@ class Kint implements FacadeInterface
     protected static function getSingleCall(array $frame, array $args): ?array
     {
         if (
-            !isset($frame['file'], $frame['line'], $frame['function']) ||
-            !\is_readable($frame['file']) ||
-            false === ($source = \file_get_contents($frame['file']))
+            !isset($frame['file'], $frame['line'], $frame['function'])
+            || !\is_readable($frame['file'])
+            || false === ($source = \file_get_contents($frame['file']))
         ) {
             return null;
         }
@@ -609,7 +637,7 @@ class Kint implements FacadeInterface
 
             // Handle argument unpacking as a last resort
             foreach ($call['parameters'] as $i => &$param) {
-                if (0 === \strpos($param['name'], '...')) {
+                if (\str_starts_with($param['name'], '...')) {
                     $is_unpack = true;
 
                     // If we're on the last param

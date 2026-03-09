@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\admin;
 
 use CodeIgniter\Model;
@@ -14,13 +16,16 @@ class PiscinesModel extends Model
     protected $allowedFields = ['nom', 'adresse', 'type_bassin', 'image_id'];
 
     /**
-     * Récupère les piscines avec l'image associée
+     * Récupère les piscines avec l'image associée.
+     *
+     * @param null|mixed $id
      */
     public function getPiscinesWithRelations($id = null)
     {
         $builder = $this
             ->select('piscines.*, images.path as image_path, images.alt')
-            ->join('images', 'piscines.image_id = images.id', 'left');
+            ->join('images', 'piscines.image_id = images.id', 'left')
+        ;
 
         if ($id) {
             return $builder->where('piscines.id', $id)->first();

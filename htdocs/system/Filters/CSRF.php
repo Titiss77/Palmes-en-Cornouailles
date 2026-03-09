@@ -26,22 +26,23 @@ use CodeIgniter\Security\Security;
  * This filter is not intended to be used from the command line.
  *
  * @codeCoverageIgnore
- * @see \CodeIgniter\Filters\CSRFTest
+ *
+ * @see CSRFTest
  */
 class CSRF implements FilterInterface
 {
     /**
      * CSRF verification.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      *
-     * @return RedirectResponse|null
+     * @return null|RedirectResponse
      *
      * @throws SecurityException
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (! $request instanceof IncomingRequest) {
+        if (!$request instanceof IncomingRequest) {
             return null;
         }
 
@@ -51,7 +52,7 @@ class CSRF implements FilterInterface
         try {
             $security->verify($request);
         } catch (SecurityException $e) {
-            if ($security->shouldRedirect() && ! $request->isAJAX()) {
+            if ($security->shouldRedirect() && !$request->isAJAX()) {
                 return redirect()->back()->with('error', $e->getMessage());
             }
 
@@ -64,7 +65,7 @@ class CSRF implements FilterInterface
     /**
      * We don't have anything to do here.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {

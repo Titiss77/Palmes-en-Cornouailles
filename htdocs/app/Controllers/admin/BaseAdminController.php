@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Controllers\BaseController;
 use App\Controllers\Root;
 use App\Models\Public\Donnees;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Config\Database;
+use Psr\Log\LoggerInterface;
 
 class BaseAdminController extends BaseController
 {
     protected $donneesModel;
     protected $root;
 
-    public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger): void
     {
         // Initialisation parent
         parent::initController($request, $response, $logger);
@@ -42,7 +48,11 @@ class BaseAdminController extends BaseController
 
     /**
      * MODIFICATION DE LA MÉTHODE handleImageUpload
-     * Ajout du paramètre $customName (optionnel)
+     * Ajout du paramètre $customName (optionnel).
+     *
+     * @param mixed      $fileInputName
+     * @param mixed      $subfolder
+     * @param null|mixed $customName
      */
     protected function handleImageUpload($fileInputName, $subfolder = 'general', $customName = null)
     {
@@ -57,26 +67,26 @@ class BaseAdminController extends BaseController
                 if (empty($extension)) {
                     $extension = $file->guessExtension();
                 }
-                $newName = $this->sanitizeFilename($customName) . '.' . $extension;
+                $newName = $this->sanitizeFilename($customName).'.'.$extension;
             } else {
                 // Sinon comportement par défaut (nom du fichier d'origine)
                 $newName = $file->getName();
             }
             // FIN MODIFICATION --------------------------------
 
-            $pathStr = $subfolder . '/';
+            $pathStr = $subfolder.'/';
 
-            if (!is_dir(FCPATH . 'uploads/' . $pathStr)) {
-                mkdir(FCPATH . 'uploads/' . $pathStr, 0777, true);
+            if (!is_dir(FCPATH.'uploads/'.$pathStr)) {
+                mkdir(FCPATH.'uploads/'.$pathStr, 0o777, true);
             }
 
             // Note: CodeIgniter gère automatiquement les doublons en ajoutant _1, _2 si le fichier existe déjà
             // sauf si vous ajoutez le paramètre true pour écraser : $file->move(..., ..., true);
-            $file->move(FCPATH . 'uploads/' . $pathStr, $newName);
-            $fullPath = $pathStr . $newName;
+            $file->move(FCPATH.'uploads/'.$pathStr, $newName);
+            $fullPath = $pathStr.$newName;
 
             // 2. Insérer dans la table images
-            $db = \Config\Database::connect();
+            $db = Database::connect();
             $builder = $db->table('images');
 
             $existing = $builder->where('path', $fullPath)->get()->getRow();
@@ -98,7 +108,7 @@ class BaseAdminController extends BaseController
     }
 
     /**
-     * Charge les données de base pour les vues admin
+     * Charge les données de base pour les vues admin.
      */
     protected function getCommonData(string $title, string $cssPage = '')
     {
@@ -108,7 +118,7 @@ class BaseAdminController extends BaseController
             'titrePage' => $title,
             'cssPage' => $cssPage,
             'isLogged' => session()->get('isLoggedIn'),
-            'userNom' => session()->get('nom')
+            'userNom' => session()->get('nom'),
         ];
     }
 }

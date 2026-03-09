@@ -11,7 +11,7 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
-/**
+/*
  * ---------------------------------------------------------------
  * This file cannot be used. The code has moved to Boot.php.
  * ---------------------------------------------------------------
@@ -27,7 +27,7 @@ header('HTTP/1.1 503 Service Unavailable.', true, 503);
 
 $message = 'This "system/bootstrap.php" is no longer used. If you are seeing this error message,
 the upgrade is not complete. Please refer to the upgrade guide and complete the upgrade.
-See https://codeigniter4.github.io/userguide/installation/upgrade_450.html' . PHP_EOL;
+See https://codeigniter4.github.io/userguide/installation/upgrade_450.html'.PHP_EOL;
 echo $message;
 
 /*
@@ -40,31 +40,31 @@ echo $message;
  * so they are available in the config files that are loaded.
  */
 
-/** @var Paths $paths */
+// @var Paths $paths
 
 // The path to the application directory.
-if (! defined('APPPATH')) {
-    define('APPPATH', realpath(rtrim($paths->appDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+if (!defined('APPPATH')) {
+    define('APPPATH', realpath(rtrim($paths->appDirectory, '\/ ')).DIRECTORY_SEPARATOR);
 }
 
 // The path to the project root directory. Just above APPPATH.
-if (! defined('ROOTPATH')) {
-    define('ROOTPATH', realpath(APPPATH . '../') . DIRECTORY_SEPARATOR);
+if (!defined('ROOTPATH')) {
+    define('ROOTPATH', realpath(APPPATH.'../').DIRECTORY_SEPARATOR);
 }
 
 // The path to the system directory.
-if (! defined('SYSTEMPATH')) {
-    define('SYSTEMPATH', realpath(rtrim($paths->systemDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+if (!defined('SYSTEMPATH')) {
+    define('SYSTEMPATH', realpath(rtrim($paths->systemDirectory, '\/ ')).DIRECTORY_SEPARATOR);
 }
 
 // The path to the writable directory.
-if (! defined('WRITEPATH')) {
-    define('WRITEPATH', realpath(rtrim($paths->writableDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+if (!defined('WRITEPATH')) {
+    define('WRITEPATH', realpath(rtrim($paths->writableDirectory, '\/ ')).DIRECTORY_SEPARATOR);
 }
 
 // The path to the tests directory
-if (! defined('TESTPATH')) {
-    define('TESTPATH', realpath(rtrim($paths->testsDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+if (!defined('TESTPATH')) {
+    define('TESTPATH', realpath(rtrim($paths->testsDirectory, '\/ ')).DIRECTORY_SEPARATOR);
 }
 
 /*
@@ -73,8 +73,8 @@ if (! defined('TESTPATH')) {
  * ---------------------------------------------------------------
  */
 
-if (! defined('APP_NAMESPACE')) {
-    require_once APPPATH . 'Config/Constants.php';
+if (!defined('APP_NAMESPACE')) {
+    require_once APPPATH.'Config/Constants.php';
 }
 
 /*
@@ -84,12 +84,12 @@ if (! defined('APP_NAMESPACE')) {
  */
 
 // Require app/Common.php file if exists.
-if (is_file(APPPATH . 'Common.php')) {
-    require_once APPPATH . 'Common.php';
+if (is_file(APPPATH.'Common.php')) {
+    require_once APPPATH.'Common.php';
 }
 
 // Require system/Common.php
-require_once SYSTEMPATH . 'Common.php';
+require_once SYSTEMPATH.'Common.php';
 
 /*
  * ---------------------------------------------------------------
@@ -101,17 +101,23 @@ require_once SYSTEMPATH . 'Common.php';
  * files can use the path constants.
  */
 
-if (! class_exists(Autoload::class, false)) {
-    require_once SYSTEMPATH . 'Config/AutoloadConfig.php';
-    require_once APPPATH . 'Config/Autoload.php';
-    require_once SYSTEMPATH . 'Modules/Modules.php';
-    require_once APPPATH . 'Config/Modules.php';
+if (!class_exists(Autoload::class, false)) {
+    require_once SYSTEMPATH.'Config/AutoloadConfig.php';
+
+    require_once APPPATH.'Config/Autoload.php';
+
+    require_once SYSTEMPATH.'Modules/Modules.php';
+
+    require_once APPPATH.'Config/Modules.php';
 }
 
-require_once SYSTEMPATH . 'Autoloader/Autoloader.php';
-require_once SYSTEMPATH . 'Config/BaseService.php';
-require_once SYSTEMPATH . 'Config/Services.php';
-require_once APPPATH . 'Config/Services.php';
+require_once SYSTEMPATH.'Autoloader/Autoloader.php';
+
+require_once SYSTEMPATH.'Config/BaseService.php';
+
+require_once SYSTEMPATH.'Config/Services.php';
+
+require_once APPPATH.'Config/Services.php';
 
 // Initialize and register the loader with the SPL autoloader stack.
 Services::autoloader()->initialize(new Autoload(), new Modules())->register();
@@ -132,7 +138,7 @@ Services::exceptions()->initialize();
  */
 
 // Run this check for manual installations
-if (! is_file(COMPOSER_PATH)) {
+if (!is_file(COMPOSER_PATH)) {
     $missingExtensions = [];
 
     foreach ([
@@ -140,12 +146,12 @@ if (! is_file(COMPOSER_PATH)) {
         'json',
         'mbstring',
     ] as $extension) {
-        if (! extension_loaded($extension)) {
+        if (!extension_loaded($extension)) {
             $missingExtensions[] = $extension;
         }
     }
 
-    if ($missingExtensions !== []) {
+    if ([] !== $missingExtensions) {
         throw FrameworkException::forMissingExtension(implode(', ', $missingExtensions));
     }
 

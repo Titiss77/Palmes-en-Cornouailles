@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Log\Handlers;
 
 /**
- * Expected behavior for a Log handler
+ * Expected behavior for a Log handler.
  */
 interface HandlerInterface
 {

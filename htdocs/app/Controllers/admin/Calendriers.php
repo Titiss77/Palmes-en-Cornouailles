@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\CalendriersModel;
+use Config\Database;
 
 class Calendriers extends BaseAdminController
 {
@@ -26,6 +29,7 @@ class Calendriers extends BaseAdminController
     public function new()
     {
         $data = $this->getCommonData('Nouveau Document', 'admin/page.css');
+
         return view('admin/calendriers/create', $data);
     }
 
@@ -46,7 +50,7 @@ class Calendriers extends BaseAdminController
         $data = [
             'categorie' => $this->request->getPost('categorie'),
             'date' => $this->request->getPost('date'),
-            'image_id' => $imageId
+            'image_id' => $imageId,
         ];
 
         $this->calModel->insert($data);
@@ -65,6 +69,7 @@ class Calendriers extends BaseAdminController
         }
 
         $data['item'] = $item;
+
         return view('admin/calendriers/edit', $data);
     }
 
@@ -79,7 +84,6 @@ class Calendriers extends BaseAdminController
         }
 
         $imageId = $this->handleImageUpload('image', 'calendriers', $this->request->getPost('nom'));
-        
 
         $data = [
             'categorie' => $this->request->getPost('categorie'),
@@ -103,17 +107,18 @@ class Calendriers extends BaseAdminController
         if ($item) {
             // Nettoyage fichier et entrée BDD Image
             if (!empty($item['image_path'])) {
-                $cheminFichier = FCPATH . 'uploads/' . $item['image_path'];
+                $cheminFichier = FCPATH.'uploads/'.$item['image_path'];
                 if (file_exists($cheminFichier)) {
                     unlink($cheminFichier);
                 }
                 if (!empty($item['image_id'])) {
-                    $db = \Config\Database::connect();
+                    $db = Database::connect();
                     $db->table('images')->where('id', $item['image_id'])->delete();
                 }
             }
 
             $this->calModel->delete($id);
+
             return redirect()->to('/admin/calendriers')->with('success', 'Document supprimé.');
         }
 
@@ -134,11 +139,11 @@ class Calendriers extends BaseAdminController
 
         $this->calModel->update($id, ['image_id' => null]);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('images')->where('id', $imageId)->delete();
 
         if (!empty($imagePath)) {
-            $fullPath = FCPATH . 'uploads/' . $imagePath;
+            $fullPath = FCPATH.'uploads/'.$imagePath;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }

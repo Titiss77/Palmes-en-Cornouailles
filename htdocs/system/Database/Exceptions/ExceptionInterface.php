@@ -19,6 +19,4 @@ namespace CodeIgniter\Database\Exceptions;
  *
  * catch (\CodeIgniter\Database\Exceptions\ExceptionInterface) { ... }
  */
-interface ExceptionInterface extends \CodeIgniter\Exceptions\ExceptionInterface
-{
-}
+interface ExceptionInterface extends \CodeIgniter\Exceptions\ExceptionInterface {}

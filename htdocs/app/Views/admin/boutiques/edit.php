@@ -1,34 +1,34 @@
-<?= $this->extend('admin/Layout/l_global') ?>
+<?php echo $this->extend('admin/Layout/l_global'); ?>
 
-<?= $this->section('contenu') ?>
-<?= $this->include('admin/retour') ?>
+<?php echo $this->section('contenu'); ?>
+<?php echo $this->include('admin/retour'); ?>
 
 <div class="site-container">
     <div class="d-flex align-items-center mb-4">
-        <a href="<?= base_url('admin/boutiques') ?>" class="text-decoration-none me-3 text-dark">
+        <a href="<?php echo base_url('admin/boutiques'); ?>" class="text-decoration-none me-3 text-dark">
             <i class="bi bi-arrow-left-circle"></i>
         </a>
-        <h3 class="title-section mb-0">Modifier : <?= esc($item['nom']) ?></h3>
+        <h3 class="title-section mb-0">Modifier : <?php echo esc($item['nom']); ?></h3>
     </div>
 
-    <?php if (session()->getFlashdata('errors')): ?>
+    <?php if (session()->getFlashdata('errors')) { ?>
     <div class="alert alert-danger mb-4 p-3">
         <ul class="mb-0 ps-3">
-            <?php foreach (session()->getFlashdata('errors') as $error): ?>
-            <li><?= esc($error) ?></li>
-            <?php endforeach; ?>
+            <?php foreach (session()->getFlashdata('errors') as $error) { ?>
+            <li><?php echo esc($error); ?></li>
+            <?php } ?>
         </ul>
     </div>
-    <?php endif; ?>
+    <?php } ?>
 
     <div class="card-item p-4">
-        <form action="<?= base_url('admin/boutiques/' . $item['id']) ?>" method="post">
-            <?= csrf_field() ?>
+        <form action="<?php echo base_url('admin/boutiques/'.$item['id']); ?>" method="post">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="_method" value="PUT">
 
             <div class="form-group mb-3">
                 <label class="fw-bold mb-1">Nom de l'article</label>
-                <input type="text" name="nom" class="form-input w-100 p-2" value="<?= old('nom', $item['nom']) ?>"
+                <input type="text" name="nom" class="form-input w-100 p-2" value="<?php echo old('nom', $item['nom']); ?>"
                     required maxlength="50">
             </div>
 
@@ -36,12 +36,12 @@
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Prix / Tranche de prix</label>
                     <input type="text" name="tranchePrix" class="form-input w-100 p-2"
-                        value="<?= old('tranchePrix', $item['tranchePrix']) ?>" required maxlength="50">
+                        value="<?php echo old('tranchePrix', $item['tranchePrix']); ?>" required maxlength="50">
                 </div>
 
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Lien externe</label>
-                    <input type="url" name="url" class="form-input w-100 p-2" value="<?= old('url', $item['url']) ?>"
+                    <input type="url" name="url" class="form-input w-100 p-2" value="<?php echo old('url', $item['url']); ?>"
                         maxlength="255">
                 </div>
             </div>
@@ -49,7 +49,7 @@
             <div class="form-group mb-4">
                 <label class="fw-bold mb-1">Description</label>
                 <textarea name="description" rows="5" class="form-input w-100 p-2"
-                    required><?= old('description', $item['description']) ?></textarea>
+                    required><?php echo old('description', $item['description']); ?></textarea>
             </div>
 
             <div class="text-end">
@@ -60,4 +60,4 @@
         </form>
     </div>
 </div>
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

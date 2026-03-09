@@ -17,6 +17,4 @@ namespace CodeIgniter\Exceptions;
  * Exception thrown if a method is called in the wrong way, or the method
  * does not exist.
  */
-class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface
-{
-}
+class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface {}

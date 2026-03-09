@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\DisciplinesModel;
+use Config\Database;
 
 class Disciplines extends BaseAdminController
 {
@@ -26,6 +29,7 @@ class Disciplines extends BaseAdminController
     public function new()
     {
         $data = $this->getCommonData('Nouvelle Discipline', 'admin/page.css');
+
         return view('admin/disciplines/create', $data);
     }
 
@@ -42,9 +46,9 @@ class Disciplines extends BaseAdminController
         $imageId = $this->handleImageUpload('image', 'disciplines', $this->request->getPost('nom'));
 
         $data = [
-            'nom'         => $this->request->getPost('nom'),
+            'nom' => $this->request->getPost('nom'),
             'description' => $this->request->getPost('description'),
-            'image_id'    => $imageId
+            'image_id' => $imageId,
         ];
 
         $this->disciplineModel->insert($data);
@@ -63,6 +67,7 @@ class Disciplines extends BaseAdminController
         }
 
         $data['item'] = $item;
+
         return view('admin/disciplines/edit', $data);
     }
 
@@ -78,7 +83,7 @@ class Disciplines extends BaseAdminController
         $imageId = $this->handleImageUpload('image', 'disciplines', $this->request->getPost('nom'));
 
         $data = [
-            'nom'         => $this->request->getPost('nom'),
+            'nom' => $this->request->getPost('nom'),
             'description' => $this->request->getPost('description'),
         ];
 
@@ -99,17 +104,18 @@ class Disciplines extends BaseAdminController
         if ($item) {
             // Suppression fichier et entrée image
             if (!empty($item['image_path'])) {
-                $cheminFichier = FCPATH . 'uploads/' . $item['image_path'];
+                $cheminFichier = FCPATH.'uploads/'.$item['image_path'];
                 if (file_exists($cheminFichier)) {
                     unlink($cheminFichier);
                 }
                 if (!empty($item['image_id'])) {
-                    $db = \Config\Database::connect();
+                    $db = Database::connect();
                     $db->table('images')->where('id', $item['image_id'])->delete();
                 }
             }
 
             $this->disciplineModel->delete($id);
+
             return redirect()->to('/admin/disciplines')->with('success', 'Discipline supprimée.');
         }
 
@@ -130,11 +136,11 @@ class Disciplines extends BaseAdminController
 
         $this->disciplineModel->update($id, ['image_id' => null]);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('images')->where('id', $imageId)->delete();
 
         if (!empty($imagePath)) {
-            $fullPath = FCPATH . 'uploads/' . $imagePath;
+            $fullPath = FCPATH.'uploads/'.$imagePath;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }

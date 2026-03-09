@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Public;
 
 use CodeIgniter\Model;
@@ -15,7 +17,8 @@ class InscriptionModel extends Model
             ->join('pret p', 'p.id = m.idPret', 'left')
             ->select('m.nom, m.description, m.idPret, i.path as image, p.nom as nomPret')
             ->get()
-            ->getResultArray();
+            ->getResultArray()
+        ;
     }
 
     public function getMail(string $poste)

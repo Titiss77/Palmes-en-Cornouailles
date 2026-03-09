@@ -24,20 +24,20 @@ use CodeIgniter\Database\TableName;
  */
 class MockConnection extends BaseConnection
 {
+    public $database;
+    public $lastQuery;
+
     /**
      * @var array{connect?: mixed, execute?: bool|object}
      */
     protected $returnValues = [];
 
     /**
-     * Database schema for Postgre and SQLSRV
+     * Database schema for Postgre and SQLSRV.
      *
      * @var string
      */
     protected $schema;
-
-    public $database;
-    public $lastQuery;
 
     /**
      * @param mixed $return
@@ -73,7 +73,7 @@ class MockConnection extends BaseConnection
 
         $query->setQuery($sql, $binds, $setEscapeFlags);
 
-        if ($this->swapPre !== '' && $this->DBPrefix !== '') {
+        if ('' !== $this->swapPre && '' !== $this->DBPrefix) {
             $query->swapPrefix($this->DBPrefix, $this->swapPre);
         }
 
@@ -151,16 +151,6 @@ class MockConnection extends BaseConnection
     }
 
     /**
-     * Executes the query against the database.
-     *
-     * @return bool|object
-     */
-    protected function execute(string $sql)
-    {
-        return $this->returnValues['execute'];
-    }
-
-    /**
      * Returns the total number of rows affected by this query.
      */
     public function affectedRows(): int
@@ -178,13 +168,13 @@ class MockConnection extends BaseConnection
     public function error(): array
     {
         return [
-            'code'    => 0,
+            'code' => 0,
             'message' => '',
         ];
     }
 
     /**
-     * Insert ID
+     * Insert ID.
      */
     public function insertID(): int
     {
@@ -192,9 +182,19 @@ class MockConnection extends BaseConnection
     }
 
     /**
+     * Executes the query against the database.
+     *
+     * @return bool|object
+     */
+    protected function execute(string $sql)
+    {
+        return $this->returnValues['execute'];
+    }
+
+    /**
      * Generates the SQL for listing tables in a platform-dependent manner.
      *
-     * @param string|null $tableName If $tableName is provided will return only this table if exists.
+     * @param null|string $tableName if $tableName is provided will return only this table if exists
      */
     protected function _listTables(bool $constrainByPrefix = false, ?string $tableName = null): string
     {
@@ -228,15 +228,11 @@ class MockConnection extends BaseConnection
 
     /**
      * Close the connection.
-     *
-     * @return void
      */
-    protected function _close()
-    {
-    }
+    protected function _close(): void {}
 
     /**
-     * Begin Transaction
+     * Begin Transaction.
      */
     protected function _transBegin(): bool
     {
@@ -244,7 +240,7 @@ class MockConnection extends BaseConnection
     }
 
     /**
-     * Commit Transaction
+     * Commit Transaction.
      */
     protected function _transCommit(): bool
     {
@@ -252,7 +248,7 @@ class MockConnection extends BaseConnection
     }
 
     /**
-     * Rollback Transaction
+     * Rollback Transaction.
      */
     protected function _transRollback(): bool
     {

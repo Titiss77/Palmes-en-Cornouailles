@@ -17,12 +17,12 @@ use CodeIgniter\Database\BaseUtils;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
 /**
- * Utils for OCI8
+ * Utils for OCI8.
  */
 class Utils extends BaseUtils
 {
     /**
-     * List databases statement
+     * List databases statement.
      *
      * @var string
      */

@@ -31,38 +31,38 @@ class FilterCheck extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'filter:check';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Check filters for a route.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'filter:check <HTTP method> <route>';
 
     /**
-     * the Command's Arguments
+     * the Command's Arguments.
      *
      * @var array<string, string>
      */
     protected $arguments = [
         'method' => 'The HTTP method. GET, POST, PUT, etc.',
-        'route'  => 'The route (URI path) to check filters.',
+        'route' => 'The route (URI path) to check filters.',
     ];
 
     /**
-     * the Command's Options
+     * the Command's Options.
      *
      * @var array<string, string>
      */
@@ -73,12 +73,12 @@ class FilterCheck extends BaseCommand
      */
     public function run(array $params)
     {
-        if (! $this->checkParams($params)) {
+        if (!$this->checkParams($params)) {
             return EXIT_ERROR;
         }
 
         $method = $params[0];
-        $route  = $params[1];
+        $route = $params[1];
 
         // Load Routes
         service('routes')->loadRoutes();
@@ -90,9 +90,9 @@ class FilterCheck extends BaseCommand
         // PageNotFoundException
         if ($filters['before'] === ['<unknown>']) {
             CLI::error(
-                "Can't find a route: " .
-                CLI::color(
-                    '"' . strtoupper($method) . ' ' . $route . '"',
+                "Can't find a route: "
+                .CLI::color(
+                    '"'.strtoupper($method).' '.$route.'"',
                     'black',
                     'light_gray',
                 ),
@@ -108,13 +108,13 @@ class FilterCheck extends BaseCommand
     }
 
     /**
-     * @param array<int|string, string|null> $params
+     * @param array<int|string, null|string> $params
      */
     private function checkParams(array $params): bool
     {
-        if (! isset($params[0], $params[1])) {
+        if (!isset($params[0], $params[1])) {
             CLI::error('You must specify a HTTP verb and a route.');
-            CLI::write('  Usage: ' . $this->usage);
+            CLI::write('  Usage: '.$this->usage);
             CLI::write('Example: filter:check GET /');
             CLI::write('         filter:check PUT products/1');
 
@@ -145,9 +145,9 @@ class FilterCheck extends BaseCommand
         $coloredRequired = $this->colorItems($required);
 
         $before = array_merge($coloredRequired['before'], $filters['before']);
-        $after  = array_merge($filters['after'], $coloredRequired['after']);
+        $after = array_merge($filters['after'], $coloredRequired['after']);
 
-        $tbody   = [];
+        $tbody = [];
         $tbody[] = [
             strtoupper($method),
             $route,
@@ -182,17 +182,17 @@ class FilterCheck extends BaseCommand
         string $route,
     ): void {
         $requiredFilterClasses = $filterCollector->getRequiredFilterClasses();
-        $filterClasses         = $filterCollector->getClasses($method, $route);
+        $filterClasses = $filterCollector->getClasses($method, $route);
 
         $coloredRequiredFilterClasses = $this->colorItems($requiredFilterClasses);
 
         $classList = [
             'before' => array_merge($coloredRequiredFilterClasses['before'], $filterClasses['before']),
-            'after'  => array_merge($filterClasses['after'], $coloredRequiredFilterClasses['after']),
+            'after' => array_merge($filterClasses['after'], $coloredRequiredFilterClasses['after']),
         ];
 
         foreach ($classList as $position => $classes) {
-            CLI::write(ucfirst($position) . ' Filter Classes:', 'cyan');
+            CLI::write(ucfirst($position).' Filter Classes:', 'cyan');
             CLI::write(implode(' → ', $classes));
         }
     }

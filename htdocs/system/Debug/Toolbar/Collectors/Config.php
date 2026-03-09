@@ -17,7 +17,7 @@ use CodeIgniter\CodeIgniter;
 use Config\App;
 
 /**
- * Debug toolbar configuration
+ * Debug toolbar configuration.
  */
 class Config
 {
@@ -29,14 +29,14 @@ class Config
         $config = config(App::class);
 
         return [
-            'ciVersion'   => CodeIgniter::CI_VERSION,
-            'phpVersion'  => PHP_VERSION,
-            'phpSAPI'     => PHP_SAPI,
+            'ciVersion' => CodeIgniter::CI_VERSION,
+            'phpVersion' => PHP_VERSION,
+            'phpSAPI' => PHP_SAPI,
             'environment' => ENVIRONMENT,
-            'baseURL'     => $config->baseURL,
-            'timezone'    => app_timezone(),
-            'locale'      => service('request')->getLocale(),
-            'cspEnabled'  => $config->CSPEnabled,
+            'baseURL' => $config->baseURL,
+            'timezone' => app_timezone(),
+            'locale' => service('request')->getLocale(),
+            'cspEnabled' => $config->CSPEnabled,
         ];
     }
 }

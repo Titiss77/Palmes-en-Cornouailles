@@ -28,35 +28,35 @@ class ControllerGenerator extends BaseCommand
     use GeneratorTrait;
 
     /**
-     * The Command's Group
+     * The Command's Group.
      *
      * @var string
      */
     protected $group = 'Generators';
 
     /**
-     * The Command's Name
+     * The Command's Name.
      *
      * @var string
      */
     protected $name = 'make:controller';
 
     /**
-     * The Command's Description
+     * The Command's Description.
      *
      * @var string
      */
     protected $description = 'Generates a new controller file.';
 
     /**
-     * The Command's Usage
+     * The Command's Usage.
      *
      * @var string
      */
     protected $usage = 'make:controller <name> [options]';
 
     /**
-     * The Command's Arguments
+     * The Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -65,26 +65,26 @@ class ControllerGenerator extends BaseCommand
     ];
 
     /**
-     * The Command's Options
+     * The Command's Options.
      *
      * @var array<string, string>
      */
     protected $options = [
-        '--bare'      => 'Extends from CodeIgniter\Controller instead of BaseController.',
-        '--restful'   => 'Extends from a RESTful resource, Options: [controller, presenter]. Default: "controller".',
+        '--bare' => 'Extends from CodeIgniter\Controller instead of BaseController.',
+        '--restful' => 'Extends from a RESTful resource, Options: [controller, presenter]. Default: "controller".',
         '--namespace' => 'Set root namespace. Default: "APP_NAMESPACE".',
-        '--suffix'    => 'Append the component title to the class name (e.g. User => UserController).',
-        '--force'     => 'Force overwrite existing file.',
+        '--suffix' => 'Append the component title to the class name (e.g. User => UserController).',
+        '--force' => 'Force overwrite existing file.',
     ];
 
     /**
      * Actually execute a command.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $this->component = 'Controller';
         $this->directory = 'Controllers';
-        $this->template  = 'controller.tpl.php';
+        $this->template = 'controller.tpl.php';
 
         $this->classNameLang = 'CLI.generator.className.controller';
         $this->generateClass($params);
@@ -98,30 +98,30 @@ class ControllerGenerator extends BaseCommand
         $bare = $this->getOption('bare');
         $rest = $this->getOption('restful');
 
-        $useStatement = trim(APP_NAMESPACE, '\\') . '\Controllers\BaseController';
-        $extends      = 'BaseController';
+        $useStatement = trim(APP_NAMESPACE, '\\').'\Controllers\BaseController';
+        $extends = 'BaseController';
 
         // Gets the appropriate parent class to extend.
         if ($bare || $rest) {
             if ($bare) {
                 $useStatement = Controller::class;
-                $extends      = 'Controller';
+                $extends = 'Controller';
             } elseif ($rest) {
                 $rest = is_string($rest) ? $rest : 'controller';
 
-                if (! in_array($rest, ['controller', 'presenter'], true)) {
+                if (!in_array($rest, ['controller', 'presenter'], true)) {
                     // @codeCoverageIgnoreStart
                     $rest = CLI::prompt(lang('CLI.generator.parentClass'), ['controller', 'presenter'], 'required');
                     CLI::newLine();
                     // @codeCoverageIgnoreEnd
                 }
 
-                if ($rest === 'controller') {
+                if ('controller' === $rest) {
                     $useStatement = ResourceController::class;
-                    $extends      = 'ResourceController';
-                } elseif ($rest === 'presenter') {
+                    $extends = 'ResourceController';
+                } elseif ('presenter' === $rest) {
                     $useStatement = ResourcePresenter::class;
-                    $extends      = 'ResourcePresenter';
+                    $extends = 'ResourcePresenter';
                 }
             }
         }

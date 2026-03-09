@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 // Fabricator language settings
 return [
-    'invalidModel'      => 'Invalid model supplied for fabrication.',
+    'invalidModel' => 'Invalid model supplied for fabrication.',
     'missingFormatters' => 'No valid formatters defined.',
-    'createFailed'      => 'Fabricator failed to insert on table "{0}": {1}',
+    'createFailed' => 'Fabricator failed to insert on table "{0}": {1}',
 ];

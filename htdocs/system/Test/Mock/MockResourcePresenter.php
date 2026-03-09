@@ -21,7 +21,7 @@ class MockResourcePresenter extends ResourcePresenter
     use ResponseTrait;
 
     /**
-     * @return object|null
+     * @return null|object
      */
     public function getModel()
     {
@@ -29,7 +29,7 @@ class MockResourcePresenter extends ResourcePresenter
     }
 
     /**
-     * @return class-string|null
+     * @return null|class-string
      */
     public function getModelName()
     {
@@ -37,7 +37,7 @@ class MockResourcePresenter extends ResourcePresenter
     }
 
     /**
-     * @return 'json'|'xml'|null
+     * @return null|'json'|'xml'
      */
     public function getFormat()
     {

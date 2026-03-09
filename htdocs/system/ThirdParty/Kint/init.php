@@ -48,17 +48,17 @@ if (\version_compare(PHP_VERSION, '7.4') < 0) {
 
 // Dynamic default settings
 if (\strlen((string) \ini_get('xdebug.file_link_format')) > 0) {
-    /** @psalm-var non-empty-string ini_get('xdebug.file_link_format') */
+    // @psalm-var non-empty-string ini_get('xdebug.file_link_format')
     AbstractRenderer::$file_link_format = \ini_get('xdebug.file_link_format');
 }
-if (isset($_SERVER['DOCUMENT_ROOT']) && false === \strpos($_SERVER['DOCUMENT_ROOT'], "\0")) {
+if (isset($_SERVER['DOCUMENT_ROOT']) && !\str_contains($_SERVER['DOCUMENT_ROOT'], "\0")) {
     Utils::$path_aliases = [
         $_SERVER['DOCUMENT_ROOT'] => '<ROOT>',
     ];
 
     // Suppressed for unreadable document roots (related to open_basedir)
     if (false !== @\realpath($_SERVER['DOCUMENT_ROOT'])) {
-        /** @psalm-suppress PropertyTypeCoercion */
+        // @psalm-suppress PropertyTypeCoercion
         Utils::$path_aliases[\realpath($_SERVER['DOCUMENT_ROOT'])] = '<ROOT>';
     }
 }

@@ -84,7 +84,7 @@ class ImageException extends FrameworkException
      */
     public static function forInvalidImageCreate(?string $extra = null)
     {
-        return new static(lang('Images.unsupportedImageCreate') . ' ' . $extra);
+        return new static(lang('Images.unsupportedImageCreate').' '.$extra);
     }
 
     /**

@@ -13,13 +13,6 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Test;
 
-use Closure;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionObject;
-use ReflectionProperty;
-
 /**
  * Testing helper.
  */
@@ -31,33 +24,16 @@ trait ReflectionHelper
      * @param object|string $obj    object or class name
      * @param string        $method method name
      *
-     * @return Closure(mixed ...$args): mixed
+     * @return \Closure(mixed ...$args): mixed
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public static function getPrivateMethodInvoker($obj, $method)
     {
-        $refMethod = new ReflectionMethod($obj, $method);
-        $obj       = (gettype($obj) === 'object') ? $obj : null;
+        $refMethod = new \ReflectionMethod($obj, $method);
+        $obj = ('object' === gettype($obj)) ? $obj : null;
 
         return static fn (...$args): mixed => $refMethod->invokeArgs($obj, $args);
-    }
-
-    /**
-     * Find an accessible property.
-     *
-     * @param object|string $obj
-     * @param string        $property
-     *
-     * @return ReflectionProperty
-     *
-     * @throws ReflectionException
-     */
-    private static function getAccessibleRefProperty($obj, $property)
-    {
-        $refClass = is_object($obj) ? new ReflectionObject($obj) : new ReflectionClass($obj);
-
-        return $refClass->getProperty($property);
     }
 
     /**
@@ -67,7 +43,7 @@ trait ReflectionHelper
      * @param string        $property property name
      * @param mixed         $value    value
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public static function setPrivateProperty($obj, $property, $value): void
     {
@@ -88,12 +64,29 @@ trait ReflectionHelper
      *
      * @return mixed
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public static function getPrivateProperty($obj, $property)
     {
         $refProperty = self::getAccessibleRefProperty($obj, $property);
 
         return is_string($obj) ? $refProperty->getValue() : $refProperty->getValue($obj);
+    }
+
+    /**
+     * Find an accessible property.
+     *
+     * @param object|string $obj
+     * @param string        $property
+     *
+     * @return \ReflectionProperty
+     *
+     * @throws \ReflectionException
+     */
+    private static function getAccessibleRefProperty($obj, $property)
+    {
+        $refClass = is_object($obj) ? new \ReflectionObject($obj) : new \ReflectionClass($obj);
+
+        return $refClass->getProperty($property);
     }
 }

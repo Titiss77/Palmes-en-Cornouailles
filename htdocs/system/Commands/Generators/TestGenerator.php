@@ -25,35 +25,35 @@ class TestGenerator extends BaseCommand
     use GeneratorTrait;
 
     /**
-     * The Command's Group
+     * The Command's Group.
      *
      * @var string
      */
     protected $group = 'Generators';
 
     /**
-     * The Command's Name
+     * The Command's Name.
      *
      * @var string
      */
     protected $name = 'make:test';
 
     /**
-     * The Command's Description
+     * The Command's Description.
      *
      * @var string
      */
     protected $description = 'Generates a new test file.';
 
     /**
-     * The Command's Usage
+     * The Command's Usage.
      *
      * @var string
      */
     protected $usage = 'make:test <name> [options]';
 
     /**
-     * The Command's Arguments
+     * The Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -62,28 +62,28 @@ class TestGenerator extends BaseCommand
     ];
 
     /**
-     * The Command's Options
+     * The Command's Options.
      *
      * @var array<string, string>
      */
     protected $options = [
         '--namespace' => 'Set root namespace. Default: "Tests".',
-        '--force'     => 'Force overwrite existing file.',
+        '--force' => 'Force overwrite existing file.',
     ];
 
     /**
      * Actually execute a command.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $this->component = 'Test';
-        $this->template  = 'test.tpl.php';
+        $this->template = 'test.tpl.php';
 
         $this->classNameLang = 'CLI.generator.className.test';
 
         $autoload = service('autoloader');
-        $autoload->addNamespace('CodeIgniter', TESTPATH . 'system');
-        $autoload->addNamespace('Tests', ROOTPATH . 'tests');
+        $autoload->addNamespace('CodeIgniter', TESTPATH.'system');
+        $autoload->addNamespace('Tests', ROOTPATH.'tests');
 
         $this->generateClass($params);
     }
@@ -93,11 +93,11 @@ class TestGenerator extends BaseCommand
      */
     protected function getNamespace(): string
     {
-        if ($this->namespace !== null) {
+        if (null !== $this->namespace) {
             return $this->namespace;
         }
 
-        if ($this->getOption('namespace') !== null) {
+        if (null !== $this->getOption('namespace')) {
             return trim(
                 str_replace(
                     '/',
@@ -108,12 +108,12 @@ class TestGenerator extends BaseCommand
             );
         }
 
-        $class      = $this->normalizeInputClassName();
+        $class = $this->normalizeInputClassName();
         $classPaths = explode('\\', $class);
 
         $namespaces = service('autoloader')->getNamespace();
 
-        while ($classPaths !== []) {
+        while ([] !== $classPaths) {
             array_pop($classPaths);
             $namespace = implode('\\', $classPaths);
 
@@ -131,7 +131,7 @@ class TestGenerator extends BaseCommand
     /**
      * Builds the test file path from the class name.
      *
-     * @param string $class namespaced classname.
+     * @param string $class namespaced classname
      */
     protected function buildPath(string $class): string
     {
@@ -139,7 +139,7 @@ class TestGenerator extends BaseCommand
 
         $base = $this->searchTestFilePath($namespace);
 
-        if ($base === null) {
+        if (null === $base) {
             CLI::error(
                 lang('CLI.namespaceNotDefined', [$namespace]),
                 'light_gray',
@@ -151,14 +151,14 @@ class TestGenerator extends BaseCommand
         }
 
         $realpath = realpath($base);
-        $base     = ($realpath !== false) ? $realpath : $base;
+        $base = (false !== $realpath) ? $realpath : $base;
 
-        $file = $base . DIRECTORY_SEPARATOR
-            . str_replace(
+        $file = $base.DIRECTORY_SEPARATOR
+            .str_replace(
                 '\\',
                 DIRECTORY_SEPARATOR,
-                trim(str_replace($namespace . '\\', '', $class), '\\'),
-            ) . '.php';
+                trim(str_replace($namespace.'\\', '', $class), '\\'),
+            ).'.php';
 
         return implode(
             DIRECTORY_SEPARATOR,
@@ -167,7 +167,7 @@ class TestGenerator extends BaseCommand
                 0,
                 -1,
             ),
-        ) . DIRECTORY_SEPARATOR . $this->basename($file);
+        ).DIRECTORY_SEPARATOR.$this->basename($file);
     }
 
     /**

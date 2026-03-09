@@ -16,7 +16,7 @@ namespace CodeIgniter\DataCaster\Cast;
 use CodeIgniter\I18n\Time;
 
 /**
- * Class TimestampCast
+ * Class TimestampCast.
  *
  * (PHP) [Time --> int       ] --> (DB driver) --> (DB column) int
  *       [     <-- int|string] <-- (DB driver) <-- (DB column) int
@@ -28,7 +28,7 @@ class TimestampCast extends BaseCast
         array $params = [],
         ?object $helper = null,
     ): Time {
-        if (! is_int($value) && ! is_string($value)) {
+        if (!is_int($value) && !is_string($value)) {
             self::invalidTypeValueError($value);
         }
 
@@ -40,7 +40,7 @@ class TimestampCast extends BaseCast
         array $params = [],
         ?object $helper = null,
     ): int {
-        if (! $value instanceof Time) {
+        if (!$value instanceof Time) {
             self::invalidTypeValueError($value);
         }
 

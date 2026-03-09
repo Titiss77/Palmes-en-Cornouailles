@@ -17,22 +17,21 @@ namespace CodeIgniter\Database;
  * @template TConnection
  * @template TResult
  *
- * @property      false|object|resource $connID
- * @property-read string                $DBDriver
+ * @property false|object|resource $connID
+ * @property string                $DBDriver
  */
 interface ConnectionInterface
 {
     /**
      * Initializes the database connection/settings.
-     *
-     * @return void
      */
-    public function initialize();
+    public function initialize(): void;
 
     /**
      * Connect to the database.
      *
-     * @return         false|object|resource
+     * @return false|object|resource
+     *
      * @phpstan-return false|TConnection
      */
     public function connect(bool $persistent = false);
@@ -40,7 +39,8 @@ interface ConnectionInterface
     /**
      * Create a persistent database connection.
      *
-     * @return         false|object|resource
+     * @return false|object|resource
+     *
      * @phpstan-return false|TConnection
      */
     public function persistentConnect();
@@ -48,10 +48,8 @@ interface ConnectionInterface
     /**
      * Keep or establish the connection if no queries have been sent for
      * a length of time exceeding the server's idle timeout.
-     *
-     * @return void
      */
-    public function reconnect();
+    public function reconnect(): void;
 
     /**
      * Returns the actual connection object. If both a 'read' and 'write'
@@ -59,7 +57,8 @@ interface ConnectionInterface
      * get that connection. If you pass either alias in and only a single
      * connection is present, it must return the sole connection.
      *
-     * @return         false|object|resource
+     * @return false|object|resource
+     *
      * @phpstan-return false|TConnection
      */
     public function getConnection(?string $alias = null);
@@ -86,7 +85,7 @@ interface ConnectionInterface
     public function error(): array;
 
     /**
-     * The name of the platform in use (MySQLi, mssql, etc)
+     * The name of the platform in use (MySQLi, mssql, etc).
      */
     public function getPlatform(): string;
 
@@ -103,9 +102,10 @@ interface ConnectionInterface
      * Should automatically handle different connections for read/write
      * queries if needed.
      *
-     * @param array|string|null $binds
+     * @param null|array|string $binds
      *
-     * @return         BaseResult|bool|Query
+     * @return BaseResult|bool|Query
+     *
      * @phpstan-return BaseResult<TConnection, TResult>|bool|Query
      */
     public function query(string $sql, $binds = null);
@@ -115,7 +115,8 @@ interface ConnectionInterface
      * is performed, nor are transactions handled. Simply takes a raw
      * query string and returns the database-specific result id.
      *
-     * @return         false|object|resource
+     * @return false|object|resource
+     *
      * @phpstan-return false|TResult
      */
     public function simpleQuery(string $sql);
@@ -123,9 +124,9 @@ interface ConnectionInterface
     /**
      * Returns an instance of the query builder for this connection.
      *
-     * @param array|string $tableName Table name.
+     * @param array|string $tableName table name
      *
-     * @return BaseBuilder Builder.
+     * @return BaseBuilder builder
      */
     public function table($tableName);
 
@@ -137,14 +138,15 @@ interface ConnectionInterface
     public function getLastQuery();
 
     /**
-     * "Smart" Escaping
+     * "Smart" Escaping.
      *
      * Escapes data based on type.
      * Sets boolean and null types.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      *
-     * @return         array|float|int|string
+     * @return array|float|int|string
+     *
      * @phpstan-return ($str is array ? array : float|int|string)
      */
     public function escape($str);
@@ -155,7 +157,7 @@ interface ConnectionInterface
      *
      * @param array ...$params
      *
-     * @return array|bool|float|int|object|resource|string|null
+     * @return null|array|bool|float|int|object|resource|string
      */
     public function callFunction(string $functionName, ...$params);
 

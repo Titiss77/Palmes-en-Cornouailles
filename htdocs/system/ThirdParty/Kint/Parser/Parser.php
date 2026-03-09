@@ -27,8 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Parser;
 
-use DomainException;
-use InvalidArgumentException;
 use Kint\Utils;
 use Kint\Value\AbstractValue;
 use Kint\Value\ArrayValue;
@@ -47,11 +45,7 @@ use Kint\Value\StringValue;
 use Kint\Value\UninitializedValue;
 use Kint\Value\UnknownValue;
 use Kint\Value\VirtualValue;
-use ReflectionClass;
-use ReflectionObject;
 use ReflectionProperty;
-use ReflectionReference;
-use Throwable;
 
 /**
  * @psalm-type ParserTrigger int-mask-of<Parser::TRIGGER_*>
@@ -149,17 +143,22 @@ class Parser
         switch ($type) {
             case 'array':
                 return $this->parseArray($var, $c);
+
             case 'boolean':
             case 'double':
             case 'integer':
             case 'null':
                 return $this->parseFixedWidth($var, $c);
+
             case 'object':
                 return $this->parseObject($var, $c);
+
             case 'resource':
                 return $this->parseResource($var, $c);
+
             case 'string':
                 return $this->parseString($var, $c);
+
             case 'resource (closed)':
                 return $this->parseResourceClosed($var, $c);
 
@@ -175,8 +174,8 @@ class Parser
     {
         try {
             $this->noRecurseCall();
-        } catch (DomainException $e) { // @codeCoverageIgnore
-            \trigger_error('Calling Kint\\Parser::addPlugin from inside a parse is deprecated', E_USER_DEPRECATED); // @codeCoverageIgnore
+        } catch (\DomainException $e) { // @codeCoverageIgnore
+            \trigger_error('Calling Kint\Parser::addPlugin from inside a parse is deprecated', E_USER_DEPRECATED); // @codeCoverageIgnore
         }
 
         if (!$types = $p->getTypes()) {
@@ -188,11 +187,11 @@ class Parser
         }
 
         if ($triggers & self::TRIGGER_BEGIN && !$p instanceof PluginBeginInterface) {
-            throw new InvalidArgumentException('Parsers triggered on begin must implement PluginBeginInterface');
+            throw new \InvalidArgumentException('Parsers triggered on begin must implement PluginBeginInterface');
         }
 
         if ($triggers & self::TRIGGER_COMPLETE && !$p instanceof PluginCompleteInterface) {
-            throw new InvalidArgumentException('Parsers triggered on completion must implement PluginCompleteInterface');
+            throw new \InvalidArgumentException('Parsers triggered on completion must implement PluginCompleteInterface');
         }
 
         $p->setParser($this);
@@ -217,8 +216,8 @@ class Parser
     {
         try {
             $this->noRecurseCall();
-        } catch (DomainException $e) { // @codeCoverageIgnore
-            \trigger_error('Calling Kint\\Parser::clearPlugins from inside a parse is deprecated', E_USER_DEPRECATED); // @codeCoverageIgnore
+        } catch (\DomainException $e) { // @codeCoverageIgnore
+            \trigger_error('Calling Kint\Parser::clearPlugins from inside a parse is deprecated', E_USER_DEPRECATED); // @codeCoverageIgnore
         }
 
         $this->plugins = [];
@@ -229,17 +228,20 @@ class Parser
         $bt = \debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS);
 
         \reset($bt);
+
         /** @psalm-var class-string $caller_frame['class'] */
         $caller_frame = \next($bt);
 
         foreach ($bt as $frame) {
             if (isset($frame['object']) && $frame['object'] === $this && 'parse' === $frame['function']) {
-                throw new DomainException($caller_frame['class'].'::'.$caller_frame['function'].' cannot be called from inside a parse');
+                throw new \DomainException($caller_frame['class'].'::'.$caller_frame['function'].' cannot be called from inside a parse');
             }
         }
     }
 
     /**
+     * @param mixed $var
+     *
      * @psalm-param null|bool|float|int &$var
      */
     private function parseFixedWidth(&$var, ContextInterface $c): AbstractValue
@@ -264,7 +266,7 @@ class Parser
     {
         $size = \count($var);
         $contents = [];
-        $parentRef = ReflectionReference::fromArrayElement([&$var], 0)->getId();
+        $parentRef = \ReflectionReference::fromArrayElement([&$var], 0)->getId();
 
         if (isset($this->array_ref_stack[$parentRef])) {
             $array = new ArrayValue($c, $size, $contents);
@@ -289,7 +291,7 @@ class Parser
             foreach ($var as $key => $_) {
                 $child = new ArrayContext($key);
                 $child->depth = $cdepth + 1;
-                $child->reference = null !== ReflectionReference::fromArrayElement($var, $key);
+                $child->reference = null !== \ReflectionReference::fromArrayElement($var, $key);
 
                 if (null !== $ap) {
                     $child->access_path = $ap.'['.\var_export($key, true).']';
@@ -313,7 +315,7 @@ class Parser
     /**
      * @psalm-return ReflectionProperty[]
      */
-    private function getPropsOrdered(ReflectionClass $r): array
+    private function getPropsOrdered(\ReflectionClass $r): array
     {
         if ($parent = $r->getParentClass()) {
             $props = self::getPropsOrdered($parent);
@@ -341,7 +343,7 @@ class Parser
      *
      * @psalm-return ReflectionProperty[]
      */
-    private function getPropsOrderedOld(ReflectionClass $r): array
+    private function getPropsOrderedOld(\ReflectionClass $r): array
     {
         $props = [];
 
@@ -354,7 +356,7 @@ class Parser
         }
 
         while ($r = $r->getParentClass()) {
-            foreach ($r->getProperties(ReflectionProperty::IS_PRIVATE) as $prop) {
+            foreach ($r->getProperties(\ReflectionProperty::IS_PRIVATE) as $prop) {
                 if ($prop->isStatic()) {
                     continue;
                 }
@@ -369,7 +371,7 @@ class Parser
     private function parseObject(object &$var, ContextInterface $c): AbstractValue
     {
         $hash = \spl_object_hash($var);
-        $classname = \get_class($var);
+        $classname = $var::class;
 
         if (isset($this->object_hashes[$hash])) {
             $object = new InstanceValue($c, $classname, $hash, \spl_object_id($var));
@@ -392,9 +394,9 @@ class Parser
             }
 
             if (KINT_PHP81) {
-                $props = $this->getPropsOrdered(new ReflectionObject($var));
+                $props = $this->getPropsOrdered(new \ReflectionObject($var));
             } else {
-                $props = $this->getPropsOrderedOld(new ReflectionObject($var)); // @codeCoverageIgnore
+                $props = $this->getPropsOrderedOld(new \ReflectionObject($var)); // @codeCoverageIgnore
             }
 
             $values = (array) $var;
@@ -464,7 +466,7 @@ class Parser
                     $child = new ClassOwnedContext($name, $rprop->getDeclaringClass()->getName());
                 }
 
-                $child->reference = $initialized && null !== ReflectionReference::fromArrayElement($values, $key);
+                $child->reference = $initialized && null !== \ReflectionReference::fromArrayElement($values, $key);
                 $child->depth = $cdepth + 1;
 
                 if (null !== $ap && $child->isAccessible($this->caller_class)) {
@@ -501,6 +503,8 @@ class Parser
     }
 
     /**
+     * @param mixed $var
+     *
      * @psalm-param resource $var
      */
     private function parseResource(&$var, ContextInterface $c): AbstractValue
@@ -513,6 +517,8 @@ class Parser
     }
 
     /**
+     * @param mixed $var
+     *
      * @psalm-param mixed $var
      */
     private function parseResourceClosed(&$var, ContextInterface $c): AbstractValue
@@ -530,6 +536,8 @@ class Parser
      * This should never happen.
      *
      * @codeCoverageIgnore
+     *
+     * @param mixed $var
      *
      * @psalm-param mixed $var
      */
@@ -556,9 +564,9 @@ class Parser
                 if ($v = $plugin->parseBegin($var, $c)) {
                     return $v;
                 }
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 \trigger_error(
-                    Utils::errorSanitizeString(\get_class($e)).' was thrown in '.$e->getFile().' on line '.$e->getLine().' while executing '.Utils::errorSanitizeString(\get_class($plugin)).'->parseBegin. Error message: '.Utils::errorSanitizeString($e->getMessage()),
+                    Utils::errorSanitizeString($e::class).' was thrown in '.$e->getFile().' on line '.$e->getLine().' while executing '.Utils::errorSanitizeString($plugin::class).'->parseBegin. Error message: '.Utils::errorSanitizeString($e->getMessage()),
                     E_USER_WARNING
                 );
             }
@@ -579,9 +587,9 @@ class Parser
         foreach ($plugins as $plugin) {
             try {
                 $v = $plugin->parseComplete($var, $v, $trigger);
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 \trigger_error(
-                    Utils::errorSanitizeString(\get_class($e)).' was thrown in '.$e->getFile().' on line '.$e->getLine().' while executing '.Utils::errorSanitizeString(\get_class($plugin)).'->parseComplete. Error message: '.Utils::errorSanitizeString($e->getMessage()),
+                    Utils::errorSanitizeString($e::class).' was thrown in '.$e->getFile().' on line '.$e->getLine().' while executing '.Utils::errorSanitizeString($plugin::class).'->parseComplete. Error message: '.Utils::errorSanitizeString($e->getMessage()),
                     E_USER_WARNING
                 );
             }

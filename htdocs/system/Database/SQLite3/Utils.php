@@ -17,12 +17,12 @@ use CodeIgniter\Database\BaseUtils;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
 /**
- * Utils for SQLite3
+ * Utils for SQLite3.
  */
 class Utils extends BaseUtils
 {
     /**
-     * OPTIMIZE TABLE statement
+     * OPTIMIZE TABLE statement.
      *
      * @var string
      */

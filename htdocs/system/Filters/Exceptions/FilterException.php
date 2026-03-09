@@ -16,7 +16,7 @@ namespace CodeIgniter\Filters\Exceptions;
 use CodeIgniter\Exceptions\ConfigException;
 
 /**
- * FilterException
+ * FilterException.
  */
 class FilterException extends ConfigException
 {

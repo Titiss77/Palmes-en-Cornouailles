@@ -27,9 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value\Representation;
 
-use InvalidArgumentException;
-use LogicException;
-
 class ColorRepresentation extends AbstractRepresentation
 {
     public const COLOR_NAME = 1;
@@ -201,6 +198,7 @@ class ColorRepresentation extends AbstractRepresentation
     protected int $g;
     protected int $b;
     protected float $a;
+
     /** @psalm-var self::COLOR_* */
     protected int $variant;
 
@@ -240,9 +238,10 @@ class ColorRepresentation extends AbstractRepresentation
                 $hex_alpha = \sprintf('%02x%02x%02x%02x', $this->r, $this->g, $this->b, \round($this->a * 0xFF));
 
                 return \array_search($hex, self::$color_map, true) ?: \array_search($hex_alpha, self::$color_map, true) ?: null;
+
             case self::COLOR_HEX_3:
                 if (0 === $this->r % 0x11 && 0 === $this->g % 0x11 && 0 === $this->b % 0x11) {
-                    /** @psalm-var truthy-string */
+                    // @psalm-var truthy-string
                     return \sprintf(
                         '#%1X%1X%1X',
                         \round($this->r / 0x11),
@@ -252,41 +251,47 @@ class ColorRepresentation extends AbstractRepresentation
                 }
 
                 return null;
+
             case self::COLOR_HEX_6:
-                /** @psalm-var truthy-string */
+                // @psalm-var truthy-string
                 return \sprintf('#%02X%02X%02X', $this->r, $this->g, $this->b);
+
             case self::COLOR_RGB:
                 if (1.0 === $this->a) {
-                    /** @psalm-var truthy-string */
+                    // @psalm-var truthy-string
                     return \sprintf('rgb(%d, %d, %d)', $this->r, $this->g, $this->b);
                 }
 
-                /** @psalm-var truthy-string */
+                // @psalm-var truthy-string
                 return \sprintf('rgb(%d, %d, %d, %s)', $this->r, $this->g, $this->b, \round($this->a, 4));
+
             case self::COLOR_RGBA:
-                /** @psalm-var truthy-string */
+                // @psalm-var truthy-string
                 return \sprintf('rgba(%d, %d, %d, %s)', $this->r, $this->g, $this->b, \round($this->a, 4));
+
             case self::COLOR_HSL:
                 $val = self::rgbToHsl($this->r, $this->g, $this->b);
                 $val[1] = \round($val[1] * 100);
                 $val[2] = \round($val[2] * 100);
                 if (1.0 === $this->a) {
-                    /** @psalm-var truthy-string */
+                    // @psalm-var truthy-string
                     return \vsprintf('hsl(%d, %d%%, %d%%)', $val);
                 }
 
-                /** @psalm-var truthy-string */
+                // @psalm-var truthy-string
                 return \sprintf('hsl(%d, %d%%, %d%%, %s)', $val[0], $val[1], $val[2], \round($this->a, 4));
+
             case self::COLOR_HSLA:
                 $val = self::rgbToHsl($this->r, $this->g, $this->b);
                 $val[1] = \round($val[1] * 100);
                 $val[2] = \round($val[2] * 100);
 
-                /** @psalm-var truthy-string */
+                // @psalm-var truthy-string
                 return \sprintf('hsla(%d, %d%%, %d%%, %s)', $val[0], $val[1], $val[2], \round($this->a, 4));
+
             case self::COLOR_HEX_4:
                 if (0 === $this->r % 0x11 && 0 === $this->g % 0x11 && 0 === $this->b % 0x11 && 0 === ((int) ($this->a * 255)) % 0x11) {
-                    /** @psalm-var truthy-string */
+                    // @psalm-var truthy-string
                     return \sprintf(
                         '#%1X%1X%1X%1X',
                         \round($this->r / 0x11),
@@ -299,7 +304,7 @@ class ColorRepresentation extends AbstractRepresentation
                 return null;
 
             case self::COLOR_HEX_8:
-                /** @psalm-var truthy-string */
+                // @psalm-var truthy-string
                 return \sprintf('#%02X%02X%02X%02X', $this->r, $this->g, $this->b, \round($this->a * 0xFF));
         }
 
@@ -315,174 +320,16 @@ class ColorRepresentation extends AbstractRepresentation
             case self::COLOR_RGB:
             case self::COLOR_HSL:
                 return \abs($this->a - 1) >= 0.0001;
+
             case self::COLOR_RGBA:
             case self::COLOR_HSLA:
             case self::COLOR_HEX_4:
             case self::COLOR_HEX_8:
                 return true;
+
             default:
                 return false;
         }
-    }
-
-    protected function setValues(string $value): void
-    {
-        $this->a = 1.0;
-
-        $value = \strtolower(\trim($value));
-        // Find out which variant of color input it is
-        if (isset(self::$color_map[$value])) {
-            $this->setValuesFromHex(self::$color_map[$value]);
-            $variant = self::COLOR_NAME;
-        } elseif ('#' === $value[0]) {
-            $variant = $this->setValuesFromHex(\substr($value, 1));
-        } else {
-            $variant = $this->setValuesFromFunction($value);
-        }
-
-        // If something has gone horribly wrong
-        if ($this->r > 0xFF || $this->g > 0xFF || $this->b > 0xFF || $this->a > 1) {
-            throw new LogicException('Something has gone wrong with color parsing'); // @codeCoverageIgnore
-        }
-        $this->variant = $variant;
-    }
-
-    /** @psalm-return self::COLOR_* */
-    protected function setValuesFromHex(string $hex): int
-    {
-        if (!\ctype_xdigit($hex)) {
-            throw new InvalidArgumentException('Hex color codes must be hexadecimal');
-        }
-
-        switch (\strlen($hex)) {
-            case 3:
-                $variant = self::COLOR_HEX_3;
-                break;
-            case 6:
-                $variant = self::COLOR_HEX_6;
-                break;
-            case 4:
-                $variant = self::COLOR_HEX_4;
-                break;
-            case 8:
-                $variant = self::COLOR_HEX_8;
-                break;
-            default:
-                throw new InvalidArgumentException('Hex color codes must have 3, 4, 6, or 8 characters');
-        }
-
-        switch ($variant) {
-            case self::COLOR_HEX_4:
-                $this->a = \hexdec($hex[3]) / 0xF;
-                // no break
-            case self::COLOR_HEX_3:
-                $this->r = \hexdec($hex[0]) * 0x11;
-                $this->g = \hexdec($hex[1]) * 0x11;
-                $this->b = \hexdec($hex[2]) * 0x11;
-                break;
-            case self::COLOR_HEX_8:
-                $this->a = \hexdec(\substr($hex, 6, 2)) / 0xFF;
-                // no break
-            case self::COLOR_HEX_6:
-                $hex = \str_split($hex, 2);
-                $this->r = \hexdec($hex[0]);
-                $this->g = \hexdec($hex[1]);
-                $this->b = \hexdec($hex[2]);
-                break;
-        }
-
-        return $variant;
-    }
-
-    /** @psalm-return self::COLOR_* */
-    protected function setValuesFromFunction(string $value): int
-    {
-        if (!\preg_match('/^((?:rgb|hsl)a?)\\s*\\(([0-9\\.%,\\s\\/\\-]+)\\)$/i', $value, $match)) {
-            throw new InvalidArgumentException('Couldn\'t parse color function string');
-        }
-
-        switch (\strtolower($match[1])) {
-            case 'rgb':
-                $variant = self::COLOR_RGB;
-                break;
-            case 'rgba':
-                $variant = self::COLOR_RGBA;
-                break;
-            case 'hsl':
-                $variant = self::COLOR_HSL;
-                break;
-            case 'hsla':
-                $variant = self::COLOR_HSLA;
-                break;
-            default:
-                // The regex should preclude this from ever happening
-                throw new InvalidArgumentException('Color functions must be one of rgb/rgba/hsl/hsla'); // @codeCoverageIgnore
-        }
-
-        $params = \preg_replace('/[,\\s\\/]+/', ',', \trim($match[2]));
-        $params = \explode(',', $params);
-        $params = \array_map('trim', $params);
-
-        if (\count($params) < 3 || \count($params) > 4) {
-            throw new InvalidArgumentException('Color functions must have 3 or 4 arguments');
-        }
-
-        foreach ($params as $i => &$color) {
-            if (false !== \strpos($color, '%')) {
-                $color = (float) \str_replace('%', '', $color);
-
-                if (\in_array($variant, [self::COLOR_RGB, self::COLOR_RGBA], true) && 3 !== $i) {
-                    $color = \round($color / 100 * 0xFF);
-                } else {
-                    $color = $color / 100;
-                }
-            }
-
-            $color = (float) $color;
-
-            if (0 === $i && \in_array($variant, [self::COLOR_HSL, self::COLOR_HSLA], true)) {
-                $color = \fmod(\fmod($color, 360) + 360, 360);
-            }
-        }
-
-        /**
-         * @psalm-var non-empty-array<array-key, float> $params
-         * Psalm bug #746 (wontfix)
-         */
-        switch ($variant) {
-            case self::COLOR_RGBA:
-            case self::COLOR_RGB:
-                if (\min($params) < 0 || \max($params) > 0xFF) {
-                    throw new InvalidArgumentException('RGB function arguments must be between 0 and 255');
-                }
-                break;
-            case self::COLOR_HSLA:
-            case self::COLOR_HSL:
-                if ($params[0] < 0 || $params[0] > 360) {
-                    // Should be impossible because of the fmod work
-                    throw new InvalidArgumentException('Hue must be between 0 and 360'); // @codeCoverageIgnore
-                }
-                if (\min($params) < 0 || \max($params[1], $params[2]) > 1) {
-                    throw new InvalidArgumentException('Saturation/lightness must be between 0 and 1');
-                }
-                break;
-        }
-
-        if (4 === \count($params)) {
-            if ($params[3] > 1) {
-                throw new InvalidArgumentException('Alpha must be between 0 and 1');
-            }
-
-            $this->a = $params[3];
-        }
-
-        if (self::COLOR_HSLA === $variant || self::COLOR_HSL === $variant) {
-            $params = self::hslToRgb($params[0], $params[1], $params[2]);
-        }
-
-        [$this->r, $this->g, $this->b] = [(int) $params[0], (int) $params[1], (int) $params[2]];
-
-        return $variant;
     }
 
     /**
@@ -497,11 +344,11 @@ class ColorRepresentation extends AbstractRepresentation
     public static function hslToRgb(float $h, float $s, float $l): array
     {
         if (\min($h, $s, $l) < 0) {
-            throw new InvalidArgumentException('The parameters for hslToRgb should be no less than 0');
+            throw new \InvalidArgumentException('The parameters for hslToRgb should be no less than 0');
         }
 
         if ($h > 360 || \max($s, $l) > 1) {
-            throw new InvalidArgumentException('The parameters for hslToRgb should be no more than 360, 1, and 1 respectively');
+            throw new \InvalidArgumentException('The parameters for hslToRgb should be no more than 360, 1, and 1 respectively');
         }
 
         $h /= 360;
@@ -528,11 +375,11 @@ class ColorRepresentation extends AbstractRepresentation
     public static function rgbToHsl(float $red, float $green, float $blue): array
     {
         if (\min($red, $green, $blue) < 0) {
-            throw new InvalidArgumentException('The parameters for rgbToHsl should be no less than 0');
+            throw new \InvalidArgumentException('The parameters for rgbToHsl should be no less than 0');
         }
 
         if (\max($red, $green, $blue) > 0xFF) {
-            throw new InvalidArgumentException('The parameters for rgbToHsl should be no more than 255');
+            throw new \InvalidArgumentException('The parameters for rgbToHsl should be no more than 255');
         }
 
         $clrMin = \min($red, $green, $blue);
@@ -569,6 +416,190 @@ class ColorRepresentation extends AbstractRepresentation
             $S,
             $L,
         ];
+    }
+
+    protected function setValues(string $value): void
+    {
+        $this->a = 1.0;
+
+        $value = \strtolower(\trim($value));
+        // Find out which variant of color input it is
+        if (isset(self::$color_map[$value])) {
+            $this->setValuesFromHex(self::$color_map[$value]);
+            $variant = self::COLOR_NAME;
+        } elseif ('#' === $value[0]) {
+            $variant = $this->setValuesFromHex(\substr($value, 1));
+        } else {
+            $variant = $this->setValuesFromFunction($value);
+        }
+
+        // If something has gone horribly wrong
+        if ($this->r > 0xFF || $this->g > 0xFF || $this->b > 0xFF || $this->a > 1) {
+            throw new \LogicException('Something has gone wrong with color parsing'); // @codeCoverageIgnore
+        }
+        $this->variant = $variant;
+    }
+
+    /** @psalm-return self::COLOR_* */
+    protected function setValuesFromHex(string $hex): int
+    {
+        if (!\ctype_xdigit($hex)) {
+            throw new \InvalidArgumentException('Hex color codes must be hexadecimal');
+        }
+
+        switch (\strlen($hex)) {
+            case 3:
+                $variant = self::COLOR_HEX_3;
+
+                break;
+
+            case 6:
+                $variant = self::COLOR_HEX_6;
+
+                break;
+
+            case 4:
+                $variant = self::COLOR_HEX_4;
+
+                break;
+
+            case 8:
+                $variant = self::COLOR_HEX_8;
+
+                break;
+
+            default:
+                throw new \InvalidArgumentException('Hex color codes must have 3, 4, 6, or 8 characters');
+        }
+
+        switch ($variant) {
+            case self::COLOR_HEX_4:
+                $this->a = \hexdec($hex[3]) / 0xF;
+
+                // no break
+            case self::COLOR_HEX_3:
+                $this->r = \hexdec($hex[0]) * 0x11;
+                $this->g = \hexdec($hex[1]) * 0x11;
+                $this->b = \hexdec($hex[2]) * 0x11;
+
+                break;
+
+            case self::COLOR_HEX_8:
+                $this->a = \hexdec(\substr($hex, 6, 2)) / 0xFF;
+
+                // no break
+            case self::COLOR_HEX_6:
+                $hex = \str_split($hex, 2);
+                $this->r = \hexdec($hex[0]);
+                $this->g = \hexdec($hex[1]);
+                $this->b = \hexdec($hex[2]);
+
+                break;
+        }
+
+        return $variant;
+    }
+
+    /** @psalm-return self::COLOR_* */
+    protected function setValuesFromFunction(string $value): int
+    {
+        if (!\preg_match('/^((?:rgb|hsl)a?)\s*\(([0-9\.%,\s\/\-]+)\)$/i', $value, $match)) {
+            throw new \InvalidArgumentException('Couldn\'t parse color function string');
+        }
+
+        switch (\strtolower($match[1])) {
+            case 'rgb':
+                $variant = self::COLOR_RGB;
+
+                break;
+
+            case 'rgba':
+                $variant = self::COLOR_RGBA;
+
+                break;
+
+            case 'hsl':
+                $variant = self::COLOR_HSL;
+
+                break;
+
+            case 'hsla':
+                $variant = self::COLOR_HSLA;
+
+                break;
+
+            default:
+                // The regex should preclude this from ever happening
+                throw new \InvalidArgumentException('Color functions must be one of rgb/rgba/hsl/hsla'); // @codeCoverageIgnore
+        }
+
+        $params = \preg_replace('/[,\s\/]+/', ',', \trim($match[2]));
+        $params = \explode(',', $params);
+        $params = \array_map('trim', $params);
+
+        if (\count($params) < 3 || \count($params) > 4) {
+            throw new \InvalidArgumentException('Color functions must have 3 or 4 arguments');
+        }
+
+        foreach ($params as $i => &$color) {
+            if (\str_contains($color, '%')) {
+                $color = (float) \str_replace('%', '', $color);
+
+                if (\in_array($variant, [self::COLOR_RGB, self::COLOR_RGBA], true) && 3 !== $i) {
+                    $color = \round($color / 100 * 0xFF);
+                } else {
+                    $color = $color / 100;
+                }
+            }
+
+            $color = (float) $color;
+
+            if (0 === $i && \in_array($variant, [self::COLOR_HSL, self::COLOR_HSLA], true)) {
+                $color = \fmod(\fmod($color, 360) + 360, 360);
+            }
+        }
+
+        /*
+         * @psalm-var non-empty-array<array-key, float> $params
+         * Psalm bug #746 (wontfix)
+         */
+        switch ($variant) {
+            case self::COLOR_RGBA:
+            case self::COLOR_RGB:
+                if (\min($params) < 0 || \max($params) > 0xFF) {
+                    throw new \InvalidArgumentException('RGB function arguments must be between 0 and 255');
+                }
+
+                break;
+
+            case self::COLOR_HSLA:
+            case self::COLOR_HSL:
+                if ($params[0] < 0 || $params[0] > 360) {
+                    // Should be impossible because of the fmod work
+                    throw new \InvalidArgumentException('Hue must be between 0 and 360'); // @codeCoverageIgnore
+                }
+                if (\min($params) < 0 || \max($params[1], $params[2]) > 1) {
+                    throw new \InvalidArgumentException('Saturation/lightness must be between 0 and 1');
+                }
+
+                break;
+        }
+
+        if (4 === \count($params)) {
+            if ($params[3] > 1) {
+                throw new \InvalidArgumentException('Alpha must be between 0 and 1');
+            }
+
+            $this->a = $params[3];
+        }
+
+        if (self::COLOR_HSLA === $variant || self::COLOR_HSL === $variant) {
+            $params = self::hslToRgb($params[0], $params[1], $params[2]);
+        }
+
+        [$this->r, $this->g, $this->b] = [(int) $params[0], (int) $params[1], (int) $params[2]];
+
+        return $variant;
     }
 
     /**

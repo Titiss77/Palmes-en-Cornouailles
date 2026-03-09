@@ -14,17 +14,17 @@ declare(strict_types=1);
 namespace CodeIgniter\Entity\Cast;
 
 /**
- * Class BaseCast
+ * Class BaseCast.
  */
 abstract class BaseCast implements CastInterface
 {
     /**
-     * Get
+     * Get.
      *
-     * @param array|bool|float|int|object|string|null $value  Data
+     * @param null|array|bool|float|int|object|string $value  Data
      * @param array                                   $params Additional param
      *
-     * @return array|bool|float|int|object|string|null
+     * @return null|array|bool|float|int|object|string
      */
     public static function get($value, array $params = [])
     {
@@ -32,12 +32,12 @@ abstract class BaseCast implements CastInterface
     }
 
     /**
-     * Set
+     * Set.
      *
-     * @param array|bool|float|int|object|string|null $value  Data
+     * @param null|array|bool|float|int|object|string $value  Data
      * @param array                                   $params Additional param
      *
-     * @return array|bool|float|int|object|string|null
+     * @return null|array|bool|float|int|object|string
      */
     public static function set($value, array $params = [])
     {

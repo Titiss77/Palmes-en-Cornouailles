@@ -15,10 +15,9 @@ namespace CodeIgniter\Test\Interfaces;
 
 use CodeIgniter\BaseModel;
 use Faker\Generator;
-use ReflectionException;
 
 /**
- * FabricatorModel
+ * FabricatorModel.
  *
  * An interface defining the required methods and properties
  * needed for a model to qualify for use with the Fabricator class.
@@ -37,7 +36,7 @@ interface FabricatorModel
      * Fetches the row of database from $this->table with a primary key
      * matching $id.
      *
-     * @param int|list<int|string>|string|null $id One primary key or an array of primary keys
+     * @param null|int|list<int|string>|string $id One primary key or an array of primary keys
      *
      * @phpstan-return ($id is int|string ? row_array|object|null : list<row_array|object>)
      */
@@ -47,17 +46,18 @@ interface FabricatorModel
      * Inserts data into the current table. If an object is provided,
      * it will attempt to convert it to an array.
      *
-     * @param         array|object|null     $row
+     * @param null|array|object $row
+     * @param bool              $returnID whether insert ID should be returned or not
+     *
      * @phpstan-param row_array|object|null $row
-     * @param         bool                  $returnID Whether insert ID should be returned or not.
      *
      * @return bool|int|string
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function insert($row = null, bool $returnID = true);
 
-    /**
+    /*
      * The following properties and methods are optional, but if present should
      * adhere to their definitions.
      *
@@ -79,7 +79,7 @@ interface FabricatorModel
      */
     // public function withDeleted($val = true);
 
-    /**
+    /*
      * Faked data for Fabricator.
      *
      * @param Generator $faker

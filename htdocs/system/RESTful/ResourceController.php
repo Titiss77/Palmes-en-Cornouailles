@@ -19,14 +19,14 @@ use CodeIgniter\HTTP\ResponseInterface;
 /**
  * An extendable controller to provide a RESTful API for a resource.
  *
- * @see \CodeIgniter\RESTful\ResourceControllerTest
+ * @see ResourceControllerTest
  */
 class ResourceController extends BaseResource
 {
     use ResponseTrait;
 
     /**
-     * Return an array of resource objects, themselves in array format
+     * Return an array of resource objects, themselves in array format.
      *
      * @return ResponseInterface|string|void
      */
@@ -36,9 +36,9 @@ class ResourceController extends BaseResource
     }
 
     /**
-     * Return the properties of a resource object
+     * Return the properties of a resource object.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -48,7 +48,7 @@ class ResourceController extends BaseResource
     }
 
     /**
-     * Return a new resource object, with default properties
+     * Return a new resource object, with default properties.
      *
      * @return ResponseInterface|string|void
      */
@@ -58,7 +58,7 @@ class ResourceController extends BaseResource
     }
 
     /**
-     * Create a new resource object, from "posted" parameters
+     * Create a new resource object, from "posted" parameters.
      *
      * @return ResponseInterface|string|void
      */
@@ -68,9 +68,9 @@ class ResourceController extends BaseResource
     }
 
     /**
-     * Return the editable properties of a resource object
+     * Return the editable properties of a resource object.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -80,9 +80,9 @@ class ResourceController extends BaseResource
     }
 
     /**
-     * Add or update a model resource, from "posted" properties
+     * Add or update a model resource, from "posted" properties.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -92,9 +92,9 @@ class ResourceController extends BaseResource
     }
 
     /**
-     * Delete the designated resource object from the model
+     * Delete the designated resource object from the model.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -104,14 +104,13 @@ class ResourceController extends BaseResource
     }
 
     /**
-     * Set/change the expected response representation for returned objects
+     * Set/change the expected response representation for returned objects.
      *
-     * @param         string       $format Response format
+     * @param string $format Response format
+     *
      * @phpstan-param 'json'|'xml' $format
-     *
-     * @return void
      */
-    public function setFormat(string $format = 'json')
+    public function setFormat(string $format = 'json'): void
     {
         if (in_array($format, ['json', 'xml'], true)) {
             $this->format = $format;

@@ -31,7 +31,8 @@ final class MockInputOutput extends InputOutput
     /**
      * Output lines.
      *
-     * @var         array<int, string>
+     * @var array<int, string>
+     *
      * @phpstan-var list<string>
      */
     private array $outputs = [];
@@ -39,7 +40,8 @@ final class MockInputOutput extends InputOutput
     /**
      * Sets user inputs.
      *
-     * @param         array<int, string> $inputs
+     * @param array<int, string> $inputs
+     *
      * @phpstan-param list<string>       $inputs
      */
     public function setInputs(array $inputs): void
@@ -50,13 +52,13 @@ final class MockInputOutput extends InputOutput
     /**
      * Gets the item from the output array.
      *
-     * @param int|null $index The output array index. If null, returns all output
+     * @param null|int $index The output array index. If null, returns all output
      *                        string. If negative int, returns the last $index-th
      *                        item.
      */
     public function getOutput(?int $index = null): string
     {
-        if ($index === null) {
+        if (null === $index) {
             return implode('', $this->outputs);
         }
 
@@ -73,8 +75,8 @@ final class MockInputOutput extends InputOutput
         }
 
         throw new InvalidArgumentException(
-            'No such index in output: ' . $index . ', the last index is: '
-            . (count($this->outputs) - 1),
+            'No such index in output: '.$index.', the last index is: '
+            .(count($this->outputs) - 1),
         );
     }
 
@@ -86,22 +88,9 @@ final class MockInputOutput extends InputOutput
         return $this->outputs;
     }
 
-    private function addStreamFilters(): void
-    {
-        CITestStreamFilter::registration();
-        CITestStreamFilter::addOutputFilter();
-        CITestStreamFilter::addErrorFilter();
-    }
-
-    private function removeStreamFilters(): void
-    {
-        CITestStreamFilter::removeOutputFilter();
-        CITestStreamFilter::removeErrorFilter();
-    }
-
     public function input(?string $prefix = null): string
     {
-        if ($this->inputs === []) {
+        if ([] === $this->inputs) {
             throw new LogicException(
                 'No input data. Specifiy input data with `MockInputOutput::setInputs()`.',
             );
@@ -114,15 +103,15 @@ final class MockInputOutput extends InputOutput
         PhpStreamWrapper::register();
         PhpStreamWrapper::setContent($input);
 
-        $userInput       = parent::input($prefix);
-        $this->outputs[] = CITestStreamFilter::$buffer . $input . PHP_EOL;
+        $userInput = parent::input($prefix);
+        $this->outputs[] = CITestStreamFilter::$buffer.$input.PHP_EOL;
 
         PhpStreamWrapper::restore();
 
         $this->removeStreamFilters();
 
         if ($input !== $userInput) {
-            throw new LogicException($input . '!==' . $userInput);
+            throw new LogicException($input.'!=='.$userInput);
         }
 
         return $input;
@@ -136,5 +125,18 @@ final class MockInputOutput extends InputOutput
         $this->outputs[] = CITestStreamFilter::$buffer;
 
         $this->removeStreamFilters();
+    }
+
+    private function addStreamFilters(): void
+    {
+        CITestStreamFilter::registration();
+        CITestStreamFilter::addOutputFilter();
+        CITestStreamFilter::addErrorFilter();
+    }
+
+    private function removeStreamFilters(): void
+    {
+        CITestStreamFilter::removeOutputFilter();
+        CITestStreamFilter::removeErrorFilter();
     }
 }

@@ -16,6 +16,4 @@ namespace CodeIgniter\Exceptions;
 /**
  * Exception that represents error in the program logic.
  */
-class LogicException extends \LogicException implements ExceptionInterface
-{
-}
+class LogicException extends \LogicException implements ExceptionInterface {}

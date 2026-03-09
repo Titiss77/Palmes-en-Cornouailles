@@ -16,7 +16,7 @@ namespace CodeIgniter\Config;
 use CodeIgniter\View\ViewDecoratorInterface;
 
 /**
- * View configuration
+ * View configuration.
  *
  * @phpstan-type parser_callable (callable(mixed): mixed)
  * @phpstan-type parser_callable_string (callable(mixed): mixed)&string
@@ -41,7 +41,8 @@ class View extends BaseConfig
      *
      * @psalm-suppress UndefinedDocblockClass
      *
-     * @var         array<string, string>
+     * @var array<string, string>
+     *
      * @phpstan-var array<string, parser_callable_string>
      */
     public $filters = [];
@@ -53,63 +54,11 @@ class View extends BaseConfig
      *
      * @psalm-suppress UndefinedDocblockClass
      *
-     * @var         array<string, callable|list<string>|string>
+     * @var array<string, callable|list<string>|string>
+     *
      * @phpstan-var array<string, list<parser_callable_string>|parser_callable_string|parser_callable>
      */
     public $plugins = [];
-
-    /**
-     * Built-in View filters.
-     *
-     * @psalm-suppress UndefinedDocblockClass
-     *
-     * @var         array<string, string>
-     * @phpstan-var array<string, parser_callable_string>
-     */
-    protected $coreFilters = [
-        'abs'            => '\abs',
-        'capitalize'     => '\CodeIgniter\View\Filters::capitalize',
-        'date'           => '\CodeIgniter\View\Filters::date',
-        'date_modify'    => '\CodeIgniter\View\Filters::date_modify',
-        'default'        => '\CodeIgniter\View\Filters::default',
-        'esc'            => '\CodeIgniter\View\Filters::esc',
-        'excerpt'        => '\CodeIgniter\View\Filters::excerpt',
-        'highlight'      => '\CodeIgniter\View\Filters::highlight',
-        'highlight_code' => '\CodeIgniter\View\Filters::highlight_code',
-        'limit_words'    => '\CodeIgniter\View\Filters::limit_words',
-        'limit_chars'    => '\CodeIgniter\View\Filters::limit_chars',
-        'local_currency' => '\CodeIgniter\View\Filters::local_currency',
-        'local_number'   => '\CodeIgniter\View\Filters::local_number',
-        'lower'          => '\strtolower',
-        'nl2br'          => '\CodeIgniter\View\Filters::nl2br',
-        'number_format'  => '\number_format',
-        'prose'          => '\CodeIgniter\View\Filters::prose',
-        'round'          => '\CodeIgniter\View\Filters::round',
-        'strip_tags'     => '\strip_tags',
-        'title'          => '\CodeIgniter\View\Filters::title',
-        'upper'          => '\strtoupper',
-    ];
-
-    /**
-     * Built-in View plugins.
-     *
-     * @psalm-suppress UndefinedDocblockClass
-     *
-     * @var         array<string, callable|list<string>|string>
-     * @phpstan-var array<string, array<parser_callable_string>|parser_callable_string|parser_callable>
-     */
-    protected $corePlugins = [
-        'csp_script_nonce'  => '\CodeIgniter\View\Plugins::cspScriptNonce',
-        'csp_style_nonce'   => '\CodeIgniter\View\Plugins::cspStyleNonce',
-        'current_url'       => '\CodeIgniter\View\Plugins::currentURL',
-        'previous_url'      => '\CodeIgniter\View\Plugins::previousURL',
-        'mailto'            => '\CodeIgniter\View\Plugins::mailto',
-        'safe_mailto'       => '\CodeIgniter\View\Plugins::safeMailto',
-        'lang'              => '\CodeIgniter\View\Plugins::lang',
-        'validation_errors' => '\CodeIgniter\View\Plugins::validationErrors',
-        'route'             => '\CodeIgniter\View\Plugins::route',
-        'siteURL'           => '\CodeIgniter\View\Plugins::siteURL',
-    ];
 
     /**
      * View Decorators are class methods that will be run in sequence to
@@ -121,6 +70,61 @@ class View extends BaseConfig
      * @var list<class-string<ViewDecoratorInterface>>
      */
     public array $decorators = [];
+
+    /**
+     * Built-in View filters.
+     *
+     * @psalm-suppress UndefinedDocblockClass
+     *
+     * @var array<string, string>
+     *
+     * @phpstan-var array<string, parser_callable_string>
+     */
+    protected $coreFilters = [
+        'abs' => '\abs',
+        'capitalize' => '\CodeIgniter\View\Filters::capitalize',
+        'date' => '\CodeIgniter\View\Filters::date',
+        'date_modify' => '\CodeIgniter\View\Filters::date_modify',
+        'default' => '\CodeIgniter\View\Filters::default',
+        'esc' => '\CodeIgniter\View\Filters::esc',
+        'excerpt' => '\CodeIgniter\View\Filters::excerpt',
+        'highlight' => '\CodeIgniter\View\Filters::highlight',
+        'highlight_code' => '\CodeIgniter\View\Filters::highlight_code',
+        'limit_words' => '\CodeIgniter\View\Filters::limit_words',
+        'limit_chars' => '\CodeIgniter\View\Filters::limit_chars',
+        'local_currency' => '\CodeIgniter\View\Filters::local_currency',
+        'local_number' => '\CodeIgniter\View\Filters::local_number',
+        'lower' => '\strtolower',
+        'nl2br' => '\CodeIgniter\View\Filters::nl2br',
+        'number_format' => '\number_format',
+        'prose' => '\CodeIgniter\View\Filters::prose',
+        'round' => '\CodeIgniter\View\Filters::round',
+        'strip_tags' => '\strip_tags',
+        'title' => '\CodeIgniter\View\Filters::title',
+        'upper' => '\strtoupper',
+    ];
+
+    /**
+     * Built-in View plugins.
+     *
+     * @psalm-suppress UndefinedDocblockClass
+     *
+     * @var array<string, callable|list<string>|string>
+     *
+     * @phpstan-var array<string, array<parser_callable_string>|parser_callable_string|parser_callable>
+     */
+    protected $corePlugins = [
+        'csp_script_nonce' => '\CodeIgniter\View\Plugins::cspScriptNonce',
+        'csp_style_nonce' => '\CodeIgniter\View\Plugins::cspStyleNonce',
+        'current_url' => '\CodeIgniter\View\Plugins::currentURL',
+        'previous_url' => '\CodeIgniter\View\Plugins::previousURL',
+        'mailto' => '\CodeIgniter\View\Plugins::mailto',
+        'safe_mailto' => '\CodeIgniter\View\Plugins::safeMailto',
+        'lang' => '\CodeIgniter\View\Plugins::lang',
+        'validation_errors' => '\CodeIgniter\View\Plugins::validationErrors',
+        'route' => '\CodeIgniter\View\Plugins::route',
+        'siteURL' => '\CodeIgniter\View\Plugins::siteURL',
+    ];
 
     /**
      * Merge the built-in and developer-configured filters and plugins,

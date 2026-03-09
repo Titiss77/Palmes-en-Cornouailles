@@ -31,7 +31,6 @@ use Kint\Value\AbstractValue;
 use Kint\Value\Context\ArrayContext;
 use Kint\Value\ResourceValue;
 use Kint\Value\StreamValue;
-use TypeError;
 
 class StreamPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -58,7 +57,7 @@ class StreamPlugin extends AbstractPlugin implements PluginCompleteInterface
 
         try {
             $meta = \stream_get_meta_data($var);
-        } catch (TypeError $e) {
+        } catch (\TypeError $e) {
             return $v;
         }
 

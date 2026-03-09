@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class Roots extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $this->forge->addField([
-            'id'       => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'libelle' => ['type' => 'VARCHAR', 'constraint' => 50, 'unique' => true],
             'value' => ['type' => 'TEXT', 'NULL' => false],
         ]);
@@ -17,7 +19,7 @@ class Roots extends Migration
         $this->forge->createTable('root');
     }
 
-    public function down()
+    public function down(): void
     {
         $this->forge->dropTable('root');
     }

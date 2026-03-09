@@ -30,21 +30,19 @@ abstract class BaseResource extends Controller
     protected $request;
 
     /**
-     * @var string|null The model that holding this resource's data
+     * @var null|string The model that holding this resource's data
      */
     protected $modelName;
 
     /**
-     * @var object|null The model that holding this resource's data
+     * @var null|object The model that holding this resource's data
      */
     protected $model;
 
     /**
      * Constructor.
-     *
-     * @return void
      */
-    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger): void
     {
         parent::initController($request, $response, $logger);
 
@@ -55,22 +53,20 @@ abstract class BaseResource extends Controller
      * Set or change the model this controller is bound to.
      * Given either the name or the object, determine the other.
      *
-     * @param object|string|null $which
-     *
-     * @return void
+     * @param null|object|string $which
      */
-    public function setModel($which = null)
+    public function setModel($which = null): void
     {
-        if ($which !== null) {
-            $this->model     = is_object($which) ? $which : null;
+        if (null !== $which) {
+            $this->model = is_object($which) ? $which : null;
             $this->modelName = is_object($which) ? null : $which;
         }
 
-        if (empty($this->model) && ! empty($this->modelName) && class_exists($this->modelName)) {
+        if (empty($this->model) && !empty($this->modelName) && class_exists($this->modelName)) {
             $this->model = model($this->modelName);
         }
 
-        if (! empty($this->model) && empty($this->modelName)) {
+        if (!empty($this->model) && empty($this->modelName)) {
             $this->modelName = $this->model::class;
         }
     }

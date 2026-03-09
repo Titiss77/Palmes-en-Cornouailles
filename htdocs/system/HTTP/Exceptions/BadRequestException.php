@@ -17,12 +17,12 @@ use CodeIgniter\Exceptions\HTTPExceptionInterface;
 use CodeIgniter\Exceptions\RuntimeException;
 
 /**
- * 400 Bad Request
+ * 400 Bad Request.
  */
 class BadRequestException extends RuntimeException implements HTTPExceptionInterface
 {
     /**
-     * HTTP status code for Bad Request
+     * HTTP status code for Bad Request.
      *
      * @var int
      */

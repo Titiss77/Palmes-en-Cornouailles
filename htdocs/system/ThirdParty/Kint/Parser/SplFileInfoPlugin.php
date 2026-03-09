@@ -49,7 +49,7 @@ class SplFileInfoPlugin extends AbstractPlugin implements PluginCompleteInterfac
     public function parseComplete(&$var, AbstractValue $v, int $trigger): AbstractValue
     {
         // SplFileObject throws exceptions in normal use in places SplFileInfo doesn't
-        if (!$var instanceof SplFileInfo || $var instanceof SplFileObject) {
+        if (!$var instanceof \SplFileInfo || $var instanceof \SplFileObject) {
             return $v;
         }
 

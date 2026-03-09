@@ -15,6 +15,4 @@ namespace CodeIgniter\Test\Mock;
 
 use CodeIgniter\HTTP\IncomingRequest;
 
-class MockIncomingRequest extends IncomingRequest
-{
-}
+class MockIncomingRequest extends IncomingRequest {}

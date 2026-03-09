@@ -26,19 +26,19 @@ use CodeIgniter\Security\Exceptions\SecurityException;
  *   - invalid UTF-8 characters
  *   - control characters except line break and tab code
  *
- * @see \CodeIgniter\Filters\InvalidCharsTest
+ * @see InvalidCharsTest
  */
 class InvalidChars implements FilterInterface
 {
     /**
-     * Data source
+     * Data source.
      *
      * @var string
      */
     protected $source;
 
     /**
-     * Regular expressions for valid control codes
+     * Regular expressions for valid control codes.
      *
      * @var string
      */
@@ -47,18 +47,18 @@ class InvalidChars implements FilterInterface
     /**
      * Check invalid characters.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (! $request instanceof IncomingRequest) {
+        if (!$request instanceof IncomingRequest) {
             return null;
         }
 
         $data = [
-            'get'      => $request->getGet(),
-            'post'     => $request->getPost(),
-            'cookie'   => $request->getCookie(),
+            'get' => $request->getGet(),
+            'post' => $request->getPost(),
+            'cookie' => $request->getCookie(),
             'rawInput' => $request->getRawInput(),
         ];
 
@@ -74,7 +74,7 @@ class InvalidChars implements FilterInterface
     /**
      * We don't have anything to do here.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
@@ -118,7 +118,7 @@ class InvalidChars implements FilterInterface
             return $value;
         }
 
-        if (preg_match($this->controlCodeRegex, $value) === 1) {
+        if (1 === preg_match($this->controlCodeRegex, $value)) {
             return $value;
         }
 

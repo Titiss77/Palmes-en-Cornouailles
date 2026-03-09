@@ -19,23 +19,23 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Honeypot filter
+ * Honeypot filter.
  *
- * @see \CodeIgniter\Filters\HoneypotTest
+ * @see HoneypotTest
  */
 class Honeypot implements FilterInterface
 {
     /**
      * Checks if Honeypot field is empty, if not then the
-     * requester is a bot
+     * requester is a bot.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      *
      * @throws HoneypotException
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (! $request instanceof IncomingRequest) {
+        if (!$request instanceof IncomingRequest) {
             return null;
         }
 
@@ -49,7 +49,7 @@ class Honeypot implements FilterInterface
     /**
      * Attach a honeypot to the current response.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {

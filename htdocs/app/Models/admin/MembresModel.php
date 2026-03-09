@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\admin;
 
 use CodeIgniter\Model;
+use Config\Database;
 
 class MembresModel extends Model
 {
@@ -13,7 +16,9 @@ class MembresModel extends Model
     protected $allowedFields = ['nom', 'image_id'];
 
     /**
-     * Récupère les membres avec leur image et la liste de leurs fonctions concaténées
+     * Récupère les membres avec leur image et la liste de leurs fonctions concaténées.
+     *
+     * @param null|mixed $id
      */
     public function getMembresWithRelations($id = null)
     {
@@ -24,20 +29,21 @@ class MembresModel extends Model
             ->select('GROUP_CONCAT(fonctions.id) as roles_ids')
             // 2. Colonne de tri "Magique" : On attribue un score manuel à chaque poste
             // On utilise MIN() pour que si un membre a plusieurs rôles, c'est son "meilleur" rôle qui compte pour le tri
-            ->select('MIN(CASE 
-            WHEN fonctions.titre = "President" THEN 1 
-            WHEN fonctions.titre = "Vice-Président" THEN 2 
-            WHEN fonctions.titre = "Comptable" THEN 3 
-            WHEN fonctions.titre = "Secrétaire" THEN 4 
-            WHEN fonctions.titre = "Sponsoring" THEN 5 
-            WHEN fonctions.titre = "Coach" THEN 6 
+            ->select('MIN(CASE
+            WHEN fonctions.titre = "President" THEN 1
+            WHEN fonctions.titre = "Vice-Président" THEN 2
+            WHEN fonctions.titre = "Comptable" THEN 3
+            WHEN fonctions.titre = "Secrétaire" THEN 4
+            WHEN fonctions.titre = "Sponsoring" THEN 5
+            WHEN fonctions.titre = "Coach" THEN 6
             WHEN fonctions.titre = "Coach en formation" THEN 7
-            ELSE 99 
+            ELSE 99
         END) as ordre_affichage')
             ->join('images', 'membres.image_id = images.id', 'left')
             ->join('membre_fonction', 'membres.id = membre_fonction.membre_id', 'left')
             ->join('fonctions', 'membre_fonction.fonction_id = fonctions.id', 'left')
-            ->groupBy('membres.id');
+            ->groupBy('membres.id')
+        ;
 
         if ($id) {
             return $builder->where('membres.id', $id)->first();
@@ -48,11 +54,14 @@ class MembresModel extends Model
     }
 
     /**
-     * Gère la mise à jour des rôles (Table pivot)
+     * Gère la mise à jour des rôles (Table pivot).
+     *
+     * @param mixed $membreId
+     * @param mixed $fonctionIds
      */
-    public function updateRoles($membreId, $fonctionIds)
+    public function updateRoles($membreId, $fonctionIds): void
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $builder = $db->table('membre_fonction');
 
         // 1. On nettoie les anciens rôles pour ce membre
@@ -64,7 +73,7 @@ class MembresModel extends Model
             foreach ($fonctionIds as $fId) {
                 $data[] = [
                     'membre_id' => $membreId,
-                    'fonction_id' => $fId
+                    'fonction_id' => $fId,
                 ];
             }
             $builder->insertBatch($data);

@@ -16,13 +16,11 @@ namespace CodeIgniter\Router;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\Router\Exceptions\MethodNotFoundException;
 use Config\Routing;
-use ReflectionClass;
-use ReflectionException;
 
 /**
- * New Secure Router for Auto-Routing
+ * New Secure Router for Auto-Routing.
  *
- * @see \CodeIgniter\Router\AutoRouterImprovedTest
+ * @see AutoRouterImprovedTest
  */
 final class AutoRouterImproved implements AutoRouterInterface
 {
@@ -50,7 +48,7 @@ final class AutoRouterImproved implements AutoRouterInterface
 
     /**
      *  Whether to translate dashes in URIs for controller/method to CamelCase.
-     *  E.g., blog-controller -> BlogController
+     *  E.g., blog-controller -> BlogController.
      */
     private readonly bool $translateUriToCamelCase;
 
@@ -98,7 +96,7 @@ final class AutoRouterImproved implements AutoRouterInterface
     private ?int $paramPos = null;
 
     /**
-     * The current URI
+     * The current URI.
      */
     private ?string $uri = null;
 
@@ -125,129 +123,12 @@ final class AutoRouterImproved implements AutoRouterInterface
     ) {
         $this->namespace = rtrim($namespace, '\\');
 
-        $routingConfig                 = config(Routing::class);
-        $this->moduleRoutes            = $routingConfig->moduleRoutes;
+        $routingConfig = config(Routing::class);
+        $this->moduleRoutes = $routingConfig->moduleRoutes;
         $this->translateUriToCamelCase = $routingConfig->translateUriToCamelCase;
 
         // Set the default values
         $this->controller = $this->defaultController;
-    }
-
-    private function createSegments(string $uri): array
-    {
-        $segments = explode('/', $uri);
-        $segments = array_filter($segments, static fn ($segment): bool => $segment !== '');
-
-        // numerically reindex the array, removing gaps
-        return array_values($segments);
-    }
-
-    /**
-     * Search for the first controller corresponding to the URI segment.
-     *
-     * If there is a controller corresponding to the first segment, the search
-     * ends there. The remaining segments are parameters to the controller.
-     *
-     * @return bool true if a controller class is found.
-     */
-    private function searchFirstController(): bool
-    {
-        $segments = $this->segments;
-
-        $controller = '\\' . $this->namespace;
-
-        $controllerPos = -1;
-
-        while ($segments !== []) {
-            $segment = array_shift($segments);
-            $controllerPos++;
-
-            $class = $this->translateURI($segment);
-
-            // as soon as we encounter any segment that is not PSR-4 compliant, stop searching
-            if (! $this->isValidSegment($class)) {
-                return false;
-            }
-
-            $controller .= '\\' . $class;
-
-            if (class_exists($controller)) {
-                $this->controller    = $controller;
-                $this->controllerPos = $controllerPos;
-
-                $this->checkUriForController($controller);
-
-                // The first item may be a method name.
-                $this->params = $segments;
-                if ($segments !== []) {
-                    $this->paramPos = $this->controllerPos + 1;
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Search for the last default controller corresponding to the URI segments.
-     *
-     * @return bool true if a controller class is found.
-     */
-    private function searchLastDefaultController(): bool
-    {
-        $segments = $this->segments;
-
-        $segmentCount = count($this->segments);
-        $paramPos     = null;
-        $params       = [];
-
-        while ($segments !== []) {
-            if ($segmentCount > count($segments)) {
-                $paramPos = count($segments);
-            }
-
-            $namespaces = array_map(
-                fn ($segment): string => $this->translateURI($segment),
-                $segments,
-            );
-
-            $controller = '\\' . $this->namespace
-                . '\\' . implode('\\', $namespaces)
-                . '\\' . $this->defaultController;
-
-            if (class_exists($controller)) {
-                $this->controller = $controller;
-                $this->params     = $params;
-
-                if ($params !== []) {
-                    $this->paramPos = $paramPos;
-                }
-
-                return true;
-            }
-
-            // Prepend the last element in $segments to the beginning of $params.
-            array_unshift($params, array_pop($segments));
-        }
-
-        // Check for the default controller in Controllers directory.
-        $controller = '\\' . $this->namespace
-            . '\\' . $this->defaultController;
-
-        if (class_exists($controller)) {
-            $this->controller = $controller;
-            $this->params     = $params;
-
-            if ($params !== []) {
-                $this->paramPos = 0;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -260,22 +141,22 @@ final class AutoRouterImproved implements AutoRouterInterface
     public function getRoute(string $uri, string $httpVerb): array
     {
         $this->uri = $uri;
-        $httpVerb  = strtolower($httpVerb);
+        $httpVerb = strtolower($httpVerb);
 
         // Reset Controller method params.
         $this->params = [];
 
-        $defaultMethod = $httpVerb . ucfirst($this->defaultMethod);
-        $this->method  = $defaultMethod;
+        $defaultMethod = $httpVerb.ucfirst($this->defaultMethod);
+        $this->method = $defaultMethod;
 
         $this->segments = $this->createSegments($uri);
 
         // Check for Module Routes.
         if (
-            $this->segments !== []
+            [] !== $this->segments
             && array_key_exists($this->segments[0], $this->moduleRoutes)
         ) {
-            $uriSegment      = array_shift($this->segments);
+            $uriSegment = array_shift($this->segments);
             $this->namespace = rtrim($this->moduleRoutes[$uriSegment], '\\');
         }
 
@@ -288,7 +169,7 @@ final class AutoRouterImproved implements AutoRouterInterface
                 strtolower($baseControllerName) === strtolower($this->defaultController)
             ) {
                 throw new PageNotFoundException(
-                    'Cannot access the default controller "' . $this->controller . '" with the controller name URI path.',
+                    'Cannot access the default controller "'.$this->controller.'" with the controller name URI path.',
                 );
             }
         } elseif ($this->searchLastDefaultController()) {
@@ -296,7 +177,7 @@ final class AutoRouterImproved implements AutoRouterInterface
             $baseControllerName = class_basename($this->controller);
         } else {
             // No Controller is found.
-            throw new PageNotFoundException('No controller is found for: ' . $uri);
+            throw new PageNotFoundException('No controller is found for: '.$uri);
         }
 
         // The first item may be a method name.
@@ -306,37 +187,37 @@ final class AutoRouterImproved implements AutoRouterInterface
         $methodParam = array_shift($params);
 
         $method = '';
-        if ($methodParam !== null) {
-            $method = $httpVerb . $this->translateURI($methodParam);
+        if (null !== $methodParam) {
+            $method = $httpVerb.$this->translateURI($methodParam);
 
             $this->checkUriForMethod($method);
         }
 
-        if ($methodParam !== null && method_exists($this->controller, $method)) {
+        if (null !== $methodParam && method_exists($this->controller, $method)) {
             // Method is found.
             $this->method = $method;
             $this->params = $params;
 
             // Update the positions.
             $this->methodPos = $this->paramPos;
-            if ($params === []) {
+            if ([] === $params) {
                 $this->paramPos = null;
             }
-            if ($this->paramPos !== null) {
-                $this->paramPos++;
+            if (null !== $this->paramPos) {
+                ++$this->paramPos;
             }
 
             // Prevent access to default controller's method
             if (strtolower($baseControllerName) === strtolower($this->defaultController)) {
                 throw new PageNotFoundException(
-                    'Cannot access the default controller "' . $this->controller . '::' . $this->method . '"',
+                    'Cannot access the default controller "'.$this->controller.'::'.$this->method.'"',
                 );
             }
 
             // Prevent access to default method path
             if (strtolower($this->method) === strtolower($defaultMethod)) {
                 throw new PageNotFoundException(
-                    'Cannot access the default method "' . $this->method . '" with the method name URI path.',
+                    'Cannot access the default method "'.$this->method.'" with the method name URI path.',
                 );
             }
         } elseif (method_exists($this->controller, $defaultMethod)) {
@@ -370,25 +251,140 @@ final class AutoRouterImproved implements AutoRouterInterface
     }
 
     /**
-     * @internal For test purpose only.
+     * @internal for test purpose only
      *
-     * @return array<string, int|null>
+     * @return array<string, null|int>
      */
     public function getPos(): array
     {
         return [
             'controller' => $this->controllerPos,
-            'method'     => $this->methodPos,
-            'params'     => $this->paramPos,
+            'method' => $this->methodPos,
+            'params' => $this->paramPos,
         ];
+    }
+
+    private function createSegments(string $uri): array
+    {
+        $segments = explode('/', $uri);
+        $segments = array_filter($segments, static fn ($segment): bool => '' !== $segment);
+
+        // numerically reindex the array, removing gaps
+        return array_values($segments);
+    }
+
+    /**
+     * Search for the first controller corresponding to the URI segment.
+     *
+     * If there is a controller corresponding to the first segment, the search
+     * ends there. The remaining segments are parameters to the controller.
+     *
+     * @return bool true if a controller class is found
+     */
+    private function searchFirstController(): bool
+    {
+        $segments = $this->segments;
+
+        $controller = '\\'.$this->namespace;
+
+        $controllerPos = -1;
+
+        while ([] !== $segments) {
+            $segment = array_shift($segments);
+            ++$controllerPos;
+
+            $class = $this->translateURI($segment);
+
+            // as soon as we encounter any segment that is not PSR-4 compliant, stop searching
+            if (!$this->isValidSegment($class)) {
+                return false;
+            }
+
+            $controller .= '\\'.$class;
+
+            if (class_exists($controller)) {
+                $this->controller = $controller;
+                $this->controllerPos = $controllerPos;
+
+                $this->checkUriForController($controller);
+
+                // The first item may be a method name.
+                $this->params = $segments;
+                if ([] !== $segments) {
+                    $this->paramPos = $this->controllerPos + 1;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Search for the last default controller corresponding to the URI segments.
+     *
+     * @return bool true if a controller class is found
+     */
+    private function searchLastDefaultController(): bool
+    {
+        $segments = $this->segments;
+
+        $segmentCount = count($this->segments);
+        $paramPos = null;
+        $params = [];
+
+        while ([] !== $segments) {
+            if ($segmentCount > count($segments)) {
+                $paramPos = count($segments);
+            }
+
+            $namespaces = array_map(
+                fn ($segment): string => $this->translateURI($segment),
+                $segments,
+            );
+
+            $controller = '\\'.$this->namespace
+                .'\\'.implode('\\', $namespaces)
+                .'\\'.$this->defaultController;
+
+            if (class_exists($controller)) {
+                $this->controller = $controller;
+                $this->params = $params;
+
+                if ([] !== $params) {
+                    $this->paramPos = $paramPos;
+                }
+
+                return true;
+            }
+
+            // Prepend the last element in $segments to the beginning of $params.
+            array_unshift($params, array_pop($segments));
+        }
+
+        // Check for the default controller in Controllers directory.
+        $controller = '\\'.$this->namespace
+            .'\\'.$this->defaultController;
+
+        if (class_exists($controller)) {
+            $this->controller = $controller;
+            $this->params = $params;
+
+            if ([] !== $params) {
+                $this->paramPos = 0;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Get the directory path from the controller and set it to the property.
-     *
-     * @return void
      */
-    private function setDirectory()
+    private function setDirectory(): void
     {
         $segments = explode('\\', trim($this->controller, '\\'));
 
@@ -403,8 +399,8 @@ final class AutoRouterImproved implements AutoRouterInterface
             ltrim(substr($namespaces, strlen($this->namespace)), '\\'),
         );
 
-        if ($dir !== '') {
-            $this->directory = $dir . '/';
+        if ('' !== $dir) {
+            $this->directory = $dir.'/';
         }
     }
 
@@ -417,7 +413,7 @@ final class AutoRouterImproved implements AutoRouterInterface
 
             if ($routeLowerCase === $controller) {
                 throw new PageNotFoundException(
-                    'Cannot access the controller in Defined Routes. Controller: ' . $controllerInRoutes,
+                    'Cannot access the controller in Defined Routes. Controller: '.$controllerInRoutes,
                 );
             }
         }
@@ -426,27 +422,27 @@ final class AutoRouterImproved implements AutoRouterInterface
     private function checkParameters(): void
     {
         try {
-            $refClass = new ReflectionClass($this->controller);
-        } catch (ReflectionException) {
+            $refClass = new \ReflectionClass($this->controller);
+        } catch (\ReflectionException) {
             throw PageNotFoundException::forControllerNotFound($this->controller, $this->method);
         }
 
         try {
             $refMethod = $refClass->getMethod($this->method);
             $refParams = $refMethod->getParameters();
-        } catch (ReflectionException) {
+        } catch (\ReflectionException) {
             throw new MethodNotFoundException();
         }
 
-        if (! $refMethod->isPublic()) {
+        if (!$refMethod->isPublic()) {
             throw new MethodNotFoundException();
         }
 
         if (count($refParams) < count($this->params)) {
             throw new PageNotFoundException(
                 'The param count in the URI are greater than the controller method params.'
-                . ' Handler:' . $this->controller . '::' . $this->method
-                . ', URI:' . $this->uri,
+                .' Handler:'.$this->controller.'::'.$this->method
+                .', URI:'.$this->uri,
             );
         }
     }
@@ -454,68 +450,68 @@ final class AutoRouterImproved implements AutoRouterInterface
     private function checkRemap(): void
     {
         try {
-            $refClass = new ReflectionClass($this->controller);
+            $refClass = new \ReflectionClass($this->controller);
             $refClass->getMethod('_remap');
 
             throw new PageNotFoundException(
                 'AutoRouterImproved does not support `_remap()` method.'
-                . ' Controller:' . $this->controller,
+                .' Controller:'.$this->controller,
             );
-        } catch (ReflectionException) {
+        } catch (\ReflectionException) {
             // Do nothing.
         }
     }
 
     private function checkUnderscore(): void
     {
-        if ($this->translateURIDashes === false) {
+        if (false === $this->translateURIDashes) {
             return;
         }
 
         $paramPos = $this->paramPos ?? count($this->segments);
 
-        for ($i = 0; $i < $paramPos; $i++) {
+        for ($i = 0; $i < $paramPos; ++$i) {
             if (str_contains($this->segments[$i], '_')) {
                 throw new PageNotFoundException(
                     'AutoRouterImproved prohibits access to the URI'
-                    . ' containing underscores ("' . $this->segments[$i] . '")'
-                    . ' when $translateURIDashes is enabled.'
-                    . ' Please use the dash.'
-                    . ' Handler:' . $this->controller . '::' . $this->method
-                    . ', URI:' . $this->uri,
+                    .' containing underscores ("'.$this->segments[$i].'")'
+                    .' when $translateURIDashes is enabled.'
+                    .' Please use the dash.'
+                    .' Handler:'.$this->controller.'::'.$this->method
+                    .', URI:'.$this->uri,
                 );
             }
         }
     }
 
     /**
-     * Check URI for controller for $translateUriToCamelCase
+     * Check URI for controller for $translateUriToCamelCase.
      *
      * @param string $classname Controller classname that is generated from URI.
      *                          The case may be a bit incorrect.
      */
     private function checkUriForController(string $classname): void
     {
-        if ($this->translateUriToCamelCase === false) {
+        if (false === $this->translateUriToCamelCase) {
             return;
         }
 
-        if (! in_array(ltrim($classname, '\\'), get_declared_classes(), true)) {
+        if (!in_array(ltrim($classname, '\\'), get_declared_classes(), true)) {
             throw new PageNotFoundException(
-                '"' . $classname . '" is not found.',
+                '"'.$classname.'" is not found.',
             );
         }
     }
 
     /**
-     * Check URI for method for $translateUriToCamelCase
+     * Check URI for method for $translateUriToCamelCase.
      *
      * @param string $method Controller method name that is generated from URI.
      *                       The case may be a bit incorrect.
      */
     private function checkUriForMethod(string $method): void
     {
-        if ($this->translateUriToCamelCase === false) {
+        if (false === $this->translateUriToCamelCase) {
             return;
         }
 
@@ -528,16 +524,16 @@ final class AutoRouterImproved implements AutoRouterInterface
             method_exists($this->controller, $method)
             // But we do not permit `controller/somemethod`, so check the exact
             // method name.
-            && ! in_array($method, get_class_methods($this->controller), true)
+            && !in_array($method, get_class_methods($this->controller), true)
         ) {
             throw new PageNotFoundException(
-                '"' . $this->controller . '::' . $method . '()" is not found.',
+                '"'.$this->controller.'::'.$method.'()" is not found.',
             );
         }
     }
 
     /**
-     * Returns true if the supplied $segment string represents a valid PSR-4 compliant namespace/directory segment
+     * Returns true if the supplied $segment string represents a valid PSR-4 compliant namespace/directory segment.
      *
      * regex comes from https://www.php.net/manual/en/language.variables.basics.php
      */
@@ -555,20 +551,20 @@ final class AutoRouterImproved implements AutoRouterInterface
             if (strtolower($segment) !== $segment) {
                 throw new PageNotFoundException(
                     'AutoRouterImproved prohibits access to the URI'
-                    . ' containing uppercase letters ("' . $segment . '")'
-                    . ' when $translateUriToCamelCase is enabled.'
-                    . ' Please use the dash.'
-                    . ' URI:' . $this->uri,
+                    .' containing uppercase letters ("'.$segment.'")'
+                    .' when $translateUriToCamelCase is enabled.'
+                    .' Please use the dash.'
+                    .' URI:'.$this->uri,
                 );
             }
 
             if (str_contains($segment, '--')) {
                 throw new PageNotFoundException(
                     'AutoRouterImproved prohibits access to the URI'
-                    . ' containing double dash ("' . $segment . '")'
-                    . ' when $translateUriToCamelCase is enabled.'
-                    . ' Please use the single dash.'
-                    . ' URI:' . $this->uri,
+                    .' containing double dash ("'.$segment.'")'
+                    .' when $translateUriToCamelCase is enabled.'
+                    .' Please use the single dash.'
+                    .' URI:'.$this->uri,
                 );
             }
 

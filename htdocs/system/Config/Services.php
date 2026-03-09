@@ -89,8 +89,6 @@ use Config\Session as SessionConfig;
 use Config\Toolbar as ToolbarConfig;
 use Config\Validation as ValidationConfig;
 use Config\View as ViewConfig;
-use InvalidArgumentException;
-use Locale;
 
 /**
  * Services Configuration file.
@@ -108,7 +106,7 @@ use Locale;
  *
  * @see http://blog.ircmaxell.com/2015/11/simple-easy-risk-and-change.html
  * @see http://www.infoq.com/presentations/Simple-Made-Easy
- * @see \CodeIgniter\Config\ServicesTest
+ * @see ServicesTest
  */
 class Services extends BaseService
 {
@@ -179,7 +177,7 @@ class Services extends BaseService
     }
 
     /**
-     * Content Security Policy
+     * Content Security Policy.
      *
      * @return ContentSecurityPolicy
      */
@@ -220,7 +218,7 @@ class Services extends BaseService
     /**
      * The Email class allows you to send email via mail, sendmail, SMTP.
      *
-     * @param array|EmailConfig|null $config
+     * @param null|array|EmailConfig $config
      *
      * @return Email
      */
@@ -230,7 +228,7 @@ class Services extends BaseService
             return static::getSharedInstance('email', $config);
         }
 
-        if (empty($config) || (! is_array($config) && ! $config instanceof EmailConfig)) {
+        if (empty($config) || (!is_array($config) && !$config instanceof EmailConfig)) {
             $config = config(EmailConfig::class);
         }
 
@@ -246,7 +244,7 @@ class Services extends BaseService
      */
     public static function encrypter(?EncryptionConfig $config = null, $getShared = false)
     {
-        if ($getShared === true) {
+        if (true === $getShared) {
             return static::getSharedInstance('encrypter', $config);
         }
 
@@ -332,7 +330,7 @@ class Services extends BaseService
 
     /**
      * Acts as a factory for ImageHandler classes and returns an instance
-     * of the handler. Used like service('image')->withFile($path)->rotate(90)->save();
+     * of the handler. Used like service('image')->withFile($path)->rotate(90)->save();.
      *
      * @return BaseHandler
      */
@@ -345,8 +343,8 @@ class Services extends BaseService
         $config ??= config(Images::class);
         assert($config instanceof Images);
 
-        $handler = $handler !== null && $handler !== '' && $handler !== '0' ? $handler : $config->defaultHandler;
-        $class   = $config->handlers[$handler];
+        $handler = null !== $handler && '' !== $handler && '0' !== $handler ? $handler : $config->defaultHandler;
+        $class = $config->handlers[$handler];
 
         return new $class($config);
     }
@@ -381,11 +379,11 @@ class Services extends BaseService
         if (AppServices::get('request') instanceof IncomingRequest) {
             $requestLocale = AppServices::get('request')->getLocale();
         } else {
-            $requestLocale = Locale::getDefault();
+            $requestLocale = \Locale::getDefault();
         }
 
         // Use '?:' for empty string check
-        $locale = $locale !== null && $locale !== '' && $locale !== '0' ? $locale : $requestLocale;
+        $locale = null !== $locale && '' !== $locale && '0' !== $locale ? $locale : $requestLocale;
 
         return new Language($locale);
     }
@@ -484,7 +482,7 @@ class Services extends BaseService
             return static::getSharedInstance('parser', $viewPath, $config);
         }
 
-        $viewPath = $viewPath !== null && $viewPath !== '' && $viewPath !== '0' ? $viewPath : (new Paths())->viewDirectory;
+        $viewPath = null !== $viewPath && '' !== $viewPath && '0' !== $viewPath ? $viewPath : (new Paths())->viewDirectory;
         $config ??= config(ViewConfig::class);
 
         return new Parser($config, $viewPath, AppServices::get('locator'), CI_DEBUG, AppServices::get('logger'));
@@ -503,7 +501,7 @@ class Services extends BaseService
             return static::getSharedInstance('renderer', $viewPath, $config);
         }
 
-        $viewPath = $viewPath !== null && $viewPath !== '' && $viewPath !== '0' ? $viewPath : (new Paths())->viewDirectory;
+        $viewPath = null !== $viewPath && '' !== $viewPath && '0' !== $viewPath ? $viewPath : (new Paths())->viewDirectory;
         $config ??= config(ViewConfig::class);
 
         return new View($config, $viewPath, AppServices::get('locator'), CI_DEBUG, AppServices::get('logger'));
@@ -516,7 +514,7 @@ class Services extends BaseService
      *
      * @return CLIRequest|IncomingRequest
      *
-     * @deprecated The parameter $config and $getShared are deprecated.
+     * @deprecated the parameter $config and $getShared are deprecated
      */
     public static function request(?App $config = null, bool $getShared = true)
     {
@@ -674,20 +672,20 @@ class Services extends BaseService
 
         $driverName = $config->driver;
 
-        if ($driverName === DatabaseHandler::class) {
+        if (DatabaseHandler::class === $driverName) {
             $DBGroup = $config->DBGroup ?? config(Database::class)->defaultGroup;
 
             $driverPlatform = Database::connect($DBGroup)->getPlatform();
 
-            if ($driverPlatform === 'MySQLi') {
+            if ('MySQLi' === $driverPlatform) {
                 $driverName = MySQLiHandler::class;
-            } elseif ($driverPlatform === 'Postgre') {
+            } elseif ('Postgre' === $driverPlatform) {
                 $driverName = PostgreHandler::class;
             }
         }
 
-        if (! class_exists($driverName) || ! is_a($driverName, SessionBaseHandler::class, true)) {
-            throw new InvalidArgumentException(sprintf(
+        if (!class_exists($driverName) || !is_a($driverName, SessionBaseHandler::class, true)) {
+            throw new \InvalidArgumentException(sprintf(
                 'Invalid session handler "%s" provided.',
                 $driverName,
             ));
@@ -700,7 +698,7 @@ class Services extends BaseService
         $session = new Session($driver, $config);
         $session->setLogger($logger);
 
-        if (session_status() === PHP_SESSION_NONE) {
+        if (PHP_SESSION_NONE === session_status()) {
             // PHP Session emits the headers according to `session.cache_limiter`.
             // See https://www.php.net/manual/en/function.session-cache-limiter.php.
             // The headers are not managed by CI's Response class.
@@ -799,9 +797,9 @@ class Services extends BaseService
     /**
      * The URI class provides a way to model and manipulate URIs.
      *
-     * @param string|null $uri The URI string
+     * @param null|string $uri The URI string
      *
-     * @return URI The current URI if $uri is null.
+     * @return URI the current URI if $uri is null
      */
     public static function uri(?string $uri = null, bool $getShared = true)
     {
@@ -809,9 +807,9 @@ class Services extends BaseService
             return static::getSharedInstance('uri', $uri);
         }
 
-        if ($uri === null) {
+        if (null === $uri) {
             $appConfig = config(App::class);
-            $factory   = AppServices::siteurifactory($appConfig, AppServices::get('superglobals'));
+            $factory = AppServices::siteurifactory($appConfig, AppServices::get('superglobals'));
 
             return $factory->createFromGlobals();
         }

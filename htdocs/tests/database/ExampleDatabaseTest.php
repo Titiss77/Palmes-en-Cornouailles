@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 use Tests\Support\Database\Seeds\ExampleSeeder;
@@ -7,6 +9,8 @@ use Tests\Support\Models\ExampleModel;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 final class ExampleDatabaseTest extends CIUnitTestCase
 {

@@ -1,53 +1,53 @@
-<?= $this->extend('admin/Layout/l_global') ?>
-<?= $this->section('contenu') ?>
-<?= $this->include('admin/retour') ?>
+<?php echo $this->extend('admin/Layout/l_global'); ?>
+<?php echo $this->section('contenu'); ?>
+<?php echo $this->include('admin/retour'); ?>
 
 <div class="site-container">
     <div class="d-flex align-items-center mb-4">
-        <a href="<?= base_url('admin/membres') ?>" class="text-decoration-none me-3 text-dark"><i
+        <a href="<?php echo base_url('admin/membres'); ?>" class="text-decoration-none me-3 text-dark"><i
                 class="bi bi-arrow-left-circle"></i></a>
-        <h3 class="title-section mb-0">Modifier : <?= esc($item['nom']) ?></h3>
+        <h3 class="title-section mb-0">Modifier : <?php echo esc($item['nom']); ?></h3>
     </div>
 
     <div class="card-item p-4">
-        <form action="<?= base_url('admin/membres/' . $item['id']) ?>" method="post" enctype="multipart/form-data">
-            <?= csrf_field() ?>
+        <form action="<?php echo base_url('admin/membres/'.$item['id']); ?>" method="post" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="_method" value="PUT">
 
             <div class="form-group mb-4">
                 <label class="fw-bold mb-2">Nom & Prénom</label>
-                <input type="text" name="nom" class="form-input w-100 p-2" value="<?= old('nom', $item['nom']) ?>"
+                <input type="text" name="nom" class="form-input w-100 p-2" value="<?php echo old('nom', $item['nom']); ?>"
                     required>
             </div>
 
             <div class="form-group mb-4">
                 <label class="fw-bold mb-2">Fonctions</label>
                 <div class="d-flex flex-wrap gap-3 p-3 border rounded bg-light">
-                    <?php foreach ($fonctions as $f): ?>
+                    <?php foreach ($fonctions as $f) { ?>
                     <?php
                     // Vérifie si l'ID de la fonction est dans le tableau des rôles actuels du membre
                     $checked = in_array($f['id'], $currentRoles) ? 'checked' : '';
-                    ?>
+                        ?>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="fonctions[]" value="<?= $f['id'] ?>"
-                            id="f_<?= $f['id'] ?>" <?= $checked ?>>
-                        <label class="form-check-label" for="f_<?= $f['id'] ?>">
-                            <?= esc($f['titre']) ?>
+                        <input class="form-check-input" type="checkbox" name="fonctions[]" value="<?php echo $f['id']; ?>"
+                            id="f_<?php echo $f['id']; ?>" <?php echo $checked; ?>>
+                        <label class="form-check-label" for="f_<?php echo $f['id']; ?>">
+                            <?php echo esc($f['titre']); ?>
                         </label>
                     </div>
-                    <?php endforeach; ?>
+                    <?php } ?>
                 </div>
             </div>
 
-            <?php if (!empty($item['image_path'])): ?>
+            <?php if (!empty($item['image_path'])) { ?>
             <div class="d-flex align-items-center justify-content-between p-2 border rounded bg-light mb-2 suppr-img">
-                <img src="<?= base_url('uploads/' . $item['image_path']) ?>" class="img-membres">
-                <a href="<?= base_url('admin/membres/' . $item['id'] . '/deleteImage') ?>"
+                <img src="<?php echo base_url('uploads/'.$item['image_path']); ?>" class="img-membres">
+                <a href="<?php echo base_url('admin/membres/'.$item['id'].'/deleteImage'); ?>"
                     class="text-danger small fw-bold" onclick="return confirm('Supprimer la photo ?');">
                     <i class="bi bi-trash"></i> Supprimer
                 </a>
             </div>
-            <?php endif; ?>
+            <?php } ?>
             <input type="file" name="image" class="form-input w-100 p-2" accept="image/*">
 
             <div class="text-end mt-4">
@@ -56,4 +56,4 @@
         </form>
     </div>
 </div>
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

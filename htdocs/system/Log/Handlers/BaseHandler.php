@@ -14,26 +14,26 @@ declare(strict_types=1);
 namespace CodeIgniter\Log\Handlers;
 
 /**
- * Base class for logging
+ * Base class for logging.
  */
 abstract class BaseHandler implements HandlerInterface
 {
     /**
-     * Handles
+     * Handles.
      *
      * @var array
      */
     protected $handles;
 
     /**
-     * Date format for logging
+     * Date format for logging.
      *
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:s';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct(array $config)
     {

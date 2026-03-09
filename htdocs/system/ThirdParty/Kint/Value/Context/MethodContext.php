@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Kint\Value\Context;
 
 use Kint\Value\InstanceValue;
-use ReflectionMethod;
 
 class MethodContext extends ClassDeclaredContext
 {
@@ -64,7 +63,7 @@ class MethodContext extends ClassDeclaredContext
      */
     public bool $inherited = false;
 
-    public function __construct(ReflectionMethod $method)
+    public function __construct(\ReflectionMethod $method)
     {
         parent::__construct(
             $method->getName(),

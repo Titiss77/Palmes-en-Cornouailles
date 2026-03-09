@@ -27,7 +27,7 @@ trait ViewDecoratorTrait
         $decorators = $this->config->decorators ?? config(ViewConfig::class)->decorators;
 
         foreach ($decorators as $decorator) {
-            if (! is_subclass_of($decorator, ViewDecoratorInterface::class)) {
+            if (!is_subclass_of($decorator, ViewDecoratorInterface::class)) {
                 throw ViewException::forInvalidDecorator($decorator);
             }
 

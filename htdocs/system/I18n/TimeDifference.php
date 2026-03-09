@@ -13,26 +13,23 @@ declare(strict_types=1);
 
 namespace CodeIgniter\I18n;
 
-use DateTime;
-use IntlCalendar;
-
 /**
- * @property-read float|int $days
- * @property-read float|int $hours
- * @property-read float|int $minutes
- * @property-read float|int $months
- * @property-read int       $seconds
- * @property-read float|int $weeks
- * @property-read float|int $years
+ * @property float|int $days
+ * @property float|int $hours
+ * @property float|int $minutes
+ * @property float|int $months
+ * @property int       $seconds
+ * @property float|int $weeks
+ * @property float|int $years
  *
- * @see \CodeIgniter\I18n\TimeDifferenceTest
+ * @see TimeDifferenceTest
  */
 class TimeDifference
 {
     /**
      * The timestamp of the "current" time.
      *
-     * @var IntlCalendar
+     * @var \IntlCalendar
      */
     protected $currentTime;
 
@@ -110,170 +107,15 @@ class TimeDifference
      * Note: both parameters are required to be in the same timezone. No timezone
      * shifting is done internally.
      */
-    public function __construct(DateTime $currentTime, DateTime $testTime)
+    public function __construct(\DateTime $currentTime, \DateTime $testTime)
     {
         $this->difference = $currentTime->getTimestamp() - $testTime->getTimestamp();
 
-        $current = IntlCalendar::fromDateTime($currentTime);
-        $time    = IntlCalendar::fromDateTime($testTime)->getTime();
+        $current = \IntlCalendar::fromDateTime($currentTime);
+        $time = \IntlCalendar::fromDateTime($testTime)->getTime();
 
         $this->currentTime = $current;
-        $this->testTime    = $time;
-    }
-
-    /**
-     * Returns the number of years of difference between the two.
-     *
-     * @return float|int
-     */
-    public function getYears(bool $raw = false)
-    {
-        if ($raw) {
-            return $this->difference / YEAR;
-        }
-
-        $time = clone $this->currentTime;
-
-        return $time->fieldDifference($this->testTime, IntlCalendar::FIELD_YEAR);
-    }
-
-    /**
-     * Returns the number of months difference between the two dates.
-     *
-     * @return float|int
-     */
-    public function getMonths(bool $raw = false)
-    {
-        if ($raw) {
-            return $this->difference / MONTH;
-        }
-
-        $time = clone $this->currentTime;
-
-        return $time->fieldDifference($this->testTime, IntlCalendar::FIELD_MONTH);
-    }
-
-    /**
-     * Returns the number of weeks difference between the two dates.
-     *
-     * @return float|int
-     */
-    public function getWeeks(bool $raw = false)
-    {
-        if ($raw) {
-            return $this->difference / WEEK;
-        }
-
-        $time = clone $this->currentTime;
-
-        return (int) ($time->fieldDifference($this->testTime, IntlCalendar::FIELD_DAY_OF_YEAR) / 7);
-    }
-
-    /**
-     * Returns the number of days difference between the two dates.
-     *
-     * @return float|int
-     */
-    public function getDays(bool $raw = false)
-    {
-        if ($raw) {
-            return $this->difference / DAY;
-        }
-
-        $time = clone $this->currentTime;
-
-        return $time->fieldDifference($this->testTime, IntlCalendar::FIELD_DAY_OF_YEAR);
-    }
-
-    /**
-     * Returns the number of hours difference between the two dates.
-     *
-     * @return float|int
-     */
-    public function getHours(bool $raw = false)
-    {
-        if ($raw) {
-            return $this->difference / HOUR;
-        }
-
-        $time = clone $this->currentTime;
-
-        return $time->fieldDifference($this->testTime, IntlCalendar::FIELD_HOUR_OF_DAY);
-    }
-
-    /**
-     * Returns the number of minutes difference between the two dates.
-     *
-     * @return float|int
-     */
-    public function getMinutes(bool $raw = false)
-    {
-        if ($raw) {
-            return $this->difference / MINUTE;
-        }
-
-        $time = clone $this->currentTime;
-
-        return $time->fieldDifference($this->testTime, IntlCalendar::FIELD_MINUTE);
-    }
-
-    /**
-     * Returns the number of seconds difference between the two dates.
-     *
-     * @return int
-     */
-    public function getSeconds(bool $raw = false)
-    {
-        if ($raw) {
-            return $this->difference;
-        }
-
-        $time = clone $this->currentTime;
-
-        return $time->fieldDifference($this->testTime, IntlCalendar::FIELD_SECOND);
-    }
-
-    /**
-     * Convert the time to human readable format
-     */
-    public function humanize(?string $locale = null): string
-    {
-        $current = clone $this->currentTime;
-
-        $years   = $current->fieldDifference($this->testTime, IntlCalendar::FIELD_YEAR);
-        $months  = $current->fieldDifference($this->testTime, IntlCalendar::FIELD_MONTH);
-        $days    = $current->fieldDifference($this->testTime, IntlCalendar::FIELD_DAY_OF_YEAR);
-        $hours   = $current->fieldDifference($this->testTime, IntlCalendar::FIELD_HOUR_OF_DAY);
-        $minutes = $current->fieldDifference($this->testTime, IntlCalendar::FIELD_MINUTE);
-
-        $phrase = null;
-
-        if ($years !== 0) {
-            $phrase = lang('Time.years', [abs($years)], $locale);
-            $before = $years < 0;
-        } elseif ($months !== 0) {
-            $phrase = lang('Time.months', [abs($months)], $locale);
-            $before = $months < 0;
-        } elseif ($days !== 0 && (abs($days) >= 7)) {
-            $weeks  = ceil($days / 7);
-            $phrase = lang('Time.weeks', [abs($weeks)], $locale);
-            $before = $days < 0;
-        } elseif ($days !== 0) {
-            $phrase = lang('Time.days', [abs($days)], $locale);
-            $before = $days < 0;
-        } elseif ($hours !== 0) {
-            $phrase = lang('Time.hours', [abs($hours)], $locale);
-            $before = $hours < 0;
-        } elseif ($minutes !== 0) {
-            $phrase = lang('Time.minutes', [abs($minutes)], $locale);
-            $before = $minutes < 0;
-        } else {
-            return lang('Time.now', [], $locale);
-        }
-
-        return $before
-            ? lang('Time.ago', [$phrase], $locale)
-            : lang('Time.inFuture', [$phrase], $locale);
+        $this->testTime = $time;
     }
 
     /**
@@ -281,11 +123,11 @@ class TimeDifference
      *
      * @param string $name
      *
-     * @return float|int|null
+     * @return null|float|int
      */
     public function __get($name)
     {
-        $name   = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $method = "get{$name}";
 
         if (method_exists($this, $method)) {
@@ -304,9 +146,164 @@ class TimeDifference
      */
     public function __isset($name)
     {
-        $name   = ucfirst(strtolower($name));
+        $name = ucfirst(strtolower($name));
         $method = "get{$name}";
 
         return method_exists($this, $method);
+    }
+
+    /**
+     * Returns the number of years of difference between the two.
+     *
+     * @return float|int
+     */
+    public function getYears(bool $raw = false)
+    {
+        if ($raw) {
+            return $this->difference / YEAR;
+        }
+
+        $time = clone $this->currentTime;
+
+        return $time->fieldDifference($this->testTime, \IntlCalendar::FIELD_YEAR);
+    }
+
+    /**
+     * Returns the number of months difference between the two dates.
+     *
+     * @return float|int
+     */
+    public function getMonths(bool $raw = false)
+    {
+        if ($raw) {
+            return $this->difference / MONTH;
+        }
+
+        $time = clone $this->currentTime;
+
+        return $time->fieldDifference($this->testTime, \IntlCalendar::FIELD_MONTH);
+    }
+
+    /**
+     * Returns the number of weeks difference between the two dates.
+     *
+     * @return float|int
+     */
+    public function getWeeks(bool $raw = false)
+    {
+        if ($raw) {
+            return $this->difference / WEEK;
+        }
+
+        $time = clone $this->currentTime;
+
+        return (int) ($time->fieldDifference($this->testTime, \IntlCalendar::FIELD_DAY_OF_YEAR) / 7);
+    }
+
+    /**
+     * Returns the number of days difference between the two dates.
+     *
+     * @return float|int
+     */
+    public function getDays(bool $raw = false)
+    {
+        if ($raw) {
+            return $this->difference / DAY;
+        }
+
+        $time = clone $this->currentTime;
+
+        return $time->fieldDifference($this->testTime, \IntlCalendar::FIELD_DAY_OF_YEAR);
+    }
+
+    /**
+     * Returns the number of hours difference between the two dates.
+     *
+     * @return float|int
+     */
+    public function getHours(bool $raw = false)
+    {
+        if ($raw) {
+            return $this->difference / HOUR;
+        }
+
+        $time = clone $this->currentTime;
+
+        return $time->fieldDifference($this->testTime, \IntlCalendar::FIELD_HOUR_OF_DAY);
+    }
+
+    /**
+     * Returns the number of minutes difference between the two dates.
+     *
+     * @return float|int
+     */
+    public function getMinutes(bool $raw = false)
+    {
+        if ($raw) {
+            return $this->difference / MINUTE;
+        }
+
+        $time = clone $this->currentTime;
+
+        return $time->fieldDifference($this->testTime, \IntlCalendar::FIELD_MINUTE);
+    }
+
+    /**
+     * Returns the number of seconds difference between the two dates.
+     *
+     * @return int
+     */
+    public function getSeconds(bool $raw = false)
+    {
+        if ($raw) {
+            return $this->difference;
+        }
+
+        $time = clone $this->currentTime;
+
+        return $time->fieldDifference($this->testTime, \IntlCalendar::FIELD_SECOND);
+    }
+
+    /**
+     * Convert the time to human readable format.
+     */
+    public function humanize(?string $locale = null): string
+    {
+        $current = clone $this->currentTime;
+
+        $years = $current->fieldDifference($this->testTime, \IntlCalendar::FIELD_YEAR);
+        $months = $current->fieldDifference($this->testTime, \IntlCalendar::FIELD_MONTH);
+        $days = $current->fieldDifference($this->testTime, \IntlCalendar::FIELD_DAY_OF_YEAR);
+        $hours = $current->fieldDifference($this->testTime, \IntlCalendar::FIELD_HOUR_OF_DAY);
+        $minutes = $current->fieldDifference($this->testTime, \IntlCalendar::FIELD_MINUTE);
+
+        $phrase = null;
+
+        if (0 !== $years) {
+            $phrase = lang('Time.years', [abs($years)], $locale);
+            $before = $years < 0;
+        } elseif (0 !== $months) {
+            $phrase = lang('Time.months', [abs($months)], $locale);
+            $before = $months < 0;
+        } elseif (0 !== $days && (abs($days) >= 7)) {
+            $weeks = ceil($days / 7);
+            $phrase = lang('Time.weeks', [abs($weeks)], $locale);
+            $before = $days < 0;
+        } elseif (0 !== $days) {
+            $phrase = lang('Time.days', [abs($days)], $locale);
+            $before = $days < 0;
+        } elseif (0 !== $hours) {
+            $phrase = lang('Time.hours', [abs($hours)], $locale);
+            $before = $hours < 0;
+        } elseif (0 !== $minutes) {
+            $phrase = lang('Time.minutes', [abs($minutes)], $locale);
+            $before = $minutes < 0;
+        } else {
+            return lang('Time.now', [], $locale);
+        }
+
+        return $before
+            ? lang('Time.ago', [$phrase], $locale)
+            : lang('Time.inFuture', [$phrase], $locale);
     }
 }

@@ -1,13 +1,13 @@
-<?= $this->extend('Public/Layout/l_global') ?>
+<?php echo $this->extend('Public/Layout/l_global'); ?>
 
-<?= $this->section('contenu') ?>
+<?php echo $this->section('contenu'); ?>
 <div class="container" style="padding: 50px 0;">
     <h1 class="h1">Politique de Confidentialité</h1>
-    <p class="paragraph">Dernière mise à jour : <?= date('d/m/Y') ?></p>
+    <p class="paragraph">Dernière mise à jour : <?php echo date('d/m/Y'); ?></p>
 
     <h2 class="h2">1. Absence de collecte de données</h2>
     <p class="paragraph">
-        Le site internet du club <strong><?= $general['nomClub'] ?></strong> est un site vitrine à vocation informative.
+        Le site internet du club <strong><?php echo $general['nomClub']; ?></strong> est un site vitrine à vocation informative.
         <strong>Nous ne collectons aucune donnée personnelle</strong> sur les visiteurs :
     </p>
     <ul>
@@ -34,7 +34,7 @@
     </p>
     <p class="paragraph">
         Pour exercer ce droit (par exemple pour demander le retrait d'une photo), contactez-nous à :
-        <?= $general['mailClub'] ?>.
+        <?php echo $general['mailClub']; ?>.
     </p>
 </div>
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

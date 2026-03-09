@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Public;
 
 use CodeIgniter\Model;
@@ -19,48 +21,34 @@ class Donnees extends Model
             ->select('ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH')
             ->select('ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF')
             ->get()
-            ->getRowArray();
+            ->getRowArray()
+        ;
 
         // Si la table est vide, on renvoie des fausses données
         if (empty($result)) {
             return [
-                'image'         => 'default_general.jpg',
-                'image_groupe'  => 'default_group.jpg',
-                'logoffessm'    => 'default_logo.jpg',
-                'nomClub'       => 'Nom du Club',
-                'description'   => 'Ceci est une description par défaut car la base de données est vide.',
-                'philosophie'   => 'Philosophie par défaut.',
+                'image' => 'default_general.jpg',
+                'image_groupe' => 'default_group.jpg',
+                'logoffessm' => 'default_logo.jpg',
+                'nomClub' => 'Nom du Club',
+                'description' => 'Ceci est une description par défaut car la base de données est vide.',
+                'philosophie' => 'Philosophie par défaut.',
                 'nombreNageurs' => 0,
                 'projetSportif' => 'Projet sportif par défaut',
-                'lienFacebook'  => '#',
+                'lienFacebook' => '#',
                 'lienInstagram' => '#',
-                'lienffessm'    => '#',
-                'lienDrive'     => '#',
-                'pourcentH'     => 50,
-                'pourcentF'     => 50
+                'lienffessm' => '#',
+                'lienDrive' => '#',
+                'pourcentH' => 50,
+                'pourcentF' => 50,
             ];
         }
 
         return $result;
     }
 
-    private function getMembresParFonction(string $titreFonction)
+    public function getPresident()
     {
-        $result = $this
-            ->db
-            ->table('membres m')
-            ->join('images i', 'm.image_id = i.id', 'left')
-            ->select('m.nom, i.path as photo')
-            ->join('membre_fonction mf', 'm.id = mf.membre_id')
-            ->join('fonctions f', 'mf.fonction_id = f.id')
-            ->where('f.titre', $titreFonction)
-            ->get()
-            ->getResultArray();
-
-        return $result;
-    }
-
-    public function getPresident() {
         $result = $this
             ->db
             ->table('membres m')
@@ -70,13 +58,14 @@ class Donnees extends Model
             ->join('fonctions f', 'mf.fonction_id = f.id', 'left')
             ->where('f.titre', 'Président')
             ->get()
-            ->getRowArray();
+            ->getRowArray()
+        ;
 
         // Si aucun président trouvé, on renvoie une fausse donnée
         if (empty($result)) {
             return [
                 'nom' => 'Personne',
-                'photo' => 'default_president.jpg'
+                'photo' => 'default_president.jpg',
             ];
         }
 
@@ -95,35 +84,31 @@ class Donnees extends Model
 
     public function getDisciplines()
     {
-        $result = $this
+        return $this
             ->db
             ->table('disciplines d')
             ->join('images i', 'd.image_id = i.id', 'left')
             ->select('d.nom, d.description, i.path as image')
             ->get()
-            ->getResultArray();
-
-        
-
-        return $result;
+            ->getResultArray()
+        ;
     }
 
     public function getPiscines()
     {
-        $result = $this
+        return $this
             ->db
             ->table('piscines p')
             ->join('images i', 'p.image_id = i.id', 'left')
             ->select('p.nom, p.adresse, p.type_bassin, i.path as photo')
             ->get()
-            ->getResultArray();
-
-        return $result;
+            ->getResultArray()
+        ;
     }
 
     public function getCalendriers()
     {
-        $result = $this
+        return $this
             ->db
             ->table('calendriers c')
             ->join('images i', 'c.image_id = i.id', 'left')
@@ -131,28 +116,26 @@ class Donnees extends Model
             ->where('c.categorie !=', 'competitions')
             ->orderBy('c.categorie', 'ASC')
             ->get()
-            ->getResultArray();
-
-        return $result;
+            ->getResultArray()
+        ;
     }
 
     public function getCalendrier()
     {
-        $result = $this
+        return $this
             ->db
             ->table('calendriers c')
             ->join('images i', 'c.image_id = i.id', 'left')
             ->select('c.categorie, c.date, i.path as image')
             ->where('c.categorie', 'competitions')
             ->get()
-            ->getResultArray();
-
-        return $result;
+            ->getResultArray()
+        ;
     }
 
     public function getBureau()
     {
-        $result = $this
+        return $this
             ->db
             ->table('membres m')
             ->join('images i', 'm.image_id = i.id', 'left')
@@ -163,16 +146,13 @@ class Donnees extends Model
             ->where('f.titre !=', 'Coach en formation')
             ->groupBy('m.id')
             ->get()
-            ->getResultArray();
-
-        return $result;
+            ->getResultArray()
+        ;
     }
 
     public function getBoutique()
     {
-        $result = $this->db->table('boutique')->select('nom, url, description, tranchePrix')->get()->getResultArray();
-
-        return $result;
+        return $this->db->table('boutique')->select('nom, url, description, tranchePrix')->get()->getResultArray();
     }
 
     public function getLiensAutres()
@@ -197,7 +177,8 @@ class Donnees extends Model
             ->where(['a.statut' => 'publie', 'a.type' => 'actualite'])
             ->orderBy('a.created_at', 'DESC')
             ->get()
-            ->getResultArray();
+            ->getResultArray()
+        ;
 
         $today = date('Y-m-d');
         $actusFiltres = [];
@@ -210,8 +191,10 @@ class Donnees extends Model
                         ->db
                         ->table('actualites')
                         ->where('id', $actu['id'])
-                        ->update(['statut' => 'archive']);
+                        ->update(['statut' => 'archive'])
+                    ;
                 }
+
                 continue;
             }
             $actusFiltres[] = $actu;
@@ -224,7 +207,7 @@ class Donnees extends Model
 
     public function getUneActualites($slug)
     {
-        $result = $this
+        return $this
             ->db
             ->table('actualites a')
             ->join('images i', 'a.image_id = i.id', 'left')
@@ -232,8 +215,21 @@ class Donnees extends Model
             ->join('membres m', 'a.id_auteur = m.id')
             ->where(['a.statut' => 'publie', 'a.slug' => $slug])
             ->get()
-            ->getResultArray();
+            ->getResultArray()
+        ;
+    }
 
-        return $result;
+    private function getMembresParFonction(string $titreFonction)
+    {
+        return $this
+            ->db
+            ->table('membres m')
+            ->join('images i', 'm.image_id = i.id', 'left')
+            ->select('m.nom, i.path as photo')
+            ->join('membre_fonction mf', 'm.id = mf.membre_id')
+            ->join('fonctions f', 'mf.fonction_id = f.id')
+            ->where('f.titre', $titreFonction)
+            ->get()
+            ->getResultArray();
     }
 }

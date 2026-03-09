@@ -16,12 +16,11 @@ namespace CodeIgniter\CLI;
 use CodeIgniter\CodeIgniter;
 use Config\App;
 use Config\Services;
-use Exception;
 
 /**
- * Console
+ * Console.
  *
- * @see \CodeIgniter\CLI\ConsoleTest
+ * @see ConsoleTest
  */
 class Console
 {
@@ -30,7 +29,7 @@ class Console
      *
      * @return int|void Exit code
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function run()
     {
@@ -40,8 +39,8 @@ class Console
         // Load Routes
         service('routes')->loadRoutes();
 
-        $params  = array_merge(CLI::getSegments(), CLI::getOptions());
-        $params  = $this->parseParamsForHelpOption($params);
+        $params = array_merge(CLI::getSegments(), CLI::getOptions());
+        $params = $this->parseParamsForHelpOption($params);
         $command = array_shift($params) ?? 'list';
 
         return service('commands')->run($command, $params);
@@ -49,10 +48,8 @@ class Console
 
     /**
      * Displays basic information about the Console.
-     *
-     * @return void
      */
-    public function showHeader(bool $suppress = false)
+    public function showHeader(bool $suppress = false): void
     {
         if ($suppress) {
             return;
@@ -75,14 +72,14 @@ class Console
      * We'll remove that as an option from `$params` and
      * unshift it as argument instead.
      *
-     * @param array<int|string, string|null> $params
+     * @param array<int|string, null|string> $params
      */
     private function parseParamsForHelpOption(array $params): array
     {
         if (array_key_exists('help', $params)) {
             unset($params['help']);
 
-            $params = $params === [] ? ['list'] : $params;
+            $params = [] === $params ? ['list'] : $params;
             array_unshift($params, 'help');
         }
 

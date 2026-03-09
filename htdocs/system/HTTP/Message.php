@@ -16,23 +16,23 @@ namespace CodeIgniter\HTTP;
 use CodeIgniter\Exceptions\InvalidArgumentException;
 
 /**
- * An HTTP message
+ * An HTTP message.
  *
- * @see \CodeIgniter\HTTP\MessageTest
+ * @see MessageTest
  */
 class Message implements MessageInterface
 {
     use MessageTrait;
 
     /**
-     * Protocol version
+     * Protocol version.
      *
      * @var string
      */
     protected $protocolVersion;
 
     /**
-     * List of valid protocol versions
+     * List of valid protocol versions.
      *
      * @var array
      */
@@ -44,16 +44,16 @@ class Message implements MessageInterface
     ];
 
     /**
-     * Message body
+     * Message body.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $body;
 
     /**
      * Returns the Message's body.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getBody()
     {
@@ -80,7 +80,7 @@ class Message implements MessageInterface
      * Returns a single header object. If multiple headers with the same
      * name exist, then will return an array of header objects.
      *
-     * @return array|Header|null
+     * @return null|array|Header
      *
      * @deprecated Use Message::header() to make room for PSR-7
      *
@@ -118,14 +118,14 @@ class Message implements MessageInterface
     {
         if ($this->hasMultipleHeaders($name)) {
             throw new InvalidArgumentException(
-                'The header "' . $name . '" already has multiple headers.'
-                . ' You cannot use getHeaderLine().',
+                'The header "'.$name.'" already has multiple headers.'
+                .' You cannot use getHeaderLine().',
             );
         }
 
         $origName = $this->getHeaderName($name);
 
-        if (! array_key_exists($origName, $this->headers)) {
+        if (!array_key_exists($origName, $this->headers)) {
             return '';
         }
 

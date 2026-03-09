@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace CodeIgniter\View;
 
-use NumberFormatter;
-
 /**
- * View filters
+ * View filters.
  */
 class Filters
 {
@@ -31,15 +29,15 @@ class Filters
     /**
      * Formats a date into the given $format.
      *
-     * @param int|string|null $value
+     * @param null|int|string $value
      */
     public static function date($value, string $format): string
     {
-        if (is_string($value) && ! is_numeric($value)) {
+        if (is_string($value) && !is_numeric($value)) {
             $value = strtotime($value);
         }
 
-        if ($value !== null) {
+        if (null !== $value) {
             $value = (int) $value;
         }
 
@@ -48,12 +46,12 @@ class Filters
 
     /**
      * Given a string or DateTime object, will return the date modified
-     * by the given value. Returns the value as a unix timestamp
+     * by the given value. Returns the value as a unix timestamp.
      *
      * Example:
      *      my_date|date_modify(+1 day)
      *
-     * @param int|string|null $value
+     * @param null|int|string $value
      *
      * @return false|int
      */
@@ -67,7 +65,7 @@ class Filters
     /**
      * Returns the given default value if $value is empty or undefined.
      *
-     * @param bool|float|int|list<string>|object|resource|string|null $value
+     * @param null|bool|float|int|list<string>|object|resource|string $value
      */
     public static function default($value, string $default): string
     {
@@ -77,7 +75,8 @@ class Filters
     /**
      * Escapes the given value with our `esc()` helper function.
      *
-     * @param         string                               $value
+     * @param string $value
+     *
      * @phpstan-param 'html'|'js'|'css'|'url'|'attr'|'raw' $context
      */
     public static function esc($value, string $context = 'html'): string
@@ -152,13 +151,13 @@ class Filters
         helper('number');
 
         $types = [
-            'decimal'    => NumberFormatter::DECIMAL,
-            'currency'   => NumberFormatter::CURRENCY,
-            'percent'    => NumberFormatter::PERCENT,
-            'scientific' => NumberFormatter::SCIENTIFIC,
-            'spellout'   => NumberFormatter::SPELLOUT,
-            'ordinal'    => NumberFormatter::ORDINAL,
-            'duration'   => NumberFormatter::DURATION,
+            'decimal' => \NumberFormatter::DECIMAL,
+            'currency' => \NumberFormatter::CURRENCY,
+            'percent' => \NumberFormatter::PERCENT,
+            'scientific' => \NumberFormatter::SCIENTIFIC,
+            'spellout' => \NumberFormatter::SPELLOUT,
+            'ordinal' => \NumberFormatter::ORDINAL,
+            'duration' => \NumberFormatter::DURATION,
         ];
 
         return format_number((float) $value, $precision, $locale, ['type' => $types[$type]]);
@@ -177,7 +176,7 @@ class Filters
         $fraction ??= 0;
 
         $options = [
-            'type'     => NumberFormatter::CURRENCY,
+            'type' => \NumberFormatter::CURRENCY,
             'currency' => $currency,
             'fraction' => $fraction,
         ];
@@ -208,7 +207,7 @@ class Filters
     }
 
     /**
-     * Rounds a given $value in one of 3 ways;
+     * Rounds a given $value in one of 3 ways;.
      *
      *  - common    Normal rounding
      *  - ceil      always rounds up
@@ -221,8 +220,8 @@ class Filters
     public static function round(string $value, $precision = 2, string $type = 'common')
     {
         // In case that $precision is a type like `{ value1|round(ceil) }`
-        if (! is_numeric($precision)) {
-            $type      = $precision;
+        if (!is_numeric($precision)) {
+            $type = $precision;
             $precision = 2;
         } else {
             $precision = (int) $precision;
@@ -230,8 +229,8 @@ class Filters
 
         return match ($type) {
             'common' => round((float) $value, $precision),
-            'ceil'   => ceil((float) $value),
-            'floor'  => floor((float) $value),
+            'ceil' => ceil((float) $value),
+            'floor' => floor((float) $value),
             // Still here, just return the value.
             default => $value,
         };

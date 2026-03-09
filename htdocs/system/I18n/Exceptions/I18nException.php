@@ -16,7 +16,7 @@ namespace CodeIgniter\I18n\Exceptions;
 use CodeIgniter\Exceptions\FrameworkException;
 
 /**
- * I18nException
+ * I18nException.
  */
 class I18nException extends FrameworkException
 {

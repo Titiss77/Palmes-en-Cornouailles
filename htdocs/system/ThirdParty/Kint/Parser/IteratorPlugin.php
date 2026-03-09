@@ -29,8 +29,6 @@ namespace Kint\Parser;
 
 use Dom\NamedNodeMap;
 use Dom\NodeList;
-use DOMNamedNodeMap;
-use DOMNodeList;
 use Kint\Value\AbstractValue;
 use Kint\Value\ArrayValue;
 use Kint\Value\Context\BaseContext;
@@ -38,12 +36,7 @@ use Kint\Value\InstanceValue;
 use Kint\Value\Representation\ContainerRepresentation;
 use Kint\Value\Representation\ValueRepresentation;
 use Kint\Value\UninitializedValue;
-use mysqli_result;
 use PDOStatement;
-use SimpleXMLElement;
-use SplFileObject;
-use Throwable;
-use Traversable;
 
 class IteratorPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -59,12 +52,12 @@ class IteratorPlugin extends AbstractPlugin implements PluginCompleteInterface
     public static array $blacklist = [
         NamedNodeMap::class,
         NodeList::class,
-        DOMNamedNodeMap::class,
-        DOMNodeList::class,
-        mysqli_result::class,
-        PDOStatement::class,
-        SimpleXMLElement::class,
-        SplFileObject::class,
+        \DOMNamedNodeMap::class,
+        \DOMNodeList::class,
+        \mysqli_result::class,
+        \PDOStatement::class,
+        \SimpleXMLElement::class,
+        \SplFileObject::class,
     ];
 
     public function getTypes(): array
@@ -79,14 +72,14 @@ class IteratorPlugin extends AbstractPlugin implements PluginCompleteInterface
 
     public function parseComplete(&$var, AbstractValue $v, int $trigger): AbstractValue
     {
-        if (!$var instanceof Traversable || !$v instanceof InstanceValue || $v->getRepresentation('iterator')) {
+        if (!$var instanceof \Traversable || !$v instanceof InstanceValue || $v->getRepresentation('iterator')) {
             return $v;
         }
 
         $c = $v->getContext();
 
         foreach (self::$blacklist as $class) {
-            /**
+            /*
              * @psalm-suppress RedundantCondition
              * Psalm bug #11076
              */
@@ -108,7 +101,7 @@ class IteratorPlugin extends AbstractPlugin implements PluginCompleteInterface
 
         try {
             $data = \iterator_to_array($var, false);
-        } catch (Throwable $t) {
+        } catch (\Throwable $t) {
             return $v;
         }
 

@@ -17,19 +17,19 @@ use CodeIgniter\Exceptions\InvalidArgumentException;
 use CodeIgniter\Files\Exceptions\FileException;
 use CodeIgniter\Files\Exceptions\FileNotFoundException;
 use Countable;
-use Generator;
 use IteratorAggregate;
 
 /**
- * File Collection Class
+ * File Collection Class.
  *
  * Representation for a group of files, with utilities for locating,
  * filtering, and ordering them.
  *
  * @template-implements IteratorAggregate<int, File>
- * @see \CodeIgniter\Files\FileCollectionTest
+ *
+ * @see FileCollectionTest
  */
-class FileCollection implements Countable, IteratorAggregate
+class FileCollection implements \Countable, \IteratorAggregate
 {
     /**
      * The current list of file paths.
@@ -37,79 +37,6 @@ class FileCollection implements Countable, IteratorAggregate
      * @var list<string>
      */
     protected $files = [];
-
-    // --------------------------------------------------------------------
-    // Support Methods
-    // --------------------------------------------------------------------
-
-    /**
-     * Resolves a full path and verifies it is an actual directory.
-     *
-     * @throws FileException
-     */
-    final protected static function resolveDirectory(string $directory): string
-    {
-        if (! is_dir($directory = set_realpath($directory))) {
-            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
-
-            throw FileException::forExpectedDirectory($caller['function']);
-        }
-
-        return $directory;
-    }
-
-    /**
-     * Resolves a full path and verifies it is an actual file.
-     *
-     * @throws FileException
-     */
-    final protected static function resolveFile(string $file): string
-    {
-        if (! is_file($file = set_realpath($file))) {
-            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
-
-            throw FileException::forExpectedFile($caller['function']);
-        }
-
-        return $file;
-    }
-
-    /**
-     * Removes files that are not part of the given directory (recursive).
-     *
-     * @param list<string> $files
-     *
-     * @return list<string>
-     */
-    final protected static function filterFiles(array $files, string $directory): array
-    {
-        $directory = self::resolveDirectory($directory);
-
-        return array_filter($files, static fn (string $value): bool => str_starts_with($value, $directory));
-    }
-
-    /**
-     * Returns any files whose `basename` matches the given pattern.
-     *
-     * @param list<string> $files
-     * @param string       $pattern Regex or pseudo-regex string
-     *
-     * @return list<string>
-     */
-    final protected static function matchFiles(array $files, string $pattern): array
-    {
-        // Convert pseudo-regex into their true form
-        if (@preg_match($pattern, '') === false) {
-            $pattern = str_replace(
-                ['#', '.', '*', '?'],
-                ['\#', '\.', '.*', '.'],
-                $pattern,
-            );
-            $pattern = "#\\A{$pattern}\\z#";
-        }
-
-        return array_filter($files, static fn ($value): bool => (bool) preg_match($pattern, basename($value)));
-    }
 
     // --------------------------------------------------------------------
     // Class Core
@@ -125,14 +52,6 @@ class FileCollection implements Countable, IteratorAggregate
         helper(['filesystem']);
 
         $this->add($files)->define();
-    }
-
-    /**
-     * Applies any initial inputs after the constructor.
-     * This method is a stub to be implemented by child classes.
-     */
-    protected function define(): void
-    {
     }
 
     /**
@@ -175,7 +94,7 @@ class FileCollection implements Countable, IteratorAggregate
         $paths = (array) $paths;
 
         foreach ($paths as $path) {
-            if (! is_string($path)) {
+            if (!is_string($path)) {
                 throw new InvalidArgumentException('FileCollection paths must be strings.');
             }
 
@@ -283,9 +202,9 @@ class FileCollection implements Countable, IteratorAggregate
         // Map the directory to depth 2 to so directories become arrays
         foreach (directory_map($directory, 2, true) as $key => $path) {
             if (is_string($path)) {
-                $this->addFile($directory . $path);
+                $this->addFile($directory.$path);
             } elseif ($recursive && is_array($path)) {
-                $this->addDirectory($directory . $key, true);
+                $this->addDirectory($directory.$key, true);
             }
         }
 
@@ -301,18 +220,18 @@ class FileCollection implements Countable, IteratorAggregate
      * (within the optional scope).
      *
      * @param string      $pattern Regex or pseudo-regex string
-     * @param string|null $scope   The directory to limit the scope
+     * @param null|string $scope   The directory to limit the scope
      *
      * @return $this
      */
     public function removePattern(string $pattern, ?string $scope = null)
     {
-        if ($pattern === '') {
+        if ('' === $pattern) {
             return $this;
         }
 
         // Start with all files or those in scope
-        $files = $scope === null ? $this->files : self::filterFiles($this->files, $scope);
+        $files = null === $scope ? $this->files : self::filterFiles($this->files, $scope);
 
         // Remove any files that match the pattern
         return $this->removeFiles(self::matchFiles($files, $pattern));
@@ -323,18 +242,18 @@ class FileCollection implements Countable, IteratorAggregate
      * (within the optional scope).
      *
      * @param string      $pattern Regex or pseudo-regex string
-     * @param string|null $scope   A directory to limit the scope
+     * @param null|string $scope   A directory to limit the scope
      *
      * @return $this
      */
     public function retainPattern(string $pattern, ?string $scope = null)
     {
-        if ($pattern === '') {
+        if ('' === $pattern) {
             return $this;
         }
 
         // Start with all files or those in scope
-        $files = $scope === null ? $this->files : self::filterFiles($this->files, $scope);
+        $files = null === $scope ? $this->files : self::filterFiles($this->files, $scope);
 
         // Matches the pattern within the scoped files and remove their inverse.
         return $this->removeFiles(array_diff($files, self::matchFiles($files, $pattern)));
@@ -345,28 +264,28 @@ class FileCollection implements Countable, IteratorAggregate
      * (within the optional scope).
      *
      * @param list<string> $patterns Array of regex or pseudo-regex strings
-     * @param string|null  $scope    A directory to limit the scope
+     * @param null|string  $scope    A directory to limit the scope
      *
      * @return $this
      */
     public function retainMultiplePatterns(array $patterns, ?string $scope = null)
     {
-        if ($patterns === []) {
+        if ([] === $patterns) {
             return $this;
         }
 
-        if (count($patterns) === 1 && $patterns[0] === '') {
+        if (1 === count($patterns) && '' === $patterns[0]) {
             return $this;
         }
 
         // Start with all files or those in scope
-        $files = $scope === null ? $this->files : self::filterFiles($this->files, $scope);
+        $files = null === $scope ? $this->files : self::filterFiles($this->files, $scope);
 
         // Add files to retain to array
         $filesToRetain = [];
 
         foreach ($patterns as $pattern) {
-            if ($pattern === '') {
+            if ('' === $pattern) {
                 continue;
             }
 
@@ -395,14 +314,93 @@ class FileCollection implements Countable, IteratorAggregate
      * Yields as an Iterator for the current files.
      * Fulfills IteratorAggregate.
      *
-     * @return Generator<File>
+     * @return \Generator<File>
      *
      * @throws FileNotFoundException
      */
-    public function getIterator(): Generator
+    public function getIterator(): \Generator
     {
         foreach ($this->get() as $file) {
             yield new File($file, true);
         }
     }
+
+    // --------------------------------------------------------------------
+    // Support Methods
+    // --------------------------------------------------------------------
+
+    /**
+     * Resolves a full path and verifies it is an actual directory.
+     *
+     * @throws FileException
+     */
+    final protected static function resolveDirectory(string $directory): string
+    {
+        if (!is_dir($directory = set_realpath($directory))) {
+            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
+
+            throw FileException::forExpectedDirectory($caller['function']);
+        }
+
+        return $directory;
+    }
+
+    /**
+     * Resolves a full path and verifies it is an actual file.
+     *
+     * @throws FileException
+     */
+    final protected static function resolveFile(string $file): string
+    {
+        if (!is_file($file = set_realpath($file))) {
+            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
+
+            throw FileException::forExpectedFile($caller['function']);
+        }
+
+        return $file;
+    }
+
+    /**
+     * Removes files that are not part of the given directory (recursive).
+     *
+     * @param list<string> $files
+     *
+     * @return list<string>
+     */
+    final protected static function filterFiles(array $files, string $directory): array
+    {
+        $directory = self::resolveDirectory($directory);
+
+        return array_filter($files, static fn (string $value): bool => str_starts_with($value, $directory));
+    }
+
+    /**
+     * Returns any files whose `basename` matches the given pattern.
+     *
+     * @param list<string> $files
+     * @param string       $pattern Regex or pseudo-regex string
+     *
+     * @return list<string>
+     */
+    final protected static function matchFiles(array $files, string $pattern): array
+    {
+        // Convert pseudo-regex into their true form
+        if (false === @preg_match($pattern, '')) {
+            $pattern = str_replace(
+                ['#', '.', '*', '?'],
+                ['\#', '\.', '.*', '.'],
+                $pattern,
+            );
+            $pattern = "#\\A{$pattern}\\z#";
+        }
+
+        return array_filter($files, static fn ($value): bool => (bool) preg_match($pattern, basename($value)));
+    }
+
+    /**
+     * Applies any initial inputs after the constructor.
+     * This method is a stub to be implemented by child classes.
+     */
+    protected function define(): void {}
 }

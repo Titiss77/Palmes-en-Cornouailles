@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\DataCaster\Cast;
 
 /**
- * Class CSVCast
+ * Class CSVCast.
  *
  * (PHP) [array --> string] --> (DB driver) --> (DB column) string
  *       [      <-- string] <-- (DB driver) <-- (DB column) string
@@ -26,7 +26,7 @@ class CSVCast extends BaseCast
         array $params = [],
         ?object $helper = null,
     ): array {
-        if (! is_string($value)) {
+        if (!is_string($value)) {
             self::invalidTypeValueError($value);
         }
 
@@ -38,7 +38,7 @@ class CSVCast extends BaseCast
         array $params = [],
         ?object $helper = null,
     ): string {
-        if (! is_array($value)) {
+        if (!is_array($value)) {
             self::invalidTypeValueError($value);
         }
 

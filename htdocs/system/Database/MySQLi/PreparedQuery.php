@@ -17,14 +17,11 @@ use CodeIgniter\Database\BasePreparedQuery;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Exceptions\BadMethodCallException;
 use mysqli;
-use mysqli_result;
-use mysqli_sql_exception;
-use mysqli_stmt;
 
 /**
- * Prepared query for MySQLi
+ * Prepared query for MySQLi.
  *
- * @extends BasePreparedQuery<mysqli, mysqli_stmt, mysqli_result>
+ * @extends BasePreparedQuery<\mysqli, \mysqli_stmt, \mysqli_result>
  */
 class PreparedQuery extends BasePreparedQuery
 {
@@ -44,12 +41,12 @@ class PreparedQuery extends BasePreparedQuery
         // with terminating semicolons.
         $sql = rtrim($sql, ';');
 
-        if (! $this->statement = $this->db->mysqli->prepare($sql)) {
-            $this->errorCode   = $this->db->mysqli->errno;
+        if (!$this->statement = $this->db->mysqli->prepare($sql)) {
+            $this->errorCode = $this->db->mysqli->errno;
             $this->errorString = $this->db->mysqli->error;
 
             if ($this->db->DBDebug) {
-                throw new DatabaseException($this->errorString . ' code: ' . $this->errorCode);
+                throw new DatabaseException($this->errorString.' code: '.$this->errorCode);
             }
         }
 
@@ -62,12 +59,12 @@ class PreparedQuery extends BasePreparedQuery
      */
     public function _execute(array $data): bool
     {
-        if (! isset($this->statement)) {
+        if (!isset($this->statement)) {
             throw new BadMethodCallException('You must call prepare before trying to execute a prepared statement.');
         }
 
         // First off - bind the parameters
-        $bindTypes  = '';
+        $bindTypes = '';
         $binaryData = [];
 
         // Determine the type string
@@ -94,7 +91,7 @@ class PreparedQuery extends BasePreparedQuery
 
         try {
             return $this->statement->execute();
-        } catch (mysqli_sql_exception $e) {
+        } catch (\mysqli_sql_exception $e) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException($e->getMessage(), $e->getCode(), $e);
             }
@@ -106,7 +103,7 @@ class PreparedQuery extends BasePreparedQuery
     /**
      * Returns the result object for the prepared query or false on failure.
      *
-     * @return false|mysqli_result
+     * @return false|\mysqli_result
      */
     public function _getResult()
     {

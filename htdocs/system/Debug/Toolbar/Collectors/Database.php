@@ -20,7 +20,7 @@ use Config\Toolbar;
 /**
  * Collector for the Database tab of the Debug Toolbar.
  *
- * @see \CodeIgniter\Debug\Toolbar\Collectors\DatabaseTest
+ * @see DatabaseTest
  */
 class Database extends BaseCollector
 {
@@ -68,7 +68,7 @@ class Database extends BaseCollector
     protected static $queries = [];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -80,10 +80,8 @@ class Database extends BaseCollector
      * data.
      *
      * @internal
-     *
-     * @return void
      */
-    public static function collect(Query $query)
+    public static function collect(Query $query): void
     {
         $config = config(Toolbar::class);
 
@@ -95,105 +93,73 @@ class Database extends BaseCollector
 
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
-            if (! is_cli()) {
+            if (!is_cli()) {
                 // when called in the browser, the first two trace arrays
                 // are from the DB event trigger, which are unneeded
                 $backtrace = array_slice($backtrace, 2);
             }
 
             static::$queries[] = [
-                'query'     => $query,
-                'string'    => $queryString,
+                'query' => $query,
+                'string' => $queryString,
                 'duplicate' => in_array($queryString, array_column(static::$queries, 'string', null), true),
-                'trace'     => $backtrace,
+                'trace' => $backtrace,
             ];
         }
     }
 
     /**
-     * Returns timeline data formatted for the toolbar.
-     *
-     * @return array The formatted data or an empty array.
-     */
-    protected function formatTimelineData(): array
-    {
-        $data = [];
-
-        foreach ($this->connections as $alias => $connection) {
-            // Connection Time
-            $data[] = [
-                'name'      => 'Connecting to Database: "' . $alias . '"',
-                'component' => 'Database',
-                'start'     => $connection->getConnectStart(),
-                'duration'  => $connection->getConnectDuration(),
-            ];
-        }
-
-        foreach (static::$queries as $query) {
-            $data[] = [
-                'name'      => 'Query',
-                'component' => 'Database',
-                'start'     => $query['query']->getStartTime(true),
-                'duration'  => $query['query']->getDuration(),
-                'query'     => $query['query']->debugToolbarDisplay(),
-            ];
-        }
-
-        return $data;
-    }
-
-    /**
-     * Returns the data of this collector to be formatted in the toolbar
+     * Returns the data of this collector to be formatted in the toolbar.
      */
     public function display(): array
     {
-        $data            = [];
+        $data = [];
         $data['queries'] = array_map(static function (array $query): array {
-            $isDuplicate = $query['duplicate'] === true;
+            $isDuplicate = true === $query['duplicate'];
 
             $firstNonSystemLine = '';
 
             foreach ($query['trace'] as $index => &$line) {
                 // simplify file and line
                 if (isset($line['file'])) {
-                    $line['file'] = clean_path($line['file']) . ':' . $line['line'];
+                    $line['file'] = clean_path($line['file']).':'.$line['line'];
                     unset($line['line']);
                 } else {
                     $line['file'] = '[internal function]';
                 }
 
                 // find the first trace line that does not originate from `system/`
-                if ($firstNonSystemLine === '' && ! str_contains($line['file'], 'SYSTEMPATH')) {
+                if ('' === $firstNonSystemLine && !str_contains($line['file'], 'SYSTEMPATH')) {
                     $firstNonSystemLine = $line['file'];
                 }
 
                 // simplify function call
                 if (isset($line['class'])) {
-                    $line['function'] = $line['class'] . $line['type'] . $line['function'];
+                    $line['function'] = $line['class'].$line['type'].$line['function'];
                     unset($line['class'], $line['type']);
                 }
 
-                if (strrpos($line['function'], '{closure}') === false) {
+                if (false === strrpos($line['function'], '{closure}')) {
                     $line['function'] .= '()';
                 }
 
-                $line['function'] = str_repeat(chr(0xC2) . chr(0xA0), 8) . $line['function'];
+                $line['function'] = str_repeat(chr(0xC2).chr(0xA0), 8).$line['function'];
 
                 // add index numbering padded with nonbreaking space
                 $indexPadded = str_pad(sprintf('%d', $index + 1), 3, ' ', STR_PAD_LEFT);
-                $indexPadded = preg_replace('/\s/', chr(0xC2) . chr(0xA0), $indexPadded);
+                $indexPadded = preg_replace('/\s/', chr(0xC2).chr(0xA0), $indexPadded);
 
-                $line['index'] = $indexPadded . str_repeat(chr(0xC2) . chr(0xA0), 4);
+                $line['index'] = $indexPadded.str_repeat(chr(0xC2).chr(0xA0), 4);
             }
 
             return [
-                'hover'      => $isDuplicate ? 'This query was called more than once.' : '',
-                'class'      => $isDuplicate ? 'duplicate' : '',
-                'duration'   => ((float) $query['query']->getDuration(5) * 1000) . ' ms',
-                'sql'        => $query['query']->debugToolbarDisplay(),
-                'trace'      => $query['trace'],
+                'hover' => $isDuplicate ? 'This query was called more than once.' : '',
+                'class' => $isDuplicate ? 'duplicate' : '',
+                'duration' => ((float) $query['query']->getDuration(5) * 1000).' ms',
+                'sql' => $query['query']->debugToolbarDisplay(),
+                'trace' => $query['trace'],
                 'trace-file' => $firstNonSystemLine,
-                'qid'        => md5($query['query'] . Time::now()->format('0.u00 U')),
+                'qid' => md5($query['query'].Time::now()->format('0.u00 U')),
             ];
         }, static::$queries);
 
@@ -211,14 +177,14 @@ class Database extends BaseCollector
     /**
      * Information to be displayed next to the title.
      *
-     * @return string The number of queries (in parentheses) or an empty string.
+     * @return string the number of queries (in parentheses) or an empty string
      */
     public function getTitleDetails(): string
     {
         $this->getConnections();
 
-        $queryCount      = count(static::$queries);
-        $uniqueCount     = count(array_filter(static::$queries, static fn ($query): bool => $query['duplicate'] === false));
+        $queryCount = count(static::$queries);
+        $uniqueCount = count(array_filter(static::$queries, static fn ($query): bool => false === $query['duplicate']));
         $connectionCount = count($this->connections);
 
         return sprintf(
@@ -237,7 +203,7 @@ class Database extends BaseCollector
      */
     public function isEmpty(): bool
     {
-        return static::$queries === [];
+        return [] === static::$queries;
     }
 
     /**
@@ -251,7 +217,39 @@ class Database extends BaseCollector
     }
 
     /**
-     * Gets the connections from the database config
+     * Returns timeline data formatted for the toolbar.
+     *
+     * @return array the formatted data or an empty array
+     */
+    protected function formatTimelineData(): array
+    {
+        $data = [];
+
+        foreach ($this->connections as $alias => $connection) {
+            // Connection Time
+            $data[] = [
+                'name' => 'Connecting to Database: "'.$alias.'"',
+                'component' => 'Database',
+                'start' => $connection->getConnectStart(),
+                'duration' => $connection->getConnectDuration(),
+            ];
+        }
+
+        foreach (static::$queries as $query) {
+            $data[] = [
+                'name' => 'Query',
+                'component' => 'Database',
+                'start' => $query['query']->getStartTime(true),
+                'duration' => $query['query']->getDuration(),
+                'query' => $query['query']->debugToolbarDisplay(),
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Gets the connections from the database config.
      */
     private function getConnections(): void
     {

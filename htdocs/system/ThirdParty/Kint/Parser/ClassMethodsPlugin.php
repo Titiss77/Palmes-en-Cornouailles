@@ -33,8 +33,6 @@ use Kint\Value\DeclaredCallableBag;
 use Kint\Value\InstanceValue;
 use Kint\Value\MethodValue;
 use Kint\Value\Representation\ContainerRepresentation;
-use ReflectionClass;
-use ReflectionMethod;
 
 class ClassMethodsPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -66,6 +64,8 @@ class ClassMethodsPlugin extends AbstractPlugin implements PluginCompleteInterfa
 
     /**
      * @psalm-template T of AbstractValue
+     *
+     * @param mixed $var
      *
      * @psalm-param mixed $var
      * @psalm-param T $v
@@ -126,7 +126,7 @@ class ClassMethodsPlugin extends AbstractPlugin implements PluginCompleteInterfa
         if (!isset($this->instance_cache[$class])) {
             $methods = [];
 
-            $r = new ReflectionClass($class);
+            $r = new \ReflectionClass($class);
 
             $parent_methods = [];
             if ($parent = \get_parent_class($class)) {
@@ -193,14 +193,14 @@ class ClassMethodsPlugin extends AbstractPlugin implements PluginCompleteInterfa
         if (!isset($this->static_cache[$class])) {
             $methods = [];
 
-            $r = new ReflectionClass($class);
+            $r = new \ReflectionClass($class);
 
             $parent_methods = [];
             if ($parent = \get_parent_class($class)) {
                 $parent_methods = $this->getCachedStaticMethods($parent);
             }
 
-            foreach ($r->getMethods(ReflectionMethod::IS_STATIC) as $mr) {
+            foreach ($r->getMethods(\ReflectionMethod::IS_STATIC) as $mr) {
                 $canon_name = \strtolower($mr->getDeclaringClass()->name.'::'.$mr->name);
 
                 if ($mr->getDeclaringClass()->name === $class) {

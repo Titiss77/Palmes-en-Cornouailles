@@ -19,7 +19,7 @@ use CodeIgniter\View\Table;
 class MockTable extends Table
 {
     /**
-     * Override inaccessible protected method
+     * Override inaccessible protected method.
      *
      * @param string      $method
      * @param list<mixed> $params
@@ -28,10 +28,10 @@ class MockTable extends Table
      */
     public function __call($method, $params)
     {
-        if (is_callable([$this, '_' . $method])) {
-            return call_user_func_array([$this, '_' . $method], $params);
+        if (is_callable([$this, '_'.$method])) {
+            return call_user_func_array([$this, '_'.$method], $params);
         }
 
-        throw new BadMethodCallException('Method ' . $method . ' was not found');
+        throw new BadMethodCallException('Method '.$method.' was not found');
     }
 }

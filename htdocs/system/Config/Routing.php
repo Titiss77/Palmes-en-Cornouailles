@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Config;
 
 /**
- * Routing configuration
+ * Routing configuration.
  */
 class Routing extends BaseConfig
 {
@@ -29,7 +29,7 @@ class Routing extends BaseConfig
      * @var list<string>
      */
     public array $routeFiles = [
-        APPPATH . 'Config/Routes.php',
+        APPPATH.'Config/Routes.php',
     ];
 
     /**
@@ -70,7 +70,7 @@ class Routing extends BaseConfig
 
     /**
      * Sets the class/method that should be called if routing doesn't
-     * find a match. It can be the controller/method name like: Users::index
+     * find a match. It can be the controller/method name like: Users::index.
      *
      * This setting is passed to the Router class and handled there.
      *
@@ -130,7 +130,7 @@ class Routing extends BaseConfig
     /**
      * For Auto Routing (Improved).
      * Whether to translate dashes in URIs for controller/method to CamelCase.
-     * E.g., blog-controller -> BlogController
+     * E.g., blog-controller -> BlogController.
      *
      * If you enable this, $translateURIDashes is ignored.
      *

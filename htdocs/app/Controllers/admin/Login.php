@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Controllers\BaseController;
@@ -21,12 +23,12 @@ class Login extends BaseController
     }
 
     /**
-     * Affiche le formulaire de connexion
+     * Affiche le formulaire de connexion.
      */
     public function index()
     {
         // Si l'admin est déjà connecté, on le redirige directement vers le dashboard
-        if (session()->get('isLoggedIn') && session()->get('role') === 'admin') {
+        if (session()->get('isLoggedIn') && 'admin' === session()->get('role')) {
             return redirect()->to(base_url('admin/dashboard'));
         }
 
@@ -41,7 +43,7 @@ class Login extends BaseController
     }
 
     /**
-     * Gère la tentative d'authentification
+     * Gère la tentative d'authentification.
      */
     public function authenticate()
     {
@@ -58,7 +60,7 @@ class Login extends BaseController
             // 2. Vérification du mot de passe
             if (password_verify($passwordRaw, $passwordEnv)) {
                 // 3. SÉCURITÉ : Vérification du Rôle admin
-                if ($user['role'] !== 'admin') {
+                if ('admin' !== $user['role']) {
                     return redirect()->back()->withInput()->with('error', 'Accès refusé : Droits insuffisants.');
                 }
 
@@ -83,7 +85,7 @@ class Login extends BaseController
     }
 
     /**
-     * Déconnecte l'utilisateur
+     * Déconnecte l'utilisateur.
      */
     public function logout()
     {

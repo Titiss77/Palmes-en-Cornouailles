@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class Membres extends Migration
 {
-    public function up()
+    public function up(): void
     {
         // 1. Table des Membres
         $this->forge->addField([
-            'id'       => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'nom'      => ['type' => 'VARCHAR', 'constraint' => 100],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'nom' => ['type' => 'VARCHAR', 'constraint' => 100],
             'image_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => true],
         ]);
         $this->forge->addPrimaryKey('id');
@@ -20,7 +22,7 @@ class Membres extends Migration
 
         // 2. Table des Fonctions
         $this->forge->addField([
-            'id'    => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'titre' => ['type' => 'VARCHAR', 'constraint' => 100],
         ]);
         $this->forge->addPrimaryKey('id');
@@ -28,16 +30,16 @@ class Membres extends Migration
 
         // 3. Table de liaison
         $this->forge->addField([
-            'membre_id'   => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
+            'membre_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
             'fonction_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
         ]);
-        
+
         $this->forge->addForeignKey('membre_id', 'membres', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('fonction_id', 'fonctions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('membre_fonction');
     }
 
-    public function down()
+    public function down(): void
     {
         $this->forge->dropTable('membre_fonction');
         $this->forge->dropTable('fonctions');

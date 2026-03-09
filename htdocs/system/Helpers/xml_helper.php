@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 // CodeIgniter XML Helpers
 
-if (! function_exists('xml_convert')) {
+if (!function_exists('xml_convert')) {
     /**
-     * Convert Reserved XML characters to Entities
+     * Convert Reserved XML characters to Entities.
      */
     function xml_convert(string $str, bool $protectAll = false): string
     {
@@ -23,10 +23,10 @@ if (! function_exists('xml_convert')) {
 
         // Replace entities to temporary markers so that
         // ampersands won't get messed up
-        $str = preg_replace('/&#(\d+);/', $temp . '\\1;', $str);
+        $str = preg_replace('/&#(\d+);/', $temp.'\1;', $str);
 
         if ($protectAll) {
-            $str = preg_replace('/&(\w+);/', $temp . '\\1;', $str);
+            $str = preg_replace('/&(\w+);/', $temp.'\1;', $str);
         }
 
         $original = [
@@ -50,10 +50,10 @@ if (! function_exists('xml_convert')) {
         $str = str_replace($original, $replacement, $str);
 
         // Decode the temp markers back to entities
-        $str = preg_replace('/' . $temp . '(\d+);/', '&#\\1;', $str);
+        $str = preg_replace('/'.$temp.'(\d+);/', '&#\1;', $str);
 
         if ($protectAll) {
-            return preg_replace('/' . $temp . '(\w+);/', '&\\1;', $str);
+            return preg_replace('/'.$temp.'(\w+);/', '&\1;', $str);
         }
 
         return $str;

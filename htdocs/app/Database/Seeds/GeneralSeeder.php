@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
 class GeneralSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         $data = [
             'nomClub' => 'Palmes en Cornouailles',
             'image_id' => $this->getImageId('favicon.ico'),
             'image_groupe_id' => $this->getImageId('general/groupe.jpg'),
             'description' => "Nous sommes ravis de vous accueillir sur le site officiel de notre club de natation basé à Quimper. Que vous soyez un nageur débutant ou expérimenté, notre club offre une variété de disciplines et d'activités pour tous les âges et niveaux.",
-            'mailClub' => getenv('CLUB_EMAIL') ?: NULL,
-            'adresse' => getenv('CLUB_ADRESSE') ?: NULL,
+            'mailClub' => getenv('CLUB_EMAIL') ?: null,
+            'adresse' => getenv('CLUB_ADRESSE') ?: null,
             'philosophie' => 'La nage avec palmes apporte gainage et sensation de glisse incomparable.',
             'nombreNageurs' => 109,
             'nombreHommes' => 24,
@@ -31,12 +33,15 @@ class GeneralSeeder extends Seeder
 
     private function getImageId($path)
     {
-        if (empty($path))
+        if (empty($path)) {
             return null;
+        }
         $existing = $this->db->table('images')->where('path', $path)->get()->getRow();
-        if ($existing)
+        if ($existing) {
             return $existing->id;
+        }
         $this->db->table('images')->insert(['path' => $path]);
+
         return $this->db->insertID();
     }
 }

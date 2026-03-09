@@ -87,13 +87,13 @@ trait MessageTrait
     public function populateHeaders(): void
     {
         $contentType = $_SERVER['CONTENT_TYPE'] ?? getenv('CONTENT_TYPE');
-        if (! empty($contentType)) {
+        if (!empty($contentType)) {
             $this->setHeader('Content-Type', $contentType);
         }
         unset($contentType);
 
         foreach (array_keys($_SERVER) as $key) {
-            if (sscanf($key, 'HTTP_%s', $header) === 1) {
+            if (1 === sscanf($key, 'HTTP_%s', $header)) {
                 // take SOME_HEADER and turn it into Some-Header
                 $header = str_replace('_', ' ', strtolower($header));
                 $header = str_replace(' ', '-', ucwords($header));
@@ -129,7 +129,7 @@ trait MessageTrait
      *
      * @param string $name
      *
-     * @return Header|list<Header>|null
+     * @return null|Header|list<Header>
      */
     public function header($name)
     {
@@ -141,7 +141,7 @@ trait MessageTrait
     /**
      * Sets a header and it's value.
      *
-     * @param array|string|null $value
+     * @param null|array|string $value
      *
      * @return $this
      */
@@ -155,7 +155,7 @@ trait MessageTrait
             isset($this->headers[$origName])
             && is_array($this->headers[$origName]->getValue())
         ) {
-            if (! is_array($value)) {
+            if (!is_array($value)) {
                 $value = [$value];
             }
 
@@ -163,28 +163,11 @@ trait MessageTrait
                 $this->appendHeader($origName, $v);
             }
         } else {
-            $this->headers[$origName]               = new Header($origName, $value);
+            $this->headers[$origName] = new Header($origName, $value);
             $this->headerMap[strtolower($origName)] = $origName;
         }
 
         return $this;
-    }
-
-    private function hasMultipleHeaders(string $name): bool
-    {
-        $origName = $this->getHeaderName($name);
-
-        return isset($this->headers[$origName]) && is_array($this->headers[$origName]);
-    }
-
-    private function checkMultipleHeaders(string $name): void
-    {
-        if ($this->hasMultipleHeaders($name)) {
-            throw new InvalidArgumentException(
-                'The header "' . $name . '" already has multiple headers.'
-                . ' You cannot change them. If you really need to change, remove the header first.',
-            );
-        }
     }
 
     /**
@@ -202,7 +185,7 @@ trait MessageTrait
 
     /**
      * Adds an additional header value to any headers that accept
-     * multiple values (i.e. are an array or implement ArrayAccess)
+     * multiple values (i.e. are an array or implement ArrayAccess).
      *
      * @return $this
      */
@@ -230,13 +213,13 @@ trait MessageTrait
     {
         $origName = $this->getHeaderName($name);
 
-        if (! isset($this->headers[$origName])) {
+        if (!isset($this->headers[$origName])) {
             $this->setHeader($name, $value);
 
             return $this;
         }
 
-        if (! $this->hasMultipleHeaders($name) && isset($this->headers[$origName])) {
+        if (!$this->hasMultipleHeaders($name) && isset($this->headers[$origName])) {
             $this->headers[$origName] = [$this->headers[$origName]];
         }
 
@@ -248,7 +231,7 @@ trait MessageTrait
 
     /**
      * Adds an additional header value to any headers that accept
-     * multiple values (i.e. are an array or implement ArrayAccess)
+     * multiple values (i.e. are an array or implement ArrayAccess).
      *
      * @return $this
      */
@@ -264,15 +247,6 @@ trait MessageTrait
     }
 
     /**
-     * Takes a header name in any case, and returns the
-     * normal-case version of the header.
-     */
-    protected function getHeaderName(string $name): string
-    {
-        return $this->headerMap[strtolower($name)] ?? $name;
-    }
-
-    /**
      * Sets the HTTP protocol version.
      *
      * @return $this
@@ -281,19 +255,45 @@ trait MessageTrait
      */
     public function setProtocolVersion(string $version): self
     {
-        if (! is_numeric($version)) {
+        if (!is_numeric($version)) {
             $version = substr($version, strpos($version, '/') + 1);
         }
 
         // Make sure that version is in the correct format
         $version = number_format((float) $version, 1);
 
-        if (! in_array($version, $this->validProtocolVersions, true)) {
+        if (!in_array($version, $this->validProtocolVersions, true)) {
             throw HTTPException::forInvalidHTTPProtocol($version);
         }
 
         $this->protocolVersion = $version;
 
         return $this;
+    }
+
+    /**
+     * Takes a header name in any case, and returns the
+     * normal-case version of the header.
+     */
+    protected function getHeaderName(string $name): string
+    {
+        return $this->headerMap[strtolower($name)] ?? $name;
+    }
+
+    private function hasMultipleHeaders(string $name): bool
+    {
+        $origName = $this->getHeaderName($name);
+
+        return isset($this->headers[$origName]) && is_array($this->headers[$origName]);
+    }
+
+    private function checkMultipleHeaders(string $name): void
+    {
+        if ($this->hasMultipleHeaders($name)) {
+            throw new InvalidArgumentException(
+                'The header "'.$name.'" already has multiple headers.'
+                .' You cannot change them. If you really need to change, remove the header first.',
+            );
+        }
     }
 }

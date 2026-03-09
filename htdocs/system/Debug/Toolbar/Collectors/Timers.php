@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Debug\Toolbar\Collectors;
 
 /**
- * Timers collector
+ * Timers collector.
  */
 class Timers extends BaseCollector
 {
@@ -51,18 +51,18 @@ class Timers extends BaseCollector
         $data = [];
 
         $benchmark = service('timer', true);
-        $rows      = $benchmark->getTimers(6);
+        $rows = $benchmark->getTimers(6);
 
         foreach ($rows as $name => $info) {
-            if ($name === 'total_execution') {
+            if ('total_execution' === $name) {
                 continue;
             }
 
             $data[] = [
-                'name'      => ucwords(str_replace('_', ' ', $name)),
+                'name' => ucwords(str_replace('_', ' ', $name)),
                 'component' => 'Timer',
-                'start'     => $info['start'],
-                'duration'  => $info['end'] - $info['start'],
+                'start' => $info['start'],
+                'duration' => $info['end'] - $info['start'],
             ];
         }
 

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Config;
 
 /**
- * Publisher Configuration
+ * Publisher Configuration.
  *
  * Defines basic security restrictions for the Publisher class
  * to prevent abuse by injecting malicious files into a project.
@@ -32,13 +32,11 @@ class Publisher extends BaseConfig
      */
     public $restrictions = [
         ROOTPATH => '*',
-        FCPATH   => '#\.(?css|js|map|htm?|xml|json|webmanifest|tff|eot|woff?|gif|jpe?g|tiff?|png|webp|bmp|ico|svg)$#i',
+        FCPATH => '#\.(?css|js|map|htm?|xml|json|webmanifest|tff|eot|woff?|gif|jpe?g|tiff?|png|webp|bmp|ico|svg)$#i',
     ];
 
     /**
      * Disables Registrars to prevent modules from altering the restrictions.
      */
-    final protected function registerProperties(): void
-    {
-    }
+    final protected function registerProperties(): void {}
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -16,11 +18,9 @@ use CodeIgniter\Exceptions\ConfigException;
 use CodeIgniter\Exceptions\RuntimeException;
 use Config\Encryption;
 use Config\Modules;
-use ReflectionClass;
-use ReflectionException;
 
 /**
- * Class BaseConfig
+ * Class BaseConfig.
  *
  * Not intended to be used on its own, this class will attempt to
  * automatically populate the child class' properties with values
@@ -29,7 +29,8 @@ use ReflectionException;
  * These can be set within the .env file.
  *
  * @phpstan-consistent-constructor
- * @see \CodeIgniter\Config\BaseConfigTest
+ *
+ * @see BaseConfigTest
  */
 class BaseConfig
 {
@@ -66,14 +67,50 @@ class BaseConfig
     /**
      * The modules configuration.
      *
-     * @var Modules|null
+     * @var null|Modules
      */
     protected static $moduleConfig;
+
+    /**
+     * Will attempt to get environment variables with names
+     * that match the properties of the child class.
+     *
+     * The "shortPrefix" is the lowercase-only config class name.
+     */
+    public function __construct()
+    {
+        static::$moduleConfig ??= new Modules();
+
+        if (!static::$override) {
+            return;
+        }
+
+        $this->registerProperties();
+
+        $properties = array_keys(get_object_vars($this));
+        $prefix = static::class;
+        $slashAt = strrpos($prefix, '\\');
+        $shortPrefix = strtolower(substr($prefix, false === $slashAt ? 0 : $slashAt + 1));
+
+        foreach ($properties as $property) {
+            $this->initEnvValue($this->{$property}, $property, $prefix, $shortPrefix);
+
+            if ($this instanceof Encryption && 'key' === $property) {
+                if (str_starts_with($this->{$property}, 'hex2bin:')) {
+                    // Handle hex2bin prefix
+                    $this->{$property} = hex2bin(substr($this->{$property}, 8));
+                } elseif (str_starts_with($this->{$property}, 'base64:')) {
+                    // Handle base64 prefix
+                    $this->{$property} = base64_decode(substr($this->{$property}, 7), true);
+                }
+            }
+        }
+    }
 
     public static function __set_state(array $array)
     {
         static::$override = false;
-        $obj              = new static();
+        $obj = new static();
         static::$override = true;
 
         $properties = array_keys(get_object_vars($obj));
@@ -86,7 +123,8 @@ class BaseConfig
     }
 
     /**
-     * @internal For testing purposes only.
+     * @internal for testing purposes only
+     *
      * @testTag
      */
     public static function setModules(Modules $modules): void
@@ -95,70 +133,33 @@ class BaseConfig
     }
 
     /**
-     * @internal For testing purposes only.
+     * @internal for testing purposes only
+     *
      * @testTag
      */
     public static function reset(): void
     {
-        static::$registrars   = [];
-        static::$override     = true;
+        static::$registrars = [];
+        static::$override = true;
         static::$didDiscovery = false;
         static::$moduleConfig = null;
     }
 
     /**
-     * Will attempt to get environment variables with names
-     * that match the properties of the child class.
+     * Initialization an environment-specific configuration setting.
      *
-     * The "shortPrefix" is the lowercase-only config class name.
+     * @param null|array|bool|float|int|string $property
      */
-    public function __construct()
-    {
-        static::$moduleConfig ??= new Modules();
-
-        if (! static::$override) {
-            return;
-        }
-
-        $this->registerProperties();
-
-        $properties  = array_keys(get_object_vars($this));
-        $prefix      = static::class;
-        $slashAt     = strrpos($prefix, '\\');
-        $shortPrefix = strtolower(substr($prefix, $slashAt === false ? 0 : $slashAt + 1));
-
-        foreach ($properties as $property) {
-            $this->initEnvValue($this->{$property}, $property, $prefix, $shortPrefix);
-
-            if ($this instanceof Encryption && $property === 'key') {
-                if (str_starts_with($this->{$property}, 'hex2bin:')) {
-                    // Handle hex2bin prefix
-                    $this->{$property} = hex2bin(substr($this->{$property}, 8));
-                } elseif (str_starts_with($this->{$property}, 'base64:')) {
-                    // Handle base64 prefix
-                    $this->{$property} = base64_decode(substr($this->{$property}, 7), true);
-                }
-            }
-        }
-    }
-
-    /**
-     * Initialization an environment-specific configuration setting
-     *
-     * @param array|bool|float|int|string|null $property
-     *
-     * @return void
-     */
-    protected function initEnvValue(&$property, string $name, string $prefix, string $shortPrefix)
+    protected function initEnvValue(&$property, string $name, string $prefix, string $shortPrefix): void
     {
         if (is_array($property)) {
             foreach (array_keys($property) as $key) {
                 $this->initEnvValue($property[$key], "{$name}.{$key}", $prefix, $shortPrefix);
             }
-        } elseif (($value = $this->getEnvValue($name, $prefix, $shortPrefix)) !== false && $value !== null) {
-            if ($value === 'false') {
+        } elseif (($value = $this->getEnvValue($name, $prefix, $shortPrefix)) !== false && null !== $value) {
+            if ('false' === $value) {
                 $value = false;
-            } elseif ($value === 'true') {
+            } elseif ('true' === $value) {
                 $value = true;
             }
             if (is_bool($value)) {
@@ -183,13 +184,13 @@ class BaseConfig
     }
 
     /**
-     * Retrieve an environment-specific configuration setting
+     * Retrieve an environment-specific configuration setting.
      *
-     * @return string|null
+     * @return null|string
      */
     protected function getEnvValue(string $property, string $prefix, string $shortPrefix)
     {
-        $shortPrefix        = ltrim($shortPrefix, '\\');
+        $shortPrefix = ltrim($shortPrefix, '\\');
         $underscoreProperty = str_replace('.', '_', $property);
 
         switch (true) {
@@ -219,11 +220,11 @@ class BaseConfig
 
             default:
                 $value = getenv("{$shortPrefix}.{$property}");
-                $value = $value === false ? getenv("{$shortPrefix}_{$underscoreProperty}") : $value;
-                $value = $value === false ? getenv("{$prefix}.{$property}") : $value;
-                $value = $value === false ? getenv("{$prefix}_{$underscoreProperty}") : $value;
+                $value = false === $value ? getenv("{$shortPrefix}_{$underscoreProperty}") : $value;
+                $value = false === $value ? getenv("{$prefix}.{$property}") : $value;
+                $value = false === $value ? getenv("{$prefix}_{$underscoreProperty}") : $value;
 
-                return $value === false ? null : $value;
+                return false === $value ? null : $value;
         }
     }
 
@@ -231,30 +232,28 @@ class BaseConfig
      * Provides external libraries a simple way to register one or more
      * options into a config file.
      *
-     * @return void
-     *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
-    protected function registerProperties()
+    protected function registerProperties(): void
     {
-        if (! static::$moduleConfig->shouldDiscover('registrars')) {
+        if (!static::$moduleConfig->shouldDiscover('registrars')) {
             return;
         }
 
-        if (! static::$didDiscovery) {
+        if (!static::$didDiscovery) {
             // Discovery must be completed before the first instantiation of any Config class.
             if (static::$discovering) {
                 throw new ConfigException(
                     'During Auto-Discovery of Registrars,'
-                    . ' "' . static::class . '" executes Auto-Discovery again.'
-                    . ' "' . clean_path(static::$registrarFile) . '" seems to have bad code.',
+                    .' "'.static::class.'" executes Auto-Discovery again.'
+                    .' "'.clean_path(static::$registrarFile).'" seems to have bad code.',
                 );
             }
 
             static::$discovering = true;
 
             /** @var FileLocatorInterface */
-            $locator         = service('locator');
+            $locator = service('locator');
             $registrarsFiles = $locator->search('Config/Registrar.php');
 
             foreach ($registrarsFiles as $file) {
@@ -263,7 +262,7 @@ class BaseConfig
 
                 $className = $locator->findQualifiedNameFromPath($file);
 
-                if ($className === false) {
+                if (false === $className) {
                     continue;
                 }
 
@@ -271,21 +270,21 @@ class BaseConfig
             }
 
             static::$didDiscovery = true;
-            static::$discovering  = false;
+            static::$discovering = false;
         }
 
-        $shortName = (new ReflectionClass($this))->getShortName();
+        $shortName = (new \ReflectionClass($this))->getShortName();
 
         // Check the registrar class for a method named after this class' shortName
         foreach (static::$registrars as $callable) {
             // ignore non-applicable registrars
-            if (! method_exists($callable, $shortName)) {
+            if (!method_exists($callable, $shortName)) {
                 continue; // @codeCoverageIgnore
             }
 
             $properties = $callable::$shortName();
 
-            if (! is_array($properties)) {
+            if (!is_array($properties)) {
                 throw new RuntimeException('Registrars must return an array of properties and their values.');
             }
 

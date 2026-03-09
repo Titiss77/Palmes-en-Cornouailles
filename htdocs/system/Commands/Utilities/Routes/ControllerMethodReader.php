@@ -13,22 +13,17 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Commands\Utilities\Routes;
 
-use ReflectionClass;
-use ReflectionMethod;
-
 /**
  * Reads a controller and returns a list of auto route listing.
  *
- * @see \CodeIgniter\Commands\Utilities\Routes\ControllerMethodReaderTest
+ * @see ControllerMethodReaderTest
  */
 final class ControllerMethodReader
 {
     /**
      * @param string $namespace the default namespace
      */
-    public function __construct(private readonly string $namespace)
-    {
-    }
+    public function __construct(private readonly string $namespace) {}
 
     /**
      * @param class-string $class
@@ -37,16 +32,16 @@ final class ControllerMethodReader
      */
     public function read(string $class, string $defaultController = 'Home', string $defaultMethod = 'index'): array
     {
-        $reflection = new ReflectionClass($class);
+        $reflection = new \ReflectionClass($class);
 
         if ($reflection->isAbstract()) {
             return [];
         }
 
-        $classname      = $reflection->getName();
+        $classname = $reflection->getName();
         $classShortname = $reflection->getShortName();
 
-        $output     = [];
+        $output = [];
         $uriByClass = $this->getUriByClass($classname);
 
         if ($this->hasRemap($reflection)) {
@@ -62,24 +57,24 @@ final class ControllerMethodReader
             $output = [...$output, ...$routeWithoutController];
 
             $output[] = [
-                'route'   => $uriByClass . '[/...]',
-                'handler' => '\\' . $classname . '::' . $methodName,
+                'route' => $uriByClass.'[/...]',
+                'handler' => '\\'.$classname.'::'.$methodName,
             ];
 
             return $output;
         }
 
-        foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             $methodName = $method->getName();
 
-            $route = $uriByClass . '/' . $methodName;
+            $route = $uriByClass.'/'.$methodName;
 
             // Exclude BaseController and initController
             // See system/Config/Routes.php
-            if (preg_match('#\AbaseController.*#', $route) === 1) {
+            if (1 === preg_match('#\AbaseController.*#', $route)) {
                 continue;
             }
-            if (preg_match('#.*/initController\z#', $route) === 1) {
+            if (1 === preg_match('#.*/initController\z#', $route)) {
                 continue;
             }
 
@@ -94,14 +89,14 @@ final class ControllerMethodReader
                 $output = [...$output, ...$routeWithoutController];
 
                 $output[] = [
-                    'route'   => $uriByClass,
-                    'handler' => '\\' . $classname . '::' . $methodName,
+                    'route' => $uriByClass,
+                    'handler' => '\\'.$classname.'::'.$methodName,
                 ];
             }
 
             $output[] = [
-                'route'   => $route . '[/...]',
-                'handler' => '\\' . $classname . '::' . $methodName,
+                'route' => $route.'[/...]',
+                'handler' => '\\'.$classname.'::'.$methodName,
             ];
         }
 
@@ -111,7 +106,7 @@ final class ControllerMethodReader
     /**
      * Whether the class has a _remap() method.
      */
-    private function hasRemap(ReflectionClass $class): bool
+    private function hasRemap(\ReflectionClass $class): bool
     {
         if ($class->hasMethod('_remap')) {
             $remap = $class->getMethod('_remap');
@@ -130,16 +125,16 @@ final class ControllerMethodReader
     private function getUriByClass(string $classname): string
     {
         // remove the namespace
-        $pattern = '/' . preg_quote($this->namespace, '/') . '/';
-        $class   = ltrim(preg_replace($pattern, '', $classname), '\\');
+        $pattern = '/'.preg_quote($this->namespace, '/').'/';
+        $class = ltrim(preg_replace($pattern, '', $classname), '\\');
 
         $classParts = explode('\\', $class);
-        $classPath  = '';
+        $classPath = '';
 
         foreach ($classParts as $part) {
             // make the first letter lowercase, because auto routing makes
             // the URI path's first letter uppercase and search the controller
-            $classPath .= lcfirst($part) . '/';
+            $classPath .= lcfirst($part).'/';
         }
 
         return rtrim($classPath, '/');
@@ -159,13 +154,13 @@ final class ControllerMethodReader
             return [];
         }
 
-        $pattern                = '#' . preg_quote(lcfirst($defaultController), '#') . '\z#';
+        $pattern = '#'.preg_quote(lcfirst($defaultController), '#').'\z#';
         $routeWithoutController = rtrim(preg_replace($pattern, '', $uriByClass), '/');
-        $routeWithoutController = $routeWithoutController !== '' && $routeWithoutController !== '0' ? $routeWithoutController : '/';
+        $routeWithoutController = '' !== $routeWithoutController && '0' !== $routeWithoutController ? $routeWithoutController : '/';
 
         return [[
-            'route'   => $routeWithoutController,
-            'handler' => '\\' . $classname . '::' . $methodName,
+            'route' => $routeWithoutController,
+            'handler' => '\\'.$classname.'::'.$methodName,
         ]];
     }
 }

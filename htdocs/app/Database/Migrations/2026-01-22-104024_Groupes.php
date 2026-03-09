@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class Groupes extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $this->forge->addField([
             'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
@@ -25,7 +27,7 @@ class Groupes extends Migration
         $this->forge->createTable('groupes');
     }
 
-    public function down()
+    public function down(): void
     {
         $this->forge->dropTable('groupes');
     }

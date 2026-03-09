@@ -13,19 +13,16 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Cookie;
 
-use ArrayIterator;
 use CodeIgniter\Cookie\Exceptions\CookieException;
-use Countable;
-use IteratorAggregate;
-use Traversable;
 
 /**
  * The CookieStore object represents an immutable collection of `Cookie` value objects.
  *
- * @implements IteratorAggregate<string, Cookie>
- * @see \CodeIgniter\Cookie\CookieStoreTest
+ * @implements \IteratorAggregate<string, Cookie>
+ *
+ * @see CookieStoreTest
  */
-class CookieStore implements Countable, IteratorAggregate
+class CookieStore implements \Countable, \IteratorAggregate
 {
     /**
      * The cookie collection.
@@ -33,6 +30,20 @@ class CookieStore implements Countable, IteratorAggregate
      * @var array<string, Cookie>
      */
     protected $cookies = [];
+
+    /**
+     * @param array<array-key, Cookie> $cookies
+     *
+     * @throws CookieException
+     */
+    final public function __construct(array $cookies)
+    {
+        $this->validateCookies($cookies);
+
+        foreach ($cookies as $cookie) {
+            $this->cookies[$cookie->getId()] = $cookie;
+        }
+    }
 
     /**
      * Creates a CookieStore from an array of `Set-Cookie` headers.
@@ -62,33 +73,19 @@ class CookieStore implements Countable, IteratorAggregate
     }
 
     /**
-     * @param array<array-key, Cookie> $cookies
-     *
-     * @throws CookieException
-     */
-    final public function __construct(array $cookies)
-    {
-        $this->validateCookies($cookies);
-
-        foreach ($cookies as $cookie) {
-            $this->cookies[$cookie->getId()] = $cookie;
-        }
-    }
-
-    /**
      * Checks if a `Cookie` object identified by name and
      * prefix is present in the collection.
      */
     public function has(string $name, string $prefix = '', ?string $value = null): bool
     {
-        $name = $prefix . $name;
+        $name = $prefix.$name;
 
         foreach ($this->cookies as $cookie) {
             if ($cookie->getPrefixedName() !== $name) {
                 continue;
             }
 
-            if ($value === null) {
+            if (null === $value) {
                 return true; // for BC
             }
 
@@ -106,7 +103,7 @@ class CookieStore implements Countable, IteratorAggregate
      */
     public function get(string $name, string $prefix = ''): Cookie
     {
-        $name = $prefix . $name;
+        $name = $prefix.$name;
 
         foreach ($this->cookies as $cookie) {
             if ($cookie->getPrefixedName() === $name) {
@@ -146,7 +143,7 @@ class CookieStore implements Countable, IteratorAggregate
     {
         $default = Cookie::setDefaults();
 
-        $id = implode(';', [$prefix . $name, $default['path'], $default['domain']]);
+        $id = implode(';', [$prefix.$name, $default['path'], $default['domain']]);
 
         $store = clone $this;
 
@@ -188,11 +185,11 @@ class CookieStore implements Countable, IteratorAggregate
     /**
      * Gets the iterator for the cookie collection.
      *
-     * @return Traversable<string, Cookie>
+     * @return \Traversable<string, Cookie>
      */
-    public function getIterator(): Traversable
+    public function getIterator(): \Traversable
     {
-        return new ArrayIterator($this->cookies);
+        return new \ArrayIterator($this->cookies);
     }
 
     /**
@@ -205,7 +202,7 @@ class CookieStore implements Countable, IteratorAggregate
         foreach ($cookies as $index => $cookie) {
             $type = get_debug_type($cookie);
 
-            if (! $cookie instanceof Cookie) {
+            if (!$cookie instanceof Cookie) {
                 throw CookieException::forInvalidCookieInstance([static::class, Cookie::class, $type, $index]);
             }
         }

@@ -23,7 +23,7 @@ use Kint\Kint;
 /**
  * Check the Config values.
  *
- * @see \CodeIgniter\Commands\Utilities\ConfigCheckTest
+ * @see ConfigCheckTest
  */
 final class ConfigCheck extends BaseCommand
 {
@@ -36,28 +36,28 @@ final class ConfigCheck extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'config:check';
 
     /**
-     * The Command's short description
+     * The Command's short description.
      *
      * @var string
      */
     protected $description = 'Check your Config values.';
 
     /**
-     * The Command's usage
+     * The Command's usage.
      *
      * @var string
      */
     protected $usage = 'config:check <classname>';
 
     /**
-     * The Command's arguments
+     * The Command's arguments.
      *
      * @var array<string, string>
      */
@@ -66,7 +66,7 @@ final class ConfigCheck extends BaseCommand
     ];
 
     /**
-     * The Command's options
+     * The Command's options.
      *
      * @var array<string, string>
      */
@@ -77,9 +77,9 @@ final class ConfigCheck extends BaseCommand
      */
     public function run(array $params)
     {
-        if (! isset($params[0])) {
+        if (!isset($params[0])) {
             CLI::error('You must specify a Config classname.');
-            CLI::write('  Usage: ' . $this->usage);
+            CLI::write('  Usage: '.$this->usage);
             CLI::write('Example: config:check App');
             CLI::write('         config:check \'CodeIgniter\Shield\Config\Auth\'');
 
@@ -99,13 +99,13 @@ final class ConfigCheck extends BaseCommand
 
         $config = config($class);
 
-        if ($config === null) {
-            CLI::error('No such Config class: ' . $class);
+        if (null === $config) {
+            CLI::error('No such Config class: '.$class);
 
             return EXIT_ERROR;
         }
 
-        if (defined('KINT_DIR') && Kint::$enabled_mode !== false) {
+        if (defined('KINT_DIR') && false !== Kint::$enabled_mode) {
             CLI::write($this->getKintD($config));
         } else {
             CLI::write(
@@ -115,13 +115,13 @@ final class ConfigCheck extends BaseCommand
 
         CLI::newLine();
         $state = CLI::color($configCacheEnabled ? 'Enabled' : 'Disabled', 'green');
-        CLI::write('Config Caching: ' . $state);
+        CLI::write('Config Caching: '.$state);
 
         return EXIT_SUCCESS;
     }
 
     /**
-     * Gets object dump by Kint d()
+     * Gets object dump by Kint d().
      */
     private function getKintD(object $config): string
     {
@@ -139,7 +139,7 @@ final class ConfigCheck extends BaseCommand
     }
 
     /**
-     * Gets object dump by var_dump()
+     * Gets object dump by var_dump().
      */
     private function getVarDump(object $config): string
     {

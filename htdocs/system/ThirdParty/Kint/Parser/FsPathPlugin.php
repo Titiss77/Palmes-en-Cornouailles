@@ -29,8 +29,6 @@ namespace Kint\Parser;
 
 use Kint\Value\AbstractValue;
 use Kint\Value\Representation\SplFileInfoRepresentation;
-use SplFileInfo;
-use TypeError;
 
 class FsPathPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -52,7 +50,7 @@ class FsPathPlugin extends AbstractPlugin implements PluginCompleteInterface
             return $v;
         }
 
-        if (!\preg_match('/[\\/\\'.DIRECTORY_SEPARATOR.']/', $var)) {
+        if (!\preg_match('/[\/\\'.DIRECTORY_SEPARATOR.']/', $var)) {
             return $v;
         }
 
@@ -64,7 +62,7 @@ class FsPathPlugin extends AbstractPlugin implements PluginCompleteInterface
             if (!@\file_exists($var)) {
                 return $v;
             }
-        } catch (TypeError $e) {// @codeCoverageIgnore
+        } catch (\TypeError $e) {// @codeCoverageIgnore
             // Only possible in PHP 7
             return $v; // @codeCoverageIgnore
         }
@@ -73,7 +71,7 @@ class FsPathPlugin extends AbstractPlugin implements PluginCompleteInterface
             return $v;
         }
 
-        $v->addRepresentation(new SplFileInfoRepresentation(new SplFileInfo($var)), 0);
+        $v->addRepresentation(new SplFileInfoRepresentation(new \SplFileInfo($var)), 0);
 
         return $v;
     }

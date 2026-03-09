@@ -27,8 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value\Context;
 
-use __PHP_Incomplete_Class;
-
 abstract class ClassDeclaredContext extends ClassOwnedContext
 {
     public const ACCESS_PUBLIC = 1;
@@ -53,7 +51,7 @@ abstract class ClassDeclaredContext extends ClassOwnedContext
     /** @psalm-param ?class-string $scope */
     public function isAccessible(?string $scope): bool
     {
-        if (__PHP_Incomplete_Class::class === $this->owner_class) {
+        if (\__PHP_Incomplete_Class::class === $this->owner_class) {
             return false;
         }
 
@@ -85,8 +83,10 @@ abstract class ClassDeclaredContext extends ClassOwnedContext
         switch ($this->access) {
             case self::ACCESS_PUBLIC:
                 return 'public';
+
             case self::ACCESS_PROTECTED:
                 return 'protected';
+
             case self::ACCESS_PRIVATE:
                 return 'private';
         }

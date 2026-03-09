@@ -13,18 +13,15 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Database\SQLite3;
 
-use Closure;
 use CodeIgniter\Database\BaseResult;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Entity\Entity;
 use SQLite3;
-use SQLite3Result;
-use stdClass;
 
 /**
- * Result for SQLite3
+ * Result for SQLite3.
  *
- * @extends BaseResult<SQLite3, SQLite3Result>
+ * @extends BaseResult<\SQLite3, \SQLite3Result>
  */
 class Result extends BaseResult
 {
@@ -43,7 +40,7 @@ class Result extends BaseResult
     {
         $fieldNames = [];
 
-        for ($i = 0, $c = $this->getFieldCount(); $i < $c; $i++) {
+        for ($i = 0, $c = $this->getFieldCount(); $i < $c; ++$i) {
             $fieldNames[] = $this->resultID->columnName($i);
         }
 
@@ -57,23 +54,23 @@ class Result extends BaseResult
     {
         static $dataTypes = [
             SQLITE3_INTEGER => 'integer',
-            SQLITE3_FLOAT   => 'float',
-            SQLITE3_TEXT    => 'text',
-            SQLITE3_BLOB    => 'blob',
-            SQLITE3_NULL    => 'null',
+            SQLITE3_FLOAT => 'float',
+            SQLITE3_TEXT => 'text',
+            SQLITE3_BLOB => 'blob',
+            SQLITE3_NULL => 'null',
         ];
 
         $retVal = [];
         $this->resultID->fetchArray(SQLITE3_NUM);
 
-        for ($i = 0, $c = $this->getFieldCount(); $i < $c; $i++) {
-            $retVal[$i]             = new stdClass();
-            $retVal[$i]->name       = $this->resultID->columnName($i);
-            $type                   = $this->resultID->columnType($i);
-            $retVal[$i]->type       = $type;
-            $retVal[$i]->type_name  = $dataTypes[$type] ?? null;
+        for ($i = 0, $c = $this->getFieldCount(); $i < $c; ++$i) {
+            $retVal[$i] = new \stdClass();
+            $retVal[$i]->name = $this->resultID->columnName($i);
+            $type = $this->resultID->columnType($i);
+            $retVal[$i]->type = $type;
+            $retVal[$i]->type_name = $dataTypes[$type] ?? null;
             $retVal[$i]->max_length = null;
-            $retVal[$i]->length     = null;
+            $retVal[$i]->length = null;
         }
         $this->resultID->reset();
 
@@ -82,10 +79,8 @@ class Result extends BaseResult
 
     /**
      * Frees the current result.
-     *
-     * @return void
      */
-    public function freeResult()
+    public function freeResult(): void
     {
         if (is_object($this->resultID)) {
             $this->resultID->finalize();
@@ -104,7 +99,7 @@ class Result extends BaseResult
      */
     public function dataSeek(int $n = 0)
     {
-        if ($n !== 0) {
+        if (0 !== $n) {
             throw new DatabaseException('SQLite3 doesn\'t support seeking to other offset.');
         }
 
@@ -128,7 +123,7 @@ class Result extends BaseResult
      *
      * Overridden by child classes.
      *
-     * @return Entity|false|object|stdClass
+     * @return Entity|false|object|\stdClass
      */
     protected function fetchObject(string $className = 'stdClass')
     {
@@ -137,7 +132,7 @@ class Result extends BaseResult
             return false;
         }
 
-        if ($className === 'stdClass') {
+        if ('stdClass' === $className) {
             return (object) $row;
         }
 
@@ -147,7 +142,7 @@ class Result extends BaseResult
             return $classObj->injectRawData($row);
         }
 
-        $classSet = Closure::bind(function ($key, $value): void {
+        $classSet = \Closure::bind(function ($key, $value): void {
             $this->{$key} = $value;
         }, $classObj, $className);
 

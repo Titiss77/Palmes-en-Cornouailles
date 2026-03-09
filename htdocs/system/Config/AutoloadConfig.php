@@ -27,7 +27,7 @@ use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
 
 /**
- * AUTOLOADER CONFIGURATION
+ * AUTOLOADER CONFIGURATION.
  *
  * This file defines the namespaces and class maps so the Autoloader
  * can find the files as needed.
@@ -92,7 +92,7 @@ class AutoloadConfig
      */
     protected $corePsr4 = [
         'CodeIgniter' => SYSTEMPATH,
-        'Config'      => APPPATH . 'Config',
+        'Config' => APPPATH.'Config',
     ];
 
     /**
@@ -108,18 +108,18 @@ class AutoloadConfig
      * @var array<class-string, string>
      */
     protected $coreClassmap = [
-        AbstractLogger::class                  => SYSTEMPATH . 'ThirdParty/PSR/Log/AbstractLogger.php',
-        InvalidArgumentException::class        => SYSTEMPATH . 'ThirdParty/PSR/Log/InvalidArgumentException.php',
-        LoggerAwareInterface::class            => SYSTEMPATH . 'ThirdParty/PSR/Log/LoggerAwareInterface.php',
-        LoggerAwareTrait::class                => SYSTEMPATH . 'ThirdParty/PSR/Log/LoggerAwareTrait.php',
-        LoggerInterface::class                 => SYSTEMPATH . 'ThirdParty/PSR/Log/LoggerInterface.php',
-        LoggerTrait::class                     => SYSTEMPATH . 'ThirdParty/PSR/Log/LoggerTrait.php',
-        LogLevel::class                        => SYSTEMPATH . 'ThirdParty/PSR/Log/LogLevel.php',
-        NullLogger::class                      => SYSTEMPATH . 'ThirdParty/PSR/Log/NullLogger.php',
-        ExceptionInterface::class              => SYSTEMPATH . 'ThirdParty/Escaper/Exception/ExceptionInterface.php',
-        EscaperInvalidArgumentException::class => SYSTEMPATH . 'ThirdParty/Escaper/Exception/InvalidArgumentException.php',
-        RuntimeException::class                => SYSTEMPATH . 'ThirdParty/Escaper/Exception/RuntimeException.php',
-        Escaper::class                         => SYSTEMPATH . 'ThirdParty/Escaper/Escaper.php',
+        AbstractLogger::class => SYSTEMPATH.'ThirdParty/PSR/Log/AbstractLogger.php',
+        InvalidArgumentException::class => SYSTEMPATH.'ThirdParty/PSR/Log/InvalidArgumentException.php',
+        LoggerAwareInterface::class => SYSTEMPATH.'ThirdParty/PSR/Log/LoggerAwareInterface.php',
+        LoggerAwareTrait::class => SYSTEMPATH.'ThirdParty/PSR/Log/LoggerAwareTrait.php',
+        LoggerInterface::class => SYSTEMPATH.'ThirdParty/PSR/Log/LoggerInterface.php',
+        LoggerTrait::class => SYSTEMPATH.'ThirdParty/PSR/Log/LoggerTrait.php',
+        LogLevel::class => SYSTEMPATH.'ThirdParty/PSR/Log/LogLevel.php',
+        NullLogger::class => SYSTEMPATH.'ThirdParty/PSR/Log/NullLogger.php',
+        ExceptionInterface::class => SYSTEMPATH.'ThirdParty/Escaper/Exception/ExceptionInterface.php',
+        EscaperInvalidArgumentException::class => SYSTEMPATH.'ThirdParty/Escaper/Exception/InvalidArgumentException.php',
+        RuntimeException::class => SYSTEMPATH.'ThirdParty/Escaper/Exception/RuntimeException.php',
+        Escaper::class => SYSTEMPATH.'ThirdParty/Escaper/Escaper.php',
     ];
 
     /**
@@ -140,14 +140,14 @@ class AutoloadConfig
      */
     public function __construct()
     {
-        if (isset($_SERVER['CI_ENVIRONMENT']) && $_SERVER['CI_ENVIRONMENT'] === 'testing') {
-            $this->psr4['Tests\Support']                  = SUPPORTPATH;
-            $this->classmap['CodeIgniter\Log\TestLogger'] = SYSTEMPATH . 'Test/TestLogger.php';
-            $this->classmap['CIDatabaseTestCase']         = SYSTEMPATH . 'Test/CIDatabaseTestCase.php';
+        if (isset($_SERVER['CI_ENVIRONMENT']) && 'testing' === $_SERVER['CI_ENVIRONMENT']) {
+            $this->psr4['Tests\Support'] = SUPPORTPATH;
+            $this->classmap['CodeIgniter\Log\TestLogger'] = SYSTEMPATH.'Test/TestLogger.php';
+            $this->classmap['CIDatabaseTestCase'] = SYSTEMPATH.'Test/CIDatabaseTestCase.php';
         }
 
-        $this->psr4     = array_merge($this->corePsr4, $this->psr4);
+        $this->psr4 = array_merge($this->corePsr4, $this->psr4);
         $this->classmap = array_merge($this->coreClassmap, $this->classmap);
-        $this->files    = [...$this->coreFiles, ...$this->files];
+        $this->files = [...$this->coreFiles, ...$this->files];
     }
 }

@@ -16,13 +16,13 @@ namespace CodeIgniter\Log\Handlers;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Class ChromeLoggerHandler
+ * Class ChromeLoggerHandler.
  *
  * Allows for logging items to the Chrome console for debugging.
  * Requires the ChromeLogger extension installed in your browser.
  *
  * @see https://craig.is/writing/chrome-logger
- * @see \CodeIgniter\Log\Handlers\ChromeLoggerHandlerTest
+ * @see ChromeLoggerHandlerTest
  */
 class ChromeLoggerHandler extends BaseHandler
 {
@@ -67,17 +67,17 @@ class ChromeLoggerHandler extends BaseHandler
      */
     protected $levels = [
         'emergency' => 'error',
-        'alert'     => 'error',
-        'critical'  => 'error',
-        'error'     => 'error',
-        'warning'   => 'warn',
-        'notice'    => 'warn',
-        'info'      => 'info',
-        'debug'     => 'info',
+        'alert' => 'error',
+        'critical' => 'error',
+        'error' => 'error',
+        'warning' => 'warn',
+        'notice' => 'warn',
+        'info' => 'info',
+        'debug' => 'info',
     ];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct(array $config = [])
     {
@@ -106,7 +106,7 @@ class ChromeLoggerHandler extends BaseHandler
 
         $backtraceMessage = 'unknown';
         if (isset($backtrace['file'], $backtrace['line'])) {
-            $backtraceMessage = $backtrace['file'] . ':' . $backtrace['line'];
+            $backtraceMessage = $backtrace['file'].':'.$backtrace['line'];
         }
 
         // Default to 'log' type.
@@ -128,6 +128,24 @@ class ChromeLoggerHandler extends BaseHandler
     }
 
     /**
+     * Attaches the header and the content to the passed in request object.
+     *
+     * @param-out ResponseInterface $response
+     */
+    public function sendLogs(?ResponseInterface &$response = null): void
+    {
+        if (!$response instanceof ResponseInterface) {
+            $response = service('response', null, true);
+        }
+
+        $data = base64_encode(
+            mb_convert_encoding(json_encode($this->json), 'UTF-8', mb_list_encodings()),
+        );
+
+        $response->setHeader($this->header, $data);
+    }
+
+    /**
      * Converts the object to display nicely in the Chrome Logger UI.
      *
      * @param array|int|object|string $object
@@ -136,7 +154,7 @@ class ChromeLoggerHandler extends BaseHandler
      */
     protected function format($object)
     {
-        if (! is_object($object)) {
+        if (!is_object($object)) {
             return $object;
         }
 
@@ -146,25 +164,5 @@ class ChromeLoggerHandler extends BaseHandler
         $objectArray['___class_name'] = $object::class;
 
         return $objectArray;
-    }
-
-    /**
-     * Attaches the header and the content to the passed in request object.
-     *
-     * @param-out ResponseInterface $response
-     *
-     * @return void
-     */
-    public function sendLogs(?ResponseInterface &$response = null)
-    {
-        if (! $response instanceof ResponseInterface) {
-            $response = service('response', null, true);
-        }
-
-        $data = base64_encode(
-            mb_convert_encoding(json_encode($this->json), 'UTF-8', mb_list_encodings()),
-        );
-
-        $response->setHeader($this->header, $data);
     }
 }

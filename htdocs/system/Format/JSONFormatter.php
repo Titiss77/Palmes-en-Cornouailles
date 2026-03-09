@@ -17,16 +17,16 @@ use CodeIgniter\Format\Exceptions\FormatException;
 use Config\Format;
 
 /**
- * JSON data formatter
+ * JSON data formatter.
  *
- * @see \CodeIgniter\Format\JSONFormatterTest
+ * @see JSONFormatterTest
  */
 class JSONFormatter implements FormatterInterface
 {
     /**
      * Takes the given data and formats it.
      *
-     * @param array|bool|float|int|object|string|null $data
+     * @param null|array|bool|float|int|object|string $data
      *
      * @return false|string (JSON string | false)
      */
@@ -41,7 +41,7 @@ class JSONFormatter implements FormatterInterface
 
         $result = json_encode($data, $options, 512);
 
-        if (! in_array(json_last_error(), [JSON_ERROR_NONE, JSON_ERROR_RECURSION], true)) {
+        if (!in_array(json_last_error(), [JSON_ERROR_NONE, JSON_ERROR_RECURSION], true)) {
             throw FormatException::forInvalidJSON(json_last_error_msg());
         }
 

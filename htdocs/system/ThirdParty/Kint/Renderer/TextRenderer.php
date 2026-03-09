@@ -318,6 +318,7 @@ class TextRenderer extends AbstractRenderer
             foreach (self::$parser_plugin_whitelist as $whitelist) {
                 if ($plugin instanceof $whitelist) {
                     $return[] = $plugin;
+
                     continue 2;
                 }
             }
@@ -332,6 +333,8 @@ class TextRenderer extends AbstractRenderer
     }
 
     /**
+     * @param mixed $encoding
+     *
      * @psalm-param Encoding $encoding
      */
     public function escape(string $string, $encoding = false): string
@@ -351,10 +354,10 @@ class TextRenderer extends AbstractRenderer
         }
 
         if (
-            isset($this->callee['function']) &&
-            (
-                !empty($this->callee['class']) ||
-                !\in_array(
+            isset($this->callee['function'])
+            && (
+                !empty($this->callee['class'])
+                || !\in_array(
                     $this->callee['function'],
                     ['include', 'include_once', 'require', 'require_once'],
                     true

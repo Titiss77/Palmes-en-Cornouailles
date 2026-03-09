@@ -16,7 +16,7 @@ namespace CodeIgniter\HTTP;
 /**
  * Representation of an outgoing, client-side request.
  *
- * @see \CodeIgniter\HTTP\OutgoingRequestTest
+ * @see OutgoingRequestTest
  */
 class OutgoingRequest extends Message implements OutgoingRequestInterface
 {
@@ -30,13 +30,13 @@ class OutgoingRequest extends Message implements OutgoingRequestInterface
     /**
      * A URI instance.
      *
-     * @var URI|null
+     * @var null|URI
      */
     protected $uri;
 
     /**
      * @param string      $method HTTP method
-     * @param string|null $body
+     * @param null|string $body
      */
     public function __construct(
         string $method,
@@ -46,25 +46,18 @@ class OutgoingRequest extends Message implements OutgoingRequestInterface
         string $version = '1.1',
     ) {
         $this->method = $method;
-        $this->uri    = $uri;
+        $this->uri = $uri;
 
         foreach ($headers as $header => $value) {
             $this->setHeader($header, $value);
         }
 
-        $this->body            = $body;
+        $this->body = $body;
         $this->protocolVersion = $version;
 
-        if (! $this->hasHeader('Host') && $this->uri->getHost() !== '') {
+        if (!$this->hasHeader('Host') && '' !== $this->uri->getHost()) {
             $this->setHeader('Host', $this->getHostFromUri($this->uri));
         }
-    }
-
-    private function getHostFromUri(URI $uri): string
-    {
-        $host = $uri->getHost();
-
-        return $host . ($uri->getPort() > 0 ? ':' . $uri->getPort() : '');
     }
 
     /**
@@ -100,7 +93,7 @@ class OutgoingRequest extends Message implements OutgoingRequestInterface
      */
     public function withMethod($method)
     {
-        $request         = clone $this;
+        $request = clone $this;
         $request->method = $method;
 
         return $request;
@@ -109,7 +102,7 @@ class OutgoingRequest extends Message implements OutgoingRequestInterface
     /**
      * Retrieves the URI instance.
      *
-     * @return URI|null
+     * @return null|URI
      */
     public function getUri()
     {
@@ -119,45 +112,52 @@ class OutgoingRequest extends Message implements OutgoingRequestInterface
     /**
      * Returns an instance with the provided URI.
      *
-     * @param URI  $uri          New request URI to use.
-     * @param bool $preserveHost Preserve the original state of the Host header.
+     * @param URI  $uri          new request URI to use
+     * @param bool $preserveHost preserve the original state of the Host header
      *
      * @return static
      */
     public function withUri(URI $uri, $preserveHost = false)
     {
-        $request      = clone $this;
+        $request = clone $this;
         $request->uri = $uri;
 
         if ($preserveHost) {
-            if ($this->isHostHeaderMissingOrEmpty() && $uri->getHost() !== '') {
+            if ($this->isHostHeaderMissingOrEmpty() && '' !== $uri->getHost()) {
                 $request->setHeader('Host', $this->getHostFromUri($uri));
 
                 return $request;
             }
 
-            if ($this->isHostHeaderMissingOrEmpty() && $uri->getHost() === '') {
+            if ($this->isHostHeaderMissingOrEmpty() && '' === $uri->getHost()) {
                 return $request;
             }
 
-            if (! $this->isHostHeaderMissingOrEmpty()) {
+            if (!$this->isHostHeaderMissingOrEmpty()) {
                 return $request;
             }
         }
 
-        if ($uri->getHost() !== '') {
+        if ('' !== $uri->getHost()) {
             $request->setHeader('Host', $this->getHostFromUri($uri));
         }
 
         return $request;
     }
 
+    private function getHostFromUri(URI $uri): string
+    {
+        $host = $uri->getHost();
+
+        return $host.($uri->getPort() > 0 ? ':'.$uri->getPort() : '');
+    }
+
     private function isHostHeaderMissingOrEmpty(): bool
     {
-        if (! $this->hasHeader('Host')) {
+        if (!$this->hasHeader('Host')) {
             return true;
         }
 
-        return $this->header('Host')->getValue() === '';
+        return '' === $this->header('Host')->getValue();
     }
 }

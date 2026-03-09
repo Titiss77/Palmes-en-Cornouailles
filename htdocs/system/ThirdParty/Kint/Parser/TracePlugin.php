@@ -36,7 +36,6 @@ use Kint\Value\Representation\SourceRepresentation;
 use Kint\Value\Representation\ValueRepresentation;
 use Kint\Value\TraceFrameValue;
 use Kint\Value\TraceValue;
-use RuntimeException;
 
 /**
  * @psalm-import-type TraceFrame from TraceFrameValue
@@ -97,7 +96,7 @@ class TracePlugin extends AbstractPlugin implements PluginCompleteInterface
 
             if (isset($trace[$index]['file']) && false !== ($realfile = \realpath($trace[$index]['file']))) {
                 foreach ($path_blacklist as $path) {
-                    if (0 === \strpos($realfile, $path)) {
+                    if (\str_starts_with($realfile, $path)) {
                         continue 2;
                     }
                 }
@@ -108,7 +107,7 @@ class TracePlugin extends AbstractPlugin implements PluginCompleteInterface
             if (null !== ($file = $frame->getFile()) && null !== ($line = $frame->getLine())) {
                 try {
                     $frame->addRepresentation(new SourceRepresentation($file, $line));
-                } catch (RuntimeException $e) {
+                } catch (\RuntimeException $e) {
                 }
             }
 

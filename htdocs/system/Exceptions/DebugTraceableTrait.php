@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Exceptions;
 
-use Throwable;
-
 /**
  * This trait provides framework exceptions the ability to pinpoint
  * accurately where the exception was raised rather than instantiated.
@@ -27,7 +25,7 @@ trait DebugTraceableTrait
      * Tweaks the exception's constructor to assign the file/line to where
      * it is actually raised rather than were it is instantiated.
      */
-    final public function __construct(string $message = '', int $code = 0, ?Throwable $previous = null)
+    final public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 

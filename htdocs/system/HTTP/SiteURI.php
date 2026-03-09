@@ -19,12 +19,30 @@ use CodeIgniter\HTTP\Exceptions\HTTPException;
 use Config\App;
 
 /**
- * URI for the application site
+ * URI for the application site.
  *
- * @see \CodeIgniter\HTTP\SiteURITest
+ * @see SiteURITest
  */
 class SiteURI extends URI
 {
+    /**
+     * List of URI segments after indexPage.
+     *
+     * The word "URI Segments" originally means only the URI path part relative
+     * to the baseURL.
+     *
+     * If the URI is "http://localhost:8888/ci431/public/index.php/test?a=b",
+     * and the baseURL is "http://localhost:8888/ci431/public/", then:
+     *   $segments = [
+     *       0 => 'test',
+     *   ];
+     *
+     * @var array<int, string>
+     *
+     * @deprecated this property will be private
+     */
+    protected $segments;
+
     /**
      * The current baseURL.
      */
@@ -57,24 +75,6 @@ class SiteURI extends URI
     private array $baseSegments;
 
     /**
-     * List of URI segments after indexPage.
-     *
-     * The word "URI Segments" originally means only the URI path part relative
-     * to the baseURL.
-     *
-     * If the URI is "http://localhost:8888/ci431/public/index.php/test?a=b",
-     * and the baseURL is "http://localhost:8888/ci431/public/", then:
-     *   $segments = [
-     *       0 => 'test',
-     *   ];
-     *
-     * @var array<int, string>
-     *
-     * @deprecated This property will be private.
-     */
-    protected $segments;
-
-    /**
      * URI path relative to baseURL.
      *
      * If the baseURL contains sub folders, this value will be different from
@@ -85,10 +85,11 @@ class SiteURI extends URI
     private string $routePath;
 
     /**
-     * @param         string              $relativePath URI path relative to baseURL. May include
-     *                                                  queries or fragments.
-     * @param         string|null         $host         Optional current hostname.
-     * @param         string|null         $scheme       Optional scheme. 'http' or 'https'.
+     * @param string      $relativePath URI path relative to baseURL. May include
+     *                                  queries or fragments.
+     * @param null|string $host         optional current hostname
+     * @param null|string $scheme       Optional scheme. 'http' or 'https'.
+     *
      * @phpstan-param 'http'|'https'|null $scheme
      */
     public function __construct(
@@ -110,150 +111,18 @@ class SiteURI extends URI
         $indexPageRoutePath = $this->getIndexPageRoutePath($routePath);
 
         // Fix the current URI
-        $uri = $this->baseURL . $indexPageRoutePath;
+        $uri = $this->baseURL.$indexPageRoutePath;
 
         // applyParts
         $parts = parse_url($uri);
-        if ($parts === false) {
+        if (false === $parts) {
             throw HTTPException::forUnableToParseURI($uri);
         }
-        $parts['query']    = $query;
+        $parts['query'] = $query;
         $parts['fragment'] = $fragment;
         $this->applyParts($parts);
 
         $this->setRoutePath($routePath);
-    }
-
-    private function parseRelativePath(string $relativePath): array
-    {
-        $parts = parse_url('http://dummy/' . $relativePath);
-        if ($parts === false) {
-            throw HTTPException::forUnableToParseURI($relativePath);
-        }
-
-        $routePath = $relativePath === '/' ? '/' : ltrim($parts['path'], '/');
-
-        $query    = $parts['query'] ?? '';
-        $fragment = $parts['fragment'] ?? '';
-
-        return [$routePath, $query, $fragment];
-    }
-
-    private function determineBaseURL(
-        App $configApp,
-        ?string $host,
-        ?string $scheme,
-    ): URI {
-        $baseURL = $this->normalizeBaseURL($configApp);
-
-        $uri = new URI($baseURL);
-
-        // Update scheme
-        if ($scheme !== null && $scheme !== '') {
-            $uri->setScheme($scheme);
-        } elseif ($configApp->forceGlobalSecureRequests) {
-            $uri->setScheme('https');
-        }
-
-        // Update host
-        if ($host !== null) {
-            $uri->setHost($host);
-        }
-
-        return $uri;
-    }
-
-    private function getIndexPageRoutePath(string $routePath): string
-    {
-        // Remove starting slash unless it is `/`.
-        if ($routePath !== '' && $routePath[0] === '/' && $routePath !== '/') {
-            $routePath = ltrim($routePath, '/');
-        }
-
-        // Check for an index page
-        $indexPage = '';
-        if ($this->indexPage !== '') {
-            $indexPage = $this->indexPage;
-
-            // Check if we need a separator
-            if ($routePath !== '' && $routePath[0] !== '/' && $routePath[0] !== '?') {
-                $indexPage .= '/';
-            }
-        }
-
-        $indexPageRoutePath = $indexPage . $routePath;
-
-        if ($indexPageRoutePath === '/') {
-            $indexPageRoutePath = '';
-        }
-
-        return $indexPageRoutePath;
-    }
-
-    private function normalizeBaseURL(App $configApp): string
-    {
-        // It's possible the user forgot a trailing slash on their
-        // baseURL, so let's help them out.
-        $baseURL = rtrim($configApp->baseURL, '/ ') . '/';
-
-        // Validate baseURL
-        if (filter_var($baseURL, FILTER_VALIDATE_URL) === false) {
-            throw new ConfigException(
-                'Config\App::$baseURL "' . $baseURL . '" is not a valid URL.',
-            );
-        }
-
-        return $baseURL;
-    }
-
-    /**
-     * Sets basePathWithoutIndexPage and baseSegments.
-     */
-    private function setBasePath(): void
-    {
-        $this->basePathWithoutIndexPage = $this->baseURL->getPath();
-
-        $this->baseSegments = $this->convertToSegments($this->basePathWithoutIndexPage);
-
-        if ($this->indexPage !== '') {
-            $this->baseSegments[] = $this->indexPage;
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    public function setBaseURL(string $baseURL): void
-    {
-        throw new BadMethodCallException('Cannot use this method.');
-    }
-
-    /**
-     * @deprecated
-     */
-    public function setURI(?string $uri = null)
-    {
-        throw new BadMethodCallException('Cannot use this method.');
-    }
-
-    /**
-     * Returns the baseURL.
-     *
-     * @interal
-     */
-    public function getBaseURL(): string
-    {
-        return (string) $this->baseURL;
-    }
-
-    /**
-     * Returns the URI path relative to baseURL.
-     *
-     * @return string The Route path.
-     */
-    public function getRoutePath(): string
-    {
-        return $this->routePath;
     }
 
     /**
@@ -271,6 +140,42 @@ class SiteURI extends URI
     }
 
     /**
+     * @deprecated
+     */
+    public function setBaseURL(string $baseURL): void
+    {
+        throw new BadMethodCallException('Cannot use this method.');
+    }
+
+    /**
+     * @deprecated
+     */
+    public function setURI(?string $uri = null): void
+    {
+        throw new BadMethodCallException('Cannot use this method.');
+    }
+
+    /**
+     * Returns the baseURL.
+     *
+     * @interal
+     */
+    public function getBaseURL(): string
+    {
+        return (string) $this->baseURL;
+    }
+
+    /**
+     * Returns the URI path relative to baseURL.
+     *
+     * @return string the Route path
+     */
+    public function getRoutePath(): string
+    {
+        return $this->routePath;
+    }
+
+    /**
      * Sets the route path (and segments).
      *
      * @return $this
@@ -283,50 +188,79 @@ class SiteURI extends URI
     }
 
     /**
-     * Sets the route path (and segments).
-     */
-    private function setRoutePath(string $routePath): void
-    {
-        $routePath = $this->filterPath($routePath);
-
-        $indexPageRoutePath = $this->getIndexPageRoutePath($routePath);
-
-        $this->path = $this->basePathWithoutIndexPage . $indexPageRoutePath;
-
-        $this->routePath = ltrim($routePath, '/');
-
-        $this->segments = $this->convertToSegments($this->routePath);
-    }
-
-    /**
-     * Converts path to segments
-     */
-    private function convertToSegments(string $path): array
-    {
-        $tempPath = trim($path, '/');
-
-        return ($tempPath === '') ? [] : explode('/', $tempPath);
-    }
-
-    /**
      * Sets the path portion of the URI based on segments.
      *
      * @return $this
      *
-     * @deprecated This method will be private.
+     * @deprecated this method will be private
      */
     public function refreshPath()
     {
         $allSegments = array_merge($this->baseSegments, $this->segments);
-        $this->path  = '/' . $this->filterPath(implode('/', $allSegments));
+        $this->path = '/'.$this->filterPath(implode('/', $allSegments));
 
-        if ($this->routePath === '/' && $this->path !== '/') {
+        if ('/' === $this->routePath && '/' !== $this->path) {
             $this->path .= '/';
         }
 
         $this->routePath = $this->filterPath(implode('/', $this->segments));
 
         return $this;
+    }
+
+    /**
+     * For base_url() helper.
+     *
+     * @param array|string $relativePath URI string or array of URI segments
+     * @param null|string  $scheme       URI scheme. E.g., http, ftp. If empty
+     *                                   string '' is set, a protocol-relative
+     *                                   link is returned.
+     */
+    public function baseUrl($relativePath = '', ?string $scheme = null): string
+    {
+        $relativePath = $this->stringifyRelativePath($relativePath);
+
+        $config = clone config(App::class);
+        $config->indexPage = '';
+
+        $host = $this->getHost();
+
+        $uri = new self($config, $relativePath, $host, $scheme);
+
+        // Support protocol-relative links
+        if ('' === $scheme) {
+            return substr((string) $uri, strlen($uri->getScheme()) + 1);
+        }
+
+        return (string) $uri;
+    }
+
+    /**
+     * For site_url() helper.
+     *
+     * @param array|string $relativePath URI string or array of URI segments
+     * @param null|string  $scheme       URI scheme. E.g., http, ftp. If empty
+     *                                   string '' is set, a protocol-relative
+     *                                   link is returned.
+     * @param null|App     $config       alternate configuration to use
+     */
+    public function siteUrl($relativePath = '', ?string $scheme = null, ?App $config = null): string
+    {
+        $relativePath = $this->stringifyRelativePath($relativePath);
+
+        // Check current host.
+        $host = $config instanceof App ? null : $this->getHost();
+
+        $config ??= config(App::class);
+
+        $uri = new self($config, $relativePath, $host, $scheme);
+
+        // Support protocol-relative links
+        if ('' === $scheme) {
+            return substr((string) $uri, strlen($uri->getScheme()) + 1);
+        }
+
+        return (string) $uri;
     }
 
     /**
@@ -345,23 +279,23 @@ class SiteURI extends URI
      */
     protected function applyParts(array $parts): void
     {
-        if (isset($parts['host']) && $parts['host'] !== '') {
+        if (isset($parts['host']) && '' !== $parts['host']) {
             $this->host = $parts['host'];
         }
 
-        if (isset($parts['user']) && $parts['user'] !== '') {
+        if (isset($parts['user']) && '' !== $parts['user']) {
             $this->user = $parts['user'];
         }
 
-        if (isset($parts['path']) && $parts['path'] !== '') {
+        if (isset($parts['path']) && '' !== $parts['path']) {
             $this->path = $this->filterPath($parts['path']);
         }
 
-        if (isset($parts['query']) && $parts['query'] !== '') {
+        if (isset($parts['query']) && '' !== $parts['query']) {
             $this->setQuery($parts['query']);
         }
 
-        if (isset($parts['fragment']) && $parts['fragment'] !== '') {
+        if (isset($parts['fragment']) && '' !== $parts['fragment']) {
             $this->fragment = $parts['fragment'];
         }
 
@@ -381,31 +315,126 @@ class SiteURI extends URI
         }
     }
 
-    /**
-     * For base_url() helper.
-     *
-     * @param array|string $relativePath URI string or array of URI segments.
-     * @param string|null  $scheme       URI scheme. E.g., http, ftp. If empty
-     *                                   string '' is set, a protocol-relative
-     *                                   link is returned.
-     */
-    public function baseUrl($relativePath = '', ?string $scheme = null): string
+    private function parseRelativePath(string $relativePath): array
     {
-        $relativePath = $this->stringifyRelativePath($relativePath);
-
-        $config            = clone config(App::class);
-        $config->indexPage = '';
-
-        $host = $this->getHost();
-
-        $uri = new self($config, $relativePath, $host, $scheme);
-
-        // Support protocol-relative links
-        if ($scheme === '') {
-            return substr((string) $uri, strlen($uri->getScheme()) + 1);
+        $parts = parse_url('http://dummy/'.$relativePath);
+        if (false === $parts) {
+            throw HTTPException::forUnableToParseURI($relativePath);
         }
 
-        return (string) $uri;
+        $routePath = '/' === $relativePath ? '/' : ltrim($parts['path'], '/');
+
+        $query = $parts['query'] ?? '';
+        $fragment = $parts['fragment'] ?? '';
+
+        return [$routePath, $query, $fragment];
+    }
+
+    private function determineBaseURL(
+        App $configApp,
+        ?string $host,
+        ?string $scheme,
+    ): URI {
+        $baseURL = $this->normalizeBaseURL($configApp);
+
+        $uri = new URI($baseURL);
+
+        // Update scheme
+        if (null !== $scheme && '' !== $scheme) {
+            $uri->setScheme($scheme);
+        } elseif ($configApp->forceGlobalSecureRequests) {
+            $uri->setScheme('https');
+        }
+
+        // Update host
+        if (null !== $host) {
+            $uri->setHost($host);
+        }
+
+        return $uri;
+    }
+
+    private function getIndexPageRoutePath(string $routePath): string
+    {
+        // Remove starting slash unless it is `/`.
+        if ('' !== $routePath && '/' === $routePath[0] && '/' !== $routePath) {
+            $routePath = ltrim($routePath, '/');
+        }
+
+        // Check for an index page
+        $indexPage = '';
+        if ('' !== $this->indexPage) {
+            $indexPage = $this->indexPage;
+
+            // Check if we need a separator
+            if ('' !== $routePath && '/' !== $routePath[0] && '?' !== $routePath[0]) {
+                $indexPage .= '/';
+            }
+        }
+
+        $indexPageRoutePath = $indexPage.$routePath;
+
+        if ('/' === $indexPageRoutePath) {
+            $indexPageRoutePath = '';
+        }
+
+        return $indexPageRoutePath;
+    }
+
+    private function normalizeBaseURL(App $configApp): string
+    {
+        // It's possible the user forgot a trailing slash on their
+        // baseURL, so let's help them out.
+        $baseURL = rtrim($configApp->baseURL, '/ ').'/';
+
+        // Validate baseURL
+        if (false === filter_var($baseURL, FILTER_VALIDATE_URL)) {
+            throw new ConfigException(
+                'Config\App::$baseURL "'.$baseURL.'" is not a valid URL.',
+            );
+        }
+
+        return $baseURL;
+    }
+
+    /**
+     * Sets basePathWithoutIndexPage and baseSegments.
+     */
+    private function setBasePath(): void
+    {
+        $this->basePathWithoutIndexPage = $this->baseURL->getPath();
+
+        $this->baseSegments = $this->convertToSegments($this->basePathWithoutIndexPage);
+
+        if ('' !== $this->indexPage) {
+            $this->baseSegments[] = $this->indexPage;
+        }
+    }
+
+    /**
+     * Sets the route path (and segments).
+     */
+    private function setRoutePath(string $routePath): void
+    {
+        $routePath = $this->filterPath($routePath);
+
+        $indexPageRoutePath = $this->getIndexPageRoutePath($routePath);
+
+        $this->path = $this->basePathWithoutIndexPage.$indexPageRoutePath;
+
+        $this->routePath = ltrim($routePath, '/');
+
+        $this->segments = $this->convertToSegments($this->routePath);
+    }
+
+    /**
+     * Converts path to segments.
+     */
+    private function convertToSegments(string $path): array
+    {
+        $tempPath = trim($path, '/');
+
+        return ('' === $tempPath) ? [] : explode('/', $tempPath);
     }
 
     /**
@@ -418,33 +447,5 @@ class SiteURI extends URI
         }
 
         return $relativePath;
-    }
-
-    /**
-     * For site_url() helper.
-     *
-     * @param array|string $relativePath URI string or array of URI segments.
-     * @param string|null  $scheme       URI scheme. E.g., http, ftp. If empty
-     *                                   string '' is set, a protocol-relative
-     *                                   link is returned.
-     * @param App|null     $config       Alternate configuration to use.
-     */
-    public function siteUrl($relativePath = '', ?string $scheme = null, ?App $config = null): string
-    {
-        $relativePath = $this->stringifyRelativePath($relativePath);
-
-        // Check current host.
-        $host = $config instanceof App ? null : $this->getHost();
-
-        $config ??= config(App::class);
-
-        $uri = new self($config, $relativePath, $host, $scheme);
-
-        // Support protocol-relative links
-        if ($scheme === '') {
-            return substr((string) $uri, strlen($uri->getScheme()) + 1);
-        }
-
-        return (string) $uri;
     }
 }

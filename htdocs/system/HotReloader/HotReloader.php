@@ -20,7 +20,7 @@ final class HotReloader
 {
     public function run(): void
     {
-        if (session_status() === PHP_SESSION_ACTIVE) {
+        if (PHP_SESSION_ACTIVE === session_status()) {
             session_write_close();
         }
 
@@ -33,11 +33,11 @@ final class HotReloader
         ob_end_clean();
         set_time_limit(0);
 
-        $hasher  = new DirectoryHasher();
+        $hasher = new DirectoryHasher();
         $appHash = $hasher->hash();
 
         while (true) {
-            if (connection_status() !== CONNECTION_NORMAL || connection_aborted() === 1) {
+            if (CONNECTION_NORMAL !== connection_status() || 1 === connection_aborted()) {
                 break;
             }
 
@@ -48,10 +48,11 @@ final class HotReloader
                 $appHash = $currentHash;
 
                 $this->sendEvent('reload', ['time' => date('Y-m-d H:i:s')]);
+
                 break;
             }
 
-            if (mt_rand(1, 10) > 8) {
+            if (random_int(1, 10) > 8) {
                 $this->sendEvent('ping', ['time' => date('Y-m-d H:i:s')]);
             }
 
@@ -65,7 +66,7 @@ final class HotReloader
     private function sendEvent(string $event, array $data): void
     {
         echo "event: {$event}\n";
-        echo 'data: ' . json_encode($data) . "\n\n";
+        echo 'data: '.json_encode($data)."\n\n";
 
         ob_flush();
         flush();

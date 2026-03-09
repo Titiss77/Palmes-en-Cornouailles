@@ -17,9 +17,9 @@ use CodeIgniter\Files\File;
 use CodeIgniter\Images\Exceptions\ImageException;
 
 /**
- * Encapsulation of an Image file
+ * Encapsulation of an Image file.
  *
- * @see \CodeIgniter\Images\ImageTest
+ * @see ImageTest
  */
 class Image extends File
 {
@@ -55,7 +55,7 @@ class Image extends File
     public $sizeStr;
 
     /**
-     * The image's mime type, i.e. image/jpeg
+     * The image's mime type, i.e. image/jpeg.
      *
      * @var string
      */
@@ -66,12 +66,12 @@ class Image extends File
      * it will use the existing filename.
      *
      * @param string      $targetPath The directory to store the file in
-     * @param string|null $targetName The new name of the copied file.
-     * @param int         $perms      File permissions to be applied after copy.
+     * @param null|string $targetName the new name of the copied file
+     * @param int         $perms      file permissions to be applied after copy
      */
-    public function copy(string $targetPath, ?string $targetName = null, int $perms = 0644): bool
+    public function copy(string $targetPath, ?string $targetName = null, int $perms = 0o644): bool
     {
-        $targetPath = rtrim($targetPath, '/ ') . '/';
+        $targetPath = rtrim($targetPath, '/ ').'/';
 
         $targetName ??= $this->getFilename();
 
@@ -79,11 +79,11 @@ class Image extends File
             throw ImageException::forInvalidFile($targetName);
         }
 
-        if (! is_dir($targetPath)) {
-            mkdir($targetPath, 0755, true);
+        if (!is_dir($targetPath)) {
+            mkdir($targetPath, 0o755, true);
         }
 
-        if (! copy($this->getPathname(), "{$targetPath}{$targetName}")) {
+        if (!copy($this->getPathname(), "{$targetPath}{$targetName}")) {
             throw ImageException::forCopyError($targetPath);
         }
 
@@ -93,7 +93,7 @@ class Image extends File
     }
 
     /**
-     * Get image properties
+     * Get image properties.
      *
      * A helper function that gets info about the file
      *
@@ -104,34 +104,34 @@ class Image extends File
         $path = $this->getPathname();
         $vals = getimagesize($path);
 
-        if ($vals === false) {
+        if (false === $vals) {
             throw ImageException::forFileNotSupported();
         }
 
         $types = [
-            IMAGETYPE_GIF  => 'gif',
+            IMAGETYPE_GIF => 'gif',
             IMAGETYPE_JPEG => 'jpeg',
-            IMAGETYPE_PNG  => 'png',
+            IMAGETYPE_PNG => 'png',
             IMAGETYPE_WEBP => 'webp',
         ];
 
-        $mime = 'image/' . ($types[$vals[2]] ?? 'jpg');
+        $mime = 'image/'.($types[$vals[2]] ?? 'jpg');
 
         if ($return) {
             return [
-                'width'      => $vals[0],
-                'height'     => $vals[1],
+                'width' => $vals[0],
+                'height' => $vals[1],
                 'image_type' => $vals[2],
-                'size_str'   => $vals[3],
-                'mime_type'  => $mime,
+                'size_str' => $vals[3],
+                'mime_type' => $mime,
             ];
         }
 
-        $this->origWidth  = $vals[0];
+        $this->origWidth = $vals[0];
         $this->origHeight = $vals[1];
-        $this->imageType  = $vals[2];
-        $this->sizeStr    = $vals[3];
-        $this->mime       = $mime;
+        $this->imageType = $vals[2];
+        $this->sizeStr = $vals[3];
+        $this->mime = $mime;
 
         return true;
     }

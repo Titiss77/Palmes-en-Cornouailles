@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\BoutiquesModel;
@@ -18,7 +20,7 @@ class Boutiques extends BaseAdminController
     public function index()
     {
         $data = $this->getCommonData('Gestion Boutique', 'admin/page.css');
-        
+
         // Utilisation de la méthode existante dans votre modèle
         $data['boutiques'] = $this->boutiquesModel->getBoutiquesWithRelations();
 
@@ -29,6 +31,7 @@ class Boutiques extends BaseAdminController
     public function new()
     {
         $data = $this->getCommonData('Nouvel Article', 'admin/page.css');
+
         return view('admin/boutiques/create', $data);
     }
 
@@ -106,6 +109,7 @@ class Boutiques extends BaseAdminController
 
         if ($article) {
             $this->boutiquesModel->delete($id);
+
             return redirect()->to('/admin/boutiques')->with('success', 'Article supprimé.');
         }
 

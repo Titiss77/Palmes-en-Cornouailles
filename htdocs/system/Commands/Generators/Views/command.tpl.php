@@ -4,16 +4,16 @@ namespace {namespace};
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
-<?php if ($type === 'generator'): ?>
+<?php if ('generator' === $type) { ?>
 use CodeIgniter\CLI\GeneratorTrait;
-<?php endif ?>
+<?php } ?>
 
 class {class} extends BaseCommand
 {
-<?php if ($type === 'generator'): ?>
+<?php if ('generator' === $type) { ?>
     use GeneratorTrait;
 
-<?php endif ?>
+<?php } ?>
     /**
      * The Command's Group
      *
@@ -63,14 +63,14 @@ class {class} extends BaseCommand
      */
     public function run(array $params)
     {
-<?php if ($type === 'generator'): ?>
+<?php if ('generator' === $type) { ?>
         $this->component = 'Command';
         $this->directory = 'Commands';
         $this->template  = 'command.tpl.php';
 
         $this->execute($params);
-<?php else: ?>
+<?php } else { ?>
         //
-<?php endif ?>
+<?php } ?>
     }
 }

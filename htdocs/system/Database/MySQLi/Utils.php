@@ -17,19 +17,19 @@ use CodeIgniter\Database\BaseUtils;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
 /**
- * Utils for MySQLi
+ * Utils for MySQLi.
  */
 class Utils extends BaseUtils
 {
     /**
-     * List databases statement
+     * List databases statement.
      *
      * @var string
      */
     protected $listDatabases = 'SHOW DATABASES';
 
     /**
-     * OPTIMIZE TABLE statement
+     * OPTIMIZE TABLE statement.
      *
      * @var string
      */

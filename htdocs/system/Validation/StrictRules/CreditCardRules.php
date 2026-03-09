@@ -16,12 +16,12 @@ namespace CodeIgniter\Validation\StrictRules;
 use CodeIgniter\Validation\CreditCardRules as NonStrictCreditCardRules;
 
 /**
- * Class CreditCardRules
+ * Class CreditCardRules.
  *
  * Provides validation methods for common credit-card inputs.
  *
  * @see http://en.wikipedia.org/wiki/Credit_card_number
- * @see \CodeIgniter\Validation\StrictRules\CreditCardRulesTest
+ * @see CreditCardRulesTest
  */
 class CreditCardRules
 {
@@ -42,11 +42,11 @@ class CreditCardRules
      *      'cc_num' => 'valid_cc_number[visa]'
      *  ];
      *
-     * @param array|bool|float|int|object|string|null $ccNumber
+     * @param null|array|bool|float|int|object|string $ccNumber
      */
     public function valid_cc_number($ccNumber, string $type): bool
     {
-        if (! is_string($ccNumber)) {
+        if (!is_string($ccNumber)) {
             return false;
         }
 

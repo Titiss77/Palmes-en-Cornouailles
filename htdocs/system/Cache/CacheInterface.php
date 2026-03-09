@@ -14,23 +14,21 @@ declare(strict_types=1);
 namespace CodeIgniter\Cache;
 
 /**
- * Cache interface
+ * Cache interface.
  */
 interface CacheInterface
 {
     /**
      * Takes care of any handler-specific setup that must be done.
-     *
-     * @return void
      */
-    public function initialize();
+    public function initialize(): void;
 
     /**
      * Attempts to fetch an item from the cache store.
      *
      * @param string $key Cache item name
      *
-     * @return array|bool|float|int|object|string|null
+     * @return null|array|bool|float|int|object|string
      */
     public function get(string $key);
 
@@ -38,7 +36,7 @@ interface CacheInterface
      * Saves an item to the cache store.
      *
      * @param string                                  $key   Cache item name
-     * @param array|bool|float|int|object|string|null $value The data to save
+     * @param null|array|bool|float|int|object|string $value The data to save
      * @param int                                     $ttl   Time To Live, in seconds (default 60)
      *
      * @return bool Success or failure
@@ -87,16 +85,16 @@ interface CacheInterface
      * The information returned and the structure of the data
      * varies depending on the handler.
      *
-     * @return array|false|object|null
+     * @return null|array|false|object
      */
     public function getCacheInfo();
 
     /**
      * Returns detailed information about the specific item in the cache.
      *
-     * @param string $key Cache item name.
+     * @param string $key cache item name
      *
-     * @return array|false|null
+     * @return null|array|false
      *                          Returns null if the item does not exist, otherwise array<string, mixed>
      *                          with at least the 'expire' key for absolute epoch expiry (or null).
      *                          Some handlers may return false when an item does not exist, which is deprecated.

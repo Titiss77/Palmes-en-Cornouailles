@@ -1,4 +1,4 @@
-<?= $this->extend('Public/Layout/l_global') ?>
+<?php echo $this->extend('Public/Layout/l_global'); ?>
 
 <?php
 
@@ -13,7 +13,7 @@
  */
 ?>
 
-<?= $this->section('contenu') ?>
+<?php echo $this->section('contenu'); ?>
 
 <?php
 
@@ -36,8 +36,8 @@ $partenariats = [
             'text' => 'Consulter le tableau de ventes',
             'url' => base_url('liste'),
             'icon' => 'bi-box-arrow-up-right',  // Icône PDF
-            'class' => 'tag-bassin text-decoration-none'  // Style : Bouton gris arrondi (badge)
-        ]
+            'class' => 'tag-bassin text-decoration-none',  // Style : Bouton gris arrondi (badge)
+        ],
     ],
     // --- CARTE 2 : DECATHLON PRO ---
     [
@@ -52,9 +52,9 @@ $partenariats = [
             'text' => 'Accéder à la boutique Pro',
             'url' => $liensautres['lienDecatPro'],
             'icon' => 'bi-box-arrow-up-right',  // Icône lien externe
-            'class' => 'color-blue fw-bold small'  // Style : Lien texte bleu simple
-        ]
-    ]
+            'class' => 'color-blue fw-bold small',  // Style : Lien texte bleu simple
+        ],
+    ],
 ];
 ?>
 
@@ -69,70 +69,70 @@ $partenariats = [
     <h3 class="title-section">Boutiques du club</h3>
 
     <div class="grid-2">
-        <?php if (!empty($boutique)): ?>
-        <?php foreach ($boutique as $item): ?>
+        <?php if (!empty($boutique)) { ?>
+        <?php foreach ($boutique as $item) { ?>
 
         <div class="card-item shop-card-clean">
 
             <div class="shop-card-content">
-                <h5><?= esc($item['nom']) ?></h5>
+                <h5><?php echo esc($item['nom']); ?></h5>
 
-                <p class="txt-small"><?= esc($item['description']) ?></p>
+                <p class="txt-small"><?php echo esc($item['description']); ?></p>
 
                 <div class="price-box">
-                    <span class="price-value"><?= esc($item['tranchePrix']) ?></span>
+                    <span class="price-value"><?php echo esc($item['tranchePrix']); ?></span>
                 </div>
             </div>
 
-            <a href="<?= esc($item['url']) ?>" target="_blank" class="btn-shop-link">
+            <a href="<?php echo esc($item['url']); ?>" target="_blank" class="btn-shop-link">
                 Commander sur HelloAsso <i class="bi bi-arrow-right"></i>
             </a>
         </div>
-        <?php endforeach; ?>
-        <?php else: ?>
+        <?php } ?>
+        <?php } else { ?>
         <p>Aucuns partenaires pour le moment. Revenez bientôt !</p>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 
     <h3 class="title-section">Bourse & Partenariats</h3>
 
     <div class="grid-2">
-        <?php foreach ($partenariats as $p): ?>
+        <?php foreach ($partenariats as $p) { ?>
 
         <div class="card-item text-left h-100">
 
-            <h3><i class="bi <?= esc($p['icon']) ?>"></i> <?= esc($p['titre']) ?></h3>
+            <h3><i class="bi <?php echo esc($p['icon']); ?>"></i> <?php echo esc($p['titre']); ?></h3>
 
             <div class="mb-3">
-                <?= $p['html'] ?>
+                <?php echo $p['html']; ?>
             </div>
 
             <div class="mt-auto">
-                <a href="<?= $p['btn']['url'] ?>" target="blank" class="<?= esc($p['btn']['class']) ?>">
+                <a href="<?php echo $p['btn']['url']; ?>" target="blank" class="<?php echo esc($p['btn']['class']); ?>">
 
                     <?php
                     // LOGIQUE D'AFFICHAGE DE L'ICÔNE
                     // Si l'icône n'est pas une flèche "arrow-right", on la met à GAUCHE du texte.
-                    if (strpos($p['btn']['icon'], 'arrow-right') === false):
+                    if (!str_contains($p['btn']['icon'], 'arrow-right')) {
                         ?>
-                    <i class="bi <?= esc($p['btn']['icon']) ?>"></i>
-                    <?php endif; ?>
+                    <i class="bi <?php echo esc($p['btn']['icon']); ?>"></i>
+                    <?php } ?>
 
-                    <?= esc($p['btn']['text']) ?>
+                    <?php echo esc($p['btn']['text']); ?>
 
                     <?php
                     // Si l'icône est une flèche "arrow-right", on la met à DROITE du texte (style "Lire la suite").
-                    if (strpos($p['btn']['icon'], 'arrow-right') !== false):
+                    if (str_contains($p['btn']['icon'], 'arrow-right')) {
                         ?>
-                    <i class="bi <?= esc($p['btn']['icon']) ?>"></i>
-                    <?php endif; ?>
+                    <i class="bi <?php echo esc($p['btn']['icon']); ?>"></i>
+                    <?php } ?>
                 </a>
             </div>
 
         </div>
-        <?php endforeach; ?>
+        <?php } ?>
     </div>
 
 </div>
 
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

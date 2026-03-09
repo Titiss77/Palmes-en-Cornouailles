@@ -30,16 +30,12 @@ namespace Kint\Parser;
 use Kint\Value\AbstractValue;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\Representation\ValueRepresentation;
-use ReflectionClass;
-use SimpleXMLElement;
-use SplFileInfo;
-use Throwable;
 
 class ToStringPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
     public static array $blacklist = [
-        SimpleXMLElement::class,
-        SplFileInfo::class,
+        \SimpleXMLElement::class,
+        \SplFileInfo::class,
     ];
 
     public function getTypes(): array
@@ -54,7 +50,7 @@ class ToStringPlugin extends AbstractPlugin implements PluginCompleteInterface
 
     public function parseComplete(&$var, AbstractValue $v, int $trigger): AbstractValue
     {
-        $reflection = new ReflectionClass($var);
+        $reflection = new \ReflectionClass($var);
         if (!$reflection->hasMethod('__toString')) {
             return $v;
         }
@@ -67,7 +63,7 @@ class ToStringPlugin extends AbstractPlugin implements PluginCompleteInterface
 
         try {
             $string = (string) $var;
-        } catch (Throwable $t) {
+        } catch (\Throwable $t) {
             return $v;
         }
 

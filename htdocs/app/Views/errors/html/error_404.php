@@ -85,9 +85,9 @@
             <strong>Cette page n'existe pas ou est en cours de production.</strong>
         </p>
 
-        <?php if (ENVIRONMENT !== 'production'): ?>
-        <code><?= nl2br(esc($message)) ?></code>
-        <?php endif; ?>
+        <?php if (ENVIRONMENT !== 'production') { ?>
+        <code><?php echo nl2br(esc($message)); ?></code>
+        <?php } ?>
 
         <br>
         <a href="javascript:history.back()" class="btn-home">Retourner à la page précédente</a>

@@ -17,7 +17,7 @@ namespace CodeIgniter\Autoloader;
  * Allows loading non-class files in a namespaced manner.
  * Works with Helpers, Views, etc.
  *
- * @see \CodeIgniter\Autoloader\FileLocatorTest
+ * @see FileLocatorTest
  */
 class FileLocator implements FileLocatorInterface
 {
@@ -47,25 +47,25 @@ class FileLocator implements FileLocatorInterface
      * @param string                $file   The relative file path or namespaced file to
      *                                      locate. If not namespaced, search in the app
      *                                      folder.
-     * @param non-empty-string|null $folder The folder within the namespace that we should
+     * @param null|non-empty-string $folder The folder within the namespace that we should
      *                                      look for the file. If $file does not contain
      *                                      this value, it will be appended to the namespace
      *                                      folder.
-     * @param string                $ext    The file extension the file should have.
+     * @param string                $ext    the file extension the file should have
      *
-     * @return false|string The path to the file, or false if not found.
+     * @return false|string the path to the file, or false if not found
      */
     public function locateFile(string $file, ?string $folder = null, string $ext = 'php')
     {
         $file = $this->ensureExt($file, $ext);
 
         // Clears the folder name if it is at the beginning of the filename
-        if ($folder !== null && str_starts_with($file, $folder)) {
-            $file = substr($file, strlen($folder . '/'));
+        if (null !== $folder && str_starts_with($file, $folder)) {
+            $file = substr($file, strlen($folder.'/'));
         }
 
         // Is not namespaced? Try the application folder.
-        if (! str_contains($file, '\\')) {
+        if (!str_contains($file, '\\')) {
             return $this->legacyLocate($file, $folder);
         }
 
@@ -76,42 +76,42 @@ class FileLocator implements FileLocatorInterface
         $segments = explode('\\', $file);
 
         // The first segment will be empty if a slash started the filename.
-        if ($segments[0] === '') {
+        if ('' === $segments[0]) {
             unset($segments[0]);
         }
 
-        $paths    = [];
+        $paths = [];
         $filename = '';
 
         // Namespaces always comes with arrays of paths
         $namespaces = $this->autoloader->getNamespace();
 
         foreach (array_keys($namespaces) as $namespace) {
-            if (substr($file, 0, strlen($namespace) + 1) === $namespace . '\\') {
+            if (substr($file, 0, strlen($namespace) + 1) === $namespace.'\\') {
                 $fileWithoutNamespace = substr($file, strlen($namespace));
 
                 // There may be sub-namespaces of the same vendor,
                 // so overwrite them with namespaces found later.
-                $paths    = $namespaces[$namespace];
+                $paths = $namespaces[$namespace];
                 $filename = ltrim(str_replace('\\', '/', $fileWithoutNamespace), '/');
             }
         }
 
         // if no namespaces matched then quit
-        if ($paths === []) {
+        if ([] === $paths) {
             return false;
         }
 
         // Check each path in the namespace
         foreach ($paths as $path) {
             // Ensure trailing slash
-            $path = rtrim($path, '/') . '/';
+            $path = rtrim($path, '/').'/';
 
             // If we have a folder name, then the calling function
             // expects this file to be within that folder, like 'Views',
             // or 'libraries'.
-            if ($folder !== null && ! str_contains($path . $filename, '/' . $folder . '/')) {
-                $path .= trim($folder, '/') . '/';
+            if (null !== $folder && !str_contains($path.$filename, '/'.$folder.'/')) {
+                $path .= trim($folder, '/').'/';
             }
 
             $path .= $filename;
@@ -132,9 +132,9 @@ class FileLocator implements FileLocatorInterface
             return '';
         }
 
-        $php       = file_get_contents($file);
-        $tokens    = token_get_all($php);
-        $dlm       = false;
+        $php = file_get_contents($file);
+        $tokens = token_get_all($php);
+        $dlm = false;
         $namespace = '';
         $className = '';
 
@@ -143,32 +143,33 @@ class FileLocator implements FileLocatorInterface
                 continue;
             }
 
-            if ((isset($tokens[$i - 2][1]) && ($tokens[$i - 2][1] === 'phpnamespace' || $tokens[$i - 2][1] === 'namespace')) || ($dlm && $tokens[$i - 1][0] === T_NS_SEPARATOR && $token[0] === T_STRING)) {
-                if (! $dlm) {
+            if ((isset($tokens[$i - 2][1]) && ('phpnamespace' === $tokens[$i - 2][1] || 'namespace' === $tokens[$i - 2][1])) || ($dlm && T_NS_SEPARATOR === $tokens[$i - 1][0] && T_STRING === $token[0])) {
+                if (!$dlm) {
                     $namespace = '';
                 }
 
                 if (isset($token[1])) {
-                    $namespace = $namespace !== '' ? $namespace . '\\' . $token[1] : $token[1];
-                    $dlm       = true;
+                    $namespace = '' !== $namespace ? $namespace.'\\'.$token[1] : $token[1];
+                    $dlm = true;
                 }
-            } elseif ($dlm && ($token[0] !== T_NS_SEPARATOR) && ($token[0] !== T_STRING)) {
+            } elseif ($dlm && (T_NS_SEPARATOR !== $token[0]) && (T_STRING !== $token[0])) {
                 $dlm = false;
             }
 
-            if (($tokens[$i - 2][0] === T_CLASS || (isset($tokens[$i - 2][1]) && $tokens[$i - 2][1] === 'phpclass'))
-                && $tokens[$i - 1][0] === T_WHITESPACE
-                && $token[0] === T_STRING) {
+            if ((T_CLASS === $tokens[$i - 2][0] || (isset($tokens[$i - 2][1]) && 'phpclass' === $tokens[$i - 2][1]))
+                && T_WHITESPACE === $tokens[$i - 1][0]
+                && T_STRING === $token[0]) {
                 $className = $token[1];
+
                 break;
             }
         }
 
-        if ($className === '') {
+        if ('' === $className) {
             return '';
         }
 
-        return $namespace . '\\' . $className;
+        return $namespace.'\\'.$className;
     }
 
     /**
@@ -191,13 +192,13 @@ class FileLocator implements FileLocatorInterface
         $path = $this->ensureExt($path, $ext);
 
         $foundPaths = [];
-        $appPaths   = [];
+        $appPaths = [];
 
         foreach ($this->getNamespaces() as $namespace) {
-            if (isset($namespace['path']) && is_file($namespace['path'] . $path)) {
-                $fullPath     = $namespace['path'] . $path;
+            if (isset($namespace['path']) && is_file($namespace['path'].$path)) {
+                $fullPath = $namespace['path'].$path;
                 $resolvedPath = realpath($fullPath);
-                $fullPath     = $resolvedPath !== false ? $resolvedPath : $fullPath;
+                $fullPath = false !== $resolvedPath ? $resolvedPath : $fullPath;
 
                 if ($prioritizeApp) {
                     $foundPaths[] = $fullPath;
@@ -209,7 +210,7 @@ class FileLocator implements FileLocatorInterface
             }
         }
 
-        if (! $prioritizeApp && $appPaths !== []) {
+        if (!$prioritizeApp && [] !== $appPaths) {
             $foundPaths = [...$foundPaths, ...$appPaths];
         }
 
@@ -217,75 +218,26 @@ class FileLocator implements FileLocatorInterface
         return array_values(array_unique($foundPaths));
     }
 
-    /**
-     * Ensures a extension is at the end of a filename
-     */
-    protected function ensureExt(string $path, string $ext): string
-    {
-        if ($ext !== '') {
-            $ext = '.' . $ext;
-
-            if (! str_ends_with($path, $ext)) {
-                $path .= $ext;
-            }
-        }
-
-        return $path;
-    }
-
-    /**
-     * Return the namespace mappings we know about.
-     *
-     * @return array<int, array<string, string>>
-     */
-    protected function getNamespaces()
-    {
-        $namespaces = [];
-
-        // Save system for last
-        $system = [];
-
-        foreach ($this->autoloader->getNamespace() as $prefix => $paths) {
-            foreach ($paths as $path) {
-                if ($prefix === 'CodeIgniter') {
-                    $system[] = [
-                        'prefix' => $prefix,
-                        'path'   => rtrim($path, '\\/') . DIRECTORY_SEPARATOR,
-                    ];
-
-                    continue;
-                }
-
-                $namespaces[] = [
-                    'prefix' => $prefix,
-                    'path'   => rtrim($path, '\\/') . DIRECTORY_SEPARATOR,
-                ];
-            }
-        }
-
-        return array_merge($namespaces, $system);
-    }
-
     public function findQualifiedNameFromPath(string $path)
     {
         $resolvedPath = realpath($path);
-        $path         = $resolvedPath !== false ? $resolvedPath : $path;
+        $path = false !== $resolvedPath ? $resolvedPath : $path;
 
-        if (! is_file($path)) {
+        if (!is_file($path)) {
             return false;
         }
 
         foreach ($this->getNamespaces() as $namespace) {
             $resolvedNamespacePath = realpath($namespace['path']);
-            $namespace['path']     = $resolvedNamespacePath !== false ? $resolvedNamespacePath : $namespace['path'];
+            $namespace['path'] = false !== $resolvedNamespacePath ? $resolvedNamespacePath : $namespace['path'];
 
-            if ($namespace['path'] === '') {
+            if ('' === $namespace['path']) {
                 continue;
             }
 
-            if (mb_strpos($path, $namespace['path']) === 0) {
-                $className = $namespace['prefix'] . '\\' .
-                    ltrim(
+            if (0 === mb_strpos($path, $namespace['path'])) {
+                $className = $namespace['prefix'].'\\'
+                    .ltrim(
                         str_replace(
                             '/',
                             '\\',
@@ -323,7 +275,7 @@ class FileLocator implements FileLocatorInterface
      */
     public function listFiles(string $path): array
     {
-        if ($path === '') {
+        if ('' === $path) {
             return [];
         }
 
@@ -331,17 +283,17 @@ class FileLocator implements FileLocatorInterface
         helper('filesystem');
 
         foreach ($this->getNamespaces() as $namespace) {
-            $fullPath     = $namespace['path'] . $path;
+            $fullPath = $namespace['path'].$path;
             $resolvedPath = realpath($fullPath);
-            $fullPath     = $resolvedPath !== false ? $resolvedPath : $fullPath;
+            $fullPath = false !== $resolvedPath ? $resolvedPath : $fullPath;
 
-            if (! is_dir($fullPath)) {
+            if (!is_dir($fullPath)) {
                 continue;
             }
 
             $tempFiles = get_filenames($fullPath, true, false, false);
 
-            if ($tempFiles !== []) {
+            if ([] !== $tempFiles) {
                 $files = array_merge($files, $tempFiles);
             }
         }
@@ -357,7 +309,7 @@ class FileLocator implements FileLocatorInterface
      */
     public function listNamespaceFiles(string $prefix, string $path): array
     {
-        if ($path === '' || ($prefix === '')) {
+        if ('' === $path || ('' === $prefix)) {
             return [];
         }
 
@@ -366,17 +318,17 @@ class FileLocator implements FileLocatorInterface
 
         // autoloader->getNamespace($prefix) returns an array of paths for that namespace
         foreach ($this->autoloader->getNamespace($prefix) as $namespacePath) {
-            $fullPath     = rtrim($namespacePath, '/') . '/' . $path;
+            $fullPath = rtrim($namespacePath, '/').'/'.$path;
             $resolvedPath = realpath($fullPath);
-            $fullPath     = $resolvedPath !== false ? $resolvedPath : $fullPath;
+            $fullPath = false !== $resolvedPath ? $resolvedPath : $fullPath;
 
-            if (! is_dir($fullPath)) {
+            if (!is_dir($fullPath)) {
                 continue;
             }
 
             $tempFiles = get_filenames($fullPath, true, false, false);
 
-            if ($tempFiles !== []) {
+            if ([] !== $tempFiles) {
                 $files = array_merge($files, $tempFiles);
             }
         }
@@ -385,18 +337,67 @@ class FileLocator implements FileLocatorInterface
     }
 
     /**
+     * Ensures a extension is at the end of a filename.
+     */
+    protected function ensureExt(string $path, string $ext): string
+    {
+        if ('' !== $ext) {
+            $ext = '.'.$ext;
+
+            if (!str_ends_with($path, $ext)) {
+                $path .= $ext;
+            }
+        }
+
+        return $path;
+    }
+
+    /**
+     * Return the namespace mappings we know about.
+     *
+     * @return array<int, array<string, string>>
+     */
+    protected function getNamespaces()
+    {
+        $namespaces = [];
+
+        // Save system for last
+        $system = [];
+
+        foreach ($this->autoloader->getNamespace() as $prefix => $paths) {
+            foreach ($paths as $path) {
+                if ('CodeIgniter' === $prefix) {
+                    $system[] = [
+                        'prefix' => $prefix,
+                        'path' => rtrim($path, '\/').DIRECTORY_SEPARATOR,
+                    ];
+
+                    continue;
+                }
+
+                $namespaces[] = [
+                    'prefix' => $prefix,
+                    'path' => rtrim($path, '\/').DIRECTORY_SEPARATOR,
+                ];
+            }
+        }
+
+        return array_merge($namespaces, $system);
+    }
+
+    /**
      * Checks the app folder to see if the file can be found.
      * Only for use with filenames that DO NOT include namespacing.
      *
-     * @param non-empty-string|null $folder
+     * @param null|non-empty-string $folder
      *
-     * @return false|string The path to the file, or false if not found.
+     * @return false|string the path to the file, or false if not found
      */
     protected function legacyLocate(string $file, ?string $folder = null)
     {
-        $path         = APPPATH . ($folder === null ? $file : $folder . '/' . $file);
+        $path = APPPATH.(null === $folder ? $file : $folder.'/'.$file);
         $resolvedPath = realpath($path);
-        $path         = $resolvedPath !== false ? $resolvedPath : $path;
+        $path = false !== $resolvedPath ? $resolvedPath : $path;
 
         if (is_file($path)) {
             return $path;

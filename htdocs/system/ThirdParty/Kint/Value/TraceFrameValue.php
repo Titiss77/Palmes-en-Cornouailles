@@ -27,11 +27,8 @@ declare(strict_types=1);
 
 namespace Kint\Value;
 
-use InvalidArgumentException;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\Context\MethodContext;
-use ReflectionFunction;
-use ReflectionMethod;
 
 /**
  * @psalm-type TraceFrame array{
@@ -70,6 +67,8 @@ class TraceFrameValue extends ArrayValue
     protected ?InstanceValue $object;
 
     /**
+     * @param mixed $raw_frame
+     *
      * @psalm-param TraceFrame $raw_frame
      */
     public function __construct(ArrayValue $old, $raw_frame)
@@ -80,13 +79,13 @@ class TraceFrameValue extends ArrayValue
         $this->line = $raw_frame['line'] ?? null;
 
         if (isset($raw_frame['class']) && \method_exists($raw_frame['class'], $raw_frame['function'])) {
-            $func = new ReflectionMethod($raw_frame['class'], $raw_frame['function']);
+            $func = new \ReflectionMethod($raw_frame['class'], $raw_frame['function']);
             $this->callable = new MethodValue(
                 new MethodContext($func),
                 new DeclaredCallableBag($func)
             );
         } elseif (!isset($raw_frame['class']) && \function_exists($raw_frame['function'])) {
-            $func = new ReflectionFunction($raw_frame['function']);
+            $func = new \ReflectionFunction($raw_frame['function']);
             $this->callable = new FunctionValue(
                 new BaseContext($raw_frame['function']),
                 new DeclaredCallableBag($func)
@@ -101,7 +100,7 @@ class TraceFrameValue extends ArrayValue
 
             if ('object' === $c->getName()) {
                 if (!$frame_prop instanceof InstanceValue) {
-                    throw new InvalidArgumentException('object key of TraceFrameValue must be parsed to InstanceValue');
+                    throw new \InvalidArgumentException('object key of TraceFrameValue must be parsed to InstanceValue');
                 }
 
                 $this->object = $frame_prop;
@@ -109,7 +108,7 @@ class TraceFrameValue extends ArrayValue
 
             if ('args' === $c->getName()) {
                 if (!$frame_prop instanceof ArrayValue) {
-                    throw new InvalidArgumentException('args key of TraceFrameValue must be parsed to ArrayValue');
+                    throw new \InvalidArgumentException('args key of TraceFrameValue must be parsed to ArrayValue');
                 }
 
                 $args = \array_values($frame_prop->getContents());
@@ -127,7 +126,7 @@ class TraceFrameValue extends ArrayValue
                             $c = $arg->getContext();
 
                             if (!$c instanceof BaseContext) {
-                                throw new InvalidArgumentException('TraceFrameValue expects arg contexts to be instanceof BaseContext');
+                                throw new \InvalidArgumentException('TraceFrameValue expects arg contexts to be instanceof BaseContext');
                             }
 
                             $c->name = '$'.$param->name;
@@ -141,7 +140,7 @@ class TraceFrameValue extends ArrayValue
             }
         }
 
-        /**
+        /*
          * @psalm-suppress DocblockTypeContradiction
          * @psalm-suppress RedundantPropertyInitializationCheck
          * Psalm bug #11124

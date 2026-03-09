@@ -16,12 +16,11 @@ namespace CodeIgniter\Database\Postgre;
 use CodeIgniter\Database\BasePreparedQuery;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Exceptions\BadMethodCallException;
-use Exception;
 use PgSql\Connection as PgSqlConnection;
 use PgSql\Result as PgSqlResult;
 
 /**
- * Prepared query for Postgre
+ * Prepared query for Postgre.
  *
  * @extends BasePreparedQuery<PgSqlConnection, PgSqlResult, PgSqlResult>
  */
@@ -53,7 +52,7 @@ class PreparedQuery extends BasePreparedQuery
      * @param array $options Passed to the connection's prepare statement.
      *                       Unused in the MySQLi driver.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function _prepare(string $sql, array $options = []): PreparedQuery
     {
@@ -65,12 +64,12 @@ class PreparedQuery extends BasePreparedQuery
         // than what was put in.
         $this->query->setQuery($sql);
 
-        if (! $this->statement = pg_prepare($this->db->connID, $this->name, $sql)) {
-            $this->errorCode   = 0;
+        if (!$this->statement = pg_prepare($this->db->connID, $this->name, $sql)) {
+            $this->errorCode = 0;
             $this->errorString = pg_last_error($this->db->connID);
 
             if ($this->db->DBDebug) {
-                throw new DatabaseException($this->errorString . ' code: ' . $this->errorCode);
+                throw new DatabaseException($this->errorString.' code: '.$this->errorCode);
             }
         }
 
@@ -83,7 +82,7 @@ class PreparedQuery extends BasePreparedQuery
      */
     public function _execute(array $data): bool
     {
-        if (! isset($this->statement)) {
+        if (!isset($this->statement)) {
             throw new BadMethodCallException('You must call prepare before trying to execute a prepared statement.');
         }
 
@@ -101,19 +100,11 @@ class PreparedQuery extends BasePreparedQuery
     /**
      * Returns the result object for the prepared query or false on failure.
      *
-     * @return PgSqlResult|null
+     * @return null|PgSqlResult
      */
     public function _getResult()
     {
         return $this->result;
-    }
-
-    /**
-     * Deallocate prepared statements.
-     */
-    protected function _close(): bool
-    {
-        return pg_query($this->db->connID, 'DEALLOCATE "' . $this->db->escapeIdentifiers($this->name) . '"') !== false;
     }
 
     /**
@@ -126,9 +117,17 @@ class PreparedQuery extends BasePreparedQuery
         $count = 0;
 
         return preg_replace_callback('/\?/', static function () use (&$count): string {
-            $count++;
+            ++$count;
 
             return "\${$count}";
         }, $sql);
+    }
+
+    /**
+     * Deallocate prepared statements.
+     */
+    protected function _close(): bool
+    {
+        return false !== pg_query($this->db->connID, 'DEALLOCATE "'.$this->db->escapeIdentifiers($this->name).'"');
     }
 }

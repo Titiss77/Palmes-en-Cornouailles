@@ -1,5 +1,5 @@
 @ -1,97 +1,116 @@
-<?= $this->extend('Public/Layout/l_global') ?>
+<?php echo $this->extend('Public/Layout/l_global'); ?>
 
 <?php
 
@@ -16,7 +16,7 @@
  */
 ?>
 
-<?= $this->section('contenu') ?>
+<?php echo $this->section('contenu'); ?>
 
 <div class="site-container">
     <h2 class="title">Calendriers & Horaires</h2>
@@ -26,7 +26,7 @@
     <p class="txt-muted">Périodes scolaires et vacances.</p>
     <section class="mb-5">
         <?php
-        if (!empty($calendriers)):
+        if (!empty($calendriers)) {
             // 1. On groupe les calendriers par catégorie dans un nouveau tableau
             $groupedCalendriers = [];
             foreach ($calendriers as $planning) {
@@ -34,37 +34,37 @@
             }
 
             // 2. On boucle sur chaque catégorie
-            foreach ($groupedCalendriers as $categorie => $items):
+            foreach ($groupedCalendriers as $categorie => $items) {
                 ?>
         <div class="category-block mb-4">
             <h4 class="text-secondary border-bottom pb-2 mb-3">
-                <?= esc(ucfirst($categorie)) ?>
+                <?php echo esc(ucfirst($categorie)); ?>
             </h4>
 
             <div class="calendar-grid">
-                <?php foreach ($items as $item): ?>
+                <?php foreach ($items as $item) { ?>
                 <div class="calendar-img-box">
-                    <a href="<?= base_url('uploads/' . $item['image']) ?>" target="_blank">
+                    <a href="<?php echo base_url('uploads/'.$item['image']); ?>" target="_blank">
                         <p class="label-cal">
-                            <strong><?= esc($item['date']) ?></strong>
+                            <strong><?php echo esc($item['date']); ?></strong>
                         </p>
-                        <img src="<?= base_url('uploads/' . $item['image']) ?>" alt="Planning <?= esc($categorie) ?>"
+                        <img src="<?php echo base_url('uploads/'.$item['image']); ?>" alt="Planning <?php echo esc($categorie); ?>"
                             class="img-fluid img-zoom" loading="lazy">
                     </a>
                 </div>
-                <?php endforeach; ?>
+                <?php } ?>
             </div>
         </div>
         <?php
-            endforeach;
-        else:
+            }
+        } else {
             ?>
 
         <div class="alert-info-box">
             <i class="bi bi-info-circle"></i> Aucun planning disponible pour le moment.
         </div>
 
-        <?php endif; ?>
+        <?php } ?>
     </section>
 
     <h3 class="title-section"><i class="bi bi-trophy"></i> Calendrier des compétitions</h3>
@@ -72,10 +72,10 @@
 
         <?php
         // VÉRIFICATION : Y a-t-il un calendrier de compétition publié ?
-        if (!empty($calendrierCompet)):
+        if (!empty($calendrierCompet)) {
             ?>
 
-        <?php foreach ($calendrierCompet as $item): ?>
+        <?php foreach ($calendrierCompet as $item) { ?>
         <div class="card-item stats-box download-card">
 
             <div class="d-flex align-items-center gap-3">
@@ -85,26 +85,26 @@
                 </div>
 
                 <div>
-                    <h5 class="mb-1 text-primary">Saison <?= esc($item['date']) ?></h5>
+                    <h5 class="mb-1 text-primary">Saison <?php echo esc($item['date']); ?></h5>
                     <p class="txt-small mb-0 text-muted">Consultez les dates et lieux (Format PDF)</p>
                 </div>
             </div>
 
-            <a href="<?= base_url('uploads/' . $item['image']) ?>" target="_blank"
+            <a href="<?php echo base_url('uploads/'.$item['image']); ?>" target="_blank"
                 class="btn-home d-inline-flex align-items-center gap-2 text-decoration-none">
                 <i class="bi bi-download"></i> Télécharger le calendrier
             </a>
 
         </div>
-        <?php endforeach; ?>
+        <?php } ?>
 
-        <?php else: // Si le calendrier compétition n'est pas encore prêt ?>
+        <?php } else { // Si le calendrier compétition n'est pas encore prêt?>
 
         <p class="text-muted">Le calendrier des compétitions sera bientôt mis en ligne.</p>
 
-        <?php endif; ?>
+        <?php } ?>
 
     </section>
 </div>
 
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

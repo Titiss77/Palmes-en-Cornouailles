@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class Actualites extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $this->forge->addField([
             'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
@@ -23,21 +25,21 @@ class Actualites extends Migration
         ]);
 
         $this->forge->addPrimaryKey('id');
-        
+
         // --- Clés étrangères existantes ---
         $this->forge->addForeignKey('id_auteur', 'membres', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('image_id', 'images', 'id', 'SET NULL', 'CASCADE');
 
         // --- Nouveaux Index de Performance/Sécurité ---
         // Permet des tris rapides sans scanner toute la table
-        $this->forge->addKey('statut'); 
+        $this->forge->addKey('statut');
         $this->forge->addKey('type');
         $this->forge->addKey('date_evenement');
 
         $this->forge->createTable('actualites');
     }
 
-    public function down()
+    public function down(): void
     {
         $this->forge->dropTable('actualites');
     }

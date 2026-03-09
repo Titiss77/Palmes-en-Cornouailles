@@ -19,7 +19,7 @@ use CodeIgniter\Database\RawSql;
 use CodeIgniter\Exceptions\InvalidArgumentException;
 
 /**
- * Builder for SQLite3
+ * Builder for SQLite3.
  */
 class Builder extends BaseBuilder
 {
@@ -40,7 +40,7 @@ class Builder extends BaseBuilder
     protected $canLimitWhereUpdates = false;
 
     /**
-     * ORDER BY random keyword
+     * ORDER BY random keyword.
      *
      * @var array
      */
@@ -56,28 +56,28 @@ class Builder extends BaseBuilder
     ];
 
     /**
-     * Replace statement
+     * Replace statement.
      *
      * Generates a platform-specific replace string from the supplied data
      */
     protected function _replace(string $table, array $keys, array $values): string
     {
-        return 'INSERT OR ' . parent::_replace($table, $keys, $values);
+        return 'INSERT OR '.parent::_replace($table, $keys, $values);
     }
 
     /**
-     * Generates a platform-specific truncate string from the supplied data
+     * Generates a platform-specific truncate string from the supplied data.
      *
      * If the database does not support the TRUNCATE statement,
      * then this method maps to 'DELETE FROM table'
      */
     protected function _truncate(string $table): string
     {
-        return 'DELETE FROM ' . $table;
+        return 'DELETE FROM '.$table;
     }
 
     /**
-     * Generates a platform-specific batch update string from the supplied data
+     * Generates a platform-specific batch update string from the supplied data.
      */
     protected function _updateBatch(string $table, array $keys, array $values): string
     {
@@ -87,7 +87,7 @@ class Builder extends BaseBuilder
 
         $constraints = $this->QBOptions['constraints'] ?? [];
 
-        if ($constraints === []) {
+        if ([] === $constraints) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('You must specify a constraint to match on for batch updates.');
             }
@@ -101,7 +101,7 @@ class Builder extends BaseBuilder
 
         $index = current($constraints);
 
-        $ids   = [];
+        $ids = [];
         $final = [];
 
         foreach ($values as $val) {
@@ -111,7 +111,7 @@ class Builder extends BaseBuilder
 
             foreach (array_keys($val) as $field) {
                 if ($field !== $index) {
-                    $final[$field][] = 'WHEN ' . $index . ' = ' . $val[$index] . ' THEN ' . $val[$field];
+                    $final[$field][] = 'WHEN '.$index.' = '.$val[$index].' THEN '.$val[$field];
                 }
             }
         }
@@ -119,18 +119,18 @@ class Builder extends BaseBuilder
         $cases = '';
 
         foreach ($final as $k => $v) {
-            $cases .= $k . " = CASE \n"
-                . implode("\n", $v) . "\n"
-                . 'ELSE ' . $k . ' END, ';
+            $cases .= $k." = CASE \n"
+                .implode("\n", $v)."\n"
+                .'ELSE '.$k.' END, ';
         }
 
-        $this->where($index . ' IN(' . implode(',', $ids) . ')', null, false);
+        $this->where($index.' IN('.implode(',', $ids).')', null, false);
 
-        return 'UPDATE ' . $this->compileIgnore('update') . $table . ' SET ' . substr($cases, 0, -2) . $this->compileWhereHaving('QBWhere');
+        return 'UPDATE '.$this->compileIgnore('update').$table.' SET '.substr($cases, 0, -2).$this->compileWhereHaving('QBWhere');
     }
 
     /**
-     * Generates a platform-specific upsertBatch string from the supplied data
+     * Generates a platform-specific upsertBatch string from the supplied data.
      *
      * @throws DatabaseException
      */
@@ -139,7 +139,7 @@ class Builder extends BaseBuilder
         $sql = $this->QBOptions['sql'] ?? '';
 
         // if this is the first iteration of batch then we need to build skeleton sql
-        if ($sql === '') {
+        if ('' === $sql) {
             $constraints = $this->QBOptions['constraints'] ?? [];
 
             if (empty($constraints)) {
@@ -148,11 +148,12 @@ class Builder extends BaseBuilder
                 $allIndexes = array_filter($this->db->getIndexData($table), static function ($index) use ($fieldNames): bool {
                     $hasAllFields = count(array_intersect($index->fields, $fieldNames)) === count($index->fields);
 
-                    return ($index->type === 'PRIMARY' || $index->type === 'UNIQUE') && $hasAllFields;
+                    return ('PRIMARY' === $index->type || 'UNIQUE' === $index->type) && $hasAllFields;
                 });
 
                 foreach ($allIndexes as $index) {
                     $constraints = $index->fields;
+
                     break;
                 }
 
@@ -169,15 +170,15 @@ class Builder extends BaseBuilder
 
             $alias = $this->QBOptions['alias'] ?? '`excluded`';
 
-            if (strtolower($alias) !== '`excluded`') {
+            if ('`excluded`' !== strtolower($alias)) {
                 throw new InvalidArgumentException('SQLite alias is always named "excluded". A custom alias cannot be used.');
             }
 
-            $updateFields = $this->QBOptions['updateFields'] ??
-                $this->updateFields($keys, false, $constraints)->QBOptions['updateFields'] ??
-                [];
+            $updateFields = $this->QBOptions['updateFields']
+                ?? $this->updateFields($keys, false, $constraints)->QBOptions['updateFields']
+                ?? [];
 
-            $sql = 'INSERT INTO ' . $table . ' (';
+            $sql = 'INSERT INTO '.$table.' (';
 
             $sql .= implode(', ', array_map(static fn ($columnName): string => $columnName, $keys));
 
@@ -185,16 +186,16 @@ class Builder extends BaseBuilder
 
             $sql .= '{:_table_:}';
 
-            $sql .= 'ON CONFLICT(' . implode(',', $constraints) . ")\n";
+            $sql .= 'ON CONFLICT('.implode(',', $constraints).")\n";
 
             $sql .= "DO UPDATE SET\n";
 
             $sql .= implode(
                 ",\n",
                 array_map(
-                    static fn ($key, $value): string => $key . ($value instanceof RawSql ?
-                        " = {$value}" :
-                        " = {$alias}.{$value}"),
+                    static fn ($key, $value): string => $key.($value instanceof RawSql
+                        ? " = {$value}"
+                        : " = {$alias}.{$value}"),
                     array_keys($updateFields),
                     $updateFields,
                 ),
@@ -206,26 +207,26 @@ class Builder extends BaseBuilder
         if (isset($this->QBOptions['setQueryAsData'])) {
             $hasWhere = stripos($this->QBOptions['setQueryAsData'], 'WHERE') > 0;
 
-            $data = $this->QBOptions['setQueryAsData'] . ($hasWhere ? '' : "\nWHERE 1 = 1\n");
+            $data = $this->QBOptions['setQueryAsData'].($hasWhere ? '' : "\nWHERE 1 = 1\n");
         } else {
-            $data = 'VALUES ' . implode(', ', $this->formatValues($values)) . "\n";
+            $data = 'VALUES '.implode(', ', $this->formatValues($values))."\n";
         }
 
         return str_replace('{:_table_:}', $data, $sql);
     }
 
     /**
-     * Generates a platform-specific batch update string from the supplied data
+     * Generates a platform-specific batch update string from the supplied data.
      */
     protected function _deleteBatch(string $table, array $keys, array $values): string
     {
         $sql = $this->QBOptions['sql'] ?? '';
 
         // if this is the first iteration of batch then we need to build skeleton sql
-        if ($sql === '') {
+        if ('' === $sql) {
             $constraints = $this->QBOptions['constraints'] ?? [];
 
-            if ($constraints === []) {
+            if ([] === $constraints) {
                 if ($this->db->DBDebug) {
                     throw new DatabaseException('You must specify a constraint to match on for batch deletes.'); // @codeCoverageIgnore
                 }
@@ -233,7 +234,7 @@ class Builder extends BaseBuilder
                 return ''; // @codeCoverageIgnore
             }
 
-            $sql = 'DELETE FROM ' . $table . "\n";
+            $sql = 'DELETE FROM '.$table."\n";
 
             if (current($constraints) instanceof RawSql && $this->db->DBDebug) {
                 throw new DatabaseException('You cannot use RawSql for constraint in SQLite.');
@@ -251,7 +252,7 @@ class Builder extends BaseBuilder
             $sql .= "WHERE {$concat1} IN (SELECT {$concat2} FROM (\n{:_table_:}))";
 
             // where is not supported
-            if ($this->QBWhere !== [] && $this->db->DBDebug) {
+            if ([] !== $this->QBWhere && $this->db->DBDebug) {
                 throw new DatabaseException('You cannot use WHERE with SQLite.');
                 // @codeCoverageIgnore
             }
@@ -265,14 +266,14 @@ class Builder extends BaseBuilder
             $data = implode(
                 " UNION ALL\n",
                 array_map(
-                    static fn ($value): string => 'SELECT ' . implode(', ', array_map(
-                        static fn ($key, $index): string => $index . ' ' . $key,
+                    static fn ($value): string => 'SELECT '.implode(', ', array_map(
+                        static fn ($key, $index): string => $index.' '.$key,
                         $keys,
                         $value,
                     )),
                     $values,
                 ),
-            ) . "\n";
+            )."\n";
         }
 
         return str_replace('{:_table_:}', $data, $sql);

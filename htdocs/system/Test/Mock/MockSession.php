@@ -18,7 +18,7 @@ use CodeIgniter\I18n\Time;
 use CodeIgniter\Session\Session;
 
 /**
- * Class MockSession
+ * Class MockSession.
  *
  * Provides a safe way to test the Session class itself,
  * that doesn't interact with the session or cookies at all.
@@ -35,12 +35,19 @@ class MockSession extends Session
     public $didRegenerate = false;
 
     /**
+     * Regenerates the session ID.
+     */
+    public function regenerate(bool $destroy = false): void
+    {
+        $this->didRegenerate = true;
+        $_SESSION['__ci_last_regenerate'] = Time::now()->getTimestamp();
+    }
+
+    /**
      * Sets the driver as the session handler in PHP.
      * Extracted for easier testing.
-     *
-     * @return void
      */
-    protected function setSaveHandler()
+    protected function setSaveHandler(): void
     {
         // session_set_save_handler($this->driver, true);
     }
@@ -48,10 +55,8 @@ class MockSession extends Session
     /**
      * Starts the session.
      * Extracted for testing reasons.
-     *
-     * @return void
      */
-    protected function startSession()
+    protected function startSession(): void
     {
         // session_start();
         $this->setCookie();
@@ -60,25 +65,12 @@ class MockSession extends Session
     /**
      * Takes care of setting the cookie on the client side.
      * Extracted for testing reasons.
-     *
-     * @return void
      */
-    protected function setCookie()
+    protected function setCookie(): void
     {
-        $expiration   = $this->config->expiration === 0 ? 0 : Time::now()->getTimestamp() + $this->config->expiration;
+        $expiration = 0 === $this->config->expiration ? 0 : Time::now()->getTimestamp() + $this->config->expiration;
         $this->cookie = $this->cookie->withValue(session_id())->withExpires($expiration);
 
         $this->cookies[] = $this->cookie;
-    }
-
-    /**
-     * Regenerates the session ID.
-     *
-     * @return void
-     */
-    public function regenerate(bool $destroy = false)
-    {
-        $this->didRegenerate              = true;
-        $_SESSION['__ci_last_regenerate'] = Time::now()->getTimestamp();
     }
 }

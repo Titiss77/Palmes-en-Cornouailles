@@ -29,7 +29,6 @@ namespace Kint\Value;
 
 use Kint\Value\Context\ContextInterface;
 use Kint\Value\Representation\RepresentationInterface;
-use OutOfRangeException;
 
 /**
  * @psalm-import-type ValueName from ContextInterface
@@ -50,6 +49,7 @@ abstract class AbstractValue
 
     /** @psalm-readonly */
     protected ContextInterface $context;
+
     /** @psalm-readonly string */
     protected string $type;
 
@@ -101,7 +101,7 @@ abstract class AbstractValue
     public function addRepresentation(RepresentationInterface $rep, ?int $pos = null): void
     {
         if (isset($this->representations[$rep->getName()])) {
-            throw new OutOfRangeException('Representation already exists');
+            throw new \OutOfRangeException('Representation already exists');
         }
 
         if (null === $pos) {

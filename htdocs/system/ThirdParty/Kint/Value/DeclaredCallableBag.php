@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Kint\Value;
 
 use Kint\Utils;
-use ReflectionFunctionAbstract;
 
 /** @psalm-api */
 final class DeclaredCallableBag
@@ -37,24 +36,30 @@ final class DeclaredCallableBag
 
     /** @psalm-readonly */
     public bool $internal;
+
     /** @psalm-readonly */
     public ?string $filename;
+
     /** @psalm-readonly */
     public ?int $startline;
+
     /** @psalm-readonly */
     public ?int $endline;
+
     /**
      * @psalm-readonly
      *
      * @psalm-var ?non-empty-string
      */
     public ?string $docstring;
+
     /** @psalm-readonly */
     public bool $return_reference;
+
     /** @psalm-readonly */
     public ?string $returntype = null;
 
-    public function __construct(ReflectionFunctionAbstract $callable)
+    public function __construct(\ReflectionFunctionAbstract $callable)
     {
         $this->internal = $callable->isInternal();
         $t = $callable->getFileName();

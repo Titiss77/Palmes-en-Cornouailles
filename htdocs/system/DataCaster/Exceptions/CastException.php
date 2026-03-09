@@ -18,6 +18,4 @@ use CodeIgniter\Entity\Exceptions\CastException as EntityCastException;
 /**
  * CastException is thrown for invalid cast initialization and management.
  */
-class CastException extends EntityCastException
-{
-}
+class CastException extends EntityCastException {}

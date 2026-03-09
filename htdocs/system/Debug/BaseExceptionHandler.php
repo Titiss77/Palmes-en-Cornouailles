@@ -16,7 +16,6 @@ namespace CodeIgniter\Debug;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Config\Exceptions as ExceptionsConfig;
-use Throwable;
 
 /**
  * Provides common functions for exception handlers,
@@ -30,7 +29,7 @@ abstract class BaseExceptionHandler
     protected ExceptionsConfig $config;
 
     /**
-     * Nesting level of the output buffering mechanism
+     * Nesting level of the output buffering mechanism.
      */
     protected int $obLevel;
 
@@ -46,28 +45,26 @@ abstract class BaseExceptionHandler
 
         $this->obLevel = ob_get_level();
 
-        if ($this->viewPath === null) {
-            $this->viewPath = rtrim($this->config->errorViewPath, '\\/ ') . DIRECTORY_SEPARATOR;
+        if (null === $this->viewPath) {
+            $this->viewPath = rtrim($this->config->errorViewPath, '\/ ').DIRECTORY_SEPARATOR;
         }
     }
 
     /**
      * The main entry point into the handler.
-     *
-     * @return void
      */
     abstract public function handle(
-        Throwable $exception,
+        \Throwable $exception,
         RequestInterface $request,
         ResponseInterface $response,
         int $statusCode,
         int $exitCode,
-    );
+    ): void;
 
     /**
      * Gathers the variables that will be made available to the view.
      */
-    protected function collectVars(Throwable $exception, int $statusCode): array
+    protected function collectVars(\Throwable $exception, int $statusCode): array
     {
         // Get the first exception.
         $firstException = $exception;
@@ -78,18 +75,18 @@ abstract class BaseExceptionHandler
 
         $trace = $firstException->getTrace();
 
-        if ($this->config->sensitiveDataInTrace !== []) {
+        if ([] !== $this->config->sensitiveDataInTrace) {
             $trace = $this->maskSensitiveData($trace, $this->config->sensitiveDataInTrace);
         }
 
         return [
-            'title'   => $exception::class,
-            'type'    => $exception::class,
-            'code'    => $statusCode,
+            'title' => $exception::class,
+            'type' => $exception::class,
+            'code' => $statusCode,
             'message' => $exception->getMessage(),
-            'file'    => $exception->getFile(),
-            'line'    => $exception->getLine(),
-            'trace'   => $trace,
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'trace' => $trace,
         ];
     }
 
@@ -103,42 +100,6 @@ abstract class BaseExceptionHandler
         }
 
         return $trace;
-    }
-
-    /**
-     * @param array|object $args
-     *
-     * @return array|object
-     */
-    private function maskData($args, array $keysToMask, string $path = '')
-    {
-        foreach ($keysToMask as $keyToMask) {
-            $explode = explode('/', $keyToMask);
-            $index   = end($explode);
-
-            if (str_starts_with(strrev($path . '/' . $index), strrev($keyToMask))) {
-                if (is_array($args) && array_key_exists($index, $args)) {
-                    $args[$index] = '******************';
-                } elseif (
-                    is_object($args) && property_exists($args, $index)
-                    && isset($args->{$index}) && is_scalar($args->{$index})
-                ) {
-                    $args->{$index} = '******************';
-                }
-            }
-        }
-
-        if (is_array($args)) {
-            foreach ($args as $pathKey => $subarray) {
-                $args[$pathKey] = $this->maskData($subarray, $keysToMask, $path . '/' . $pathKey);
-            }
-        } elseif (is_object($args)) {
-            foreach ($args as $pathKey => $subarray) {
-                $args->{$pathKey} = $this->maskData($subarray, $keysToMask, $path . '/' . $pathKey);
-            }
-        }
-
-        return $args;
     }
 
     /**
@@ -163,7 +124,7 @@ abstract class BaseExceptionHandler
      */
     protected static function highlightFile(string $file, int $lineNumber, int $lines = 15)
     {
-        if ($file === '' || ! is_readable($file)) {
+        if ('' === $file || !is_readable($file)) {
             return false;
         }
 
@@ -178,7 +139,7 @@ abstract class BaseExceptionHandler
 
         try {
             $source = file_get_contents($file);
-        } catch (Throwable) {
+        } catch (\Throwable) {
             return false;
         }
 
@@ -201,7 +162,7 @@ abstract class BaseExceptionHandler
         $source = array_splice($source, $start, $lines, true);
 
         // Used to format the line number in the source
-        $format = '% ' . strlen((string) ($start + $lines)) . 'd';
+        $format = '% '.strlen((string) ($start + $lines)).'d';
 
         $out = '';
         // Because the highlighting may have an uneven number
@@ -224,10 +185,10 @@ abstract class BaseExceptionHandler
                     implode('', $tags[0]),
                 );
             } else {
-                $out .= sprintf('<span class="line"><span class="number">' . $format . '</span> %s', $n + $start + 1, $row) . "\n";
+                $out .= sprintf('<span class="line"><span class="number">'.$format.'</span> %s', $n + $start + 1, $row)."\n";
                 // We're closing only one span tag we added manually line before,
                 // so we have to increment $spans count to close this tag later.
-                $spans++;
+                ++$spans;
             }
         }
 
@@ -235,24 +196,24 @@ abstract class BaseExceptionHandler
             $out .= str_repeat('</span>', $spans);
         }
 
-        return '<pre><code>' . $out . '</code></pre>';
+        return '<pre><code>'.$out.'</code></pre>';
     }
 
     /**
      * Given an exception and status code will display the error to the client.
      *
-     * @param string|null $viewFile
+     * @param null|string $viewFile
      */
-    protected function render(Throwable $exception, int $statusCode, $viewFile = null): void
+    protected function render(\Throwable $exception, int $statusCode, $viewFile = null): void
     {
-        if ($viewFile === null) {
+        if (null === $viewFile) {
             echo 'The error view file was not specified. Cannot display error view.';
 
             exit(1);
         }
 
-        if (! is_file($viewFile)) {
-            echo 'The error view file "' . $viewFile . '" was not found. Cannot display error view.';
+        if (!is_file($viewFile)) {
+            echo 'The error view file "'.$viewFile.'" was not found. Cannot display error view.';
 
             exit(1);
         }
@@ -263,9 +224,46 @@ abstract class BaseExceptionHandler
 
             // CLI error views output to STDERR/STDOUT, so ob_start() does not work.
             ob_start();
+
             include $viewFile;
 
             return ob_get_clean();
         })();
+    }
+
+    /**
+     * @param array|object $args
+     *
+     * @return array|object
+     */
+    private function maskData($args, array $keysToMask, string $path = '')
+    {
+        foreach ($keysToMask as $keyToMask) {
+            $explode = explode('/', $keyToMask);
+            $index = end($explode);
+
+            if (str_starts_with(strrev($path.'/'.$index), strrev($keyToMask))) {
+                if (is_array($args) && array_key_exists($index, $args)) {
+                    $args[$index] = '******************';
+                } elseif (
+                    is_object($args) && property_exists($args, $index)
+                    && isset($args->{$index}) && is_scalar($args->{$index})
+                ) {
+                    $args->{$index} = '******************';
+                }
+            }
+        }
+
+        if (is_array($args)) {
+            foreach ($args as $pathKey => $subarray) {
+                $args[$pathKey] = $this->maskData($subarray, $keysToMask, $path.'/'.$pathKey);
+            }
+        } elseif (is_object($args)) {
+            foreach ($args as $pathKey => $subarray) {
+                $args->{$pathKey} = $this->maskData($subarray, $keysToMask, $path.'/'.$pathKey);
+            }
+        }
+
+        return $args;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psr\Log;
 
 /**
@@ -16,8 +18,9 @@ class NullLogger extends AbstractLogger
      * Logs with an arbitrary level.
      *
      * @param mixed[] $context
+     * @param mixed   $level
      *
-     * @throws \Psr\Log\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function log($level, string|\Stringable $message, array $context = []): void
     {

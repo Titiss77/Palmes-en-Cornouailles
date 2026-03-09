@@ -16,20 +16,18 @@ namespace CodeIgniter\Test;
 use CodeIgniter\Exceptions\BadMethodCallException;
 use CodeIgniter\Exceptions\InvalidArgumentException;
 use DOMDocument;
-use DOMNodeList;
-use DOMXPath;
 
 /**
- * Load a response into a DOMDocument for testing assertions based on that
+ * Load a response into a DOMDocument for testing assertions based on that.
  *
- * @see \CodeIgniter\Test\DOMParserTest
+ * @see DOMParserTest
  */
 class DOMParser
 {
     /**
-     * DOM for the body,
+     * DOM for the body,.
      *
-     * @var DOMDocument
+     * @var \DOMDocument
      */
     protected $dom;
 
@@ -40,11 +38,11 @@ class DOMParser
      */
     public function __construct()
     {
-        if (! extension_loaded('DOM')) {
+        if (!extension_loaded('DOM')) {
             throw new BadMethodCallException('DOM extension is required, but not currently loaded.'); // @codeCoverageIgnore
         }
 
-        $this->dom = new DOMDocument('1.0', 'utf-8');
+        $this->dom = new \DOMDocument('1.0', 'utf-8');
     }
 
     /**
@@ -71,7 +69,7 @@ class DOMParser
         // turning off some errors
         libxml_use_internal_errors(true);
 
-        if (! $this->dom->loadHTML($content)) {
+        if (!$this->dom->loadHTML($content)) {
             // unclear how we would get here, given that we are trapping libxml errors
             // @codeCoverageIgnoreStart
             libxml_clear_errors();
@@ -94,8 +92,8 @@ class DOMParser
      */
     public function withFile(string $path)
     {
-        if (! is_file($path)) {
-            throw new InvalidArgumentException(basename($path) . ' is not a valid file.');
+        if (!is_file($path)) {
+            throw new InvalidArgumentException(basename($path).' is not a valid file.');
         }
 
         $content = file_get_contents($path);
@@ -109,10 +107,10 @@ class DOMParser
     public function see(?string $search = null, ?string $element = null): bool
     {
         // If Element is null, we're just scanning for text
-        if ($element === null) {
+        if (null === $element) {
             $content = $this->dom->saveHTML($this->dom->documentElement);
 
-            return mb_strpos($content, $search) !== false;
+            return false !== mb_strpos($content, $search);
         }
 
         $result = $this->doXPath($search, $element);
@@ -125,7 +123,7 @@ class DOMParser
      */
     public function dontSee(?string $search = null, ?string $element = null): bool
     {
-        return ! $this->see($search, $element);
+        return !$this->see($search, $element);
     }
 
     /**
@@ -151,7 +149,7 @@ class DOMParser
      */
     public function seeLink(string $text, ?string $details = null): bool
     {
-        return $this->see($text, 'a' . $details);
+        return $this->see($text, 'a'.$details);
     }
 
     /**
@@ -169,7 +167,7 @@ class DOMParser
      */
     public function seeCheckboxIsChecked(string $element): bool
     {
-        $result = $this->doXPath(null, 'input' . $element, [
+        $result = $this->doXPath(null, 'input'.$element, [
             '[@type="checkbox"]',
             '[@checked="checked"]',
         ]);
@@ -182,7 +180,7 @@ class DOMParser
      */
     public function seeXPath(string $path): bool
     {
-        $xpath = new DOMXPath($this->dom);
+        $xpath = new \DOMXPath($this->dom);
 
         return (bool) $xpath->query($path)->length;
     }
@@ -192,13 +190,63 @@ class DOMParser
      */
     public function dontSeeXPath(string $path): bool
     {
-        return ! $this->seeXPath($path);
+        return !$this->seeXPath($path);
+    }
+
+    /**
+     * Look for the a selector  in the passed text.
+     *
+     * @return array{tag: string, id: null|string, class: null|string, attr: null|array<string, string>}
+     */
+    public function parseSelector(string $selector)
+    {
+        $id = null;
+        $class = null;
+        $attr = null;
+
+        // ID?
+        if (str_contains($selector, '#')) {
+            [$tag, $id] = explode('#', $selector);
+        }
+        // Attribute
+        elseif (str_contains($selector, '[') && str_contains($selector, ']')) {
+            $open = strpos($selector, '[');
+            $close = strpos($selector, ']');
+
+            $tag = substr($selector, 0, $open);
+            $text = substr($selector, $open + 1, $close - 2);
+
+            // We only support a single attribute currently
+            $text = explode(',', $text);
+            $text = trim(array_shift($text));
+
+            [$name, $value] = explode('=', $text);
+
+            $name = trim($name);
+            $value = trim($value);
+            $attr = [$name => trim($value, '] ')];
+        }
+        // Class?
+        elseif (str_contains($selector, '.')) {
+            [$tag, $class] = explode('.', $selector);
+        }
+        // Otherwise, assume the entire string is our tag
+        else {
+            $tag = $selector;
+        }
+
+        return [
+            'tag' => $tag,
+            'id' => $id,
+            'class' => $class,
+            'attr' => $attr,
+        ];
     }
 
     /**
      * Search the DOM using an XPath expression.
      *
-     * @return DOMNodeList|false
+     * @return \DOMNodeList|false
      */
     protected function doXPath(?string $search, string $element, array $paths = [])
     {
@@ -210,18 +258,18 @@ class DOMParser
 
         // By ID
         if (isset($selector['id'])) {
-            $path = ($selector['tag'] === '')
+            $path = ('' === $selector['tag'])
                 ? "id(\"{$selector['id']}\")"
                 : "//{$selector['tag']}[@id=\"{$selector['id']}\"]";
         }
         // By Class
         elseif (isset($selector['class'])) {
-            $path = ($selector['tag'] === '')
+            $path = ('' === $selector['tag'])
                 ? "//*[@class=\"{$selector['class']}\"]"
                 : "//{$selector['tag']}[@class=\"{$selector['class']}\"]";
         }
         // By tag only
-        elseif ($selector['tag'] !== '') {
+        elseif ('' !== $selector['tag']) {
             $path = "//{$selector['tag']}";
         }
 
@@ -237,62 +285,12 @@ class DOMParser
             $path .= $extra;
         }
 
-        if ($search !== null) {
+        if (null !== $search) {
             $path .= "[contains(., \"{$search}\")]";
         }
 
-        $xpath = new DOMXPath($this->dom);
+        $xpath = new \DOMXPath($this->dom);
 
         return $xpath->query($path);
-    }
-
-    /**
-     * Look for the a selector  in the passed text.
-     *
-     * @return array{tag: string, id: string|null, class: string|null, attr: array<string, string>|null}
-     */
-    public function parseSelector(string $selector)
-    {
-        $id    = null;
-        $class = null;
-        $attr  = null;
-
-        // ID?
-        if (str_contains($selector, '#')) {
-            [$tag, $id] = explode('#', $selector);
-        }
-        // Attribute
-        elseif (str_contains($selector, '[') && str_contains($selector, ']')) {
-            $open  = strpos($selector, '[');
-            $close = strpos($selector, ']');
-
-            $tag  = substr($selector, 0, $open);
-            $text = substr($selector, $open + 1, $close - 2);
-
-            // We only support a single attribute currently
-            $text = explode(',', $text);
-            $text = trim(array_shift($text));
-
-            [$name, $value] = explode('=', $text);
-
-            $name  = trim($name);
-            $value = trim($value);
-            $attr  = [$name => trim($value, '] ')];
-        }
-        // Class?
-        elseif (str_contains($selector, '.')) {
-            [$tag, $class] = explode('.', $selector);
-        }
-        // Otherwise, assume the entire string is our tag
-        else {
-            $tag = $selector;
-        }
-
-        return [
-            'tag'   => $tag,
-            'id'    => $id,
-            'class' => $class,
-            'attr'  => $attr,
-        ];
     }
 }

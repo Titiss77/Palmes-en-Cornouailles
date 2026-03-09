@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\DataCaster\Cast;
 
 /**
- * Class FloatCast
+ * Class FloatCast.
  *
  * (PHP) [float --> float       ] --> (DB driver) --> (DB column) float
  *       [      <-- float|string] <-- (DB driver) <-- (DB column) float
@@ -26,7 +26,7 @@ class FloatCast extends BaseCast
         array $params = [],
         ?object $helper = null,
     ): float {
-        if (! is_float($value) && ! is_string($value)) {
+        if (!is_float($value) && !is_string($value)) {
             self::invalidTypeValueError($value);
         }
 

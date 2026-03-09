@@ -16,12 +16,11 @@ namespace CodeIgniter\Session\Handlers;
 use Config\Cookie as CookieConfig;
 use Config\Session as SessionConfig;
 use Psr\Log\LoggerAwareTrait;
-use SessionHandlerInterface;
 
 /**
- * Base class for session handling
+ * Base class for session handling.
  */
-abstract class BaseHandler implements SessionHandlerInterface
+abstract class BaseHandler implements \SessionHandlerInterface
 {
     use LoggerAwareTrait;
 
@@ -40,7 +39,7 @@ abstract class BaseHandler implements SessionHandlerInterface
     protected $lock = false;
 
     /**
-     * Cookie prefix
+     * Cookie prefix.
      *
      * The Config\Cookie::$prefix setting is completely ignored.
      * See https://codeigniter.com/user_guide/libraries/sessions.html#session-preferences
@@ -50,14 +49,14 @@ abstract class BaseHandler implements SessionHandlerInterface
     protected $cookiePrefix = '';
 
     /**
-     * Cookie domain
+     * Cookie domain.
      *
      * @var string
      */
     protected $cookieDomain = '';
 
     /**
-     * Cookie path
+     * Cookie path.
      *
      * @var string
      */
@@ -71,7 +70,7 @@ abstract class BaseHandler implements SessionHandlerInterface
     protected $cookieSecure = false;
 
     /**
-     * Cookie name to use
+     * Cookie name to use.
      *
      * @var string
      */
@@ -85,15 +84,15 @@ abstract class BaseHandler implements SessionHandlerInterface
     protected $matchIP = false;
 
     /**
-     * Current session ID
+     * Current session ID.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $sessionID;
 
     /**
      * The 'save path' for the session
-     * varies between
+     * varies between.
      *
      * @var array|string
      */
@@ -110,14 +109,14 @@ abstract class BaseHandler implements SessionHandlerInterface
     {
         // Store Session configurations
         $this->cookieName = $config->cookieName;
-        $this->matchIP    = $config->matchIP;
-        $this->savePath   = $config->savePath;
+        $this->matchIP = $config->matchIP;
+        $this->savePath = $config->savePath;
 
         $cookie = config(CookieConfig::class);
 
         // Session cookies have no prefix.
         $this->cookieDomain = $cookie->domain;
-        $this->cookiePath   = $cookie->path;
+        $this->cookiePath = $cookie->path;
         $this->cookieSecure = $cookie->secure;
 
         $this->ipAddress = $ipAddress;

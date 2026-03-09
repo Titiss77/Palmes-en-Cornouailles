@@ -16,7 +16,7 @@ namespace CodeIgniter\View;
 use CodeIgniter\HTTP\URI;
 
 /**
- * View plugins
+ * View plugins.
  */
 class Plugins
 {
@@ -88,7 +88,7 @@ class Plugins
     public static function validationErrors(array $params = []): string
     {
         $validator = service('validation');
-        if ($params === []) {
+        if ([] === $params) {
             return $validator->listErrors();
         }
 

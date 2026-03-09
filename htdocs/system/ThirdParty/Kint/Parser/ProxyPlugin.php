@@ -38,13 +38,17 @@ use Kint\Value\Context\ContextInterface;
 class ProxyPlugin implements PluginBeginInterface, PluginCompleteInterface
 {
     protected array $types;
+
     /** @psalm-var ParserTrigger */
     protected int $triggers;
+
     /** @psalm-var callable */
     protected $callback;
     private ?Parser $parser = null;
 
     /**
+     * @param mixed $callback
+     *
      * @psalm-param ParserTrigger $triggers
      * @psalm-param callable $callback
      */

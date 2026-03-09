@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Debug;
 
-use Closure;
-
 /**
  * Iterator for debugging.
  */
@@ -40,11 +38,11 @@ class Iterator
      * Tests are simply closures that the user can define any sequence of
      * things to happen during the test.
      *
-     * @param Closure(): mixed $closure
+     * @param \Closure(): mixed $closure
      *
      * @return $this
      */
-    public function add(string $name, Closure $closure)
+    public function add(string $name, \Closure $closure)
     {
         $name = strtolower($name);
 
@@ -58,7 +56,7 @@ class Iterator
      * time to execute the desired number of iterations, and the approximate
      * memory usage used during those iterations.
      *
-     * @return string|null
+     * @return null|string
      */
     public function run(int $iterations = 1000, bool $output = true)
     {
@@ -66,20 +64,20 @@ class Iterator
             // clear memory before start
             gc_collect_cycles();
 
-            $start    = microtime(true);
+            $start = microtime(true);
             $startMem = $maxMemory = memory_get_usage(true);
 
-            for ($i = 0; $i < $iterations; $i++) {
-                $result    = $test();
+            for ($i = 0; $i < $iterations; ++$i) {
+                $result = $test();
                 $maxMemory = max($maxMemory, memory_get_usage(true));
 
                 unset($result);
             }
 
             $this->results[$name] = [
-                'time'   => microtime(true) - $start,
+                'time' => microtime(true) - $start,
                 'memory' => $maxMemory - $startMem,
-                'n'      => $iterations,
+                'n' => $iterations,
             ];
         }
 
@@ -95,7 +93,7 @@ class Iterator
      */
     public function getReport(): string
     {
-        if ($this->results === []) {
+        if ([] === $this->results) {
             return 'No results to display.';
         }
 
@@ -122,13 +120,13 @@ class Iterator
 
             $rows .= "<tr>
 				<td>{$name}</td>
-				<td>" . number_format($result['time'], 4) . "</td>
+				<td>".number_format($result['time'], 4)."</td>
 				<td>{$memory}</td>
 			</tr>";
         }
 
         $tpl = str_replace('{rows}', $rows, $tpl);
 
-        return $tpl . '<br/>';
+        return $tpl.'<br/>';
     }
 }

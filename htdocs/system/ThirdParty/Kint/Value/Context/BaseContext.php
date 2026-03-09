@@ -27,8 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value\Context;
 
-use InvalidArgumentException;
-
 /**
  * @psalm-import-type ValueName from ContextInterface
  */
@@ -44,7 +42,7 @@ class BaseContext implements ContextInterface
     public function __construct($name)
     {
         if (!\is_string($name) && !\is_int($name)) {
-            throw new InvalidArgumentException('Context names must be string|int');
+            throw new \InvalidArgumentException('Context names must be string|int');
         }
 
         $this->name = $name;

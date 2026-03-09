@@ -21,14 +21,14 @@ use Config\Database;
 /**
  * Validation Rules.
  *
- * @see \CodeIgniter\Validation\RulesTest
+ * @see RulesTest
  */
 class Rules
 {
     /**
      * The value does not match another field in $data.
      *
-     * @param string|null $str
+     * @param null|string $str
      * @param array       $data Other field/value pairs
      */
     public function differs($str, string $field, array $data): bool
@@ -43,11 +43,11 @@ class Rules
     /**
      * Equals the static value provided.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function equals($str, string $val): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -56,13 +56,13 @@ class Rules
 
     /**
      * Returns true if $str is $val characters long.
-     * $val = "5" (one) | "5,8,12" (multiple values)
+     * $val = "5" (one) | "5,8,12" (multiple values).
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function exact_length($str, string $val): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -78,13 +78,13 @@ class Rules
     }
 
     /**
-     * Greater than
+     * Greater than.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function greater_than($str, string $min): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -92,13 +92,13 @@ class Rules
     }
 
     /**
-     * Equal to or Greater than
+     * Equal to or Greater than.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function greater_than_equal_to($str, string $min): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -115,31 +115,31 @@ class Rules
      *    is_not_unique[table.field,where_field,where_value]
      *    is_not_unique[menu.id,active,1]
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function is_not_unique($str, string $field, array $data): bool
     {
         [$builder, $whereField, $whereValue] = $this->prepareUniqueQuery($str, $field, $data);
 
         if (
-            $whereField !== null && $whereField !== ''
-            && $whereValue !== null && $whereValue !== ''
-            && preg_match('/^\{(\w+)\}$/', $whereValue) !== 1
+            null !== $whereField && '' !== $whereField
+            && null !== $whereValue && '' !== $whereValue
+            && 1 !== preg_match('/^\{(\w+)\}$/', $whereValue)
         ) {
             $builder = $builder->where($whereField, $whereValue);
         }
 
-        return $builder->get()->getRow() !== null;
+        return null !== $builder->get()->getRow();
     }
 
     /**
-     * Value should be within an array of values
+     * Value should be within an array of values.
      *
-     * @param string|null $value
+     * @param null|string $value
      */
     public function in_list($value, string $list): bool
     {
-        if (! is_string($value) && $value !== null) {
+        if (!is_string($value) && null !== $value) {
             $value = (string) $value;
         }
 
@@ -158,72 +158,31 @@ class Rules
      *    is_unique[table.field,ignore_field,ignore_value]
      *    is_unique[users.email,id,5]
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function is_unique($str, string $field, array $data): bool
     {
         [$builder, $ignoreField, $ignoreValue] = $this->prepareUniqueQuery($str, $field, $data);
 
         if (
-            $ignoreField !== null && $ignoreField !== ''
-            && $ignoreValue !== null && $ignoreValue !== ''
-            && preg_match('/^\{(\w+)\}$/', $ignoreValue) !== 1
+            null !== $ignoreField && '' !== $ignoreField
+            && null !== $ignoreValue && '' !== $ignoreValue
+            && 1 !== preg_match('/^\{(\w+)\}$/', $ignoreValue)
         ) {
             $builder = $builder->where("{$ignoreField} !=", $ignoreValue);
         }
 
-        return $builder->get()->getRow() === null;
+        return null === $builder->get()->getRow();
     }
 
     /**
-     * Prepares the database query for uniqueness checks.
+     * Less than.
      *
-     * @param mixed                $value The value to check.
-     * @param string               $field The field parameters.
-     * @param array<string, mixed> $data  Additional data.
-     *
-     * @return array{0: BaseBuilder, 1: string|null, 2: string|null}
-     */
-    private function prepareUniqueQuery($value, string $field, array $data): array
-    {
-        if (! is_string($value) && $value !== null) {
-            $value = (string) $value;
-        }
-
-        // Split the field parameters and pad the array to ensure three elements.
-        [$field, $extraField, $extraValue] = array_pad(explode(',', $field), 3, null);
-
-        // Parse the field string to extract dbGroup, table, and field.
-        $parts    = explode('.', $field, 3);
-        $numParts = count($parts);
-
-        if ($numParts === 3) {
-            [$dbGroup, $table, $field] = $parts;
-        } elseif ($numParts === 2) {
-            [$table, $field] = $parts;
-        } else {
-            throw new InvalidArgumentException('The field must be in the format "table.field" or "dbGroup.table.field".');
-        }
-
-        // Connect to the database.
-        $dbGroup ??= $data['DBGroup'] ?? null;
-        $builder = Database::connect($dbGroup)
-            ->table($table)
-            ->select('1')
-            ->where($field, $value)
-            ->limit(1);
-
-        return [$builder, $extraField, $extraValue];
-    }
-
-    /**
-     * Less than
-     *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function less_than($str, string $max): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -231,13 +190,13 @@ class Rules
     }
 
     /**
-     * Equal to or Less than
+     * Equal to or Less than.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function less_than_equal_to($str, string $max): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -247,7 +206,7 @@ class Rules
     /**
      * Matches the value of another field in $data.
      *
-     * @param string|null $str
+     * @param null|string $str
      * @param array       $data Other field/value pairs
      */
     public function matches($str, string $field, array $data): bool
@@ -262,11 +221,11 @@ class Rules
     /**
      * Returns true if $str is $val or fewer characters in length.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function max_length($str, string $val): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -276,11 +235,11 @@ class Rules
     /**
      * Returns true if $str is at least $val length.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function min_length($str, string $val): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -290,11 +249,11 @@ class Rules
     /**
      * Does not equal the static value provided.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function not_equals($str, string $val): bool
     {
-        if (! is_string($str) && $str !== null) {
+        if (!is_string($str) && null !== $str) {
             $str = (string) $str;
         }
 
@@ -304,23 +263,23 @@ class Rules
     /**
      * Value should not be within an array of values.
      *
-     * @param string|null $value
+     * @param null|string $value
      */
     public function not_in_list($value, string $list): bool
     {
-        if (! is_string($value) && $value !== null) {
+        if (!is_string($value) && null !== $value) {
             $value = (string) $value;
         }
 
-        return ! $this->in_list($value, $list);
+        return !$this->in_list($value, $list);
     }
 
     /**
-     * @param array|bool|float|int|object|string|null $str
+     * @param null|array|bool|float|int|object|string $str
      */
     public function required($str = null): bool
     {
-        if ($str === null) {
+        if (null === $str) {
             return false;
         }
 
@@ -329,10 +288,10 @@ class Rules
         }
 
         if (is_array($str)) {
-            return $str !== [];
+            return [] !== $str;
         }
 
-        return trim((string) $str) !== '';
+        return '' !== trim((string) $str);
     }
 
     /**
@@ -343,13 +302,13 @@ class Rules
      *
      *     required_with[password]
      *
-     * @param string|null $str
-     * @param string|null $fields List of fields that we should check if present
+     * @param null|string $str
+     * @param null|string $fields List of fields that we should check if present
      * @param array       $data   Complete list of fields from the form
      */
     public function required_with($str = null, ?string $fields = null, array $data = []): bool
     {
-        if ($fields === null || $data === []) {
+        if (null === $fields || [] === $data) {
             throw new InvalidArgumentException('You must supply the parameters: fields, data.');
         }
 
@@ -369,14 +328,14 @@ class Rules
 
         foreach (explode(',', $fields) as $field) {
             if (
-                (array_key_exists($field, $data) && ! empty($data[$field]))
-                || (str_contains($field, '.') && ! empty(dot_array_search($field, $data)))
+                (array_key_exists($field, $data) && !empty($data[$field]))
+                || (str_contains($field, '.') && !empty(dot_array_search($field, $data)))
             ) {
                 $requiredFields[] = $field;
             }
         }
 
-        return $requiredFields === [];
+        return [] === $requiredFields;
     }
 
     /**
@@ -387,9 +346,9 @@ class Rules
      *
      *     required_without[id,email]
      *
-     * @param string|null $str
-     * @param string|null $otherFields The param fields of required_without[].
-     * @param string|null $field       This rule param fields aren't present, this field is required.
+     * @param null|string $str
+     * @param null|string $otherFields the param fields of required_without[]
+     * @param null|string $field       this rule param fields aren't present, this field is required
      */
     public function required_without(
         $str = null,
@@ -398,7 +357,7 @@ class Rules
         ?string $error = null,
         ?string $field = null,
     ): bool {
-        if ($otherFields === null || $data === []) {
+        if (null === $otherFields || [] === $data) {
             throw new InvalidArgumentException('You must supply the parameters: otherFields, data.');
         }
 
@@ -415,26 +374,26 @@ class Rules
         // any of the fields are not present in $data
         foreach (explode(',', $otherFields) as $otherField) {
             if (
-                (! str_contains($otherField, '.'))
-                && (! array_key_exists($otherField, $data)
+                (!str_contains($otherField, '.'))
+                && (!array_key_exists($otherField, $data)
                     || empty($data[$otherField]))
             ) {
                 return false;
             }
 
             if (str_contains($otherField, '.')) {
-                if ($field === null) {
+                if (null === $field) {
                     throw new InvalidArgumentException('You must supply the parameters: field.');
                 }
 
-                $fieldData       = dot_array_search($otherField, $data);
+                $fieldData = dot_array_search($otherField, $data);
                 $fieldSplitArray = explode('.', $field);
-                $fieldKey        = $fieldSplitArray[1];
+                $fieldKey = $fieldSplitArray[1];
 
                 if (is_array($fieldData)) {
-                    return ! empty(dot_array_search($otherField, $data)[$fieldKey]);
+                    return !empty(dot_array_search($otherField, $data)[$fieldKey]);
                 }
-                $nowField      = str_replace('*', $fieldKey, $otherField);
+                $nowField = str_replace('*', $fieldKey, $otherField);
                 $nowFieldVaule = dot_array_search($nowField, $data);
 
                 return null !== $nowFieldVaule;
@@ -447,10 +406,10 @@ class Rules
     /**
      * The field exists in $data.
      *
-     * @param array|bool|float|int|object|string|null $value The field value.
-     * @param string|null                             $param The rule's parameter.
-     * @param array                                   $data  The data to be validated.
-     * @param string|null                             $field The field name.
+     * @param null|array|bool|float|int|object|string $value the field value
+     * @param null|string                             $param the rule's parameter
+     * @param array                                   $data  the data to be validated
+     * @param null|string                             $field the field name
      */
     public function field_exists(
         $value = null,
@@ -464,5 +423,47 @@ class Rules
         }
 
         return array_key_exists($field, $data);
+    }
+
+    /**
+     * Prepares the database query for uniqueness checks.
+     *
+     * @param mixed                $value the value to check
+     * @param string               $field the field parameters
+     * @param array<string, mixed> $data  additional data
+     *
+     * @return array{0: BaseBuilder, 1: null|string, 2: null|string}
+     */
+    private function prepareUniqueQuery($value, string $field, array $data): array
+    {
+        if (!is_string($value) && null !== $value) {
+            $value = (string) $value;
+        }
+
+        // Split the field parameters and pad the array to ensure three elements.
+        [$field, $extraField, $extraValue] = array_pad(explode(',', $field), 3, null);
+
+        // Parse the field string to extract dbGroup, table, and field.
+        $parts = explode('.', $field, 3);
+        $numParts = count($parts);
+
+        if (3 === $numParts) {
+            [$dbGroup, $table, $field] = $parts;
+        } elseif (2 === $numParts) {
+            [$table, $field] = $parts;
+        } else {
+            throw new InvalidArgumentException('The field must be in the format "table.field" or "dbGroup.table.field".');
+        }
+
+        // Connect to the database.
+        $dbGroup ??= $data['DBGroup'] ?? null;
+        $builder = Database::connect($dbGroup)
+            ->table($table)
+            ->select('1')
+            ->where($field, $value)
+            ->limit(1)
+        ;
+
+        return [$builder, $extraField, $extraValue];
     }
 }

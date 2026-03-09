@@ -18,19 +18,19 @@ use CodeIgniter\Database\ConnectionInterface;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
 /**
- * Utils for SQLSRV
+ * Utils for SQLSRV.
  */
 class Utils extends BaseUtils
 {
     /**
-     * List databases statement
+     * List databases statement.
      *
      * @var string
      */
     protected $listDatabases = 'EXEC sp_helpdb'; // Can also be: EXEC sp_databases
 
     /**
-     * OPTIMIZE TABLE statement
+     * OPTIMIZE TABLE statement.
      *
      * @var string
      */
@@ -40,7 +40,7 @@ class Utils extends BaseUtils
     {
         parent::__construct($db);
 
-        $this->optimizeTable = 'ALTER INDEX all ON  ' . $this->db->schema . '.%s REORGANIZE';
+        $this->optimizeTable = 'ALTER INDEX all ON  '.$this->db->schema.'.%s REORGANIZE';
     }
 
     /**

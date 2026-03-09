@@ -23,9 +23,9 @@ use Config\View as ViewConfig;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class View
+ * Class View.
  *
- * @see \CodeIgniter\View\ViewTest
+ * @see ViewTest
  */
 class View implements RendererInterface
 {
@@ -41,7 +41,7 @@ class View implements RendererInterface
     /**
      * Data for the variables that are available in the Views.
      *
-     * @var array<string, mixed>|null
+     * @var null|array<string, mixed>
      */
     protected $tempData;
 
@@ -84,7 +84,7 @@ class View implements RendererInterface
 
     /**
      * Cache stats about our performance here,
-     * when CI_DEBUG = true
+     * when CI_DEBUG = true.
      *
      * @var list<array{start: float, end: float, view: string}>
      */
@@ -103,7 +103,7 @@ class View implements RendererInterface
     protected $saveData;
 
     /**
-     * Number of loaded views
+     * Number of loaded views.
      *
      * @var int
      */
@@ -113,7 +113,7 @@ class View implements RendererInterface
      * The name of the layout being used, if any.
      * Set by the `extend` method used within views.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $layout;
 
@@ -139,11 +139,11 @@ class View implements RendererInterface
         ?bool $debug = null,
         ?LoggerInterface $logger = null,
     ) {
-        $this->config   = $config;
-        $this->viewPath = rtrim($viewPath, '\\/ ') . DIRECTORY_SEPARATOR;
-        $this->loader   = $loader ?? service('locator');
-        $this->logger   = $logger ?? service('logger');
-        $this->debug    = $debug ?? CI_DEBUG;
+        $this->config = $config;
+        $this->viewPath = rtrim($viewPath, '\/ ').DIRECTORY_SEPARATOR;
+        $this->loader = $loader ?? service('locator');
+        $this->logger = $logger ?? service('logger');
+        $this->debug = $debug ?? CI_DEBUG;
         $this->saveData = (bool) $config->saveData;
     }
 
@@ -156,12 +156,12 @@ class View implements RendererInterface
      *  - cache_name Name to use for cache
      *
      * @param string                    $view     File name of the view source
-     * @param array<string, mixed>|null $options  Reserved for 3rd-party uses since
+     * @param null|array<string, mixed> $options  reserved for 3rd-party uses since
      *                                            it might be needed to pass additional info
-     *                                            to other template engines.
-     * @param bool|null                 $saveData If true, saves data for subsequent calls,
+     *                                            to other template engines
+     * @param null|bool                 $saveData if true, saves data for subsequent calls,
      *                                            if false, cleans the data after displaying,
-     *                                            if null, uses the config setting.
+     *                                            if null, uses the config setting
      */
     public function render(string $view, ?array $options = null, ?bool $saveData = null): string
     {
@@ -174,7 +174,7 @@ class View implements RendererInterface
 
         $fileExt = pathinfo($view, PATHINFO_EXTENSION);
         // allow Views as .html, .tpl, etc (from CI3)
-        $this->renderVars['view'] = ($fileExt === '') ? $view . '.php' : $view;
+        $this->renderVars['view'] = ('' === $fileExt) ? $view.'.php' : $view;
 
         $this->renderVars['options'] = $options ?? [];
 
@@ -197,18 +197,18 @@ class View implements RendererInterface
             }
         }
 
-        $this->renderVars['file'] = $this->viewPath . $this->renderVars['view'];
+        $this->renderVars['file'] = $this->viewPath.$this->renderVars['view'];
 
-        if (! is_file($this->renderVars['file'])) {
+        if (!is_file($this->renderVars['file'])) {
             $this->renderVars['file'] = $this->loader->locateFile(
                 $this->renderVars['view'],
                 'Views',
-                ($fileExt === '') ? 'php' : $fileExt,
+                ('' === $fileExt) ? 'php' : $fileExt,
             );
         }
 
         // locateFile() will return false if the file cannot be found.
-        if ($this->renderVars['file'] === false) {
+        if (false === $this->renderVars['file']) {
             throw ViewException::forInvalidFile($this->renderVars['view']);
         }
 
@@ -221,6 +221,7 @@ class View implements RendererInterface
         $output = (function (): string {
             extract($this->tempData);
             ob_start();
+
             include $this->renderVars['file'];
 
             return ob_get_clean() ?: '';
@@ -232,12 +233,12 @@ class View implements RendererInterface
         // When using layouts, the data has already been stored
         // in $this->sections, and no other valid output
         // is allowed in $output so we'll overwrite it.
-        if ($this->layout !== null && $this->sectionStack === []) {
-            $layoutView   = $this->layout;
+        if (null !== $this->layout && [] === $this->sectionStack) {
+            $layoutView = $this->layout;
             $this->layout = null;
             // Save current vars
             $renderVars = $this->renderVars;
-            $output     = $this->render($layoutView, $options, $saveData);
+            $output = $this->render($layoutView, $options, $saveData);
             // Get back current vars
             $this->renderVars = $renderVars;
         }
@@ -251,29 +252,29 @@ class View implements RendererInterface
         );
 
         // Check if DebugToolbar is enabled.
-        $filters              = service('filters');
+        $filters = service('filters');
         $requiredAfterFilters = $filters->getRequiredFilters('after')[0];
         if (in_array('toolbar', $requiredAfterFilters, true)) {
             $debugBarEnabled = true;
         } else {
-            $afterFilters    = $filters->getFiltersClass()['after'];
+            $afterFilters = $filters->getFiltersClass()['after'];
             $debugBarEnabled = in_array(DebugToolbar::class, $afterFilters, true);
         }
 
         if (
             $this->debug && $debugBarEnabled
-            && (! isset($options['debug']) || $options['debug'] === true)
+            && (!isset($options['debug']) || true === $options['debug'])
         ) {
             $toolbarCollectors = config(Toolbar::class)->collectors;
 
             if (in_array(Views::class, $toolbarCollectors, true)) {
                 // Clean up our path names to make them a little cleaner
                 $this->renderVars['file'] = clean_path($this->renderVars['file']);
-                $this->renderVars['file'] = ++$this->viewsCount . ' ' . $this->renderVars['file'];
+                $this->renderVars['file'] = ++$this->viewsCount.' '.$this->renderVars['file'];
 
-                $output = '<!-- DEBUG-VIEW START ' . $this->renderVars['file'] . ' -->' . PHP_EOL
-                    . $output . PHP_EOL
-                    . '<!-- DEBUG-VIEW ENDED ' . $this->renderVars['file'] . ' -->' . PHP_EOL;
+                $output = '<!-- DEBUG-VIEW START '.$this->renderVars['file'].' -->'.PHP_EOL
+                    .$output.PHP_EOL
+                    .'<!-- DEBUG-VIEW ENDED '.$this->renderVars['file'].' -->'.PHP_EOL;
             }
         }
 
@@ -297,12 +298,12 @@ class View implements RendererInterface
      * Cache does not apply, because there is no "key".
      *
      * @param string                    $view     The view contents
-     * @param array<string, mixed>|null $options  Reserved for 3rd-party uses since
+     * @param null|array<string, mixed> $options  reserved for 3rd-party uses since
      *                                            it might be needed to pass additional info
-     *                                            to other template engines.
-     * @param bool|null                 $saveData If true, saves data for subsequent calls,
+     *                                            to other template engines
+     * @param null|bool                 $saveData if true, saves data for subsequent calls,
      *                                            if false, cleans the data after displaying,
-     *                                            if null, uses the config setting.
+     *                                            if null, uses the config setting
      */
     public function renderString(string $view, ?array $options = null, ?bool $saveData = null): string
     {
@@ -313,7 +314,7 @@ class View implements RendererInterface
         $output = (function (string $view): string {
             extract($this->tempData);
             ob_start();
-            eval('?>' . $view);
+            eval('?>'.$view);
 
             return ob_get_clean() ?: '';
         })($view);
@@ -325,23 +326,24 @@ class View implements RendererInterface
     }
 
     /**
-     * Extract first bit of a long string and add ellipsis
+     * Extract first bit of a long string and add ellipsis.
      */
     public function excerpt(string $string, int $length = 20): string
     {
-        return (mb_strlen($string) > $length) ? mb_substr($string, 0, $length - 3) . '...' : $string;
+        return (mb_strlen($string) > $length) ? mb_substr($string, 0, $length - 3).'...' : $string;
     }
 
     /**
      * Sets several pieces of view data at once.
      *
-     * @param         non-empty-string|null                     $context The context to escape it for.
-     *                                                                   If 'raw', no escaping will happen.
+     * @param null|non-empty-string $context The context to escape it for.
+     *                                       If 'raw', no escaping will happen.
+     *
      * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
      */
     public function setData(array $data = [], ?string $context = null): RendererInterface
     {
-        if ($context !== null) {
+        if (null !== $context) {
             $data = \esc($data, $context);
         }
 
@@ -354,14 +356,15 @@ class View implements RendererInterface
     /**
      * Sets a single piece of view data.
      *
-     * @param         mixed                                     $value
-     * @param         non-empty-string|null                     $context The context to escape it for.
-     *                                                                   If 'raw', no escaping will happen.
+     * @param mixed                 $value
+     * @param null|non-empty-string $context The context to escape it for.
+     *                                       If 'raw', no escaping will happen.
+     *
      * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
      */
     public function setVar(string $name, $value = null, ?string $context = null): RendererInterface
     {
-        if ($context !== null) {
+        if (null !== $context) {
             $value = esc($value, $context);
         }
 
@@ -393,10 +396,8 @@ class View implements RendererInterface
 
     /**
      * Specifies that the current view should extend an existing layout.
-     *
-     * @return void
      */
-    public function extend(string $layout)
+    public function extend(string $layout): void
     {
         $this->layout = $layout;
     }
@@ -405,10 +406,8 @@ class View implements RendererInterface
      * Starts holds content for a section within the layout.
      *
      * @param string $name Section name
-     *
-     * @return void
      */
-    public function section(string $name)
+    public function section(string $name): void
     {
         $this->sectionStack[] = $name;
 
@@ -416,24 +415,22 @@ class View implements RendererInterface
     }
 
     /**
-     * Captures the last section
-     *
-     * @return void
+     * Captures the last section.
      *
      * @throws RuntimeException
      */
-    public function endSection()
+    public function endSection(): void
     {
         $contents = ob_get_clean();
 
-        if ($this->sectionStack === []) {
+        if ([] === $this->sectionStack) {
             throw new RuntimeException('View themes, no current section.');
         }
 
         $section = array_pop($this->sectionStack);
 
         // Ensure an array exists so we can store multiple entries for this.
-        if (! array_key_exists($section, $this->sections)) {
+        if (!array_key_exists($section, $this->sections)) {
             $this->sections[$section] = [];
         }
 
@@ -443,12 +440,12 @@ class View implements RendererInterface
     /**
      * Renders a section's contents.
      *
-     * @param bool $saveData If true, saves data for subsequent calls,
-     *                       if false, cleans the data after displaying.
+     * @param bool $saveData if true, saves data for subsequent calls,
+     *                       if false, cleans the data after displaying
      */
     public function renderSection(string $sectionName, bool $saveData = false): string
     {
-        if (! isset($this->sections[$sectionName])) {
+        if (!isset($this->sections[$sectionName])) {
             return '';
         }
 
@@ -456,7 +453,7 @@ class View implements RendererInterface
 
         foreach ($this->sections[$sectionName] as $key => $contents) {
             $output .= $contents;
-            if ($saveData === false) {
+            if (false === $saveData) {
                 unset($this->sections[$sectionName][$key]);
             }
         }
@@ -467,7 +464,7 @@ class View implements RendererInterface
     /**
      * Used within layout views to include additional views.
      *
-     * @param array<string, mixed>|null $options
+     * @param null|array<string, mixed> $options
      * @param bool                      $saveData
      */
     public function include(string $view, ?array $options = null, $saveData = true): string
@@ -488,16 +485,14 @@ class View implements RendererInterface
 
     /**
      * Logs performance data for rendering a view.
-     *
-     * @return void
      */
-    protected function logPerformance(float $start, float $end, string $view)
+    protected function logPerformance(float $start, float $end, string $view): void
     {
         if ($this->debug) {
             $this->performanceData[] = [
                 'start' => $start,
-                'end'   => $end,
-                'view'  => $view,
+                'end' => $end,
+                'view' => $view,
             ];
         }
     }

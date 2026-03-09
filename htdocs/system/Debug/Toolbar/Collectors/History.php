@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Debug\Toolbar\Collectors;
 
-use DateTime;
-
 /**
- * History collector
+ * History collector.
  *
- * @see \CodeIgniter\Debug\Toolbar\Collectors\HistoryTest
+ * @see HistoryTest
  */
 class History extends BaseCollector
 {
@@ -64,18 +62,16 @@ class History extends BaseCollector
      *
      * @param string $current Current history time
      * @param int    $limit   Max history files
-     *
-     * @return void
      */
-    public function setFiles(string $current, int $limit = 20)
+    public function setFiles(string $current, int $limit = 20): void
     {
-        $filenames = glob(WRITEPATH . 'debugbar/debugbar_*.json');
+        $filenames = glob(WRITEPATH.'debugbar/debugbar_*.json');
 
-        $files   = [];
+        $files = [];
         $counter = 0;
 
         foreach (array_reverse($filenames) as $filename) {
-            $counter++;
+            ++$counter;
 
             // Oldest files will be deleted
             if ($limit >= 0 && $counter > $limit) {
@@ -88,19 +84,19 @@ class History extends BaseCollector
             $contents = file_get_contents($filename);
 
             $contents = @json_decode($contents);
-            if (json_last_error() === JSON_ERROR_NONE) {
+            if (JSON_ERROR_NONE === json_last_error()) {
                 preg_match('/debugbar_(.*)\.json$/s', $filename, $time);
                 $time = sprintf('%.6f', $time[1] ?? 0);
 
                 // Debugbar files shown in History Collector
                 $files[] = [
-                    'time'        => $time,
-                    'datetime'    => DateTime::createFromFormat('U.u', $time)->format('Y-m-d H:i:s.u'),
-                    'active'      => $time === $current,
-                    'status'      => $contents->vars->response->statusCode,
-                    'method'      => $contents->method,
-                    'url'         => $contents->url,
-                    'isAJAX'      => $contents->isAJAX ? 'Yes' : 'No',
+                    'time' => $time,
+                    'datetime' => \DateTime::createFromFormat('U.u', $time)->format('Y-m-d H:i:s.u'),
+                    'active' => $time === $current,
+                    'status' => $contents->vars->response->statusCode,
+                    'method' => $contents->method,
+                    'url' => $contents->url,
+                    'isAJAX' => $contents->isAJAX ? 'Yes' : 'No',
                     'contentType' => $contents->vars->response->contentType,
                 ];
             }
@@ -110,7 +106,7 @@ class History extends BaseCollector
     }
 
     /**
-     * Returns the data of this collector to be formatted in the toolbar
+     * Returns the data of this collector to be formatted in the toolbar.
      */
     public function display(): array
     {
@@ -130,7 +126,7 @@ class History extends BaseCollector
      */
     public function isEmpty(): bool
     {
-        return $this->files === [];
+        return [] === $this->files;
     }
 
     /**

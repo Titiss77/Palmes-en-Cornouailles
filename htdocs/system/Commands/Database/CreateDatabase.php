@@ -18,7 +18,6 @@ use CodeIgniter\CLI\CLI;
 use CodeIgniter\Config\Factories;
 use CodeIgniter\Database\SQLite3\Connection;
 use Config\Database;
-use Throwable;
 
 /**
  * Creates a new database.
@@ -34,28 +33,28 @@ class CreateDatabase extends BaseCommand
     protected $group = 'Database';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'db:create';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Create a new database schema.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'db:create <db_name> [options]';
 
     /**
-     * The Command's arguments
+     * The Command's arguments.
      *
      * @var array<string, string>
      */
@@ -64,7 +63,7 @@ class CreateDatabase extends BaseCommand
     ];
 
     /**
-     * The Command's options
+     * The Command's options.
      *
      * @var array<string, string>
      */
@@ -75,7 +74,7 @@ class CreateDatabase extends BaseCommand
     /**
      * Creates a new database.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $name = array_shift($params);
 
@@ -97,19 +96,19 @@ class CreateDatabase extends BaseCommand
             if ($db instanceof Connection) {
                 $ext = $params['ext'] ?? CLI::getOption('ext') ?? 'db';
 
-                if (! in_array($ext, ['db', 'sqlite'], true)) {
+                if (!in_array($ext, ['db', 'sqlite'], true)) {
                     $ext = CLI::prompt('Please choose a valid file extension', ['db', 'sqlite']); // @codeCoverageIgnore
                 }
 
-                if ($name !== ':memory:') {
-                    $name = str_replace(['.db', '.sqlite'], '', $name) . ".{$ext}";
+                if (':memory:' !== $name) {
+                    $name = str_replace(['.db', '.sqlite'], '', $name).".{$ext}";
                 }
 
                 $config->{$group}['DBDriver'] = 'SQLite3';
                 $config->{$group}['database'] = $name;
 
-                if ($name !== ':memory:') {
-                    $dbName = ! str_contains($name, DIRECTORY_SEPARATOR) ? WRITEPATH . $name : $name;
+                if (':memory:' !== $name) {
+                    $dbName = !str_contains($name, DIRECTORY_SEPARATOR) ? WRITEPATH.$name : $name;
 
                     if (is_file($dbName)) {
                         CLI::error("Database \"{$dbName}\" already exists.", 'light_gray', 'red');
@@ -125,7 +124,7 @@ class CreateDatabase extends BaseCommand
                 $db = Database::connect(null, false);
                 $db->connect();
 
-                if (! is_file($db->getDatabase()) && $name !== ':memory:') {
+                if (!is_file($db->getDatabase()) && ':memory:' !== $name) {
                     // @codeCoverageIgnoreStart
                     CLI::error('Database creation failed.', 'light_gray', 'red');
                     CLI::newLine();
@@ -133,7 +132,7 @@ class CreateDatabase extends BaseCommand
                     return;
                     // @codeCoverageIgnoreEnd
                 }
-            } elseif (! Database::forge()->createDatabase($name)) {
+            } elseif (!Database::forge()->createDatabase($name)) {
                 // @codeCoverageIgnoreStart
                 CLI::error('Database creation failed.', 'light_gray', 'red');
                 CLI::newLine();
@@ -144,7 +143,7 @@ class CreateDatabase extends BaseCommand
 
             CLI::write("Database \"{$name}\" successfully created.", 'green');
             CLI::newLine();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $this->showError($e);
         } finally {
             Factories::reset('config');

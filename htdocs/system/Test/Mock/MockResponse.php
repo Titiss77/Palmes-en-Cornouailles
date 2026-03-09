@@ -35,11 +35,9 @@ class MockResponse extends Response
     }
 
     /**
-     * Artificial error for testing
-     *
-     * @return void
+     * Artificial error for testing.
      */
-    public function misbehave()
+    public function misbehave(): void
     {
         $this->statusCode = 0;
     }

@@ -36,6 +36,7 @@ class PropertyContext extends DoubleAccessMemberContext
     public const HOOK_SET_TYPE = 1 << 3;
 
     public bool $readonly = false;
+
     /** @psalm-var int-mask-of<self::HOOK_*> */
     public int $hooks = self::HOOK_NONE;
     public ?string $hook_set_type = null;

@@ -18,10 +18,9 @@ use CodeIgniter\Database\BaseConnection;
 use CodeIgniter\Session\Exceptions\SessionException;
 use Config\Database;
 use Config\Session as SessionConfig;
-use ReturnTypeWillChange;
 
 /**
- * Base database session handler
+ * Base database session handler.
  *
  * Do not use this class. Use database specific handler class.
  */
@@ -49,21 +48,21 @@ class DatabaseHandler extends BaseHandler
     protected $db;
 
     /**
-     * The database type
+     * The database type.
      *
      * @var string
      */
     protected $platform;
 
     /**
-     * Row exists flag
+     * Row exists flag.
      *
      * @var bool
      */
     protected $rowExists = false;
 
     /**
-     * ID prefix for multiple session cookies
+     * ID prefix for multiple session cookies.
      */
     protected string $idPrefix;
 
@@ -77,14 +76,14 @@ class DatabaseHandler extends BaseHandler
         // Store Session configurations
         $this->DBGroup = $config->DBGroup ?? config(Database::class)->defaultGroup;
         // Add sessionCookieName for multiple session cookies.
-        $this->idPrefix = $config->cookieName . ':';
+        $this->idPrefix = $config->cookieName.':';
 
         $this->table = $this->savePath;
         if (empty($this->table)) {
             throw SessionException::forMissingDatabaseTable();
         }
 
-        $this->db       = Database::connect($this->DBGroup);
+        $this->db = Database::connect($this->DBGroup);
         $this->platform = $this->db->getPlatform();
     }
 
@@ -111,20 +110,20 @@ class DatabaseHandler extends BaseHandler
      * @return false|string Returns an encoded string of the read data.
      *                      If nothing was read, it must return false.
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function read($id)
     {
-        if ($this->lockSession($id) === false) {
+        if (false === $this->lockSession($id)) {
             $this->fingerprint = md5('');
 
             return '';
         }
 
-        if (! isset($this->sessionID)) {
+        if (!isset($this->sessionID)) {
             $this->sessionID = $id;
         }
 
-        $builder = $this->db->table($this->table)->where('id', $this->idPrefix . $id);
+        $builder = $this->db->table($this->table)->where('id', $this->idPrefix.$id);
 
         if ($this->matchIP) {
             $builder = $builder->where('ip_address', $this->ipAddress);
@@ -134,11 +133,11 @@ class DatabaseHandler extends BaseHandler
 
         $result = $builder->get()->getRow();
 
-        if ($result === null) {
+        if (null === $result) {
             // PHP7 will reuse the same SessionHandler object after
             // ID regeneration, so we need to explicitly set this to
             // FALSE instead of relying on the default ...
-            $this->rowExists   = false;
+            $this->rowExists = false;
             $this->fingerprint = md5('');
 
             return '';
@@ -147,31 +146,9 @@ class DatabaseHandler extends BaseHandler
         $result = is_bool($result) ? '' : $this->decodeData($result->data);
 
         $this->fingerprint = md5($result);
-        $this->rowExists   = true;
+        $this->rowExists = true;
 
         return $result;
-    }
-
-    /**
-     * Sets SELECT clause
-     *
-     * @return void
-     */
-    protected function setSelect(BaseBuilder $builder)
-    {
-        $builder->select('data');
-    }
-
-    /**
-     * Decodes column data
-     *
-     * @param string $data
-     *
-     * @return false|string
-     */
-    protected function decodeData($data)
-    {
-        return $data;
     }
 
     /**
@@ -182,7 +159,7 @@ class DatabaseHandler extends BaseHandler
      */
     public function write($id, $data): bool
     {
-        if ($this->lock === false) {
+        if (false === $this->lock) {
             return $this->fail();
         }
 
@@ -191,24 +168,24 @@ class DatabaseHandler extends BaseHandler
             $this->sessionID = $id;
         }
 
-        if ($this->rowExists === false) {
+        if (false === $this->rowExists) {
             $insertData = [
-                'id'         => $this->idPrefix . $id,
+                'id' => $this->idPrefix.$id,
                 'ip_address' => $this->ipAddress,
-                'data'       => $this->prepareData($data),
+                'data' => $this->prepareData($data),
             ];
 
-            if (! $this->db->table($this->table)->set('timestamp', 'now()', false)->insert($insertData)) {
+            if (!$this->db->table($this->table)->set('timestamp', 'now()', false)->insert($insertData)) {
                 return $this->fail();
             }
 
             $this->fingerprint = md5($data);
-            $this->rowExists   = true;
+            $this->rowExists = true;
 
             return true;
         }
 
-        $builder = $this->db->table($this->table)->where('id', $this->idPrefix . $id);
+        $builder = $this->db->table($this->table)->where('id', $this->idPrefix.$id);
 
         if ($this->matchIP) {
             $builder = $builder->where('ip_address', $this->ipAddress);
@@ -220,7 +197,7 @@ class DatabaseHandler extends BaseHandler
             $updateData['data'] = $this->prepareData($data);
         }
 
-        if (! $builder->set('timestamp', 'now()', false)->update($updateData)) {
+        if (!$builder->set('timestamp', 'now()', false)->update($updateData)) {
             return $this->fail();
         }
 
@@ -230,36 +207,28 @@ class DatabaseHandler extends BaseHandler
     }
 
     /**
-     * Prepare data to insert/update
-     */
-    protected function prepareData(string $data): string
-    {
-        return $data;
-    }
-
-    /**
      * Closes the current session.
      */
     public function close(): bool
     {
-        return ($this->lock && ! $this->releaseLock()) ? $this->fail() : true;
+        return ($this->lock && !$this->releaseLock()) ? $this->fail() : true;
     }
 
     /**
-     * Destroys a session
+     * Destroys a session.
      *
      * @param string $id The session ID being destroyed
      */
     public function destroy($id): bool
     {
         if ($this->lock) {
-            $builder = $this->db->table($this->table)->where('id', $this->idPrefix . $id);
+            $builder = $this->db->table($this->table)->where('id', $this->idPrefix.$id);
 
             if ($this->matchIP) {
                 $builder = $builder->where('ip_address', $this->ipAddress);
             }
 
-            if (! $builder->delete()) {
+            if (!$builder->delete()) {
                 return $this->fail();
             }
         }
@@ -276,12 +245,12 @@ class DatabaseHandler extends BaseHandler
     /**
      * Cleans up expired sessions.
      *
-     * @param int $max_lifetime Sessions that have not updated
-     *                          for the last max_lifetime seconds will be removed.
+     * @param int $max_lifetime sessions that have not updated
+     *                          for the last max_lifetime seconds will be removed
      *
-     * @return false|int Returns the number of deleted sessions on success, or false on failure.
+     * @return false|int returns the number of deleted sessions on success, or false on failure
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function gc($max_lifetime)
     {
         return $this->db->table($this->table)->where(
@@ -292,11 +261,39 @@ class DatabaseHandler extends BaseHandler
     }
 
     /**
+     * Sets SELECT clause.
+     */
+    protected function setSelect(BaseBuilder $builder): void
+    {
+        $builder->select('data');
+    }
+
+    /**
+     * Decodes column data.
+     *
+     * @param string $data
+     *
+     * @return false|string
+     */
+    protected function decodeData($data)
+    {
+        return $data;
+    }
+
+    /**
+     * Prepare data to insert/update.
+     */
+    protected function prepareData(string $data): string
+    {
+        return $data;
+    }
+
+    /**
      * Releases the lock, if any.
      */
     protected function releaseLock(): bool
     {
-        if (! $this->lock) {
+        if (!$this->lock) {
             return true;
         }
 

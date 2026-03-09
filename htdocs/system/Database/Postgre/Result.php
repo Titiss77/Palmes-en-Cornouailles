@@ -17,10 +17,9 @@ use CodeIgniter\Database\BaseResult;
 use CodeIgniter\Entity\Entity;
 use PgSql\Connection as PgSqlConnection;
 use PgSql\Result as PgSqlResult;
-use stdClass;
 
 /**
- * Result for Postgre
+ * Result for Postgre.
  *
  * @extends BaseResult<PgSqlConnection, PgSqlResult>
  */
@@ -41,7 +40,7 @@ class Result extends BaseResult
     {
         $fieldNames = [];
 
-        for ($i = 0, $c = $this->getFieldCount(); $i < $c; $i++) {
+        for ($i = 0, $c = $this->getFieldCount(); $i < $c; ++$i) {
             $fieldNames[] = pg_field_name($this->resultID, $i);
         }
 
@@ -55,13 +54,13 @@ class Result extends BaseResult
     {
         $retVal = [];
 
-        for ($i = 0, $c = $this->getFieldCount(); $i < $c; $i++) {
-            $retVal[$i]             = new stdClass();
-            $retVal[$i]->name       = pg_field_name($this->resultID, $i);
-            $retVal[$i]->type       = pg_field_type_oid($this->resultID, $i);
-            $retVal[$i]->type_name  = pg_field_type($this->resultID, $i);
+        for ($i = 0, $c = $this->getFieldCount(); $i < $c; ++$i) {
+            $retVal[$i] = new \stdClass();
+            $retVal[$i]->name = pg_field_name($this->resultID, $i);
+            $retVal[$i]->type = pg_field_type_oid($this->resultID, $i);
+            $retVal[$i]->type_name = pg_field_type($this->resultID, $i);
             $retVal[$i]->max_length = pg_field_size($this->resultID, $i);
-            $retVal[$i]->length     = $retVal[$i]->max_length;
+            $retVal[$i]->length = $retVal[$i]->max_length;
             // $retVal[$i]->primary_key = (int)($fieldData[$i]->flags & 2);
             // $retVal[$i]->default     = $fieldData[$i]->def;
         }
@@ -71,12 +70,10 @@ class Result extends BaseResult
 
     /**
      * Frees the current result.
-     *
-     * @return void
      */
-    public function freeResult()
+    public function freeResult(): void
     {
-        if ($this->resultID !== false) {
+        if (false !== $this->resultID) {
             pg_free_result($this->resultID);
             $this->resultID = false;
         }
@@ -92,6 +89,18 @@ class Result extends BaseResult
     public function dataSeek(int $n = 0)
     {
         return pg_result_seek($this->resultID, $n);
+    }
+
+    /**
+     * Returns the number of rows in the resultID (i.e., PostgreSQL query result resource).
+     */
+    public function getNumRows(): int
+    {
+        if (!is_int($this->numRows)) {
+            $this->numRows = pg_num_rows($this->resultID);
+        }
+
+        return $this->numRows;
     }
 
     /**
@@ -111,7 +120,7 @@ class Result extends BaseResult
      *
      * Overridden by child classes.
      *
-     * @return Entity|false|object|stdClass
+     * @return Entity|false|object|\stdClass
      */
     protected function fetchObject(string $className = 'stdClass')
     {
@@ -120,17 +129,5 @@ class Result extends BaseResult
         }
 
         return pg_fetch_object($this->resultID, null, $className);
-    }
-
-    /**
-     * Returns the number of rows in the resultID (i.e., PostgreSQL query result resource)
-     */
-    public function getNumRows(): int
-    {
-        if (! is_int($this->numRows)) {
-            $this->numRows = pg_num_rows($this->resultID);
-        }
-
-        return $this->numRows;
     }
 }

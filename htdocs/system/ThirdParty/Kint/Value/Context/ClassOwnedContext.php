@@ -27,8 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value\Context;
 
-use __PHP_Incomplete_Class;
-
 class ClassOwnedContext extends BaseContext
 {
     /** @psalm-var class-string */
@@ -54,6 +52,6 @@ class ClassOwnedContext extends BaseContext
     /** @psalm-param ?class-string $scope */
     public function isAccessible(?string $scope): bool
     {
-        return __PHP_Incomplete_Class::class !== $this->owner_class;
+        return \__PHP_Incomplete_Class::class !== $this->owner_class;
     }
 }

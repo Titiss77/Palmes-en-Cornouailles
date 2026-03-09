@@ -26,14 +26,14 @@ use PHPUnit\Framework\Constraint\IsEqual;
  *
  * @mixin DOMParser
  *
- * @see \CodeIgniter\Test\TestResponseTest
+ * @see TestResponseTest
  */
 class TestResponse
 {
     /**
      * The request.
      *
-     * @var RequestInterface|null
+     * @var null|RequestInterface
      */
     protected $request;
 
@@ -59,6 +59,20 @@ class TestResponse
         $this->setResponse($response);
     }
 
+    /**
+     * Forward any unrecognized method calls to our DOMParser instance.
+     *
+     * @param list<mixed> $params
+     */
+    public function __call(string $function, array $params): mixed
+    {
+        if (method_exists($this->domParser, $function)) {
+            return $this->domParser->{$function}(...$params);
+        }
+
+        return null;
+    }
+
     // --------------------------------------------------------------------
     // Getters / Setters
     // --------------------------------------------------------------------
@@ -82,12 +96,12 @@ class TestResponse
      */
     public function setResponse(ResponseInterface $response)
     {
-        $this->response  = $response;
+        $this->response = $response;
         $this->domParser = new DOMParser();
 
         $body = $response->getBody();
 
-        if (is_string($body) && $body !== '') {
+        if (is_string($body) && '' !== $body) {
             $this->domParser->withString($body);
         }
 
@@ -97,7 +111,7 @@ class TestResponse
     /**
      * Request accessor.
      *
-     * @return RequestInterface|null
+     * @return null|RequestInterface
      */
     public function request()
     {
@@ -135,7 +149,7 @@ class TestResponse
         $body = (string) $this->response->getBody();
 
         // Empty bodies are not considered valid, unless in redirects
-        return ! ($status < 300 && $body === '');
+        return !($status < 300 && '' === $body);
     }
 
     /**
@@ -173,7 +187,7 @@ class TestResponse
     // --------------------------------------------------------------------
 
     /**
-     * Returns whether or not the Response was a redirect or RedirectResponse
+     * Returns whether or not the Response was a redirect or RedirectResponse.
      */
     public function isRedirect(): bool
     {
@@ -198,7 +212,7 @@ class TestResponse
     {
         $this->assertRedirect();
 
-        $uri         = trim(strtolower($uri));
+        $uri = trim(strtolower($uri));
         $redirectUri = strtolower($this->getRedirectUrl());
 
         $matches = $uri === $redirectUri
@@ -221,7 +235,7 @@ class TestResponse
      */
     public function getRedirectUrl(): ?string
     {
-        if (! $this->isRedirect()) {
+        if (!$this->isRedirect()) {
             return null;
         }
 
@@ -249,7 +263,7 @@ class TestResponse
     {
         Assert::assertArrayHasKey($key, $_SESSION, "Key '{$key}' is not in the current \$_SESSION");
 
-        if ($value === null) {
+        if (null === $value) {
             return;
         }
 
@@ -277,13 +291,13 @@ class TestResponse
     /**
      * Asserts that the Response contains a specific header.
      *
-     * @param string|null $value
+     * @param null|string $value
      */
     public function assertHeader(string $key, $value = null): void
     {
         Assert::assertTrue($this->response->hasHeader($key), "Header '{$key}' is not a valid Response header.");
 
-        if ($value !== null) {
+        if (null !== $value) {
             Assert::assertSame(
                 $value,
                 $this->response->getHeaderLine($key),
@@ -307,7 +321,7 @@ class TestResponse
     /**
      * Asserts that the response has the specified cookie.
      *
-     * @param string|null $value
+     * @param null|string $value
      */
     public function assertCookie(string $key, $value = null, string $prefix = ''): void
     {
@@ -340,7 +354,7 @@ class TestResponse
     // --------------------------------------------------------------------
 
     /**
-     * Returns the response's body as JSON
+     * Returns the response's body as JSON.
      *
      * @return false|string
      */
@@ -348,7 +362,7 @@ class TestResponse
     {
         $response = $this->response->getJSON();
 
-        if ($response === null) {
+        if (null === $response) {
             return false;
         }
 
@@ -400,9 +414,9 @@ class TestResponse
     // --------------------------------------------------------------------
 
     /**
-     * Returns the response' body as XML
+     * Returns the response' body as XML.
      *
-     * @return bool|string|null
+     * @return null|bool|string
      */
     public function getXML()
     {
@@ -477,19 +491,5 @@ class TestResponse
             $this->domParser->seeInField($field, $value),
             "Input named '{$field}' with value '{$value}' is not seen in response.",
         );
-    }
-
-    /**
-     * Forward any unrecognized method calls to our DOMParser instance.
-     *
-     * @param list<mixed> $params
-     */
-    public function __call(string $function, array $params): mixed
-    {
-        if (method_exists($this->domParser, $function)) {
-            return $this->domParser->{$function}(...$params);
-        }
-
-        return null;
     }
 }

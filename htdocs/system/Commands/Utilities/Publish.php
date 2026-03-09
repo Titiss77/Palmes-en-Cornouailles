@@ -33,28 +33,28 @@ class Publish extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'publish';
 
     /**
-     * The Command's short description
+     * The Command's short description.
      *
      * @var string
      */
     protected $description = 'Discovers and executes all predefined Publisher classes.';
 
     /**
-     * The Command's usage
+     * The Command's usage.
      *
      * @var string
      */
     protected $usage = 'publish [<directory>]';
 
     /**
-     * The Command's arguments
+     * The Command's arguments.
      *
      * @var array<string, string>
      */
@@ -63,7 +63,7 @@ class Publish extends BaseCommand
     ];
 
     /**
-     * the Command's Options
+     * the Command's Options.
      *
      * @var array<string, string>
      */
@@ -74,13 +74,13 @@ class Publish extends BaseCommand
     /**
      * Displays the help for the spark cli script itself.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $directory = $params[0] ?? 'Publishers';
         $namespace = $params['namespace'] ?? '';
 
         if ([] === $publishers = Publisher::discover($directory, $namespace)) {
-            if ($namespace === '') {
+            if ('' === $namespace) {
                 CLI::write(lang('Publisher.publishMissing', [$directory]));
             } else {
                 CLI::write(lang('Publisher.publishMissingNamespace', [$directory, $namespace]));

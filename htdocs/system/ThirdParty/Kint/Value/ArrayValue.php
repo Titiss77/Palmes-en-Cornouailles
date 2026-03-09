@@ -33,6 +33,7 @@ class ArrayValue extends AbstractValue
 {
     /** @psalm-readonly */
     protected int $size;
+
     /**
      * @psalm-readonly
      *

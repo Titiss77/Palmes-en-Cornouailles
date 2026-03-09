@@ -16,7 +16,7 @@ namespace CodeIgniter\Debug\Toolbar\Collectors;
 use CodeIgniter\View\RendererInterface;
 
 /**
- * Views collector
+ * Views collector.
  */
 class Views extends BaseCollector
 {
@@ -61,47 +61,18 @@ class Views extends BaseCollector
     protected $title = 'Views';
 
     /**
-     * Instance of the shared Renderer service
+     * Instance of the shared Renderer service.
      *
-     * @var RendererInterface|null
+     * @var null|RendererInterface
      */
     protected $viewer;
 
     /**
-     * Views counter
+     * Views counter.
      *
      * @var array
      */
     protected $views = [];
-
-    private function initViewer(): void
-    {
-        $this->viewer ??= service('renderer');
-    }
-
-    /**
-     * Child classes should implement this to return the timeline data
-     * formatted for correct usage.
-     */
-    protected function formatTimelineData(): array
-    {
-        $this->initViewer();
-
-        $data = [];
-
-        $rows = $this->viewer->getPerformanceData();
-
-        foreach ($rows as $info) {
-            $data[] = [
-                'name'      => 'View: ' . $info['view'],
-                'component' => 'Views',
-                'start'     => $info['start'],
-                'duration'  => $info['end'] - $info['start'],
-            ];
-        }
-
-        return $data;
-    }
 
     /**
      * Gets a collection of data that should be shown in the 'Vars' tab.
@@ -146,5 +117,34 @@ class Views extends BaseCollector
     public function icon(): string
     {
         return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADeSURBVEhL7ZSxDcIwEEWNYA0YgGmgyAaJLTcUaaBzQQEVjMEabBQxAdw53zTHiThEovGTfnE/9rsoRUxhKLOmaa6Uh7X2+UvguLCzVxN1XW9x4EYHzik033Hp3X0LO+DaQG8MDQcuq6qao4qkHuMgQggLvkPLjqh00ZgFDBacMJYFkuwFlH1mshdkZ5JPJERA9JpI6xNCBESvibQ+IURA9JpI6xNCBESvibQ+IURA9DTsuHTOrVFFxixgB/eUFlU8uKJ0eDBFOu/9EvoeKnlJS2/08Tc8NOwQ8sIfMeYFjqKDjdU2sp4AAAAASUVORK5CYII=';
+    }
+
+    /**
+     * Child classes should implement this to return the timeline data
+     * formatted for correct usage.
+     */
+    protected function formatTimelineData(): array
+    {
+        $this->initViewer();
+
+        $data = [];
+
+        $rows = $this->viewer->getPerformanceData();
+
+        foreach ($rows as $info) {
+            $data[] = [
+                'name' => 'View: '.$info['view'],
+                'component' => 'Views',
+                'start' => $info['start'],
+                'duration' => $info['end'] - $info['start'],
+            ];
+        }
+
+        return $data;
+    }
+
+    private function initViewer(): void
+    {
+        $this->viewer ??= service('renderer');
     }
 }

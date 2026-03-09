@@ -15,7 +15,6 @@ namespace CodeIgniter\Debug;
 
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Throwable;
 
 interface ExceptionHandlerInterface
 {
@@ -23,7 +22,7 @@ interface ExceptionHandlerInterface
      * Determines the correct way to display the error.
      */
     public function handle(
-        Throwable $exception,
+        \Throwable $exception,
         RequestInterface $request,
         ResponseInterface $response,
         int $statusCode,

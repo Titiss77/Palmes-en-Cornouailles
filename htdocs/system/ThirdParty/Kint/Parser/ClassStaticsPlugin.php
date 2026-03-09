@@ -34,10 +34,6 @@ use Kint\Value\Context\StaticPropertyContext;
 use Kint\Value\InstanceValue;
 use Kint\Value\Representation\ContainerRepresentation;
 use Kint\Value\UninitializedValue;
-use ReflectionClass;
-use ReflectionClassConstant;
-use ReflectionProperty;
-use UnitEnum;
 
 class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -57,6 +53,8 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
     /**
      * @psalm-template T of AbstractValue
      *
+     * @param mixed $var
+     *
      * @psalm-param mixed $var
      * @psalm-param T $v
      *
@@ -70,7 +68,7 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
 
         $deep = 0 === $this->getParser()->getDepthLimit();
 
-        $r = new ReflectionClass($v->getClassName());
+        $r = new \ReflectionClass($v->getClassName());
 
         if ($statics = $this->getStatics($r, $v->getContext()->getDepth() + 1)) {
             $v->addRepresentation(new ContainerRepresentation('Static properties', \array_values($statics), 'statics'));
@@ -84,7 +82,7 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
     }
 
     /** @psalm-return array<AbstractValue> */
-    private function getStatics(ReflectionClass $r, int $depth): array
+    private function getStatics(\ReflectionClass $r, int $depth): array
     {
         $cdepth = $depth ?: 1;
         $class = $r->getName();
@@ -93,7 +91,7 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
         $parent_statics = $parent ? $this->getStatics($parent, $depth) : [];
         $statics = [];
 
-        foreach ($r->getProperties(ReflectionProperty::IS_STATIC) as $pr) {
+        foreach ($r->getProperties(\ReflectionProperty::IS_STATIC) as $pr) {
             $canon_name = \strtolower($pr->getDeclaringClass()->name.'::'.$pr->name);
 
             if ($pr->getDeclaringClass()->name === $class) {
@@ -114,7 +112,7 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
         return $statics;
     }
 
-    private function buildStaticValue(ReflectionProperty $pr, int $depth): AbstractValue
+    private function buildStaticValue(\ReflectionProperty $pr, int $depth): AbstractValue
     {
         $context = new StaticPropertyContext(
             $pr->name,
@@ -138,7 +136,7 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
 
         $pr->setAccessible(true);
 
-        /**
+        /*
          * @psalm-suppress TooFewArguments
          * Appears to have been fixed in master.
          */
@@ -157,7 +155,7 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
     }
 
     /** @psalm-return array<AbstractValue> */
-    private function getCachedConstants(ReflectionClass $r, bool $deep): array
+    private function getCachedConstants(\ReflectionClass $r, bool $deep): array
     {
         $parser = $this->getParser();
         $cdepth = $parser->getDepthLimit() ?: 1;
@@ -174,10 +172,10 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
                 $parent_consts = $this->getCachedConstants($parent, $deep);
             }
             foreach ($r->getConstants() as $name => $val) {
-                $cr = new ReflectionClassConstant($class, $name);
+                $cr = new \ReflectionClassConstant($class, $name);
 
                 // Skip enum constants
-                if ($cr->class === $class && \is_a($class, UnitEnum::class, true)) {
+                if ($cr->class === $class && \is_a($class, \UnitEnum::class, true)) {
                     continue;
                 }
 
@@ -208,7 +206,7 @@ class ClassStaticsPlugin extends AbstractPlugin implements PluginCompleteInterfa
         return $this->cache[$class][$deepkey];
     }
 
-    private function buildConstContext(ReflectionClassConstant $cr): ClassConstContext
+    private function buildConstContext(\ReflectionClassConstant $cr): ClassConstContext
     {
         $context = new ClassConstContext(
             $cr->name,

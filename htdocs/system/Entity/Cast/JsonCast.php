@@ -14,22 +14,17 @@ declare(strict_types=1);
 namespace CodeIgniter\Entity\Cast;
 
 use CodeIgniter\Entity\Exceptions\CastException;
-use JsonException;
-use stdClass;
 
 /**
- * Class JsonCast
+ * Class JsonCast.
  */
 class JsonCast extends BaseCast
 {
-    /**
-     * {@inheritDoc}
-     */
     public static function get($value, array $params = [])
     {
         $associative = in_array('array', $params, true);
 
-        $tmp = $value !== null ? ($associative ? [] : new stdClass()) : null;
+        $tmp = null !== $value ? ($associative ? [] : new \stdClass()) : null;
 
         if (function_exists('json_decode')
             && (
@@ -41,7 +36,7 @@ class JsonCast extends BaseCast
         ) {
             try {
                 $tmp = json_decode($value, $associative, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
+            } catch (\JsonException $e) {
                 throw CastException::forInvalidJsonFormat($e->getCode());
             }
         }
@@ -49,15 +44,12 @@ class JsonCast extends BaseCast
         return $tmp;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public static function set($value, array $params = []): string
     {
         if (function_exists('json_encode')) {
             try {
                 $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
+            } catch (\JsonException $e) {
                 throw CastException::forInvalidJsonFormat($e->getCode());
             }
         }

@@ -31,28 +31,28 @@ final class PhpIniCheck extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'phpini:check';
 
     /**
-     * The Command's short description
+     * The Command's short description.
      *
      * @var string
      */
     protected $description = 'Check your php.ini values in production environment.';
 
     /**
-     * The Command's usage
+     * The Command's usage.
      *
      * @var string
      */
     protected $usage = 'phpini:check';
 
     /**
-     * The Command's arguments
+     * The Command's arguments.
      *
      * @var array<string, string>
      */
@@ -61,7 +61,7 @@ final class PhpIniCheck extends BaseCommand
     ];
 
     /**
-     * The Command's options
+     * The Command's options.
      *
      * @var array<string, string>
      */
@@ -72,16 +72,16 @@ final class PhpIniCheck extends BaseCommand
      */
     public function run(array $params)
     {
-        if (isset($params[0]) && ! in_array($params[0], array_keys($this->arguments), true)) {
+        if (isset($params[0]) && !in_array($params[0], array_keys($this->arguments), true)) {
             CLI::error('You must specify a correct argument.');
-            CLI::write('    Usage: ' . $this->usage);
+            CLI::write('    Usage: '.$this->usage);
             CLI::write('  Example: phpini:check opcache');
             CLI::write('Arguments:');
 
             $length = max(array_map(strlen(...), array_keys($this->arguments)));
 
             foreach ($this->arguments as $argument => $description) {
-                CLI::write(CLI::color($this->setPad($argument, $length, 2, 2), 'green') . $description);
+                CLI::write(CLI::color($this->setPad($argument, $length, 2, 2), 'green').$description);
             }
 
             return EXIT_ERROR;

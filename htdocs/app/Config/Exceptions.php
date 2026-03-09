@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Debug\ExceptionHandler;
 use CodeIgniter\Debug\ExceptionHandlerInterface;
 use Psr\Log\LogLevel;
-use Throwable;
 
 /**
  * Setup how the exception handler works.
@@ -44,7 +45,7 @@ class Exceptions extends BaseConfig
      *
      * Default: APPPATH.'Views/errors'
      */
-    public string $errorViewPath = APPPATH . 'Views/errors';
+    public string $errorViewPath = APPPATH.'Views/errors';
 
     /**
      * --------------------------------------------------------------------------
@@ -52,7 +53,7 @@ class Exceptions extends BaseConfig
      * --------------------------------------------------------------------------
      * Any data that you would like to hide from the debug trace.
      * In order to specify 2 levels, use "/" to separate.
-     * ex. ['server', 'setup/password', 'secret_token']
+     * ex. ['server', 'setup/password', 'secret_token'].
      *
      * @var list<string>
      */
@@ -99,7 +100,7 @@ class Exceptions extends BaseConfig
      *          return new \App\Libraries\MyExceptionHandler();
      *      }
      */
-    public function handler(int $statusCode, Throwable $exception): ExceptionHandlerInterface
+    public function handler(int $statusCode, \Throwable $exception): ExceptionHandlerInterface
     {
         return new ExceptionHandler($this);
     }

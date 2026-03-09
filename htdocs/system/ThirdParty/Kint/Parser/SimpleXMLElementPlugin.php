@@ -75,14 +75,14 @@ class SimpleXMLElementPlugin extends AbstractPlugin implements PluginBeginInterf
 
     public function parseBegin(&$var, ContextInterface $c): ?AbstractValue
     {
-        if (!$var instanceof SimpleXMLElement) {
+        if (!$var instanceof \SimpleXMLElement) {
             return null;
         }
 
         return $this->parseElement($var, $c);
     }
 
-    protected function parseElement(SimpleXMLElement &$var, ContextInterface $c): SimpleXMLElementValue
+    protected function parseElement(\SimpleXMLElement &$var, ContextInterface $c): SimpleXMLElementValue
     {
         $parser = $this->getParser();
         $pdepth = $parser->getDepthLimit();
@@ -133,7 +133,7 @@ class SimpleXMLElementPlugin extends AbstractPlugin implements PluginBeginInterf
     }
 
     /** @psalm-return list<AbstractValue> */
-    protected function getAttributes(ContextInterface $c, SimpleXMLElement $var): array
+    protected function getAttributes(ContextInterface $c, \SimpleXMLElement $var): array
     {
         $parser = $this->getParser();
         $namespaces = \array_merge(['' => null], $var->getDocNamespaces());
@@ -198,7 +198,7 @@ class SimpleXMLElementPlugin extends AbstractPlugin implements PluginBeginInterf
      *
      * @psalm-return list<SimpleXMLElementValue>
      */
-    protected function getChildren(ContextInterface $c, SimpleXMLElement $var): array
+    protected function getChildren(ContextInterface $c, \SimpleXMLElement $var): array
     {
         $namespaces = \array_merge(['' => null], $var->getDocNamespaces());
 
@@ -211,7 +211,7 @@ class SimpleXMLElementPlugin extends AbstractPlugin implements PluginBeginInterf
             if ((bool) $nsChildren = $var->children($nsAlias, true)) {
                 $nsap = [];
                 foreach ($nsChildren as $name => $child) {
-                    $base = new ClassOwnedContext((string) $name, SimpleXMLElement::class);
+                    $base = new ClassOwnedContext((string) $name, \SimpleXMLElement::class);
                     $base->depth = $cdepth + 1;
 
                     if ('' !== $nsAlias) {
@@ -280,7 +280,7 @@ class SimpleXMLElementPlugin extends AbstractPlugin implements PluginBeginInterf
      * Long story short the function below is the only way to reliably check if
      * a SimpleXMLElement has children
      */
-    protected static function hasChildElements(SimpleXMLElement $var): bool
+    protected static function hasChildElements(\SimpleXMLElement $var): bool
     {
         $namespaces = \array_merge(['' => null], $var->getDocNamespaces());
 

@@ -34,6 +34,7 @@ class FunctionValue extends AbstractValue
 {
     /** @psalm-readonly */
     protected DeclaredCallableBag $callable_bag;
+
     /** @psalm-readonly */
     protected ?CallableDefinitionRepresentation $definition_rep;
 
@@ -49,7 +50,7 @@ class FunctionValue extends AbstractValue
             return;
         }
 
-        /**
+        /*
          * @psalm-var string $this->callable_bag->filename
          * @psalm-var int $this->callable_bag->startline
          * Psalm issue #11121

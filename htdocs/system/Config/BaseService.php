@@ -191,11 +191,32 @@ class BaseService
     private static array $serviceNames = [];
 
     /**
+     * Provides the ability to perform case-insensitive calling of service
+     * names.
+     *
+     * @return null|object
+     */
+    public static function __callStatic(string $name, array $arguments)
+    {
+        if (isset(static::$factories[$name])) {
+            return static::$factories[$name](...$arguments);
+        }
+
+        $service = static::serviceExists($name);
+
+        if (null === $service) {
+            return null;
+        }
+
+        return $service::$name(...$arguments);
+    }
+
+    /**
      * Simple method to get an entry fast.
      *
-     * @param string $key Identifier of the entry to look for.
+     * @param string $key identifier of the entry to look for
      *
-     * @return object|null Entry.
+     * @return null|object entry
      */
     public static function get(string $key): ?object
     {
@@ -205,12 +226,12 @@ class BaseService
     /**
      * Sets an entry.
      *
-     * @param string $key Identifier of the entry.
+     * @param string $key identifier of the entry
      */
     public static function set(string $key, object $value): void
     {
         if (isset(static::$instances[$key])) {
-            throw new InvalidArgumentException('The entry for "' . $key . '" is already set.');
+            throw new InvalidArgumentException('The entry for "'.$key.'" is already set.');
         }
 
         static::$instances[$key] = $value;
@@ -219,39 +240,11 @@ class BaseService
     /**
      * Overrides an existing entry.
      *
-     * @param string $key Identifier of the entry.
+     * @param string $key identifier of the entry
      */
     public static function override(string $key, object $value): void
     {
         static::$instances[$key] = $value;
-    }
-
-    /**
-     * Returns a shared instance of any of the class' services.
-     *
-     * $key must be a name matching a service.
-     *
-     * @param array|bool|float|int|object|string|null ...$params
-     *
-     * @return object
-     */
-    protected static function getSharedInstance(string $key, ...$params)
-    {
-        $key = strtolower($key);
-
-        // Returns mock if exists
-        if (isset(static::$mocks[$key])) {
-            return static::$mocks[$key];
-        }
-
-        if (! isset(static::$instances[$key])) {
-            // Make sure $getShared is false
-            $params[] = false;
-
-            static::$instances[$key] = AppServices::$key(...$params);
-        }
-
-        return static::$instances[$key];
     }
 
     /**
@@ -301,27 +294,6 @@ class BaseService
     }
 
     /**
-     * Provides the ability to perform case-insensitive calling of service
-     * names.
-     *
-     * @return object|null
-     */
-    public static function __callStatic(string $name, array $arguments)
-    {
-        if (isset(static::$factories[$name])) {
-            return static::$factories[$name](...$arguments);
-        }
-
-        $service = static::serviceExists($name);
-
-        if ($service === null) {
-            return null;
-        }
-
-        return $service::$name(...$arguments);
-    }
-
-    /**
      * Check if the requested service is defined and return the declaring
      * class. Return null if not found.
      */
@@ -330,7 +302,7 @@ class BaseService
         static::buildServicesCache();
 
         $services = array_merge(self::$serviceNames, [Services::class]);
-        $name     = strtolower($name);
+        $name = strtolower($name);
 
         foreach ($services as $service) {
             if (method_exists($service, $name)) {
@@ -346,13 +318,11 @@ class BaseService
     /**
      * Reset shared instances and mocks for testing.
      *
-     * @return void
-     *
      * @testTag only available to test code
      */
-    public static function reset(bool $initAutoloader = true)
+    public static function reset(bool $initAutoloader = true): void
     {
-        static::$mocks     = [];
+        static::$mocks = [];
         static::$instances = [];
         static::$factories = [];
 
@@ -364,11 +334,9 @@ class BaseService
     /**
      * Resets any mock and shared instances for a single service.
      *
-     * @return void
-     *
      * @testTag only available to test code
      */
-    public static function resetSingle(string $name)
+    public static function resetSingle(string $name): void
     {
         $name = strtolower($name);
         unset(static::$mocks[$name], static::$instances[$name]);
@@ -379,13 +347,11 @@ class BaseService
      *
      * @param object $mock
      *
-     * @return void
-     *
      * @testTag only available to test code
      */
-    public static function injectMock(string $name, $mock)
+    public static function injectMock(string $name, $mock): void
     {
-        static::$instances[$name]         = $mock;
+        static::$instances[$name] = $mock;
         static::$mocks[strtolower($name)] = $mock;
     }
 
@@ -398,12 +364,40 @@ class BaseService
         static::$discovered = false;
     }
 
+    /**
+     * Returns a shared instance of any of the class' services.
+     *
+     * $key must be a name matching a service.
+     *
+     * @param null|array|bool|float|int|object|string ...$params
+     *
+     * @return object
+     */
+    protected static function getSharedInstance(string $key, ...$params)
+    {
+        $key = strtolower($key);
+
+        // Returns mock if exists
+        if (isset(static::$mocks[$key])) {
+            return static::$mocks[$key];
+        }
+
+        if (!isset(static::$instances[$key])) {
+            // Make sure $getShared is false
+            $params[] = false;
+
+            static::$instances[$key] = AppServices::$key(...$params);
+        }
+
+        return static::$instances[$key];
+    }
+
     protected static function buildServicesCache(): void
     {
-        if (! static::$discovered) {
+        if (!static::$discovered) {
             if ((new Modules())->shouldDiscover('services')) {
                 $locator = static::locator();
-                $files   = $locator->search('Config/Services');
+                $files = $locator->search('Config/Services');
 
                 $systemPath = static::autoloader()->getNamespace('CodeIgniter')[0];
 
@@ -416,11 +410,11 @@ class BaseService
 
                     $classname = $locator->findQualifiedNameFromPath($file);
 
-                    if ($classname === false) {
+                    if (false === $classname) {
                         continue;
                     }
 
-                    if ($classname !== Services::class) {
+                    if (Services::class !== $classname) {
                         self::$serviceNames[] = $classname;
                     }
                 }

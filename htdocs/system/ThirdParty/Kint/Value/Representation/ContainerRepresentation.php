@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value\Representation;
 
-use InvalidArgumentException;
 use Kint\Value\AbstractValue;
 
 class ContainerRepresentation extends AbstractRepresentation
@@ -43,7 +42,7 @@ class ContainerRepresentation extends AbstractRepresentation
     public function __construct(string $label, array $contents, ?string $name = null, bool $implicit_label = false)
     {
         if ([] === $contents) {
-            throw new InvalidArgumentException("ContainerRepresentation can't take empty list");
+            throw new \InvalidArgumentException("ContainerRepresentation can't take empty list");
         }
 
         parent::__construct($label, $name, $implicit_label);

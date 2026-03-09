@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Parser;
 
-use DateTimeImmutable;
 use Kint\Value\AbstractValue;
 use Kint\Value\FixedWidthValue;
 use Kint\Value\Representation\StringRepresentation;
@@ -77,7 +76,7 @@ class TimestampPlugin extends AbstractPlugin implements PluginCompleteInterface
             return $v;
         }
 
-        if (!$dt = DateTimeImmutable::createFromFormat('U', (string) $var)) {
+        if (!$dt = \DateTimeImmutable::createFromFormat('U', (string) $var)) {
             return $v;
         }
 

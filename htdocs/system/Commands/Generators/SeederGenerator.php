@@ -24,35 +24,35 @@ class SeederGenerator extends BaseCommand
     use GeneratorTrait;
 
     /**
-     * The Command's Group
+     * The Command's Group.
      *
      * @var string
      */
     protected $group = 'Generators';
 
     /**
-     * The Command's Name
+     * The Command's Name.
      *
      * @var string
      */
     protected $name = 'make:seeder';
 
     /**
-     * The Command's Description
+     * The Command's Description.
      *
      * @var string
      */
     protected $description = 'Generates a new seeder file.';
 
     /**
-     * The Command's Usage
+     * The Command's Usage.
      *
      * @var string
      */
     protected $usage = 'make:seeder <name> [options]';
 
     /**
-     * The Command's Arguments
+     * The Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -61,24 +61,24 @@ class SeederGenerator extends BaseCommand
     ];
 
     /**
-     * The Command's Options
+     * The Command's Options.
      *
      * @var array<string, string>
      */
     protected $options = [
         '--namespace' => 'Set root namespace. Default: "APP_NAMESPACE".',
-        '--suffix'    => 'Append the component title to the class name (e.g. User => UserSeeder).',
-        '--force'     => 'Force overwrite existing file.',
+        '--suffix' => 'Append the component title to the class name (e.g. User => UserSeeder).',
+        '--force' => 'Force overwrite existing file.',
     ];
 
     /**
      * Actually execute a command.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $this->component = 'Seeder';
         $this->directory = 'Database\Seeds';
-        $this->template  = 'seeder.tpl.php';
+        $this->template = 'seeder.tpl.php';
 
         $this->classNameLang = 'CLI.generator.className.seeder';
         $this->generateClass($params);

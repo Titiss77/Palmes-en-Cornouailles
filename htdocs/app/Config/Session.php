@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
@@ -11,7 +13,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Session Driver
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The session storage driver to use:
      * - `CodeIgniter\Session\Handlers\FileHandler`
@@ -26,7 +28,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Session Cookie Name
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The session cookie name, must contain only [0-9a-z_-] characters
      */
@@ -35,7 +37,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Session Expiration
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The number of SECONDS you want the session to last.
      * Setting to 0 (zero) means expire when the browser is closed.
@@ -45,7 +47,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Session Save Path
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The location to save sessions to and is driver dependent.
      *
@@ -57,12 +59,12 @@ class Session extends BaseConfig
      *
      * IMPORTANT: You are REQUIRED to set a valid save path!
      */
-    public string $savePath = WRITEPATH . 'session';
+    public string $savePath = WRITEPATH.'session';
 
     /**
      * --------------------------------------------------------------------------
      * Session Match IP
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * Whether to match the user's IP address when reading the session data.
      *
@@ -74,7 +76,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Session Time to Update
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * How many seconds between CI regenerating the session ID.
      */
@@ -83,7 +85,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Session Regenerate Destroy
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * Whether to destroy session data associated with the old session ID
      * when auto-regenerating the session ID. When set to FALSE, the data
@@ -94,7 +96,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Session Database Group
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * DB Group for the database session.
      */
@@ -103,7 +105,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Lock Retry Interval (microseconds)
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * This is used for RedisHandler.
      *
@@ -115,7 +117,7 @@ class Session extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Lock Max Retries
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * This is used for RedisHandler.
      *

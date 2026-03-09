@@ -22,7 +22,7 @@ use Config\Services;
 use PHPUnit\Framework\Attributes\AfterClass;
 
 /**
- * DatabaseTestTrait
+ * DatabaseTestTrait.
  *
  * Provides functionality for refreshing/seeding
  * the database during testing.
@@ -45,183 +45,35 @@ trait DatabaseTestTrait
      */
     private static $doneSeed = false;
 
-    // --------------------------------------------------------------------
-    // Staging
-    // --------------------------------------------------------------------
-
-    /**
-     * Runs the trait set up methods.
-     *
-     * @return void
-     */
-    protected function setUpDatabase()
-    {
-        $this->loadDependencies();
-        $this->setUpMigrate();
-        $this->setUpSeed();
-    }
-
-    /**
-     * Runs the trait set up methods.
-     *
-     * @return void
-     */
-    protected function tearDownDatabase()
-    {
-        $this->clearInsertCache();
-    }
-
     /**
      * Load any database test dependencies.
-     *
-     * @return void
      */
-    public function loadDependencies()
+    public function loadDependencies(): void
     {
-        if ($this->db === null) {
+        if (null === $this->db) {
             $this->db = Database::connect($this->DBGroup);
             $this->db->initialize();
         }
 
-        if ($this->migrations === null) {
+        if (null === $this->migrations) {
             // Ensure that we can run migrations
-            $config          = new Migrations();
+            $config = new Migrations();
             $config->enabled = true;
 
             $this->migrations = Services::migrations($config, $this->db, false);
             $this->migrations->setSilent(false);
         }
 
-        if ($this->seeder === null) {
+        if (null === $this->seeder) {
             $this->seeder = Database::seeder($this->DBGroup);
             $this->seeder->setSilent(true);
         }
     }
 
-    // --------------------------------------------------------------------
-    // Migrations
-    // --------------------------------------------------------------------
-
-    /**
-     * Migrate on setUp
-     *
-     * @return void
-     */
-    protected function setUpMigrate()
-    {
-        if ($this->migrateOnce === false || self::$doneMigration === false) {
-            if ($this->refresh === true) {
-                $this->regressDatabase();
-
-                // Reset counts on faked items
-                Fabricator::resetCounts();
-            }
-
-            $this->migrateDatabase();
-        }
-    }
-
-    /**
-     * Regress migrations as defined by the class
-     *
-     * @return void
-     */
-    protected function regressDatabase()
-    {
-        if ($this->migrate === false) {
-            return;
-        }
-
-        // If no namespace was specified then rollback all
-        if ($this->namespace === null) {
-            $this->migrations->setNamespace(null);
-            $this->migrations->regress(0, 'tests');
-        }
-
-        // Regress each specified namespace
-        else {
-            $namespaces = is_array($this->namespace) ? $this->namespace : [$this->namespace];
-
-            foreach ($namespaces as $namespace) {
-                $this->migrations->setNamespace($namespace);
-                $this->migrations->regress(0, 'tests');
-            }
-        }
-    }
-
-    /**
-     * Run migrations as defined by the class
-     *
-     * @return void
-     */
-    protected function migrateDatabase()
-    {
-        if ($this->migrate === false) {
-            return;
-        }
-
-        // If no namespace was specified then migrate all
-        if ($this->namespace === null) {
-            $this->migrations->setNamespace(null);
-            $this->migrations->latest('tests');
-            self::$doneMigration = true;
-        }
-        // Run migrations for each specified namespace
-        else {
-            $namespaces = is_array($this->namespace) ? $this->namespace : [$this->namespace];
-
-            foreach ($namespaces as $namespace) {
-                $this->migrations->setNamespace($namespace);
-                $this->migrations->latest('tests');
-                self::$doneMigration = true;
-            }
-        }
-    }
-
-    // --------------------------------------------------------------------
-    // Seeds
-    // --------------------------------------------------------------------
-
-    /**
-     * Seed on setUp
-     *
-     * @return void
-     */
-    protected function setUpSeed()
-    {
-        if ($this->seedOnce === false || self::$doneSeed === false) {
-            $this->runSeeds();
-        }
-    }
-
-    /**
-     * Run seeds as defined by the class
-     *
-     * @return void
-     */
-    protected function runSeeds()
-    {
-        if ($this->seed !== '') {
-            if ($this->basePath !== '') {
-                $this->seeder->setPath(rtrim($this->basePath, '/') . '/Seeds');
-            }
-
-            $seeds = is_array($this->seed) ? $this->seed : [$this->seed];
-
-            foreach ($seeds as $seed) {
-                $this->seed($seed);
-            }
-        }
-
-        self::$doneSeed = true;
-    }
-
     /**
      * Seeds that database with a specific seeder.
-     *
-     * @return void
      */
-    public function seed(string $name)
+    public function seed(string $name): void
     {
         $this->seeder->call($name);
     }
@@ -230,29 +82,13 @@ trait DatabaseTestTrait
     // Utility
     // --------------------------------------------------------------------
     /**
-     * Reset $doneMigration and $doneSeed
-     *
-     * @return void
+     * Reset $doneMigration and $doneSeed.
      */
     #[AfterClass]
-    public static function resetMigrationSeedCount()
+    public static function resetMigrationSeedCount(): void
     {
         self::$doneMigration = false;
-        self::$doneSeed      = false;
-    }
-
-    /**
-     * Removes any rows inserted via $this->hasInDatabase()
-     *
-     * @return void
-     */
-    protected function clearInsertCache()
-    {
-        foreach ($this->insertCache as $row) {
-            $this->db->table($row[0])
-                ->where($row[1])
-                ->delete();
-        }
+        self::$doneSeed = false;
     }
 
     /**
@@ -282,7 +118,8 @@ trait DatabaseTestTrait
         $query = $this->db->table($table)
             ->select($column)
             ->where($where)
-            ->get();
+            ->get()
+        ;
 
         $query = $query->getRow();
 
@@ -299,11 +136,9 @@ trait DatabaseTestTrait
      *
      * @param array<string, mixed> $where
      *
-     * @return void
-     *
      * @throws DatabaseException
      */
-    public function seeInDatabase(string $table, array $where)
+    public function seeInDatabase(string $table, array $where): void
     {
         $constraint = new SeeInDatabase($this->db, $where);
         static::assertThat($table, $constraint);
@@ -314,16 +149,15 @@ trait DatabaseTestTrait
      * not exist in the database.
      *
      * @param array<string, mixed> $where
-     *
-     * @return void
      */
-    public function dontSeeInDatabase(string $table, array $where)
+    public function dontSeeInDatabase(string $table, array $where): void
     {
         $count = $this->db->table($table)
             ->where($where)
-            ->countAllResults();
+            ->countAllResults()
+        ;
 
-        $this->assertTrue($count === 0, 'Row was found in database');
+        $this->assertTrue(0 === $count, 'Row was found in database');
     }
 
     /**
@@ -350,17 +184,159 @@ trait DatabaseTestTrait
      *
      * @param array<string, mixed> $where
      *
-     * @return void
-     *
      * @throws DatabaseException
      */
-    public function seeNumRecords(int $expected, string $table, array $where)
+    public function seeNumRecords(int $expected, string $table, array $where): void
     {
         $count = $this->db->table($table)
             ->where($where)
-            ->countAllResults();
+            ->countAllResults()
+        ;
 
         $this->assertEquals($expected, $count, 'Wrong number of matching rows in database.');
+    }
+
+    // --------------------------------------------------------------------
+    // Staging
+    // --------------------------------------------------------------------
+
+    /**
+     * Runs the trait set up methods.
+     */
+    protected function setUpDatabase(): void
+    {
+        $this->loadDependencies();
+        $this->setUpMigrate();
+        $this->setUpSeed();
+    }
+
+    /**
+     * Runs the trait set up methods.
+     */
+    protected function tearDownDatabase(): void
+    {
+        $this->clearInsertCache();
+    }
+
+    // --------------------------------------------------------------------
+    // Migrations
+    // --------------------------------------------------------------------
+
+    /**
+     * Migrate on setUp.
+     */
+    protected function setUpMigrate(): void
+    {
+        if (false === $this->migrateOnce || false === self::$doneMigration) {
+            if (true === $this->refresh) {
+                $this->regressDatabase();
+
+                // Reset counts on faked items
+                Fabricator::resetCounts();
+            }
+
+            $this->migrateDatabase();
+        }
+    }
+
+    /**
+     * Regress migrations as defined by the class.
+     */
+    protected function regressDatabase(): void
+    {
+        if (false === $this->migrate) {
+            return;
+        }
+
+        // If no namespace was specified then rollback all
+        if (null === $this->namespace) {
+            $this->migrations->setNamespace(null);
+            $this->migrations->regress(0, 'tests');
+        }
+
+        // Regress each specified namespace
+        else {
+            $namespaces = is_array($this->namespace) ? $this->namespace : [$this->namespace];
+
+            foreach ($namespaces as $namespace) {
+                $this->migrations->setNamespace($namespace);
+                $this->migrations->regress(0, 'tests');
+            }
+        }
+    }
+
+    /**
+     * Run migrations as defined by the class.
+     */
+    protected function migrateDatabase(): void
+    {
+        if (false === $this->migrate) {
+            return;
+        }
+
+        // If no namespace was specified then migrate all
+        if (null === $this->namespace) {
+            $this->migrations->setNamespace(null);
+            $this->migrations->latest('tests');
+            self::$doneMigration = true;
+        }
+        // Run migrations for each specified namespace
+        else {
+            $namespaces = is_array($this->namespace) ? $this->namespace : [$this->namespace];
+
+            foreach ($namespaces as $namespace) {
+                $this->migrations->setNamespace($namespace);
+                $this->migrations->latest('tests');
+                self::$doneMigration = true;
+            }
+        }
+    }
+
+    // --------------------------------------------------------------------
+    // Seeds
+    // --------------------------------------------------------------------
+
+    /**
+     * Seed on setUp.
+     */
+    protected function setUpSeed(): void
+    {
+        if (false === $this->seedOnce || false === self::$doneSeed) {
+            $this->runSeeds();
+        }
+    }
+
+    /**
+     * Run seeds as defined by the class.
+     */
+    protected function runSeeds(): void
+    {
+        if ('' !== $this->seed) {
+            if ('' !== $this->basePath) {
+                $this->seeder->setPath(rtrim($this->basePath, '/').'/Seeds');
+            }
+
+            $seeds = is_array($this->seed) ? $this->seed : [$this->seed];
+
+            foreach ($seeds as $seed) {
+                $this->seed($seed);
+            }
+        }
+
+        self::$doneSeed = true;
+    }
+
+    /**
+     * Removes any rows inserted via $this->hasInDatabase().
+     */
+    protected function clearInsertCache(): void
+    {
+        foreach ($this->insertCache as $row) {
+            $this->db->table($row[0])
+                ->where($row[1])
+                ->delete()
+            ;
+        }
     }
 
     /**

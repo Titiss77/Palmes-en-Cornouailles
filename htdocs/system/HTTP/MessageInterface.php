@@ -16,7 +16,7 @@ namespace CodeIgniter\HTTP;
 use CodeIgniter\HTTP\Exceptions\HTTPException;
 
 /**
- * Expected behavior of an HTTP message
+ * Expected behavior of an HTTP message.
  */
 interface MessageInterface
 {
@@ -25,7 +25,7 @@ interface MessageInterface
      *
      * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
      *
-     * @return string HTTP protocol version.
+     * @return string HTTP protocol version
      */
     public function getProtocolVersion(): string;
 
@@ -41,7 +41,7 @@ interface MessageInterface
     /**
      * Gets the body of the message.
      *
-     * @return string|null
+     * @return null|string
      *
      * @TODO Incompatible return type with PSR-7
      */
@@ -71,7 +71,7 @@ interface MessageInterface
     /**
      * Checks if a header exists by the given case-insensitive name.
      *
-     * @param string $name Case-insensitive header field name.
+     * @param string $name case-insensitive header field name
      *
      * @return bool Returns true if any header names match the given header
      *              name using a case-insensitive string comparison. Returns false if
@@ -85,7 +85,7 @@ interface MessageInterface
      *
      * @param string $name
      *
-     * @return Header|list<Header>|null
+     * @return null|Header|list<Header>
      */
     public function header($name);
 
@@ -105,7 +105,7 @@ interface MessageInterface
     /**
      * Sets a header and it's value.
      *
-     * @param array|string|null $value
+     * @param null|array|string $value
      *
      * @return $this
      */
@@ -120,7 +120,7 @@ interface MessageInterface
 
     /**
      * Adds an additional header value to any headers that accept
-     * multiple values (i.e. are an array or implement ArrayAccess)
+     * multiple values (i.e. are an array or implement ArrayAccess).
      *
      * @return $this
      */
@@ -128,7 +128,7 @@ interface MessageInterface
 
     /**
      * Adds an additional header value to any headers that accept
-     * multiple values (i.e. are an array or implement ArrayAccess)
+     * multiple values (i.e. are an array or implement ArrayAccess).
      *
      * @return $this
      */

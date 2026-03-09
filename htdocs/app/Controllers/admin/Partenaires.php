@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\PartenairesModel;
+use Config\Database;
 
 class Partenaires extends BaseAdminController
 {
@@ -26,6 +29,7 @@ class Partenaires extends BaseAdminController
     public function new()
     {
         $data = $this->getCommonData('Nouveau Partenaire', 'admin/page.css');
+
         return view('admin/partenaires/create', $data);
     }
 
@@ -34,7 +38,7 @@ class Partenaires extends BaseAdminController
     {
         if (!$this->validate([
             'description' => 'required|max_length[255]|is_unique[partenaires.description]', // "description" agit comme le nom
-            'ordre'       => 'integer'
+            'ordre' => 'integer',
         ])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -44,8 +48,8 @@ class Partenaires extends BaseAdminController
 
         $data = [
             'description' => $this->request->getPost('description'),
-            'ordre'       => $this->request->getPost('ordre') ?? 1,
-            'image_id'    => $imageId
+            'ordre' => $this->request->getPost('ordre') ?? 1,
+            'image_id' => $imageId,
         ];
 
         $this->partenaireModel->insert($data);
@@ -64,6 +68,7 @@ class Partenaires extends BaseAdminController
         }
 
         $data['item'] = $item;
+
         return view('admin/partenaires/edit', $data);
     }
 
@@ -73,7 +78,7 @@ class Partenaires extends BaseAdminController
         // On vérifie l'unicité sauf pour l'ID courant
         if (!$this->validate([
             'description' => "required|max_length[255]|is_unique[partenaires.description,id,{$id}]",
-            'ordre'       => 'integer'
+            'ordre' => 'integer',
         ])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -82,7 +87,7 @@ class Partenaires extends BaseAdminController
 
         $data = [
             'description' => $this->request->getPost('description'),
-            'ordre'       => $this->request->getPost('ordre')
+            'ordre' => $this->request->getPost('ordre'),
         ];
 
         if ($imageId) {
@@ -102,17 +107,18 @@ class Partenaires extends BaseAdminController
         if ($item) {
             // Suppression fichier et entrée image
             if (!empty($item['image_path'])) {
-                $cheminFichier = FCPATH . 'uploads/' . $item['image_path'];
+                $cheminFichier = FCPATH.'uploads/'.$item['image_path'];
                 if (file_exists($cheminFichier)) {
                     unlink($cheminFichier);
                 }
                 if (!empty($item['image_id'])) {
-                    $db = \Config\Database::connect();
+                    $db = Database::connect();
                     $db->table('images')->where('id', $item['image_id'])->delete();
                 }
             }
 
             $this->partenaireModel->delete($id);
+
             return redirect()->to('/admin/partenaires')->with('success', 'Partenaire supprimé.');
         }
 
@@ -133,11 +139,11 @@ class Partenaires extends BaseAdminController
 
         $this->partenaireModel->update($id, ['image_id' => null]);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('images')->where('id', $imageId)->delete();
 
         if (!empty($imagePath)) {
-            $fullPath = FCPATH . 'uploads/' . $imagePath;
+            $fullPath = FCPATH.'uploads/'.$imagePath;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }

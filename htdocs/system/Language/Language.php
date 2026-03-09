@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Language;
 
-use IntlException;
-use MessageFormatter;
-
 /**
  * Handle system messages and localization.
  *
  * Locale-based, built on top of PHP internationalization.
  *
- * @see \CodeIgniter\Language\LanguageTest
+ * @see LanguageTest
  */
 class Language
 {
@@ -61,7 +58,7 @@ class Language
     {
         $this->locale = $locale;
 
-        if (class_exists(MessageFormatter::class)) {
+        if (class_exists(\MessageFormatter::class)) {
             $this->intlSupport = true;
         }
     }
@@ -73,7 +70,7 @@ class Language
      */
     public function setLocale(?string $locale = null)
     {
-        if ($locale !== null) {
+        if (null !== $locale) {
             $this->locale = $locale;
         }
 
@@ -94,7 +91,7 @@ class Language
     public function getLine(string $line, array $args = [])
     {
         // if no file is given, just parse the line
-        if (! str_contains($line, '.')) {
+        if (!str_contains($line, '.')) {
             return $this->formatMessage($line, $args);
         }
 
@@ -104,7 +101,7 @@ class Language
 
         $output = $this->getTranslationOutput($this->locale, $file, $parsedLine);
 
-        if ($output === null && strpos($this->locale, '-')) {
+        if (null === $output && strpos($this->locale, '-')) {
             [$locale] = explode('-', $this->locale, 2);
 
             [$file, $parsedLine] = $this->parseLine($line, $locale);
@@ -113,7 +110,7 @@ class Language
         }
 
         // if still not found, try English
-        if ($output === null) {
+        if (null === $output) {
             [$file, $parsedLine] = $this->parseLine($line, 'en');
 
             $output = $this->getTranslationOutput('en', $file, $parsedLine);
@@ -125,17 +122,17 @@ class Language
     }
 
     /**
-     * @return array|string|null
+     * @return null|array|string
      */
     protected function getTranslationOutput(string $locale, string $file, string $parsedLine)
     {
         $output = $this->language[$locale][$file][$parsedLine] ?? null;
-        if ($output !== null) {
+        if (null !== $output) {
             return $output;
         }
 
         foreach (explode('.', $parsedLine) as $row) {
-            if (! isset($current)) {
+            if (!isset($current)) {
                 $current = $this->language[$locale][$file] ?? null;
             }
 
@@ -145,7 +142,7 @@ class Language
             }
         }
 
-        if ($output !== null) {
+        if (null !== $output) {
             return $output;
         }
 
@@ -164,7 +161,7 @@ class Language
         $file = substr($line, 0, strpos($line, '.'));
         $line = substr($line, strlen($file) + 1);
 
-        if (! isset($this->language[$locale][$file]) || ! array_key_exists($line, $this->language[$locale][$file])) {
+        if (!isset($this->language[$locale][$file]) || !array_key_exists($line, $this->language[$locale][$file])) {
             $this->load($file, $locale);
         }
 
@@ -181,7 +178,7 @@ class Language
      */
     protected function formatMessage($message, array $args = [])
     {
-        if (! $this->intlSupport || $args === []) {
+        if (!$this->intlSupport || [] === $args) {
             return $message;
         }
 
@@ -193,35 +190,35 @@ class Language
             return $message;
         }
 
-        $formatted = MessageFormatter::formatMessage($this->locale, $message, $args);
-        if ($formatted === false) {
+        $formatted = \MessageFormatter::formatMessage($this->locale, $message, $args);
+        if (false === $formatted) {
             // Format again to get the error message.
             try {
-                $fmt       = new MessageFormatter($this->locale, $message);
+                $fmt = new \MessageFormatter($this->locale, $message);
                 $formatted = $fmt->format($args);
-                $fmtError  = '"' . $fmt->getErrorMessage() . '" (' . $fmt->getErrorCode() . ')';
-            } catch (IntlException $e) {
-                $fmtError = '"' . $e->getMessage() . '" (' . $e->getCode() . ')';
+                $fmtError = '"'.$fmt->getErrorMessage().'" ('.$fmt->getErrorCode().')';
+            } catch (\IntlException $e) {
+                $fmtError = '"'.$e->getMessage().'" ('.$e->getCode().')';
             }
 
             $argsString = implode(
                 ', ',
-                array_map(static fn ($element): string => '"' . $element . '"', $args),
+                array_map(static fn ($element): string => '"'.$element.'"', $args),
             );
             $argsUrlEncoded = implode(
                 ', ',
-                array_map(static fn ($element): string => '"' . rawurlencode($element) . '"', $args),
+                array_map(static fn ($element): string => '"'.rawurlencode($element).'"', $args),
             );
 
             log_message(
                 'error',
-                'Language.invalidMessageFormat: $message: "' . $message
-                . '", $args: ' . $argsString
-                . ' (urlencoded: ' . $argsUrlEncoded . '),'
-                . ' MessageFormatter Error: ' . $fmtError,
+                'Language.invalidMessageFormat: $message: "'.$message
+                .'", $args: '.$argsString
+                .' (urlencoded: '.$argsUrlEncoded.'),'
+                .' MessageFormatter Error: '.$fmtError,
             );
 
-            return $message . "\n【Warning】Also, invalid string(s) was passed to the Language class. See log file for details.";
+            return $message."\n【Warning】Also, invalid string(s) was passed to the Language class. See log file for details.";
         }
 
         return $formatted;
@@ -232,11 +229,11 @@ class Language
      * will return the file's contents, otherwise will merge with
      * the existing language lines.
      *
-     * @return list<mixed>|null
+     * @return null|list<mixed>
      */
     protected function load(string $file, string $locale, bool $return = false)
     {
-        if (! array_key_exists($locale, $this->loadedFiles)) {
+        if (!array_key_exists($locale, $this->loadedFiles)) {
             $this->loadedFiles[$locale] = [];
         }
 
@@ -245,11 +242,11 @@ class Language
             return [];
         }
 
-        if (! array_key_exists($locale, $this->language)) {
+        if (!array_key_exists($locale, $this->language)) {
             $this->language[$locale] = [];
         }
 
-        if (! array_key_exists($file, $this->language[$locale])) {
+        if (!array_key_exists($file, $this->language[$locale])) {
             $this->language[$locale][$file] = [];
         }
 
@@ -275,7 +272,7 @@ class Language
      */
     protected function requireFile(string $path): array
     {
-        $files   = service('locator')->search($path, 'php', false);
+        $files = service('locator')->search($path, 'php', false);
         $strings = [];
 
         foreach ($files as $file) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psr\Log;
 
 /**
@@ -92,7 +94,7 @@ trait LoggerTrait
      *
      * @param mixed $level
      *
-     * @throws \Psr\Log\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     abstract public function log($level, string|\Stringable $message, array $context = []): void;
 }

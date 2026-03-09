@@ -161,7 +161,7 @@ class ProfilePlugin extends AbstractPlugin implements PluginBeginInterface, Plug
         }
 
         $rep = new ProfileRepresentation($sub_complexity);
-        /** @psalm-suppress UnsupportedReferenceUsage */
+        // @psalm-suppress UnsupportedReferenceUsage
         if ($v instanceof InstanceValue) {
             $rep->instance_counts = &$this->instance_counts[$v->getSplObjectHash()];
             $rep->instance_complexity = &$this->instance_complexity[$v->getSplObjectHash()];

@@ -25,74 +25,77 @@ use stdClass;
 abstract class BaseResult implements ResultInterface
 {
     /**
-     * Connection ID
+     * Connection ID.
      *
-     * @var         object|resource
+     * @var object|resource
+     *
      * @phpstan-var TConnection
      */
     public $connID;
 
     /**
-     * Result ID
+     * Result ID.
      *
-     * @var         false|object|resource
+     * @var false|object|resource
+     *
      * @phpstan-var false|TResult
      */
     public $resultID;
 
     /**
-     * Result Array
+     * Result Array.
      *
      * @var list<array>
      */
     public $resultArray = [];
 
     /**
-     * Result Object
+     * Result Object.
      *
      * @var list<object>
      */
     public $resultObject = [];
 
     /**
-     * Custom Result Object
+     * Custom Result Object.
      *
      * @var array
      */
     public $customResultObject = [];
 
     /**
-     * Current Row index
+     * Current Row index.
      *
      * @var int
      */
     public $currentRow = 0;
 
     /**
-     * The number of records in the query result
+     * Row data.
      *
-     * @var int|null
-     */
-    protected $numRows;
-
-    /**
-     * Row data
-     *
-     * @var array|null
+     * @var null|array
      */
     public $rowData;
 
     /**
-     * Constructor
+     * The number of records in the query result.
      *
-     * @param         object|resource $connID
-     * @param         object|resource $resultID
+     * @var null|int
+     */
+    protected $numRows;
+
+    /**
+     * Constructor.
+     *
+     * @param object|resource $connID
+     * @param object|resource $resultID
+     *
      * @phpstan-param TConnection     $connID
      * @phpstan-param TResult         $resultID
      */
     public function __construct(&$connID, &$resultID)
     {
-        $this->connID   = $connID;
+        $this->connID = $connID;
         $this->resultID = $resultID;
     }
 
@@ -105,11 +108,11 @@ abstract class BaseResult implements ResultInterface
      */
     public function getResult(string $type = 'object'): array
     {
-        if ($type === 'array') {
+        if ('array' === $type) {
             return $this->getResultArray();
         }
 
-        if ($type === 'object') {
+        if ('object' === $type) {
             return $this->getResultObject();
         }
 
@@ -129,7 +132,7 @@ abstract class BaseResult implements ResultInterface
             return $this->customResultObject[$className];
         }
 
-        if (! $this->isValidResultId()) {
+        if (!$this->isValidResultId()) {
             return [];
         }
 
@@ -141,8 +144,8 @@ abstract class BaseResult implements ResultInterface
             $_data = 'resultObject';
         }
 
-        if ($_data !== null) {
-            for ($i = 0; $i < $c; $i++) {
+        if (null !== $_data) {
+            for ($i = 0; $i < $c; ++$i) {
                 $this->customResultObject[$className][$i] = new $className();
 
                 foreach ($this->{$_data}[$i] as $key => $value) {
@@ -153,13 +156,13 @@ abstract class BaseResult implements ResultInterface
             return $this->customResultObject[$className];
         }
 
-        if ($this->rowData !== null) {
+        if (null !== $this->rowData) {
             $this->dataSeek();
         }
         $this->customResultObject[$className] = [];
 
         while ($row = $this->fetchObject($className)) {
-            if (! is_subclass_of($row, Entity::class) && method_exists($row, 'syncOriginal')) {
+            if (!is_subclass_of($row, Entity::class) && method_exists($row, 'syncOriginal')) {
                 $row->syncOriginal();
             }
 
@@ -176,18 +179,18 @@ abstract class BaseResult implements ResultInterface
      */
     public function getResultArray(): array
     {
-        if ($this->resultArray !== []) {
+        if ([] !== $this->resultArray) {
             return $this->resultArray;
         }
 
         // In the event that query caching is on, the result_id variable
         // will not be a valid resource so we'll simply return an empty
         // array.
-        if (! $this->isValidResultId()) {
+        if (!$this->isValidResultId()) {
             return [];
         }
 
-        if ($this->resultObject !== []) {
+        if ([] !== $this->resultObject) {
             foreach ($this->resultObject as $row) {
                 $this->resultArray[] = (array) $row;
             }
@@ -195,7 +198,7 @@ abstract class BaseResult implements ResultInterface
             return $this->resultArray;
         }
 
-        if ($this->rowData !== null) {
+        if (null !== $this->rowData) {
             $this->dataSeek();
         }
 
@@ -211,23 +214,24 @@ abstract class BaseResult implements ResultInterface
      *
      * If no results, an empty array is returned.
      *
-     * @return         array<int, stdClass>
+     * @return array<int, \stdClass>
+     *
      * @phpstan-return list<stdClass>
      */
     public function getResultObject(): array
     {
-        if ($this->resultObject !== []) {
+        if ([] !== $this->resultObject) {
             return $this->resultObject;
         }
 
         // In the event that query caching is on, the result_id variable
         // will not be a valid resource so we'll simply return an empty
         // array.
-        if (! $this->isValidResultId()) {
+        if (!$this->isValidResultId()) {
             return [];
         }
 
-        if ($this->resultArray !== []) {
+        if ([] !== $this->resultArray) {
             foreach ($this->resultArray as $row) {
                 $this->resultObject[] = (object) $row;
             }
@@ -235,12 +239,12 @@ abstract class BaseResult implements ResultInterface
             return $this->resultObject;
         }
 
-        if ($this->rowData !== null) {
+        if (null !== $this->rowData) {
             $this->dataSeek();
         }
 
         while ($row = $this->fetchObject()) {
-            if (! is_subclass_of($row, Entity::class) && method_exists($row, 'syncOriginal')) {
+            if (!is_subclass_of($row, Entity::class) && method_exists($row, 'syncOriginal')) {
                 $row->syncOriginal();
             }
 
@@ -258,35 +262,37 @@ abstract class BaseResult implements ResultInterface
      *
      * @template T of object
      *
-     * @param         int|string                       $n    The index of the results to return, or column name.
-     * @param         string                           $type The type of result object. 'array', 'object' or class name.
+     * @param int|string $n    the index of the results to return, or column name
+     * @param string     $type The type of result object. 'array', 'object' or class name.
+     *
      * @phpstan-param class-string<T>|'array'|'object' $type
      *
-     * @return         array|float|int|object|stdClass|string|null
+     * @return null|array|float|int|object|\stdClass|string
+     *
      * @phpstan-return ($n is string ? float|int|string|null : ($type is 'object' ? stdClass|null : ($type is 'array' ? array|null : T|null)))
      */
     public function getRow($n = 0, string $type = 'object')
     {
         // $n is a column name.
-        if (! is_numeric($n)) {
+        if (!is_numeric($n)) {
             // We cache the row data for subsequent uses
-            if (! is_array($this->rowData)) {
+            if (!is_array($this->rowData)) {
                 $this->rowData = $this->getRowArray();
             }
 
             // array_key_exists() instead of isset() to allow for NULL values
-            if (empty($this->rowData) || ! array_key_exists($n, $this->rowData)) {
+            if (empty($this->rowData) || !array_key_exists($n, $this->rowData)) {
                 return null;
             }
 
             return $this->rowData[$n];
         }
 
-        if ($type === 'object') {
+        if ('object' === $type) {
             return $this->getRowObject($n);
         }
 
-        if ($type === 'array') {
+        if ('array' === $type) {
             return $this->getRowArray($n);
         }
 
@@ -300,15 +306,17 @@ abstract class BaseResult implements ResultInterface
      *
      * @template T of object
      *
-     * @param         int             $n         The index of the results to return.
+     * @param int $n the index of the results to return
+     *
      * @phpstan-param class-string<T> $className
      *
-     * @return         object|null
+     * @return null|object
+     *
      * @phpstan-return T|null
      */
     public function getCustomRowObject(int $n, string $className)
     {
-        if (! isset($this->customResultObject[$className])) {
+        if (!isset($this->customResultObject[$className])) {
             $this->getCustomResultObject($className);
         }
 
@@ -328,12 +336,12 @@ abstract class BaseResult implements ResultInterface
      *
      * If row doesn't exist, returns null.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getRowArray(int $n = 0)
     {
         $result = $this->getResultArray();
-        if ($result === []) {
+        if ([] === $result) {
             return null;
         }
 
@@ -349,12 +357,12 @@ abstract class BaseResult implements ResultInterface
      *
      * If row doesn't exist, returns null.
      *
-     * @return object|stdClass|null
+     * @return null|object|\stdClass
      */
     public function getRowObject(int $n = 0)
     {
         $result = $this->getResultObject();
-        if ($result === []) {
+        if ([] === $result) {
             return null;
         }
 
@@ -368,15 +376,13 @@ abstract class BaseResult implements ResultInterface
     /**
      * Assigns an item into a particular column slot.
      *
-     * @param array|string               $key
-     * @param array|object|stdClass|null $value
-     *
-     * @return void
+     * @param array|string                $key
+     * @param null|array|object|\stdClass $value
      */
-    public function setRow($key, $value = null)
+    public function setRow($key, $value = null): void
     {
         // We cache the row data for subsequent uses
-        if (! is_array($this->rowData)) {
+        if (!is_array($this->rowData)) {
             $this->rowData = $this->getRowArray();
         }
 
@@ -388,7 +394,7 @@ abstract class BaseResult implements ResultInterface
             return;
         }
 
-        if ($key !== '' && $value !== null) {
+        if ('' !== $key && null !== $value) {
             $this->rowData[$key] = $value;
         }
     }
@@ -396,36 +402,36 @@ abstract class BaseResult implements ResultInterface
     /**
      * Returns the "first" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getFirstRow(string $type = 'object')
     {
         $result = $this->getResult($type);
 
-        return ($result === []) ? null : $result[0];
+        return ([] === $result) ? null : $result[0];
     }
 
     /**
      * Returns the "last" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getLastRow(string $type = 'object')
     {
         $result = $this->getResult($type);
 
-        return ($result === []) ? null : $result[count($result) - 1];
+        return ([] === $result) ? null : $result[count($result) - 1];
     }
 
     /**
      * Returns the "next" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getNextRow(string $type = 'object')
     {
         $result = $this->getResult($type);
-        if ($result === []) {
+        if ([] === $result) {
             return null;
         }
 
@@ -435,17 +441,17 @@ abstract class BaseResult implements ResultInterface
     /**
      * Returns the "previous" row of the current results.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getPreviousRow(string $type = 'object')
     {
         $result = $this->getResult($type);
-        if ($result === []) {
+        if ([] === $result) {
             return null;
         }
 
         if (isset($result[$this->currentRow - 1])) {
-            $this->currentRow--;
+            --$this->currentRow;
         }
 
         return $result[$this->currentRow];
@@ -454,15 +460,15 @@ abstract class BaseResult implements ResultInterface
     /**
      * Returns an unbuffered row and move the pointer to the next row.
      *
-     * @return array|object|null
+     * @return null|array|object
      */
     public function getUnbufferedRow(string $type = 'object')
     {
-        if ($type === 'array') {
+        if ('array' === $type) {
             return $this->fetchAssoc();
         }
 
-        if ($type === 'object') {
+        if ('object' === $type) {
             return $this->fetchObject();
         }
 
@@ -472,26 +478,21 @@ abstract class BaseResult implements ResultInterface
     /**
      * Number of rows in the result set; checks for previous count, falls
      * back on counting resultArray or resultObject, finally fetching resultArray
-     * if nothing was previously fetched
+     * if nothing was previously fetched.
      */
     public function getNumRows(): int
     {
         if (is_int($this->numRows)) {
             return $this->numRows;
         }
-        if ($this->resultArray !== []) {
+        if ([] !== $this->resultArray) {
             return $this->numRows = count($this->resultArray);
         }
-        if ($this->resultObject !== []) {
+        if ([] !== $this->resultObject) {
             return $this->numRows = count($this->resultObject);
         }
 
         return $this->numRows = count($this->getResultArray());
-    }
-
-    private function isValidResultId(): bool
-    {
-        return is_resource($this->resultID) || is_object($this->resultID);
     }
 
     /**
@@ -511,10 +512,8 @@ abstract class BaseResult implements ResultInterface
 
     /**
      * Frees the current result.
-     *
-     * @return void
      */
-    abstract public function freeResult();
+    abstract public function freeResult(): void;
 
     /**
      * Moves the internal pointer to the desired offset. This is called
@@ -530,7 +529,7 @@ abstract class BaseResult implements ResultInterface
      *
      * Overridden by driver classes.
      *
-     * @return array|false|null
+     * @return null|array|false
      */
     abstract protected function fetchAssoc();
 
@@ -539,7 +538,12 @@ abstract class BaseResult implements ResultInterface
      *
      * Overridden by child classes.
      *
-     * @return Entity|false|object|stdClass
+     * @return Entity|false|object|\stdClass
      */
     abstract protected function fetchObject(string $className = 'stdClass');
+
+    private function isValidResultId(): bool
+    {
+        return is_resource($this->resultID) || is_object($this->resultID);
+    }
 }

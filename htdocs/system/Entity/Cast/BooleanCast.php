@@ -14,13 +14,10 @@ declare(strict_types=1);
 namespace CodeIgniter\Entity\Cast;
 
 /**
- * Class BooleanCast
+ * Class BooleanCast.
  */
 class BooleanCast extends BaseCast
 {
-    /**
-     * {@inheritDoc}
-     */
     public static function get($value, array $params = []): bool
     {
         return (bool) $value;

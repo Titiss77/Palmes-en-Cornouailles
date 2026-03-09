@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
-use App\Models\Public\Donnees;
-use App\Models\Public\InscriptionModel;
+use Config\Database;
 
 class Root extends BaseController
 {
     public function getRootStyles()
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $settings = $db->table('root')->get()->getResultArray();
 
         $rootData = [];
@@ -19,7 +19,7 @@ class Root extends BaseController
             $key = str_replace('_', '-', $setting['libelle']);
             $rootData[$key] = $setting['value'];
         }
+
         return $rootData;
     }
-    
 }

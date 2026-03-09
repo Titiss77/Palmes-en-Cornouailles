@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\GroupesModel;
+use Config\Database;
 
 class Groupes extends BaseAdminController
 {
@@ -26,6 +29,7 @@ class Groupes extends BaseAdminController
     public function new()
     {
         $data = $this->getCommonData('Nouveau Groupe', 'admin/page.css');
+
         return view('admin/groupes/create', $data);
     }
 
@@ -35,7 +39,7 @@ class Groupes extends BaseAdminController
         if (!$this->validate([
             'nom' => 'required|min_length[2]|max_length[100]',
             'prix' => 'required|max_length[50]',
-            'ordre' => 'integer'
+            'ordre' => 'integer',
         ])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -51,7 +55,7 @@ class Groupes extends BaseAdminController
             'prix' => $this->request->getPost('prix'),
             'codeCouleur' => $this->request->getPost('codeCouleur'),
             'ordre' => $this->request->getPost('ordre') ?? 0,
-            'image_id' => $imageId
+            'image_id' => $imageId,
         ];
 
         $this->groupeModel->insert($data);
@@ -70,6 +74,7 @@ class Groupes extends BaseAdminController
         }
 
         $data['item'] = $item;
+
         return view('admin/groupes/edit', $data);
     }
 
@@ -79,7 +84,7 @@ class Groupes extends BaseAdminController
         if (!$this->validate([
             'nom' => 'required|min_length[2]|max_length[100]',
             'prix' => 'required|max_length[50]',
-            'ordre' => 'integer'
+            'ordre' => 'integer',
         ])) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -93,7 +98,7 @@ class Groupes extends BaseAdminController
             'horaire_resume' => $this->request->getPost('horaire_resume'),
             'prix' => $this->request->getPost('prix'),
             'codeCouleur' => $this->request->getPost('codeCouleur'),
-            'ordre' => $this->request->getPost('ordre')
+            'ordre' => $this->request->getPost('ordre'),
         ];
 
         if ($imageId) {
@@ -113,18 +118,19 @@ class Groupes extends BaseAdminController
         if ($groupe) {
             // Suppression de l'image physique si elle existe
             if (!empty($groupe['image_path'])) {
-                $cheminFichier = FCPATH . 'uploads/' . $groupe['image_path'];
+                $cheminFichier = FCPATH.'uploads/'.$groupe['image_path'];
                 if (file_exists($cheminFichier)) {
                     unlink($cheminFichier);
                 }
                 // Suppression de l'entrée dans la table images
                 if (!empty($groupe['image_id'])) {
-                    $db = \Config\Database::connect();
+                    $db = Database::connect();
                     $db->table('images')->where('id', $groupe['image_id'])->delete();
                 }
             }
 
             $this->groupeModel->delete($id);
+
             return redirect()->to('/admin/groupes')->with('success', 'Groupe supprimé.');
         }
 
@@ -147,11 +153,11 @@ class Groupes extends BaseAdminController
         $this->groupeModel->update($id, ['image_id' => null]);
 
         // Supprimer l'entrée image et le fichier
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('images')->where('id', $imageId)->delete();
 
         if (!empty($imagePath)) {
-            $fullPath = FCPATH . 'uploads/' . $imagePath;
+            $fullPath = FCPATH.'uploads/'.$imagePath;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }

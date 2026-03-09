@@ -16,6 +16,4 @@ namespace CodeIgniter\Exceptions;
 /**
  * Exception thrown if an error which can only be found on runtime occurs.
  */
-class RuntimeException extends \RuntimeException implements ExceptionInterface
-{
-}
+class RuntimeException extends \RuntimeException implements ExceptionInterface {}

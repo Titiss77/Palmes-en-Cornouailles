@@ -22,7 +22,7 @@ use Config\Filters as FiltersConfig;
 /**
  * Collects filters for a route.
  *
- * @see \CodeIgniter\Commands\Utilities\Routes\FilterCollectorTest
+ * @see FilterCollectorTest
  */
 final class FilterCollector
 {
@@ -33,13 +33,12 @@ final class FilterCollector
          * If set to true, route filters are not found.
          */
         private readonly bool $resetRoutes = false,
-    ) {
-    }
+    ) {}
 
     /**
-     * Returns filters for the URI
+     * Returns filters for the URI.
      *
-     * @param string $method HTTP verb like `GET`,`POST` or `CLI`.
+     * @param string $method HTTP verb like `GET`,`POST` or `CLI`
      * @param string $uri    URI path to find filters for
      *
      * @return array{before: list<string>, after: list<string>} array of alias/classname:args
@@ -48,29 +47,30 @@ final class FilterCollector
     {
         if ($method === strtolower($method)) {
             @trigger_error(
-                'Passing lowercase HTTP method "' . $method . '" is deprecated.'
-                . ' Use uppercase HTTP method like "' . strtoupper($method) . '".',
+                'Passing lowercase HTTP method "'.$method.'" is deprecated.'
+                .' Use uppercase HTTP method like "'.strtoupper($method).'".',
                 E_USER_DEPRECATED,
             );
         }
 
         /**
          * @deprecated 4.5.0
+         *
          * @TODO Remove this in the future.
          */
         $method = strtoupper($method);
 
-        if ($method === 'CLI') {
+        if ('CLI' === $method) {
             return [
                 'before' => [],
-                'after'  => [],
+                'after' => [],
             ];
         }
 
         $request = service('incomingrequest', null, false);
         $request->setMethod($method);
 
-        $router  = $this->createRouter($request);
+        $router = $this->createRouter($request);
         $filters = $this->createFilters($request);
 
         $finder = new FilterFinder($router, $filters);
@@ -79,9 +79,9 @@ final class FilterCollector
     }
 
     /**
-     * Returns filter classes for the URI
+     * Returns filter classes for the URI.
      *
-     * @param string $method HTTP verb like `GET`,`POST` or `CLI`.
+     * @param string $method HTTP verb like `GET`,`POST` or `CLI`
      * @param string $uri    URI path to find filters for
      *
      * @return array{before: list<string>, after: list<string>} array of classname:args
@@ -90,29 +90,30 @@ final class FilterCollector
     {
         if ($method === strtolower($method)) {
             @trigger_error(
-                'Passing lowercase HTTP method "' . $method . '" is deprecated.'
-                . ' Use uppercase HTTP method like "' . strtoupper($method) . '".',
+                'Passing lowercase HTTP method "'.$method.'" is deprecated.'
+                .' Use uppercase HTTP method like "'.strtoupper($method).'".',
                 E_USER_DEPRECATED,
             );
         }
 
         /**
          * @deprecated 4.5.0
+         *
          * @TODO Remove this in the future.
          */
         $method = strtoupper($method);
 
-        if ($method === 'CLI') {
+        if ('CLI' === $method) {
             return [
                 'before' => [],
-                'after'  => [],
+                'after' => [],
             ];
         }
 
         $request = service('incomingrequest', null, false);
         $request->setMethod($method);
 
-        $router  = $this->createRouter($request);
+        $router = $this->createRouter($request);
         $filters = $this->createFilters($request);
 
         $finder = new FilterFinder($router, $filters);
@@ -121,7 +122,7 @@ final class FilterCollector
     }
 
     /**
-     * Returns Required Filters
+     * Returns Required Filters.
      *
      * @return array{before: list<string>, after: list<string>} array of aliases
      */
@@ -130,7 +131,7 @@ final class FilterCollector
         $request = service('incomingrequest', null, false);
         $request->setMethod(Method::GET);
 
-        $router  = $this->createRouter($request);
+        $router = $this->createRouter($request);
         $filters = $this->createFilters($request);
 
         $finder = new FilterFinder($router, $filters);
@@ -139,7 +140,7 @@ final class FilterCollector
     }
 
     /**
-     * Returns Required Filter class list
+     * Returns Required Filter class list.
      *
      * @return array{before: list<string>, after: list<string>} array of classnames
      */
@@ -148,7 +149,7 @@ final class FilterCollector
         $request = service('incomingrequest', null, false);
         $request->setMethod(Method::GET);
 
-        $router  = $this->createRouter($request);
+        $router = $this->createRouter($request);
         $filters = $this->createFilters($request);
 
         $finder = new FilterFinder($router, $filters);

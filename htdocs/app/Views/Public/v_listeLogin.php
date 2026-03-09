@@ -1,4 +1,4 @@
-<?= $this->extend('Public/Layout/l_global') ?>
+<?php echo $this->extend('Public/Layout/l_global'); ?>
 
 <?php
 
@@ -14,7 +14,7 @@
  */
 ?>
 
-<?= $this->section('contenu') ?>
+<?php echo $this->section('contenu'); ?>
 
 <div class="site-container" style="display:flex; justify-content:center; align-items:center; min-height:60vh;">
 
@@ -22,14 +22,14 @@
 
         <h2 class="title-section text-center">Connexion Licenciés</h2>
 
-        <?php if (session()->getFlashdata('error')): ?>
+        <?php if (session()->getFlashdata('error')) { ?>
         <div class="tag-status is-evenement"
             style="width:100%; margin-bottom:15px; background-color:#ffe6e6; color:#d63384; text-align:center;">
-            <i class="bi bi-exclamation-triangle-fill"></i> <?= session()->getFlashdata('error') ?>
+            <i class="bi bi-exclamation-triangle-fill"></i> <?php echo session()->getFlashdata('error'); ?>
         </div>
-        <?php endif; ?>
+        <?php } ?>
 
-        <form action="<?= base_url('login/auth/liste') ?>" method="post">
+        <form action="<?php echo base_url('login/auth/liste'); ?>" method="post">
             <div class="form-group">
                 <label for="identifiant" class="sr-only" style="display:none">Identifiant</label> <input type="text"
                     id="identifiant" name="identifiant" placeholder="Identifiant" class="form-input" required
@@ -50,4 +50,4 @@
     </div>
 </div>
 
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

@@ -19,14 +19,14 @@ use CodeIgniter\Commands\Utilities\Routes\FilterCollector;
 /**
  * Collects data for Auto Routing Improved.
  *
- * @see \CodeIgniter\Commands\Utilities\Routes\AutoRouterImproved\AutoRouteCollectorTest
+ * @see AutoRouteCollectorTest
  */
 final class AutoRouteCollector
 {
     /**
      * @param string             $namespace            namespace to search
-     * @param list<class-string> $protectedControllers List of controllers in Defined
-     *                                                 Routes that should not be accessed via Auto-Routing.
+     * @param list<class-string> $protectedControllers list of controllers in Defined
+     *                                                 Routes that should not be accessed via Auto-Routing
      * @param list<string>       $httpMethods
      * @param string             $prefix               URI prefix for Module Routing
      */
@@ -37,8 +37,7 @@ final class AutoRouteCollector
         private readonly array $httpMethods,
         private readonly array $protectedControllers,
         private readonly string $prefix = '',
-    ) {
-    }
+    ) {}
 
     /**
      * @return list<list<string>>
@@ -52,7 +51,7 @@ final class AutoRouteCollector
 
         foreach ($finder->find() as $class) {
             // Exclude controllers in Defined Routes.
-            if (in_array('\\' . $class, $this->protectedControllers, true)) {
+            if (in_array('\\'.$class, $this->protectedControllers, true)) {
                 continue;
             }
 
@@ -62,24 +61,24 @@ final class AutoRouteCollector
                 $this->defaultMethod,
             );
 
-            if ($routes === []) {
+            if ([] === $routes) {
                 continue;
             }
 
             $routes = $this->addFilters($routes);
 
             foreach ($routes as $item) {
-                $route = $item['route'] . $item['route_params'];
+                $route = $item['route'].$item['route_params'];
 
                 // For module routing
-                if ($this->prefix !== '' && $route === '/') {
+                if ('' !== $this->prefix && '/' === $route) {
                     $route = $this->prefix;
-                } elseif ($this->prefix !== '') {
-                    $route = $this->prefix . '/' . $route;
+                } elseif ('' !== $this->prefix) {
+                    $route = $this->prefix.'/'.$route;
                 }
 
                 $tbody[] = [
-                    strtoupper($item['method']) . '(auto)',
+                    strtoupper($item['method']).'(auto)',
                     $route,
                     '',
                     $item['handler'],
@@ -93,7 +92,7 @@ final class AutoRouteCollector
     }
 
     /**
-     * Adding Filters
+     * Adding Filters.
      *
      * @param list<array<string, array|string>> $routes
      *
@@ -107,28 +106,28 @@ final class AutoRouteCollector
             $routePath = $route['route'];
 
             // For module routing
-            if ($this->prefix !== '' && $route === '/') {
+            if ('' !== $this->prefix && '/' === $route) {
                 $routePath = $this->prefix;
-            } elseif ($this->prefix !== '') {
-                $routePath = $this->prefix . '/' . $routePath;
+            } elseif ('' !== $this->prefix) {
+                $routePath = $this->prefix.'/'.$routePath;
             }
 
             // Search filters for the URI with all params
-            $sampleUri      = $this->generateSampleUri($route);
-            $filtersLongest = $filterCollector->get($route['method'], $routePath . $sampleUri);
+            $sampleUri = $this->generateSampleUri($route);
+            $filtersLongest = $filterCollector->get($route['method'], $routePath.$sampleUri);
 
             // Search filters for the URI without optional params
-            $sampleUri       = $this->generateSampleUri($route, false);
-            $filtersShortest = $filterCollector->get($route['method'], $routePath . $sampleUri);
+            $sampleUri = $this->generateSampleUri($route, false);
+            $filtersShortest = $filterCollector->get($route['method'], $routePath.$sampleUri);
 
             // Get common array elements
             $filters = [
                 'before' => array_intersect($filtersLongest['before'], $filtersShortest['before']),
-                'after'  => array_intersect($filtersLongest['after'], $filtersShortest['after']),
+                'after' => array_intersect($filtersLongest['after'], $filtersShortest['after']),
             ];
 
             $route['before'] = implode(' ', array_map(class_basename(...), $filters['before']));
-            $route['after']  = implode(' ', array_map(class_basename(...), $filters['after']));
+            $route['after'] = implode(' ', array_map(class_basename(...), $filters['after']));
         }
 
         return $routes;
@@ -142,8 +141,8 @@ final class AutoRouteCollector
             $i = 1;
 
             foreach ($route['params'] as $required) {
-                if ($longest && ! $required) {
-                    $sampleUri .= '/' . $i++;
+                if ($longest && !$required) {
+                    $sampleUri .= '/'.$i++;
                 }
             }
         }

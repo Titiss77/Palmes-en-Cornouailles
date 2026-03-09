@@ -15,13 +15,11 @@ namespace CodeIgniter\HotReloader;
 
 use CodeIgniter\Exceptions\FrameworkException;
 use Config\Toolbar;
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 /**
  * @internal
- * @see \CodeIgniter\HotReloader\DirectoryHasherTest
+ *
+ * @see DirectoryHasherTest
  */
 final class DirectoryHasher
 {
@@ -47,8 +45,8 @@ final class DirectoryHasher
         $watchedDirectories = config(Toolbar::class)->watchedDirectories;
 
         foreach ($watchedDirectories as $directory) {
-            if (is_dir(ROOTPATH . $directory)) {
-                $hashes[$directory] = $this->hashDirectory(ROOTPATH . $directory);
+            if (is_dir(ROOTPATH.$directory)) {
+                $hashes[$directory] = $this->hashDirectory(ROOTPATH.$directory);
             }
         }
 
@@ -61,13 +59,13 @@ final class DirectoryHasher
      */
     public function hashDirectory(string $path): string
     {
-        if (! is_dir($path)) {
+        if (!is_dir($path)) {
             throw FrameworkException::forInvalidDirectory($path);
         }
 
-        $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
-        $filter    = new IteratorFilter($directory);
-        $iterator  = new RecursiveIteratorIterator($filter);
+        $directory = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
+        $filter = new IteratorFilter($directory);
+        $iterator = new \RecursiveIteratorIterator($filter);
 
         $hashes = [];
 

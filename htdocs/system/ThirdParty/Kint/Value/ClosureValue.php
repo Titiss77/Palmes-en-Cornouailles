@@ -27,11 +27,9 @@ declare(strict_types=1);
 
 namespace Kint\Value;
 
-use Closure;
 use Kint\Utils;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\Context\ContextInterface;
-use ReflectionFunction;
 
 class ClosureValue extends InstanceValue
 {
@@ -39,12 +37,13 @@ class ClosureValue extends InstanceValue
 
     /** @psalm-readonly */
     protected ?string $filename;
+
     /** @psalm-readonly */
     protected ?int $startline;
 
-    public function __construct(ContextInterface $context, Closure $cl)
+    public function __construct(ContextInterface $context, \Closure $cl)
     {
-        parent::__construct($context, \get_class($cl), \spl_object_hash($cl), \spl_object_id($cl));
+        parent::__construct($context, $cl::class, \spl_object_hash($cl), \spl_object_id($cl));
 
         /**
          * @psalm-suppress UnnecessaryVarAnnotation
@@ -52,7 +51,7 @@ class ClosureValue extends InstanceValue
          * @psalm-var ContextInterface $this->context
          * Psalm bug #11113
          */
-        $closure = new ReflectionFunction($cl);
+        $closure = new \ReflectionFunction($cl);
 
         if ($closure->isUserDefined()) {
             $this->filename = $closure->getFileName();
@@ -82,7 +81,7 @@ class ClosureValue extends InstanceValue
             return;
         }
 
-        if (\preg_match('/^\\((function|fn)\\s*\\(/i', $ap, $match)) {
+        if (\preg_match('/^\((function|fn)\s*\(/i', $ap, $match)) {
             $this->context->name = \strtolower($match[1]);
         }
     }

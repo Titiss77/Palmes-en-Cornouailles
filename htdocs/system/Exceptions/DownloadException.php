@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Exceptions;
 
 /**
- * Class DownloadException
+ * Class DownloadException.
  */
 class DownloadException extends RuntimeException
 {

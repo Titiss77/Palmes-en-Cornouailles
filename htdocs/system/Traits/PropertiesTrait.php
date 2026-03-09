@@ -13,11 +13,8 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Traits;
 
-use ReflectionClass;
-use ReflectionProperty;
-
 /**
- * Trait PropertiesTrait
+ * Trait PropertiesTrait.
  *
  * Provides utilities for reading and writing
  * class properties, primarily for limiting access
@@ -46,7 +43,7 @@ trait PropertiesTrait
      */
     final public function getPublicProperties(): array
     {
-        $worker = new class () {
+        $worker = new class {
             public function getProperties(object $obj): array
             {
                 return get_object_vars($obj);
@@ -61,12 +58,12 @@ trait PropertiesTrait
      */
     final public function getNonPublicProperties(): array
     {
-        $exclude    = ['view'];
+        $exclude = ['view'];
         $properties = [];
 
-        $reflection = new ReflectionClass($this);
+        $reflection = new \ReflectionClass($this);
 
-        foreach ($reflection->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED) as $property) {
+        foreach ($reflection->getProperties(\ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED) as $property) {
             if ($property->isStatic() || in_array($property->getName(), $exclude, true)) {
                 continue;
             }

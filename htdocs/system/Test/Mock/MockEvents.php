@@ -41,10 +41,7 @@ class MockEvents extends Events
         return self::$simulate;
     }
 
-    /**
-     * @return void
-     */
-    public function unInitialize()
+    public function unInitialize(): void
     {
         static::$initialized = false;
     }

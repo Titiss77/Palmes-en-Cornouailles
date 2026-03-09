@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 // Session language settings
 return [
-    'missingDatabaseTable'   => '"sessionSavePath" must have the table name for the Database Session Handler to work.',
-    'invalidSavePath'        => 'Session: Configured save path "{0}" is not a directory, does not exist or cannot be created.',
+    'missingDatabaseTable' => '"sessionSavePath" must have the table name for the Database Session Handler to work.',
+    'invalidSavePath' => 'Session: Configured save path "{0}" is not a directory, does not exist or cannot be created.',
     'writeProtectedSavePath' => 'Session: Configured save path "{0}" is not writable by the PHP process.',
-    'emptySavePath'          => 'Session: No save path configured.',
-    'invalidSavePathFormat'  => 'Session: Invalid Redis save path format: "{0}"',
+    'emptySavePath' => 'Session: No save path configured.',
+    'invalidSavePathFormat' => 'Session: Invalid Redis save path format: "{0}"',
 
     // @deprecated
     'invalidSameSiteSetting' => 'Session: The SameSite setting must be None, Lax, Strict, or a blank string. Given: "{0}"',

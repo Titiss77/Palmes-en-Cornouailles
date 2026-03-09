@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
+use Config\Database;
 
 class MembresSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
 
         // 1. Insertion des membres (Migration de 'photo' vers 'image_id')
         $membres = [
@@ -35,22 +38,22 @@ class MembresSeeder extends Seeder
             $m['image_id'] = $this->getImageId($photoPath);
             $membresData[] = $m;
         }
-        
+
         $db->table('membres')->insertBatch($membresData);
 
         // 2. Insertion des fonctions (Inchangé)
         $fonctions = [
-            ['titre' => 'President'], //1
-            ['titre' => 'Vice-Président'], //2
-            ['titre' => 'Comptable'], //3
-            ['titre' => 'Secrétaire'],//4
-            ['titre' => 'Sponsoring'],//5
-            ['titre' => 'Informatique'],//6
-            ['titre' => 'Coach'],//7
-            ['titre' => 'Coach en formation'],//8
+            ['titre' => 'President'], // 1
+            ['titre' => 'Vice-Président'], // 2
+            ['titre' => 'Comptable'], // 3
+            ['titre' => 'Secrétaire'], // 4
+            ['titre' => 'Sponsoring'], // 5
+            ['titre' => 'Informatique'], // 6
+            ['titre' => 'Coach'], // 7
+            ['titre' => 'Coach en formation'], // 8
         ];
         $db->table('fonctions')->insertBatch($fonctions);
-        
+
         // 3. Liaisons (Inchangé)
         $liaisons = [
             ['membre_id' => 1, 'fonction_id' => 1],
@@ -74,10 +77,15 @@ class MembresSeeder extends Seeder
 
     private function getImageId($path)
     {
-        if (empty($path)) return null;
+        if (empty($path)) {
+            return null;
+        }
         $existing = $this->db->table('images')->where('path', $path)->get()->getRow();
-        if ($existing) return $existing->id;
+        if ($existing) {
+            return $existing->id;
+        }
         $this->db->table('images')->insert(['path' => $path, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+
         return $this->db->insertID();
     }
 }

@@ -17,35 +17,31 @@ use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Helpers\Array\ArrayHelper;
 use Config\App;
-use Locale;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
 
 /**
- * @see \CodeIgniter\Commands\Translation\LocalizationFinderTest
+ * @see LocalizationFinderTest
  */
 class LocalizationFinder extends BaseCommand
 {
-    protected $group       = 'Translation';
-    protected $name        = 'lang:find';
+    protected $group = 'Translation';
+    protected $name = 'lang:find';
     protected $description = 'Find and save available phrases to translate.';
-    protected $usage       = 'lang:find [options]';
-    protected $arguments   = [];
-    protected $options     = [
-        '--locale'   => 'Specify locale (en, ru, etc.) to save files.',
-        '--dir'      => 'Directory to search for translations relative to APPPATH.',
+    protected $usage = 'lang:find [options]';
+    protected $arguments = [];
+    protected $options = [
+        '--locale' => 'Specify locale (en, ru, etc.) to save files.',
+        '--dir' => 'Directory to search for translations relative to APPPATH.',
         '--show-new' => 'Show only new translations in table. Does not write to files.',
-        '--verbose'  => 'Output detailed information.',
+        '--verbose' => 'Output detailed information.',
     ];
 
     /**
-     * Flag for output detailed information
+     * Flag for output detailed information.
      */
     private bool $verbose = false;
 
     /**
-     * Flag for showing only translations, without saving
+     * Flag for showing only translations, without saving.
      */
     private bool $showNew = false;
 
@@ -53,24 +49,24 @@ class LocalizationFinder extends BaseCommand
 
     public function run(array $params)
     {
-        $this->verbose      = array_key_exists('verbose', $params);
-        $this->showNew      = array_key_exists('show-new', $params);
-        $optionLocale       = $params['locale'] ?? null;
-        $optionDir          = $params['dir'] ?? null;
-        $currentLocale      = Locale::getDefault();
-        $currentDir         = APPPATH;
-        $this->languagePath = $currentDir . 'Language';
+        $this->verbose = array_key_exists('verbose', $params);
+        $this->showNew = array_key_exists('show-new', $params);
+        $optionLocale = $params['locale'] ?? null;
+        $optionDir = $params['dir'] ?? null;
+        $currentLocale = \Locale::getDefault();
+        $currentDir = APPPATH;
+        $this->languagePath = $currentDir.'Language';
 
         if (ENVIRONMENT === 'testing') {
-            $currentDir         = SUPPORTPATH . 'Services' . DIRECTORY_SEPARATOR;
-            $this->languagePath = SUPPORTPATH . 'Language';
+            $currentDir = SUPPORTPATH.'Services'.DIRECTORY_SEPARATOR;
+            $this->languagePath = SUPPORTPATH.'Language';
         }
 
         if (is_string($optionLocale)) {
-            if (! in_array($optionLocale, config(App::class)->supportedLocales, true)) {
+            if (!in_array($optionLocale, config(App::class)->supportedLocales, true)) {
                 CLI::error(
-                    'Error: "' . $optionLocale . '" is not supported. Supported locales: '
-                    . implode(', ', config(App::class)->supportedLocales),
+                    'Error: "'.$optionLocale.'" is not supported. Supported locales: '
+                    .implode(', ', config(App::class)->supportedLocales),
                 );
 
                 return EXIT_USER_INPUT;
@@ -80,16 +76,16 @@ class LocalizationFinder extends BaseCommand
         }
 
         if (is_string($optionDir)) {
-            $tempCurrentDir = realpath($currentDir . $optionDir);
+            $tempCurrentDir = realpath($currentDir.$optionDir);
 
-            if ($tempCurrentDir === false) {
-                CLI::error('Error: Directory must be located in "' . $currentDir . '"');
+            if (false === $tempCurrentDir) {
+                CLI::error('Error: Directory must be located in "'.$currentDir.'"');
 
                 return EXIT_USER_INPUT;
             }
 
             if ($this->isSubDirectory($tempCurrentDir, $this->languagePath)) {
-                CLI::error('Error: Directory "' . $this->languagePath . '" restricted to scan.');
+                CLI::error('Error: Directory "'.$this->languagePath.'" restricted to scan.');
 
                 return EXIT_USER_INPUT;
             }
@@ -106,27 +102,27 @@ class LocalizationFinder extends BaseCommand
 
     private function process(string $currentDir, string $currentLocale): void
     {
-        $tableRows    = [];
+        $tableRows = [];
         $countNewKeys = 0;
 
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($currentDir));
-        $files    = iterator_to_array($iterator, true);
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($currentDir));
+        $files = iterator_to_array($iterator, true);
         ksort($files);
 
         [
             'foundLanguageKeys' => $foundLanguageKeys,
-            'badLanguageKeys'   => $badLanguageKeys,
-            'countFiles'        => $countFiles,
+            'badLanguageKeys' => $badLanguageKeys,
+            'countFiles' => $countFiles,
         ] = $this->findLanguageKeysInFiles($files);
 
         ksort($foundLanguageKeys);
 
-        $languageDiff        = [];
+        $languageDiff = [];
         $languageFoundGroups = array_unique(array_keys($foundLanguageKeys));
 
         foreach ($languageFoundGroups as $langFileName) {
             $languageStoredKeys = [];
-            $languageFilePath   = $this->languagePath . DIRECTORY_SEPARATOR . $currentLocale . DIRECTORY_SEPARATOR . $langFileName . '.php';
+            $languageFilePath = $this->languagePath.DIRECTORY_SEPARATOR.$currentLocale.DIRECTORY_SEPARATOR.$langFileName.'.php';
 
             if (is_file($languageFilePath)) {
                 // Load old localization
@@ -141,30 +137,30 @@ class LocalizationFinder extends BaseCommand
             } else {
                 $newLanguageKeys = array_replace_recursive($foundLanguageKeys[$langFileName], $languageStoredKeys);
 
-                if ($languageDiff !== []) {
-                    if (file_put_contents($languageFilePath, $this->templateFile($newLanguageKeys)) === false) {
-                        $this->writeIsVerbose('Lang file ' . $langFileName . ' (error write).', 'red');
+                if ([] !== $languageDiff) {
+                    if (false === file_put_contents($languageFilePath, $this->templateFile($newLanguageKeys))) {
+                        $this->writeIsVerbose('Lang file '.$langFileName.' (error write).', 'red');
                     } else {
-                        $this->writeIsVerbose('Lang file "' . $langFileName . '" successful updated!', 'green');
+                        $this->writeIsVerbose('Lang file "'.$langFileName.'" successful updated!', 'green');
                     }
                 }
             }
         }
 
-        if ($this->showNew && $tableRows !== []) {
+        if ($this->showNew && [] !== $tableRows) {
             sort($tableRows);
             CLI::table($tableRows, ['File', 'Key']);
         }
 
-        if (! $this->showNew && $countNewKeys > 0) {
+        if (!$this->showNew && $countNewKeys > 0) {
             CLI::write('Note: You need to run your linting tool to fix coding standards issues.', 'white', 'red');
         }
 
-        $this->writeIsVerbose('Files found: ' . $countFiles);
-        $this->writeIsVerbose('New translates found: ' . $countNewKeys);
-        $this->writeIsVerbose('Bad translates found: ' . count($badLanguageKeys));
+        $this->writeIsVerbose('Files found: '.$countFiles);
+        $this->writeIsVerbose('New translates found: '.$countNewKeys);
+        $this->writeIsVerbose('Bad translates found: '.count($badLanguageKeys));
 
-        if ($this->verbose && $badLanguageKeys !== []) {
+        if ($this->verbose && [] !== $badLanguageKeys) {
             $tableBadRows = [];
 
             foreach ($badLanguageKeys as $value) {
@@ -178,23 +174,23 @@ class LocalizationFinder extends BaseCommand
     }
 
     /**
-     * @param SplFileInfo|string $file
+     * @param \SplFileInfo|string $file
      *
      * @return array<string, array>
      */
     private function findTranslationsInFile($file): array
     {
         $foundLanguageKeys = [];
-        $badLanguageKeys   = [];
+        $badLanguageKeys = [];
 
         if (is_string($file) && is_file($file)) {
-            $file = new SplFileInfo($file);
+            $file = new \SplFileInfo($file);
         }
 
         $fileContent = file_get_contents($file->getRealPath());
         preg_match_all('/lang\(\'([._a-z0-9\-]+)\'\)/ui', $fileContent, $matches);
 
-        if ($matches[1] === []) {
+        if ([] === $matches[1]) {
             return compact('foundLanguageKeys', 'badLanguageKeys');
         }
 
@@ -208,10 +204,10 @@ class LocalizationFinder extends BaseCommand
                 continue;
             }
 
-            $languageFileName   = array_shift($phraseKeys);
-            $isEmptyNestedArray = ($languageFileName !== '' && $phraseKeys[0] === '')
-                || ($languageFileName === '' && $phraseKeys[0] !== '')
-                || ($languageFileName === '' && $phraseKeys[0] === '');
+            $languageFileName = array_shift($phraseKeys);
+            $isEmptyNestedArray = ('' !== $languageFileName && '' === $phraseKeys[0])
+                || ('' === $languageFileName && '' !== $phraseKeys[0])
+                || ('' === $languageFileName && '' === $phraseKeys[0]);
 
             if ($isEmptyNestedArray) {
                 $badLanguageKeys[] = [mb_substr($file->getRealPath(), mb_strlen(ROOTPATH)), $phraseKey];
@@ -219,7 +215,7 @@ class LocalizationFinder extends BaseCommand
                 continue;
             }
 
-            if (count($phraseKeys) === 1) {
+            if (1 === count($phraseKeys)) {
                 $foundLanguageKeys[$languageFileName][$phraseKeys[0]] = $phraseKey;
             } else {
                 $childKeys = $this->buildMultiArray($phraseKeys, $phraseKey);
@@ -231,18 +227,18 @@ class LocalizationFinder extends BaseCommand
         return compact('foundLanguageKeys', 'badLanguageKeys');
     }
 
-    private function isIgnoredFile(SplFileInfo $file): bool
+    private function isIgnoredFile(\SplFileInfo $file): bool
     {
         if ($file->isDir() || $this->isSubDirectory($file->getRealPath(), $this->languagePath)) {
             return true;
         }
 
-        return $file->getExtension() !== 'php';
+        return 'php' !== $file->getExtension();
     }
 
     private function templateFile(array $language = []): string
     {
-        if ($language !== []) {
+        if ([] !== $language) {
             $languageArrayString = var_export($language, true);
 
             $code = <<<PHP
@@ -265,7 +261,7 @@ class LocalizationFinder extends BaseCommand
 
     private function replaceArraySyntax(string $code): string
     {
-        $tokens    = token_get_all($code);
+        $tokens = token_get_all($code);
         $newTokens = $tokens;
 
         foreach ($tokens as $i => $token) {
@@ -274,21 +270,21 @@ class LocalizationFinder extends BaseCommand
 
                 // Replace "array ("
                 if (
-                    $tokenId === T_ARRAY
-                    && $tokens[$i + 1][0] === T_WHITESPACE
-                    && $tokens[$i + 2] === '('
+                    T_ARRAY === $tokenId
+                    && T_WHITESPACE === $tokens[$i + 1][0]
+                    && '(' === $tokens[$i + 2]
                 ) {
-                    $newTokens[$i][1]     = '[';
+                    $newTokens[$i][1] = '[';
                     $newTokens[$i + 1][1] = '';
-                    $newTokens[$i + 2]    = '';
+                    $newTokens[$i + 2] = '';
                 }
 
                 // Replace indent
-                if ($tokenId === T_WHITESPACE && preg_match('/\n([ ]+)/u', $tokenValue, $matches)) {
+                if (T_WHITESPACE === $tokenId && preg_match('/\n([ ]+)/u', $tokenValue, $matches)) {
                     $newTokens[$i][1] = "\n{$matches[1]}{$matches[1]}";
                 }
             } // Replace ")"
-            elseif ($token === ')') {
+            elseif (')' === $token) {
                 $newTokens[$i] = ']';
             }
         }
@@ -303,17 +299,17 @@ class LocalizationFinder extends BaseCommand
     }
 
     /**
-     * Create multidimensional array from another keys
+     * Create multidimensional array from another keys.
      */
     private function buildMultiArray(array $fromKeys, string $lastArrayValue = ''): array
     {
-        $newArray  = [];
+        $newArray = [];
         $lastIndex = array_pop($fromKeys);
-        $current   = &$newArray;
+        $current = &$newArray;
 
         foreach ($fromKeys as $value) {
             $current[$value] = [];
-            $current         = &$current[$value];
+            $current = &$current[$value];
         }
 
         $current[$lastIndex] = $lastArrayValue;
@@ -322,7 +318,7 @@ class LocalizationFinder extends BaseCommand
     }
 
     /**
-     * Convert multi arrays to specific CLI table rows (flat array)
+     * Convert multi arrays to specific CLI table rows (flat array).
      */
     private function arrayToTableRows(string $langFileName, array $array): array
     {
@@ -344,7 +340,7 @@ class LocalizationFinder extends BaseCommand
     }
 
     /**
-     * Show details in the console if the flag is set
+     * Show details in the console if the flag is set.
      */
     private function writeIsVerbose(string $text = '', ?string $foreground = null, ?string $background = null): void
     {
@@ -359,29 +355,30 @@ class LocalizationFinder extends BaseCommand
     }
 
     /**
-     * @param list<SplFileInfo> $files
+     * @param list<\SplFileInfo> $files
      *
-     * @return         array<string, array|int>
+     * @return array<string, array|int>
+     *
      * @phpstan-return array{'foundLanguageKeys': array<string, array<string, string>>, 'badLanguageKeys': array<int, array<int, string>>, 'countFiles': int}
      */
     private function findLanguageKeysInFiles(array $files): array
     {
         $foundLanguageKeys = [];
-        $badLanguageKeys   = [];
-        $countFiles        = 0;
+        $badLanguageKeys = [];
+        $countFiles = 0;
 
         foreach ($files as $file) {
             if ($this->isIgnoredFile($file)) {
                 continue;
             }
 
-            $this->writeIsVerbose('File found: ' . mb_substr($file->getRealPath(), mb_strlen(APPPATH)));
-            $countFiles++;
+            $this->writeIsVerbose('File found: '.mb_substr($file->getRealPath(), mb_strlen(APPPATH)));
+            ++$countFiles;
 
             $findInFile = $this->findTranslationsInFile($file);
 
             $foundLanguageKeys = array_replace_recursive($findInFile['foundLanguageKeys'], $foundLanguageKeys);
-            $badLanguageKeys   = array_merge($findInFile['badLanguageKeys'], $badLanguageKeys);
+            $badLanguageKeys = array_merge($findInFile['badLanguageKeys'], $badLanguageKeys);
         }
 
         return compact('foundLanguageKeys', 'badLanguageKeys', 'countFiles');

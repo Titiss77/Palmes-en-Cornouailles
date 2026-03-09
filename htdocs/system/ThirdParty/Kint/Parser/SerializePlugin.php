@@ -68,7 +68,7 @@ class SerializePlugin extends AbstractPlugin implements PluginCompleteInterface
     {
         $trimmed = \rtrim($var);
 
-        if ('N;' !== $trimmed && !\preg_match('/^(?:[COabis]:\\d+[:;]|d:\\d+(?:\\.\\d+);)/', $trimmed)) {
+        if ('N;' !== $trimmed && !\preg_match('/^(?:[COabis]:\d+[:;]|d:\d+(?:\.\d+);)/', $trimmed)) {
             return $v;
         }
 

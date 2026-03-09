@@ -13,23 +13,21 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Validation;
 
-use DateTime;
-
 /**
  * Format validation Rules.
  *
- * @see \CodeIgniter\Validation\FormatRulesTest
+ * @see FormatRulesTest
  */
 class FormatRules
 {
     /**
-     * Alpha
+     * Alpha.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function alpha($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -39,17 +37,17 @@ class FormatRules
     /**
      * Alpha with spaces.
      *
-     * @param string|null $value Value.
+     * @param null|string $value value
      *
-     * @return bool True if alpha with spaces, else false.
+     * @return bool true if alpha with spaces, else false
      */
     public function alpha_space($value = null): bool
     {
-        if ($value === null) {
+        if (null === $value) {
             return true;
         }
 
-        if (! is_string($value)) {
+        if (!is_string($value)) {
             $value = (string) $value;
         }
 
@@ -58,23 +56,23 @@ class FormatRules
     }
 
     /**
-     * Alphanumeric with underscores and dashes
+     * Alphanumeric with underscores and dashes.
      *
      * @see https://regex101.com/r/XfVY3d/1
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function alpha_dash($str = null): bool
     {
-        if ($str === null) {
+        if (null === $str) {
             return false;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
-        return preg_match('/\A[a-z0-9_-]+\z/i', $str) === 1;
+        return 1 === preg_match('/\A[a-z0-9_-]+\z/i', $str);
     }
 
     /**
@@ -84,7 +82,7 @@ class FormatRules
      * _ underscore, + plus, = equals, | vertical bar, : colon, . period
      * ~ ! # $ % & * - _ + = | : .
      *
-     * @param string|null $str
+     * @param null|string $str
      *
      * @return bool
      *
@@ -92,25 +90,25 @@ class FormatRules
      */
     public function alpha_numeric_punct($str)
     {
-        if ($str === null) {
+        if (null === $str) {
             return false;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
-        return preg_match('/\A[A-Z0-9 ~!#$%\&\*\-_+=|:.]+\z/i', $str) === 1;
+        return 1 === preg_match('/\A[A-Z0-9 ~!#$%\&\*\-_+=|:.]+\z/i', $str);
     }
 
     /**
-     * Alphanumeric
+     * Alphanumeric.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function alpha_numeric($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -118,13 +116,13 @@ class FormatRules
     }
 
     /**
-     * Alphanumeric w/ spaces
+     * Alphanumeric w/ spaces.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function alpha_numeric_space($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -133,12 +131,12 @@ class FormatRules
     }
 
     /**
-     * Any type of string
+     * Any type of string.
      *
      * Note: we specifically do NOT type hint $str here so that
      * it doesn't convert numbers into strings.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function string($str = null): bool
     {
@@ -146,13 +144,13 @@ class FormatRules
     }
 
     /**
-     * Decimal number
+     * Decimal number.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function decimal($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -161,13 +159,13 @@ class FormatRules
     }
 
     /**
-     * String of hexidecimal characters
+     * String of hexidecimal characters.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function hex($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -175,13 +173,13 @@ class FormatRules
     }
 
     /**
-     * Integer
+     * Integer.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function integer($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -189,13 +187,13 @@ class FormatRules
     }
 
     /**
-     * Is a Natural number  (0,1,2,3, etc.)
+     * Is a Natural number  (0,1,2,3, etc.).
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function is_natural($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -203,27 +201,27 @@ class FormatRules
     }
 
     /**
-     * Is a Natural number, but not a zero  (1,2,3, etc.)
+     * Is a Natural number, but not a zero  (1,2,3, etc.).
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function is_natural_no_zero($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
-        return $str !== '0' && ctype_digit($str);
+        return '0' !== $str && ctype_digit($str);
     }
 
     /**
-     * Numeric
+     * Numeric.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function numeric($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -234,15 +232,15 @@ class FormatRules
     /**
      * Compares value against a regular expression pattern.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function regex_match($str, string $pattern): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
-        if (! str_starts_with($pattern, '/')) {
+        if (!str_starts_with($pattern, '/')) {
             $pattern = "/{$pattern}/";
         }
 
@@ -255,11 +253,11 @@ class FormatRules
      *
      * @see http://php.net/manual/en/datetimezone.listidentifiers.php
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function timezone($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -267,20 +265,20 @@ class FormatRules
     }
 
     /**
-     * Valid Base64
+     * Valid Base64.
      *
      * Tests a string for characters outside of the Base64 alphabet
      * as defined by RFC 2045 http://www.faqs.org/rfcs/rfc2045
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function valid_base64($str = null): bool
     {
-        if ($str === null) {
+        if (null === $str) {
             return false;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
@@ -288,35 +286,35 @@ class FormatRules
     }
 
     /**
-     * Valid JSON
+     * Valid JSON.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function valid_json($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
         json_decode($str);
 
-        return json_last_error() === JSON_ERROR_NONE;
+        return JSON_ERROR_NONE === json_last_error();
     }
 
     /**
-     * Checks for a correctly formatted email address
+     * Checks for a correctly formatted email address.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function valid_email($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
         // @see https://regex101.com/r/wlJG1t/1/
         if (function_exists('idn_to_ascii') && defined('INTL_IDNA_VARIANT_UTS46') && preg_match('#\A([^@]+)@(.+)\z#', $str, $matches)) {
-            $str = $matches[1] . '@' . idn_to_ascii($matches[2], 0, INTL_IDNA_VARIANT_UTS46);
+            $str = $matches[1].'@'.idn_to_ascii($matches[2], 0, INTL_IDNA_VARIANT_UTS46);
         }
 
         return (bool) filter_var($str, FILTER_VALIDATE_EMAIL);
@@ -328,22 +326,22 @@ class FormatRules
      * Example:
      *     valid_emails[one@example.com,two@example.com]
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function valid_emails($str = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
         foreach (explode(',', $str) as $email) {
             $email = trim($email);
 
-            if ($email === '') {
+            if ('' === $email) {
                 return false;
             }
 
-            if ($this->valid_email($email) === false) {
+            if (false === $this->valid_email($email)) {
                 return false;
             }
         }
@@ -352,29 +350,29 @@ class FormatRules
     }
 
     /**
-     * Validate an IP address (human readable format or binary string - inet_pton)
+     * Validate an IP address (human readable format or binary string - inet_pton).
      *
-     * @param string|null $ip
-     * @param string|null $which IP protocol: 'ipv4' or 'ipv6'
+     * @param null|string $ip
+     * @param null|string $which IP protocol: 'ipv4' or 'ipv6'
      */
     public function valid_ip($ip = null, ?string $which = null): bool
     {
-        if (! is_string($ip)) {
+        if (!is_string($ip)) {
             $ip = (string) $ip;
         }
 
-        if ($ip === '') {
+        if ('' === $ip) {
             return false;
         }
 
         $option = match (strtolower($which ?? '')) {
-            'ipv4'  => FILTER_FLAG_IPV4,
-            'ipv6'  => FILTER_FLAG_IPV6,
+            'ipv4' => FILTER_FLAG_IPV4,
+            'ipv6' => FILTER_FLAG_IPV6,
             default => 0,
         };
 
-        return filter_var($ip, FILTER_VALIDATE_IP, $option) !== false
-            || (! ctype_print($ip) && filter_var(inet_ntop($ip), FILTER_VALIDATE_IP, $option) !== false);
+        return false !== filter_var($ip, FILTER_VALIDATE_IP, $option)
+            || (!ctype_print($ip) && false !== filter_var(inet_ntop($ip), FILTER_VALIDATE_IP, $option));
     }
 
     /**
@@ -383,90 +381,90 @@ class FormatRules
      * Warning: this rule will pass basic strings like
      * "banana"; use valid_url_strict for a stricter rule.
      *
-     * @param string|null $str
+     * @param null|string $str
      */
     public function valid_url($str = null): bool
     {
-        if ($str === null || $str === '') {
+        if (null === $str || '' === $str) {
             return false;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
         if (preg_match('/\A(?:([^:]*)\:)?\/\/(.+)\z/', $str, $matches)) {
-            if (! in_array($matches[1], ['http', 'https'], true)) {
+            if (!in_array($matches[1], ['http', 'https'], true)) {
                 return false;
             }
 
             $str = $matches[2];
         }
 
-        $str = 'http://' . $str;
+        $str = 'http://'.$str;
 
-        return filter_var($str, FILTER_VALIDATE_URL) !== false;
+        return false !== filter_var($str, FILTER_VALIDATE_URL);
     }
 
     /**
      * Checks a URL to ensure it's formed correctly.
      *
-     * @param string|null $str
-     * @param string|null $validSchemes comma separated list of allowed schemes
+     * @param null|string $str
+     * @param null|string $validSchemes comma separated list of allowed schemes
      */
     public function valid_url_strict($str = null, ?string $validSchemes = null): bool
     {
-        if ($str === null || $str === '' || $str === '0') {
+        if (null === $str || '' === $str || '0' === $str) {
             return false;
         }
 
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
         // parse_url() may return null and false
-        $scheme       = strtolower((string) parse_url($str, PHP_URL_SCHEME));
+        $scheme = strtolower((string) parse_url($str, PHP_URL_SCHEME));
         $validSchemes = explode(
             ',',
             strtolower($validSchemes ?? 'http,https'),
         );
 
         return in_array($scheme, $validSchemes, true)
-            && filter_var($str, FILTER_VALIDATE_URL) !== false;
+            && false !== filter_var($str, FILTER_VALIDATE_URL);
     }
 
     /**
-     * Checks for a valid date and matches a given date format
+     * Checks for a valid date and matches a given date format.
      *
-     * @param string|null           $str
-     * @param non-empty-string|null $format
+     * @param null|string           $str
+     * @param null|non-empty-string $format
      */
     public function valid_date($str = null, ?string $format = null): bool
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             $str = (string) $str;
         }
 
-        if ($str === '') {
+        if ('' === $str) {
             return false;
         }
 
-        if ($format === null || $format === '') {
-            return strtotime($str) !== false;
+        if (null === $format || '' === $format) {
+            return false !== strtotime($str);
         }
 
-        $date   = DateTime::createFromFormat($format, $str);
-        $errors = DateTime::getLastErrors();
+        $date = \DateTime::createFromFormat($format, $str);
+        $errors = \DateTime::getLastErrors();
 
-        if ($date === false) {
+        if (false === $date) {
             return false;
         }
 
         // PHP 8.2 or later.
-        if ($errors === false) {
+        if (false === $errors) {
             return true;
         }
 
-        return $errors['warning_count'] === 0 && $errors['error_count'] === 0;
+        return 0 === $errors['warning_count'] && 0 === $errors['error_count'];
     }
 }

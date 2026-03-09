@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\ActualiteModel;
-use CodeIgniter\Controller;
+use Config\Database;
 
 class Actualites extends BaseAdminController
 {
@@ -15,53 +17,6 @@ class Actualites extends BaseAdminController
     }
 
     // -------------------------------------------------------------------------
-    //  MÉTHODES UTILITAIRES (NETTOYAGE & SLUG)
-    // -------------------------------------------------------------------------
-
-    /**
-     * Nettoie une chaîne pour en faire un slug (URL) propre
-     */
-    private function nettoyer_chaine($chaine)
-    {
-        // 1. On s'assure d'avoir de l'UTF-8 propre (normalisation)
-        if (!mb_check_encoding($chaine, 'UTF-8')) {
-            $chaine = mb_convert_encoding($chaine, 'UTF-8', 'Windows-1252');
-        }
-
-        // 2. Translitérer : convertit les accents (é -> e, à -> a)
-        // setlocale aide iconv à comprendre les caractères régionaux
-        setlocale(LC_ALL, 'en_US.utf8');
-        $chaine = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $chaine);
-
-        // 3. Supprimer tout ce qui n'est pas alphanumérique ou tiret
-        $chaine = preg_replace('/[^a-zA-Z0-9 -]/', '', $chaine);
-
-        // 4. Minuscules et tirets
-        $chaine = strtolower(trim($chaine));
-        $chaine = str_replace(' ', '-', $chaine);
-        $chaine = preg_replace('/-+/', '-', $chaine);  // Évite les tirets multiples
-
-        return $chaine;
-    }
-
-    /**
-     * Génère un slug unique (ajoute -1, -2 si nécessaire)
-     */
-    private function genererSlugUnique($slugBase)
-    {
-        $slug = $slugBase;
-        $compteur = 1;
-
-        // Tant que le slug existe dans la base, on incrémente
-        while ($this->actuModel->where('slug', $slug)->countAllResults() > 0) {
-            $slug = $slugBase . '-' . $compteur;
-            $compteur++;
-        }
-
-        return $slug;
-    }
-
-    // -------------------------------------------------------------------------
     //  CRUD STANDARD
     // -------------------------------------------------------------------------
 
@@ -69,12 +24,14 @@ class Actualites extends BaseAdminController
     {
         $data = $this->getCommonData('Gestion Actualités', 'admin/page.css');
         $data['actualites'] = $this->actuModel->getActualitesWithRelations();
+
         return view('admin/actualites/index', $data);
     }
 
     public function new()
     {
         $data = $this->getCommonData('Nouvelle Actualité', 'admin/page.css');
+
         return view('admin/actualites/create', $data);
     }
 
@@ -95,10 +52,11 @@ class Actualites extends BaseAdminController
             'statut' => $this->request->getPost('statut'),
             'type' => 'actualite',
             'id_auteur' => session()->get('user_id') ?? 1,
-            'image_id' => $this->handleImageUpload('image', 'actualites')
+            'image_id' => $this->handleImageUpload('image', 'actualites'),
         ];
 
         $this->actuModel->insert($data);
+
         return redirect()->to('/admin/actualites')->with('success', 'Actualité créée avec succès.');
     }
 
@@ -107,10 +65,12 @@ class Actualites extends BaseAdminController
         $data = $this->getCommonData('Modifier Actualité', 'admin/page.css');
         $item = $this->actuModel->getActualitesWithRelations($id);
 
-        if (!$item)
+        if (!$item) {
             return redirect()->to('/admin/actualites')->with('error', 'Article introuvable.');
+        }
 
         $data['item'] = $item;
+
         return view('admin/actualites/edit', $data);
     }
 
@@ -141,6 +101,7 @@ class Actualites extends BaseAdminController
         }
 
         $this->actuModel->update($id, $data);
+
         return redirect()->to('/admin/actualites')->with('success', 'Actualité mise à jour.');
     }
 
@@ -149,34 +110,38 @@ class Actualites extends BaseAdminController
         $actualite = $this->actuModel->getActualitesWithRelations($id);
         if ($actualite) {
             if (!empty($actualite['image_path'])) {
-                $path = FCPATH . 'uploads/' . $actualite['image_path'];
-                if (file_exists($path))
+                $path = FCPATH.'uploads/'.$actualite['image_path'];
+                if (file_exists($path)) {
                     unlink($path);
+                }
 
                 if (!empty($actualite['image_id'])) {
-                    $db = \Config\Database::connect();
+                    $db = Database::connect();
                     $db->table('images')->where('id', $actualite['image_id'])->delete();
                 }
             }
             $this->actuModel->delete($id);
+
             return redirect()->to('/admin/actualites')->with('success', 'Suppression réussie.');
         }
+
         return redirect()->to('/admin/actualites')->with('error', 'Introuvable.');
     }
 
     public function deleteImage($id = null)
     {
         $article = $this->actuModel->getActualitesWithRelations($id);
-        if (!$article || empty($article['image_id']))
+        if (!$article || empty($article['image_id'])) {
             return redirect()->back()->with('error', 'Aucune image.');
+        }
 
         $this->actuModel->update($id, ['image_id' => null]);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('images')->where('id', $article['image_id'])->delete();
 
-        if (file_exists(FCPATH . 'uploads/' . $article['image_path'])) {
-            unlink(FCPATH . 'uploads/' . $article['image_path']);
+        if (file_exists(FCPATH.'uploads/'.$article['image_path'])) {
+            unlink(FCPATH.'uploads/'.$article['image_path']);
         }
 
         return redirect()->back()->with('success', 'Image supprimée.');
@@ -189,6 +154,7 @@ class Actualites extends BaseAdminController
     public function import()
     {
         $data = $this->getCommonData('Importer des Actualités', 'admin/import.css');
+
         return view('admin/actualites/import', $data);
     }
 
@@ -212,7 +178,7 @@ class Actualites extends BaseAdminController
             // Détection de l'encodage (Windows-1252 est le défaut d'Excel)
             $encoding = mb_detect_encoding($content, ['UTF-8', 'Windows-1252', 'ISO-8859-1'], true);
 
-            if (!$encoding || $encoding !== 'UTF-8') {
+            if (!$encoding || 'UTF-8' !== $encoding) {
                 // On convertit tout le contenu en UTF-8 proprement
                 $content = mb_convert_encoding($content, 'UTF-8', $encoding ?: 'Windows-1252');
             }
@@ -225,14 +191,16 @@ class Actualites extends BaseAdminController
             $count = 0;
             $rowIdx = 0;
 
-            while (($data = fgetcsv($handle, 0, ';')) !== FALSE) {
-                $rowIdx++;
+            while (($data = fgetcsv($handle, 0, ';')) !== false) {
+                ++$rowIdx;
 
                 // Ignorer les lignes vides ou entêtes
-                if (count($data) < 2)
+                if (count($data) < 2) {
                     continue;
-                if ($rowIdx === 1 && strtolower(trim($data[0])) === 'titre')
+                }
+                if (1 === $rowIdx && 'titre' === strtolower(trim($data[0]))) {
                     continue;
+                }
 
                 $titre = $data[0] ?? 'Sans titre';
                 $description = $data[1] ?? '';
@@ -250,7 +218,7 @@ class Actualites extends BaseAdminController
                         $dateEvenement = date('Y-m-d', $unixDate);
                     }
                     // CAS 2 : Format Français avec slash (ex: 07/02/2026)
-                    elseif (strpos($rawDate, '/') !== false) {
+                    elseif (str_contains($rawDate, '/')) {
                         // On essaie d'abord le format complet JJ/MM/AAAA
                         $dt = \DateTime::createFromFormat('d/m/Y', $rawDate);
 
@@ -286,16 +254,67 @@ class Actualites extends BaseAdminController
                     'date_evenement' => $dateEvenement,
                     'statut' => 'publie',
                     'type' => 'actualite',
-                    'id_auteur' => session()->get('user_id') ?? 1
+                    'id_auteur' => session()->get('user_id') ?? 1,
                 ]);
 
-                $count++;
+                ++$count;
             }
 
             fclose($handle);
-            return redirect()->to('/admin/actualites')->with('success', "$count actualités importées avec succès.");
+
+            return redirect()->to('/admin/actualites')->with('success', "{$count} actualités importées avec succès.");
         }
 
         return redirect()->back()->with('error', "Erreur lors de l'upload.");
+    }
+
+    // -------------------------------------------------------------------------
+    //  MÉTHODES UTILITAIRES (NETTOYAGE & SLUG)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Nettoie une chaîne pour en faire un slug (URL) propre.
+     *
+     * @param mixed $chaine
+     */
+    private function nettoyer_chaine($chaine)
+    {
+        // 1. On s'assure d'avoir de l'UTF-8 propre (normalisation)
+        if (!mb_check_encoding($chaine, 'UTF-8')) {
+            $chaine = mb_convert_encoding($chaine, 'UTF-8', 'Windows-1252');
+        }
+
+        // 2. Translitérer : convertit les accents (é -> e, à -> a)
+        // setlocale aide iconv à comprendre les caractères régionaux
+        setlocale(LC_ALL, 'en_US.utf8');
+        $chaine = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $chaine);
+
+        // 3. Supprimer tout ce qui n'est pas alphanumérique ou tiret
+        $chaine = preg_replace('/[^a-zA-Z0-9 -]/', '', $chaine);
+
+        // 4. Minuscules et tirets
+        $chaine = strtolower(trim($chaine));
+        $chaine = str_replace(' ', '-', $chaine);
+
+        return preg_replace('/-+/', '-', $chaine);  // Évite les tirets multiples
+    }
+
+    /**
+     * Génère un slug unique (ajoute -1, -2 si nécessaire).
+     *
+     * @param mixed $slugBase
+     */
+    private function genererSlugUnique($slugBase)
+    {
+        $slug = $slugBase;
+        $compteur = 1;
+
+        // Tant que le slug existe dans la base, on incrémente
+        while ($this->actuModel->where('slug', $slug)->countAllResults() > 0) {
+            $slug = $slugBase.'-'.$compteur;
+            ++$compteur;
+        }
+
+        return $slug;
     }
 }

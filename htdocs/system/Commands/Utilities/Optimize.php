@@ -34,21 +34,21 @@ final class Optimize extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'optimize';
 
     /**
-     * The Command's short description
+     * The Command's short description.
      *
      * @var string
      */
     protected $description = 'Optimize for production.';
 
     /**
-     * The Command's usage
+     * The Command's usage.
      *
      * @var string
      */
@@ -78,7 +78,7 @@ final class Optimize extends BaseCommand
         $locator->deleteCache();
         CLI::write('Removed FileLocatorCache.', 'green');
 
-        $cache = WRITEPATH . 'cache/FactoriesCache_config';
+        $cache = WRITEPATH.'cache/FactoriesCache_config';
         $this->removeFile($cache);
     }
 
@@ -88,12 +88,12 @@ final class Optimize extends BaseCommand
             $result = unlink($cache);
 
             if ($result) {
-                CLI::write('Removed "' . clean_path($cache) . '".', 'green');
+                CLI::write('Removed "'.clean_path($cache).'".', 'green');
 
                 return;
             }
 
-            CLI::error('Error in removing file: ' . clean_path($cache));
+            CLI::error('Error in removing file: '.clean_path($cache));
 
             throw new RuntimeException(__METHOD__);
         }
@@ -103,12 +103,12 @@ final class Optimize extends BaseCommand
     {
         $publisher = new Publisher(APPPATH, APPPATH);
 
-        $config = APPPATH . 'Config/Optimize.php';
+        $config = APPPATH.'Config/Optimize.php';
 
         $result = $publisher->replace(
             $config,
             [
-                'public bool $configCacheEnabled = false;'  => 'public bool $configCacheEnabled = true;',
+                'public bool $configCacheEnabled = false;' => 'public bool $configCacheEnabled = true;',
                 'public bool $locatorCacheEnabled = false;' => 'public bool $locatorCacheEnabled = true;',
             ],
         );
@@ -122,21 +122,21 @@ final class Optimize extends BaseCommand
             return;
         }
 
-        CLI::error('Error in updating file: ' . clean_path($config));
+        CLI::error('Error in updating file: '.clean_path($config));
 
         throw new RuntimeException(__METHOD__);
     }
 
     private function removeDevPackages(): void
     {
-        if (! defined('VENDORPATH')) {
+        if (!defined('VENDORPATH')) {
             return;
         }
 
         chdir(ROOTPATH);
         passthru('composer install --no-dev', $status);
 
-        if ($status === 0) {
+        if (0 === $status) {
             CLI::write('Removed Composer dev packages.', 'green');
 
             return;

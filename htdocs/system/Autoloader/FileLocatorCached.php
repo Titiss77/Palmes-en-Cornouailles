@@ -17,9 +17,9 @@ use CodeIgniter\Cache\CacheInterface;
 use CodeIgniter\Cache\FactoriesCache\FileVarExportHandler;
 
 /**
- * FileLocator with Cache
+ * FileLocator with Cache.
  *
- * @see \CodeIgniter\Autoloader\FileLocatorCachedTest
+ * @see FileLocatorCachedTest
  */
 final class FileLocatorCached implements FileLocatorInterface
 {
@@ -29,7 +29,7 @@ final class FileLocatorCached implements FileLocatorInterface
     private $cacheHandler;
 
     /**
-     * Cache data
+     * Cache data.
      *
      * [method => data]
      * E.g.,
@@ -49,7 +49,7 @@ final class FileLocatorCached implements FileLocatorInterface
     private string $cacheKey = 'FileLocatorCache';
 
     /**
-     * @param CacheInterface|FileVarExportHandler|null $cache
+     * @param null|CacheInterface|FileVarExportHandler $cache
      */
     public function __construct(private readonly FileLocator $locator, $cache = null)
     {
@@ -58,29 +58,13 @@ final class FileLocatorCached implements FileLocatorInterface
         $this->loadCache();
     }
 
-    private function loadCache(): void
-    {
-        $data = $this->cacheHandler->get($this->cacheKey);
-
-        if (is_array($data)) {
-            $this->cache = $data;
-        }
-    }
-
     public function __destruct()
     {
         $this->saveCache();
     }
 
-    private function saveCache(): void
-    {
-        if ($this->cacheUpdated) {
-            $this->cacheHandler->save($this->cacheKey, $this->cache, 3600 * 24);
-        }
-    }
-
     /**
-     * Delete cache data
+     * Delete cache data.
      */
     public function deleteCache(): void
     {
@@ -97,7 +81,7 @@ final class FileLocatorCached implements FileLocatorInterface
         $classname = $this->locator->findQualifiedNameFromPath($path);
 
         $this->cache['findQualifiedNameFromPath'][$path] = $classname;
-        $this->cacheUpdated                              = true;
+        $this->cacheUpdated = true;
 
         return $classname;
     }
@@ -111,7 +95,7 @@ final class FileLocatorCached implements FileLocatorInterface
         $classname = $this->locator->getClassname($file);
 
         $this->cache['getClassname'][$file] = $classname;
-        $this->cacheUpdated                 = true;
+        $this->cacheUpdated = true;
 
         return $classname;
     }
@@ -128,7 +112,7 @@ final class FileLocatorCached implements FileLocatorInterface
         $foundPaths = $this->locator->search($path, $ext, $prioritizeApp);
 
         $this->cache['search'][$path][$ext][$prioritizeApp] = $foundPaths;
-        $this->cacheUpdated                                 = true;
+        $this->cacheUpdated = true;
 
         return $foundPaths;
     }
@@ -142,7 +126,7 @@ final class FileLocatorCached implements FileLocatorInterface
         $files = $this->locator->listFiles($path);
 
         $this->cache['listFiles'][$path] = $files;
-        $this->cacheUpdated              = true;
+        $this->cacheUpdated = true;
 
         return $files;
     }
@@ -156,7 +140,7 @@ final class FileLocatorCached implements FileLocatorInterface
         $files = $this->locator->listNamespaceFiles($prefix, $path);
 
         $this->cache['listNamespaceFiles'][$prefix][$path] = $files;
-        $this->cacheUpdated                                = true;
+        $this->cacheUpdated = true;
 
         return $files;
     }
@@ -170,8 +154,24 @@ final class FileLocatorCached implements FileLocatorInterface
         $files = $this->locator->locateFile($file, $folder, $ext);
 
         $this->cache['locateFile'][$file][$folder][$ext] = $files;
-        $this->cacheUpdated                              = true;
+        $this->cacheUpdated = true;
 
         return $files;
+    }
+
+    private function loadCache(): void
+    {
+        $data = $this->cacheHandler->get($this->cacheKey);
+
+        if (is_array($data)) {
+            $this->cache = $data;
+        }
+    }
+
+    private function saveCache(): void
+    {
+        if ($this->cacheUpdated) {
+            $this->cacheHandler->save($this->cacheKey, $this->cache, 3600 * 24);
+        }
     }
 }

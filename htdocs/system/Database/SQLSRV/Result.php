@@ -15,10 +15,9 @@ namespace CodeIgniter\Database\SQLSRV;
 
 use CodeIgniter\Database\BaseResult;
 use CodeIgniter\Entity\Entity;
-use stdClass;
 
 /**
- * Result for SQLSRV
+ * Result for SQLSRV.
  *
  * @extends BaseResult<resource, resource>
  */
@@ -53,50 +52,50 @@ class Result extends BaseResult
     {
         static $dataTypes = [
             SQLSRV_SQLTYPE_BIGINT => 'bigint',
-            SQLSRV_SQLTYPE_BIT    => 'bit',
-            SQLSRV_SQLTYPE_CHAR   => 'char',
+            SQLSRV_SQLTYPE_BIT => 'bit',
+            SQLSRV_SQLTYPE_CHAR => 'char',
 
-            SQLSRV_SQLTYPE_DATE           => 'date',
-            SQLSRV_SQLTYPE_DATETIME       => 'datetime',
-            SQLSRV_SQLTYPE_DATETIME2      => 'datetime2',
+            SQLSRV_SQLTYPE_DATE => 'date',
+            SQLSRV_SQLTYPE_DATETIME => 'datetime',
+            SQLSRV_SQLTYPE_DATETIME2 => 'datetime2',
             SQLSRV_SQLTYPE_DATETIMEOFFSET => 'datetimeoffset',
 
             SQLSRV_SQLTYPE_DECIMAL => 'decimal',
-            SQLSRV_SQLTYPE_FLOAT   => 'float',
+            SQLSRV_SQLTYPE_FLOAT => 'float',
 
-            SQLSRV_SQLTYPE_IMAGE   => 'image',
-            SQLSRV_SQLTYPE_INT     => 'int',
-            SQLSRV_SQLTYPE_MONEY   => 'money',
-            SQLSRV_SQLTYPE_NCHAR   => 'nchar',
+            SQLSRV_SQLTYPE_IMAGE => 'image',
+            SQLSRV_SQLTYPE_INT => 'int',
+            SQLSRV_SQLTYPE_MONEY => 'money',
+            SQLSRV_SQLTYPE_NCHAR => 'nchar',
             SQLSRV_SQLTYPE_NUMERIC => 'numeric',
 
             SQLSRV_SQLTYPE_NVARCHAR => 'nvarchar',
-            SQLSRV_SQLTYPE_NTEXT    => 'ntext',
+            SQLSRV_SQLTYPE_NTEXT => 'ntext',
 
-            SQLSRV_SQLTYPE_REAL          => 'real',
+            SQLSRV_SQLTYPE_REAL => 'real',
             SQLSRV_SQLTYPE_SMALLDATETIME => 'smalldatetime',
-            SQLSRV_SQLTYPE_SMALLINT      => 'smallint',
-            SQLSRV_SQLTYPE_SMALLMONEY    => 'smallmoney',
-            SQLSRV_SQLTYPE_TEXT          => 'text',
+            SQLSRV_SQLTYPE_SMALLINT => 'smallint',
+            SQLSRV_SQLTYPE_SMALLMONEY => 'smallmoney',
+            SQLSRV_SQLTYPE_TEXT => 'text',
 
-            SQLSRV_SQLTYPE_TIME             => 'time',
-            SQLSRV_SQLTYPE_TIMESTAMP        => 'timestamp',
-            SQLSRV_SQLTYPE_TINYINT          => 'tinyint',
+            SQLSRV_SQLTYPE_TIME => 'time',
+            SQLSRV_SQLTYPE_TIMESTAMP => 'timestamp',
+            SQLSRV_SQLTYPE_TINYINT => 'tinyint',
             SQLSRV_SQLTYPE_UNIQUEIDENTIFIER => 'uniqueidentifier',
-            SQLSRV_SQLTYPE_UDT              => 'udt',
-            SQLSRV_SQLTYPE_VARBINARY        => 'varbinary',
-            SQLSRV_SQLTYPE_VARCHAR          => 'varchar',
-            SQLSRV_SQLTYPE_XML              => 'xml',
+            SQLSRV_SQLTYPE_UDT => 'udt',
+            SQLSRV_SQLTYPE_VARBINARY => 'varbinary',
+            SQLSRV_SQLTYPE_VARCHAR => 'varchar',
+            SQLSRV_SQLTYPE_XML => 'xml',
         ];
 
         $retVal = [];
 
         foreach (sqlsrv_field_metadata($this->resultID) as $i => $field) {
-            $retVal[$i] = new stdClass();
+            $retVal[$i] = new \stdClass();
 
-            $retVal[$i]->name       = $field['Name'];
-            $retVal[$i]->type       = $field['Type'];
-            $retVal[$i]->type_name  = $dataTypes[$field['Type']] ?? null;
+            $retVal[$i]->name = $field['Name'];
+            $retVal[$i]->type = $field['Type'];
+            $retVal[$i]->type_name = $dataTypes[$field['Type']] ?? null;
             $retVal[$i]->max_length = $field['Size'];
         }
 
@@ -105,10 +104,8 @@ class Result extends BaseResult
 
     /**
      * Frees the current result.
-     *
-     * @return void
      */
-    public function freeResult()
+    public function freeResult(): void
     {
         if (is_resource($this->resultID)) {
             sqlsrv_free_stmt($this->resultID);
@@ -126,8 +123,8 @@ class Result extends BaseResult
     public function dataSeek(int $n = 0)
     {
         if ($n > 0) {
-            for ($i = 0; $i < $n; $i++) {
-                if (sqlsrv_fetch($this->resultID) === false) {
+            for ($i = 0; $i < $n; ++$i) {
+                if (false === sqlsrv_fetch($this->resultID)) {
                     return false;
                 }
             }
@@ -137,11 +134,23 @@ class Result extends BaseResult
     }
 
     /**
+     * Returns the number of rows in the resultID (i.e., SQLSRV query result resource).
+     */
+    public function getNumRows(): int
+    {
+        if (!is_int($this->numRows)) {
+            $this->numRows = sqlsrv_num_rows($this->resultID);
+        }
+
+        return $this->numRows;
+    }
+
+    /**
      * Returns the result set as an array.
      *
      * Overridden by driver classes.
      *
-     * @return array|false|null
+     * @return null|array|false
      */
     protected function fetchAssoc()
     {
@@ -151,7 +160,7 @@ class Result extends BaseResult
     /**
      * Returns the result set as an object.
      *
-     * @return Entity|false|object|stdClass
+     * @return Entity|false|object|\stdClass
      */
     protected function fetchObject(string $className = 'stdClass')
     {
@@ -160,17 +169,5 @@ class Result extends BaseResult
         }
 
         return sqlsrv_fetch_object($this->resultID, $className);
-    }
-
-    /**
-     * Returns the number of rows in the resultID (i.e., SQLSRV query result resource)
-     */
-    public function getNumRows(): int
-    {
-        if (! is_int($this->numRows)) {
-            $this->numRows = sqlsrv_num_rows($this->resultID);
-        }
-
-        return $this->numRows;
     }
 }

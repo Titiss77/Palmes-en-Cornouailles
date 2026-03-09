@@ -20,10 +20,9 @@ use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Config\Paths;
-use Throwable;
 
 /**
- * @see \CodeIgniter\Debug\ExceptionHandlerTest
+ * @see ExceptionHandlerTest
  */
 final class ExceptionHandler extends BaseExceptionHandler implements ExceptionHandlerInterface
 {
@@ -43,14 +42,14 @@ final class ExceptionHandler extends BaseExceptionHandler implements ExceptionHa
      * Determines the correct way to display the error.
      */
     public function handle(
-        Throwable $exception,
+        \Throwable $exception,
         RequestInterface $request,
         ResponseInterface $response,
         int $statusCode,
         int $exitCode,
     ): void {
         // ResponseTrait needs these properties.
-        $this->request  = $request;
+        $this->request = $request;
         $this->response = $response;
 
         if ($request instanceof IncomingRequest) {
@@ -62,7 +61,7 @@ final class ExceptionHandler extends BaseExceptionHandler implements ExceptionHa
                 $response->setStatusCode($statusCode);
             }
 
-            if (! headers_sent()) {
+            if (!headers_sent()) {
                 header(
                     sprintf(
                         'HTTP/%s %s %s',
@@ -76,7 +75,7 @@ final class ExceptionHandler extends BaseExceptionHandler implements ExceptionHa
             }
 
             // Handles non-HTML requests.
-            if (! str_contains($request->getHeaderLine('accept'), 'text/html')) {
+            if (!str_contains($request->getHeaderLine('accept'), 'text/html')) {
                 // If display_errors is enabled, shows the error details.
                 $data = $this->isDisplayErrorsEnabled()
                     ? $this->collectVars($exception, $statusCode)
@@ -95,21 +94,21 @@ final class ExceptionHandler extends BaseExceptionHandler implements ExceptionHa
         }
 
         // Determine possible directories of error views
-        $addPath = ($request instanceof IncomingRequest ? 'html' : 'cli') . DIRECTORY_SEPARATOR;
-        $path    = $this->viewPath . $addPath;
-        $altPath = rtrim((new Paths())->viewDirectory, '\\/ ')
-            . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR . $addPath;
+        $addPath = ($request instanceof IncomingRequest ? 'html' : 'cli').DIRECTORY_SEPARATOR;
+        $path = $this->viewPath.$addPath;
+        $altPath = rtrim((new Paths())->viewDirectory, '\/ ')
+            .DIRECTORY_SEPARATOR.'errors'.DIRECTORY_SEPARATOR.$addPath;
 
         // Determine the views
-        $view    = $this->determineView($exception, $path, $statusCode);
+        $view = $this->determineView($exception, $path, $statusCode);
         $altView = $this->determineView($exception, $altPath, $statusCode);
 
         // Check if the view exists
         $viewFile = null;
-        if (is_file($path . $view)) {
-            $viewFile = $path . $view;
-        } elseif (is_file($altPath . $altView)) {
-            $viewFile = $altPath . $altView;
+        if (is_file($path.$view)) {
+            $viewFile = $path.$view;
+        } elseif (is_file($altPath.$altView)) {
+            $viewFile = $altPath.$altView;
         }
 
         // Displays the HTML or CLI error code.
@@ -129,7 +128,7 @@ final class ExceptionHandler extends BaseExceptionHandler implements ExceptionHa
      * @return string The filename of the view file to use
      */
     protected function determineView(
-        Throwable $exception,
+        \Throwable $exception,
         string $templatePath,
         int $statusCode = 500,
     ): string {
@@ -146,11 +145,11 @@ final class ExceptionHandler extends BaseExceptionHandler implements ExceptionHa
             return 'error_404.php';
         }
 
-        $templatePath = rtrim($templatePath, '\\/ ') . DIRECTORY_SEPARATOR;
+        $templatePath = rtrim($templatePath, '\/ ').DIRECTORY_SEPARATOR;
 
         // Allow for custom views based upon the status code
-        if (is_file($templatePath . 'error_' . $statusCode . '.php')) {
-            return 'error_' . $statusCode . '.php';
+        if (is_file($templatePath.'error_'.$statusCode.'.php')) {
+            return 'error_'.$statusCode.'.php';
         }
 
         return $view;

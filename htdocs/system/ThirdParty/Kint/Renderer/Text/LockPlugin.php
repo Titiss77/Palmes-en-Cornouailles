@@ -36,10 +36,13 @@ class LockPlugin extends AbstractPlugin
         switch ($v->getHint()) {
             case 'blacklist':
                 return $this->renderLockedHeader($v, 'BLACKLISTED');
+
             case 'recursion':
                 return $this->renderLockedHeader($v, 'RECURSION');
+
             case 'depth_limit':
                 return $this->renderLockedHeader($v, 'DEPTH LIMIT');
+
             case 'array_limit':
                 return $this->renderLockedHeader($v, 'ARRAY LIMIT');
         }

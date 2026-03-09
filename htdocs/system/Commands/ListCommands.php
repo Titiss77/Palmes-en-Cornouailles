@@ -33,35 +33,35 @@ class ListCommands extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'list';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Lists the available commands.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'list';
 
     /**
-     * the Command's Arguments
+     * the Command's Arguments.
      *
      * @var array<string, string>
      */
     protected $arguments = [];
 
     /**
-     * the Command's Options
+     * the Command's Options.
      *
      * @var array<string, string>
      */
@@ -80,7 +80,7 @@ class ListCommands extends BaseCommand
         ksort($commands);
 
         // Check for 'simple' format
-        return array_key_exists('simple', $params) || CLI::getOption('simple') === true
+        return array_key_exists('simple', $params) || true === CLI::getOption('simple')
             ? $this->listSimple($commands)
             : $this->listFull($commands);
     }
@@ -96,7 +96,7 @@ class ListCommands extends BaseCommand
         $groups = [];
 
         foreach ($commands as $title => $command) {
-            if (! isset($groups[$command['group']])) {
+            if (!isset($groups[$command['group']])) {
                 $groups[$command['group']] = [];
             }
 
@@ -112,7 +112,7 @@ class ListCommands extends BaseCommand
             CLI::write($group, 'yellow');
 
             foreach ($commands as $name => $command) {
-                $name   = $this->setPad($name, $length, 2, 2);
+                $name = $this->setPad($name, $length, 2, 2);
                 $output = CLI::color($name, 'green');
 
                 if (isset($command['description'])) {

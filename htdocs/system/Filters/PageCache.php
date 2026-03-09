@@ -22,7 +22,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Page Cache filter
+ * Page Cache filter.
  */
 class PageCache implements FilterInterface
 {
@@ -36,9 +36,9 @@ class PageCache implements FilterInterface
     /**
      * Checks page cache and return if found.
      *
-     * @param array|null $arguments
+     * @param null|array $arguments
      *
-     * @return ResponseInterface|null
+     * @return null|ResponseInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -58,15 +58,15 @@ class PageCache implements FilterInterface
     /**
      * Cache the page.
      *
-     * @param array|null $arguments
+     * @param null|array $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
         assert($request instanceof CLIRequest || $request instanceof IncomingRequest);
 
         if (
-            ! $response instanceof DownloadResponse
-            && ! $response instanceof RedirectResponse
+            !$response instanceof DownloadResponse
+            && !$response instanceof RedirectResponse
         ) {
             // Cache it without the performance metrics replaced
             // so that we can have live speed updates along the way.

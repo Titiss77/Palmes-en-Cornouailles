@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Kint\Renderer;
 
 use Kint\Value\AbstractValue;
-use Throwable;
 
 class CliRenderer extends TextRenderer
 {
@@ -61,7 +60,7 @@ class CliRenderer extends TextRenderer
      *
      * @psalm-var ?resource
      */
-    public static $windows_stream = null;
+    public static $windows_stream;
 
     protected static ?int $terminal_width = null;
 
@@ -96,13 +95,13 @@ class CliRenderer extends TextRenderer
                 try {
                     $tput = KINT_WIN ? \exec('tput cols 2>nul') : \exec('tput cols 2>/dev/null');
                     if ((bool) $tput) {
-                        /**
+                        /*
                          * @psalm-suppress InvalidCast
                          * Psalm bug #11080
                          */
                         self::$terminal_width = (int) $tput;
                     }
-                } catch (Throwable $t) {
+                } catch (\Throwable $t) {
                     self::$terminal_width = self::$default_width;
                 }
             }
@@ -169,7 +168,7 @@ class CliRenderer extends TextRenderer
 
     public function escape(string $string, $encoding = false): string
     {
-        return \str_replace("\x1b", '\\x1b', $string);
+        return \str_replace("\x1b", '\x1b', $string);
     }
 
     protected function utf8ToWindows(string $string): string

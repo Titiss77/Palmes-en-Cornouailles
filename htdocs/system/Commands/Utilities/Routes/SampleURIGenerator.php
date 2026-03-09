@@ -19,7 +19,7 @@ use Config\App;
 /**
  * Generate a sample URI path from route key regex.
  *
- * @see \CodeIgniter\Commands\Utilities\Routes\SampleURIGeneratorTest
+ * @see SampleURIGeneratorTest
  */
 final class SampleURIGenerator
 {
@@ -31,12 +31,12 @@ final class SampleURIGenerator
      * @var array<string, string>
      */
     private array $samples = [
-        'any'      => '123/abc',
-        'segment'  => 'abc_123',
+        'any' => '123/abc',
+        'segment' => 'abc_123',
         'alphanum' => 'abc123',
-        'num'      => '123',
-        'alpha'    => 'abc',
-        'hash'     => 'abc_123',
+        'num' => '123',
+        'alpha' => 'abc',
+        'hash' => 'abc_123',
     ];
 
     public function __construct(?RouteCollection $routes = null)
@@ -64,7 +64,7 @@ final class SampleURIGenerator
         foreach ($this->routes->getPlaceholders() as $placeholder => $regex) {
             $sample = $this->samples[$placeholder] ?? '::unknown::';
 
-            $sampleUri = str_replace('(' . $regex . ')', $sample, $sampleUri);
+            $sampleUri = str_replace('('.$regex.')', $sample, $sampleUri);
         }
 
         // auto route

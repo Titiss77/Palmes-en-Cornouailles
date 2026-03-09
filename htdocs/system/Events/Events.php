@@ -16,15 +16,15 @@ namespace CodeIgniter\Events;
 use Config\Modules;
 
 /**
- * Events
+ * Events.
  *
- * @see \CodeIgniter\Events\EventsTest
+ * @see EventsTest
  */
 class Events
 {
-    public const PRIORITY_LOW    = 200;
+    public const PRIORITY_LOW = 200;
     public const PRIORITY_NORMAL = 100;
-    public const PRIORITY_HIGH   = 10;
+    public const PRIORITY_HIGH = 10;
 
     /**
      * The list of listeners.
@@ -66,10 +66,8 @@ class Events
 
     /**
      * Ensures that we have a events file ready.
-     *
-     * @return void
      */
-    public static function initialize()
+    public static function initialize(): void
     {
         // Don't overwrite anything....
         if (static::$initialized) {
@@ -77,8 +75,8 @@ class Events
         }
 
         $config = new Modules();
-        $events = APPPATH . 'Config' . DIRECTORY_SEPARATOR . 'Events.php';
-        $files  = [];
+        $events = APPPATH.'Config'.DIRECTORY_SEPARATOR.'Events.php';
+        $files = [];
 
         if ($config->shouldDiscover('events')) {
             $files = service('locator')->search('Config/Events.php');
@@ -113,19 +111,17 @@ class Events
      * @param string   $eventName
      * @param callable $callback
      * @param int      $priority
-     *
-     * @return void
      */
-    public static function on($eventName, $callback, $priority = self::PRIORITY_NORMAL)
+    public static function on($eventName, $callback, $priority = self::PRIORITY_NORMAL): void
     {
-        if (! isset(static::$listeners[$eventName])) {
+        if (!isset(static::$listeners[$eventName])) {
             static::$listeners[$eventName] = [
                 true, // If there's only 1 item, it's sorted.
                 [$priority],
                 [$callback],
             ];
         } else {
-            static::$listeners[$eventName][0]   = false; // Not sorted
+            static::$listeners[$eventName][0] = false; // Not sorted
             static::$listeners[$eventName][1][] = $priority;
             static::$listeners[$eventName][2][] = $callback;
         }
@@ -143,7 +139,7 @@ class Events
     public static function trigger($eventName, ...$arguments): bool
     {
         // Read in our Config/Events file so that we have them all!
-        if (! static::$initialized) {
+        if (!static::$initialized) {
             static::initialize();
         }
 
@@ -152,17 +148,17 @@ class Events
         foreach ($listeners as $listener) {
             $start = microtime(true);
 
-            $result = static::$simulate === false ? $listener(...$arguments) : true;
+            $result = false === static::$simulate ? $listener(...$arguments) : true;
 
             if (CI_DEBUG) {
                 static::$performanceLog[] = [
                     'start' => $start,
-                    'end'   => microtime(true),
+                    'end' => microtime(true),
                     'event' => $eventName,
                 ];
             }
 
-            if ($result === false) {
+            if (false === $result) {
                 return false;
             }
         }
@@ -178,12 +174,12 @@ class Events
      */
     public static function listeners($eventName): array
     {
-        if (! isset(static::$listeners[$eventName])) {
+        if (!isset(static::$listeners[$eventName])) {
             return [];
         }
 
         // The list is not sorted
-        if (! static::$listeners[$eventName][0]) {
+        if (!static::$listeners[$eventName][0]) {
             // Sort it!
             array_multisort(static::$listeners[$eventName][1], SORT_NUMERIC, static::$listeners[$eventName][2]);
 
@@ -204,7 +200,7 @@ class Events
      */
     public static function removeListener($eventName, callable $listener): bool
     {
-        if (! isset(static::$listeners[$eventName])) {
+        if (!isset(static::$listeners[$eventName])) {
             return false;
         }
 
@@ -228,13 +224,11 @@ class Events
      * If the event_name is specified, only listeners for that event will be
      * removed, otherwise all listeners for all events are removed.
      *
-     * @param string|null $eventName
-     *
-     * @return void
+     * @param null|string $eventName
      */
-    public static function removeAllListeners($eventName = null)
+    public static function removeAllListeners($eventName = null): void
     {
-        if ($eventName !== null) {
+        if (null !== $eventName) {
             unset(static::$listeners[$eventName]);
         } else {
             static::$listeners = [];
@@ -243,10 +237,8 @@ class Events
 
     /**
      * Sets the path to the file that routes are read from.
-     *
-     * @return void
      */
-    public static function setFiles(array $files)
+    public static function setFiles(array $files): void
     {
         static::$files = $files;
     }
@@ -265,10 +257,8 @@ class Events
      * Turns simulation on or off. When on, events will not be triggered,
      * simply logged. Useful during testing when you don't actually want
      * the tests to run.
-     *
-     * @return void
      */
-    public static function simulate(bool $choice = true)
+    public static function simulate(bool $choice = true): void
     {
         static::$simulate = $choice;
     }

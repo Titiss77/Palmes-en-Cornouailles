@@ -18,7 +18,7 @@ class PageNotFoundException extends RuntimeException implements HTTPExceptionInt
     use DebugTraceableTrait;
 
     /**
-     * HTTP status code
+     * HTTP status code.
      *
      * @var int
      */
@@ -65,7 +65,7 @@ class PageNotFoundException extends RuntimeException implements HTTPExceptionInt
     }
 
     /**
-     * Get translated system message
+     * Get translated system message.
      *
      * Use a non-shared Language instance in the Services.
      * If a shared instance is created, the Language will

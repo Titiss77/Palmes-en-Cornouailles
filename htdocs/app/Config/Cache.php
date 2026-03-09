@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Config;
 
 use CodeIgniter\Cache\CacheInterface;
@@ -16,7 +18,7 @@ class Cache extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Primary Handler
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The name of the preferred handler that should be used. If for some reason
      * it is not available, the $backupHandler will be used in its place.
@@ -26,7 +28,7 @@ class Cache extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Backup Handler
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The name of the handler that will be used in case the first one is
      * unreachable. Often, 'file' is used here since the filesystem is
@@ -37,7 +39,7 @@ class Cache extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Key Prefix
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * This string is added to all cache item names to help avoid collisions
      * if you run multiple applications with the same cache engine.
@@ -47,7 +49,7 @@ class Cache extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Default TTL
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The default number of seconds to save items when none is specified.
      *
@@ -60,7 +62,7 @@ class Cache extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Reserved Characters
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * A string of reserved characters that will not be allowed in keys or tags.
      * Strings that violate this restriction will cause handlers to throw.
@@ -73,22 +75,22 @@ class Cache extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * File settings
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * Your file storage preferences can be specified below, if you are using
      * the File driver.
      *
-     * @var array<string, int|string|null>
+     * @var array<string, null|int|string>
      */
     public array $file = [
-        'storePath' => WRITEPATH . 'cache/',
-        'mode'      => 0640,
+        'storePath' => WRITEPATH.'cache/',
+        'mode' => 0o640,
     ];
 
     /**
      * -------------------------------------------------------------------------
      * Memcached settings
-     * -------------------------------------------------------------------------
+     * -------------------------------------------------------------------------.
      *
      * Your Memcached servers can be specified below, if you are using
      * the Memcached drivers.
@@ -98,34 +100,34 @@ class Cache extends BaseConfig
      * @var array<string, bool|int|string>
      */
     public array $memcached = [
-        'host'   => '127.0.0.1',
-        'port'   => 11211,
+        'host' => '127.0.0.1',
+        'port' => 11211,
         'weight' => 1,
-        'raw'    => false,
+        'raw' => false,
     ];
 
     /**
      * -------------------------------------------------------------------------
      * Redis settings
-     * -------------------------------------------------------------------------
+     * -------------------------------------------------------------------------.
      *
      * Your Redis server can be specified below, if you are using
      * the Redis or Predis drivers.
      *
-     * @var array<string, int|string|null>
+     * @var array<string, null|int|string>
      */
     public array $redis = [
-        'host'     => '127.0.0.1',
+        'host' => '127.0.0.1',
         'password' => null,
-        'port'     => 6379,
-        'timeout'  => 0,
+        'port' => 6379,
+        'timeout' => 0,
         'database' => 0,
     ];
 
     /**
      * --------------------------------------------------------------------------
      * Available Cache Handlers
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * This is an array of cache engine alias' and class names. Only engines
      * that are listed here are allowed to be used.
@@ -133,18 +135,18 @@ class Cache extends BaseConfig
      * @var array<string, class-string<CacheInterface>>
      */
     public array $validHandlers = [
-        'dummy'     => DummyHandler::class,
-        'file'      => FileHandler::class,
+        'dummy' => DummyHandler::class,
+        'file' => FileHandler::class,
         'memcached' => MemcachedHandler::class,
-        'predis'    => PredisHandler::class,
-        'redis'     => RedisHandler::class,
-        'wincache'  => WincacheHandler::class,
+        'predis' => PredisHandler::class,
+        'redis' => RedisHandler::class,
+        'wincache' => WincacheHandler::class,
     ];
 
     /**
      * --------------------------------------------------------------------------
      * Web Page Caching: Cache Include Query String
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * Whether to take the URL query string into consideration when generating
      * output cache files. Valid options are:

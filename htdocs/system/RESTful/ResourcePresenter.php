@@ -18,12 +18,12 @@ use CodeIgniter\HTTP\ResponseInterface;
 /**
  * An extendable controller to help provide a UI for a resource.
  *
- * @see \CodeIgniter\RESTful\ResourcePresenterTest
+ * @see ResourcePresenterTest
  */
 class ResourcePresenter extends BaseResource
 {
     /**
-     * Present a view of resource objects
+     * Present a view of resource objects.
      *
      * @return ResponseInterface|string|void
      */
@@ -33,9 +33,9 @@ class ResourcePresenter extends BaseResource
     }
 
     /**
-     * Present a view to present a specific resource object
+     * Present a view to present a specific resource object.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -45,7 +45,7 @@ class ResourcePresenter extends BaseResource
     }
 
     /**
-     * Present a view to present a new single resource object
+     * Present a view to present a new single resource object.
      *
      * @return ResponseInterface|string|void
      */
@@ -66,9 +66,9 @@ class ResourcePresenter extends BaseResource
     }
 
     /**
-     * Present a view to edit the properties of a specific resource object
+     * Present a view to edit the properties of a specific resource object.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -81,7 +81,7 @@ class ResourcePresenter extends BaseResource
      * Process the updating, full or partial, of a specific resource object.
      * This should be a POST.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -91,9 +91,9 @@ class ResourcePresenter extends BaseResource
     }
 
     /**
-     * Present a view to confirm the deletion of a specific resource object
+     * Present a view to confirm the deletion of a specific resource object.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */
@@ -103,9 +103,9 @@ class ResourcePresenter extends BaseResource
     }
 
     /**
-     * Process the deletion of a specific resource object
+     * Process the deletion of a specific resource object.
      *
-     * @param int|string|null $id
+     * @param null|int|string $id
      *
      * @return ResponseInterface|string|void
      */

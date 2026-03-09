@@ -17,58 +17,58 @@ use CodeIgniter\Encryption\Exceptions\EncryptionException;
 use Config\Encryption as EncryptionConfig;
 
 /**
- * CodeIgniter Encryption Manager
+ * CodeIgniter Encryption Manager.
  *
  * Provides two-way keyed encryption via PHP's Sodium and/or OpenSSL extensions.
  * This class determines the driver, cipher, and mode to use, and then
  * initializes the appropriate encryption handler.
  *
- * @property-read string       $digest
- * @property-read string       $driver
- * @property-read list<string> $drivers
- * @property-read string       $key
+ * @property string       $digest
+ * @property string       $driver
+ * @property list<string> $drivers
+ * @property string       $key
  *
- * @see \CodeIgniter\Encryption\EncryptionTest
+ * @see EncryptionTest
  */
 class Encryption
 {
     /**
-     * The encrypter we create
+     * The encrypter we create.
      *
      * @var EncrypterInterface
      */
     protected $encrypter;
 
     /**
-     * The driver being used
+     * The driver being used.
      *
      * @var string
      */
     protected $driver;
 
     /**
-     * The key/seed being used
+     * The key/seed being used.
      *
      * @var string
      */
     protected $key;
 
     /**
-     * The derived HMAC key
+     * The derived HMAC key.
      *
      * @var string
      */
     protected $hmacKey;
 
     /**
-     * HMAC digest to use
+     * HMAC digest to use.
      *
      * @var string
      */
     protected $digest = 'SHA512';
 
     /**
-     * Map of drivers to handler classes, in preference order
+     * Map of drivers to handler classes, in preference order.
      *
      * @var array
      */
@@ -78,7 +78,7 @@ class Encryption
     ];
 
     /**
-     * Handlers that are to be installed
+     * Handlers that are to be installed.
      *
      * @var array<string, bool>
      */
@@ -91,7 +91,7 @@ class Encryption
     {
         $config ??= new EncryptionConfig();
 
-        $this->key    = $config->key;
+        $this->key = $config->key;
         $this->driver = $config->driver;
         $this->digest = $config->digest ?? 'SHA512';
 
@@ -101,64 +101,17 @@ class Encryption
             'Sodium' => extension_loaded('sodium') && version_compare(SODIUM_LIBRARY_VERSION, '1.0.14', '>='),
         ];
 
-        if (! in_array($this->driver, $this->drivers, true) || (array_key_exists($this->driver, $this->handlers) && ! $this->handlers[$this->driver])) {
+        if (!in_array($this->driver, $this->drivers, true) || (array_key_exists($this->driver, $this->handlers) && !$this->handlers[$this->driver])) {
             throw EncryptionException::forNoHandlerAvailable($this->driver);
         }
     }
 
     /**
-     * Initialize or re-initialize an encrypter
-     *
-     * @return EncrypterInterface
-     *
-     * @throws EncryptionException
-     */
-    public function initialize(?EncryptionConfig $config = null)
-    {
-        if ($config instanceof EncryptionConfig) {
-            $this->key    = $config->key;
-            $this->driver = $config->driver;
-            $this->digest = $config->digest ?? 'SHA512';
-        }
-
-        if (empty($this->driver)) {
-            throw EncryptionException::forNoDriverRequested();
-        }
-
-        if (! in_array($this->driver, $this->drivers, true)) {
-            throw EncryptionException::forUnKnownHandler($this->driver);
-        }
-
-        if (empty($this->key)) {
-            throw EncryptionException::forNeedsStarterKey();
-        }
-
-        $this->hmacKey = bin2hex(\hash_hkdf($this->digest, $this->key));
-
-        $handlerName     = 'CodeIgniter\\Encryption\\Handlers\\' . $this->driver . 'Handler';
-        $this->encrypter = new $handlerName($config);
-
-        return $this->encrypter;
-    }
-
-    /**
-     * Create a random key
-     *
-     * @param int $length Output length
-     *
-     * @return string
-     */
-    public static function createKey($length = 32)
-    {
-        return random_bytes($length);
-    }
-
-    /**
-     * __get() magic, providing readonly access to some of our protected properties
+     * __get() magic, providing readonly access to some of our protected properties.
      *
      * @param string $key Property name
      *
-     * @return array|string|null
+     * @return null|array|string
      */
     public function __get($key)
     {
@@ -170,12 +123,59 @@ class Encryption
     }
 
     /**
-     * __isset() magic, providing checking for some of our protected properties
+     * __isset() magic, providing checking for some of our protected properties.
      *
      * @param string $key Property name
      */
     public function __isset($key): bool
     {
         return in_array($key, ['key', 'digest', 'driver', 'drivers'], true);
+    }
+
+    /**
+     * Initialize or re-initialize an encrypter.
+     *
+     * @return EncrypterInterface
+     *
+     * @throws EncryptionException
+     */
+    public function initialize(?EncryptionConfig $config = null)
+    {
+        if ($config instanceof EncryptionConfig) {
+            $this->key = $config->key;
+            $this->driver = $config->driver;
+            $this->digest = $config->digest ?? 'SHA512';
+        }
+
+        if (empty($this->driver)) {
+            throw EncryptionException::forNoDriverRequested();
+        }
+
+        if (!in_array($this->driver, $this->drivers, true)) {
+            throw EncryptionException::forUnKnownHandler($this->driver);
+        }
+
+        if (empty($this->key)) {
+            throw EncryptionException::forNeedsStarterKey();
+        }
+
+        $this->hmacKey = bin2hex(\hash_hkdf($this->digest, $this->key));
+
+        $handlerName = 'CodeIgniter\Encryption\Handlers\\'.$this->driver.'Handler';
+        $this->encrypter = new $handlerName($config);
+
+        return $this->encrypter;
+    }
+
+    /**
+     * Create a random key.
+     *
+     * @param int $length Output length
+     *
+     * @return string
+     */
+    public static function createKey($length = 32)
+    {
+        return random_bytes($length);
     }
 }

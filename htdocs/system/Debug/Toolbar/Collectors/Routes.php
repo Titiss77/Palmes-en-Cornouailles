@@ -14,12 +14,9 @@ declare(strict_types=1);
 namespace CodeIgniter\Debug\Toolbar\Collectors;
 
 use CodeIgniter\Router\DefinedRouteCollector;
-use ReflectionException;
-use ReflectionFunction;
-use ReflectionMethod;
 
 /**
- * Routes collector
+ * Routes collector.
  */
 class Routes extends BaseCollector
 {
@@ -48,7 +45,7 @@ class Routes extends BaseCollector
     protected $title = 'Routes';
 
     /**
-     * Returns the data of this collector to be formatted in the toolbar
+     * Returns the data of this collector to be formatted in the toolbar.
      *
      * @return array{
      *      matchedRoute: array<array{
@@ -69,30 +66,30 @@ class Routes extends BaseCollector
      *      }>
      * }
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function display(): array
     {
         $rawRoutes = service('routes', true);
-        $router    = service('router', null, null, true);
+        $router = service('router', null, null, true);
 
         // Get our parameters
         // Closure routes
         if (is_callable($router->controllerName())) {
-            $method = new ReflectionFunction($router->controllerName());
+            $method = new \ReflectionFunction($router->controllerName());
         } else {
             try {
-                $method = new ReflectionMethod($router->controllerName(), $router->methodName());
-            } catch (ReflectionException) {
+                $method = new \ReflectionMethod($router->controllerName(), $router->methodName());
+            } catch (\ReflectionException) {
                 try {
                     // If we're here, the method doesn't exist
                     // and is likely calculated in _remap.
-                    $method = new ReflectionMethod($router->controllerName(), '_remap');
-                } catch (ReflectionException) {
+                    $method = new \ReflectionMethod($router->controllerName(), '_remap');
+                } catch (\ReflectionException) {
                     // If we're here, page cache is returned. The router is not executed.
                     return [
                         'matchedRoute' => [],
-                        'routes'       => [],
+                        'routes' => [],
                     ];
                 }
             }
@@ -104,10 +101,10 @@ class Routes extends BaseCollector
 
         foreach ($rawParams as $key => $param) {
             $params[] = [
-                'name'  => '$' . $param->getName() . ' = ',
-                'value' => $router->params()[$key] ??
-                    ' <empty> | default: '
-                    . var_export(
+                'name' => '$'.$param->getName().' = ',
+                'value' => $router->params()[$key]
+                    ?? ' <empty> | default: '
+                    .var_export(
                         $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null,
                         true,
                     ),
@@ -116,12 +113,12 @@ class Routes extends BaseCollector
 
         $matchedRoute = [
             [
-                'directory'  => $router->directory(),
+                'directory' => $router->directory(),
                 'controller' => $router->controllerName(),
-                'method'     => $router->methodName(),
+                'method' => $router->methodName(),
                 'paramCount' => count($router->params()),
                 'truePCount' => count($params),
-                'params'     => $params,
+                'params' => $params,
             ],
         ];
 
@@ -132,10 +129,10 @@ class Routes extends BaseCollector
 
         foreach ($definedRouteCollector->collect() as $route) {
             // filter for strings, as callbacks aren't displayable
-            if ($route['handler'] !== '(Closure)') {
+            if ('(Closure)' !== $route['handler']) {
                 $routes[] = [
-                    'method'  => strtoupper($route['method']),
-                    'route'   => $route['route'],
+                    'method' => strtoupper($route['method']),
+                    'route' => $route['route'],
                     'handler' => $route['handler'],
                 ];
             }
@@ -143,7 +140,7 @@ class Routes extends BaseCollector
 
         return [
             'matchedRoute' => $matchedRoute,
-            'routes'       => $routes,
+            'routes' => $routes,
         ];
     }
 

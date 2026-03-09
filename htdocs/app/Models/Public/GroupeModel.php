@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Public;
 
 use CodeIgniter\Model;
@@ -17,11 +19,12 @@ class GroupeModel extends Model
             ->select('images.path as image')
             ->join('images', 'groupes.image_id = images.id', 'left')
             ->orderBy('groupes.ordre', 'ASC')
-            ->findAll();
+            ->findAll()
+        ;
     }
 
     /**
-     * Récupère un groupe spécifique par son ID
+     * Récupère un groupe spécifique par son ID.
      */
     public function getGroupeById(int $id)
     {
@@ -29,6 +32,7 @@ class GroupeModel extends Model
             ->select('groupes.*, images.path as image')
             ->join('images', 'groupes.image_id = images.id', 'left')
             ->where('groupes.id', $id)
-            ->first();
+            ->first()
+        ;
     }
 }

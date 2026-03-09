@@ -39,6 +39,7 @@ class StreamValue extends ResourceValue
      * @psalm-var AbstractValue[]
      */
     protected array $stream_meta;
+
     /** @psalm-readonly */
     protected ?string $uri;
 

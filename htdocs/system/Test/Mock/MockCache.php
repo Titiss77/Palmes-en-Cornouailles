@@ -31,7 +31,7 @@ class MockCache extends BaseHandler implements CacheInterface
     /**
      * Expiration times.
      *
-     * @var array<string, int|null>
+     * @var array<string, null|int>
      */
     protected $expirations = [];
 
@@ -44,19 +44,15 @@ class MockCache extends BaseHandler implements CacheInterface
 
     /**
      * Takes care of any handler-specific setup that must be done.
-     *
-     * @return void
      */
-    public function initialize()
-    {
-    }
+    public function initialize(): void {}
 
     /**
      * Attempts to fetch an item from the cache store.
      *
      * @param string $key Cache item name
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function get(string $key)
     {
@@ -68,13 +64,13 @@ class MockCache extends BaseHandler implements CacheInterface
     /**
      * Get an item from the cache, or execute the given Closure and store the result.
      *
-     * @return bool|null
+     * @return null|bool
      */
-    public function remember(string $key, int $ttl, Closure $callback)
+    public function remember(string $key, int $ttl, \Closure $callback)
     {
         $value = $this->get($key);
 
-        if ($value !== null) {
+        if (null !== $value) {
             return $value;
         }
 
@@ -103,7 +99,7 @@ class MockCache extends BaseHandler implements CacheInterface
 
         $key = static::validateKey($key, $this->prefix);
 
-        $this->cache[$key]       = $value;
+        $this->cache[$key] = $value;
         $this->expirations[$key] = $ttl > 0 ? Time::now()->getTimestamp() + $ttl : null;
 
         return true;
@@ -118,7 +114,7 @@ class MockCache extends BaseHandler implements CacheInterface
     {
         $key = static::validateKey($key, $this->prefix);
 
-        if (! isset($this->cache[$key])) {
+        if (!isset($this->cache[$key])) {
             return false;
         }
 
@@ -138,7 +134,7 @@ class MockCache extends BaseHandler implements CacheInterface
 
         foreach (array_keys($this->cache) as $key) {
             if (fnmatch($pattern, $key)) {
-                $count++;
+                ++$count;
                 unset($this->cache[$key], $this->expirations[$key]);
             }
         }
@@ -153,12 +149,12 @@ class MockCache extends BaseHandler implements CacheInterface
      */
     public function increment(string $key, int $offset = 1)
     {
-        $key  = static::validateKey($key, $this->prefix);
+        $key = static::validateKey($key, $this->prefix);
         $data = $this->cache[$key] ?: null;
 
-        if ($data === null) {
+        if (null === $data) {
             $data = 0;
-        } elseif (! is_int($data)) {
+        } elseif (!is_int($data)) {
             return false;
         }
 
@@ -176,9 +172,9 @@ class MockCache extends BaseHandler implements CacheInterface
 
         $data = $this->cache[$key] ?: null;
 
-        if ($data === null) {
+        if (null === $data) {
             $data = 0;
-        } elseif (! is_int($data)) {
+        } elseif (!is_int($data)) {
             return false;
         }
 
@@ -192,7 +188,7 @@ class MockCache extends BaseHandler implements CacheInterface
      */
     public function clean()
     {
-        $this->cache       = [];
+        $this->cache = [];
         $this->expirations = [];
 
         return true;
@@ -214,13 +210,13 @@ class MockCache extends BaseHandler implements CacheInterface
     /**
      * Returns detailed information about the specific item in the cache.
      *
-     * @return array|null Returns null if the item does not exist, otherwise array<string, mixed>
-     *                    with at least the 'expire' key for absolute epoch expiry (or null).
+     * @return null|array returns null if the item does not exist, otherwise array<string, mixed>
+     *                    with at least the 'expire' key for absolute epoch expiry (or null)
      */
     public function getMetaData(string $key)
     {
         // Misses return null
-        if (! array_key_exists($key, $this->expirations)) {
+        if (!array_key_exists($key, $this->expirations)) {
             return null;
         }
 
@@ -267,10 +263,8 @@ class MockCache extends BaseHandler implements CacheInterface
      * Asserts that the cache has an item named $key.
      * The value is not checked since storing false or null
      * values is valid.
-     *
-     * @return void
      */
-    public function assertHas(string $key)
+    public function assertHas(string $key): void
     {
         Assert::assertNotNull($this->get($key), "The cache does not have an item named: `{$key}`");
     }
@@ -279,28 +273,24 @@ class MockCache extends BaseHandler implements CacheInterface
      * Asserts that the cache has an item named $key with a value matching $value.
      *
      * @param mixed $value
-     *
-     * @return void
      */
-    public function assertHasValue(string $key, $value = null)
+    public function assertHasValue(string $key, $value = null): void
     {
         $item = $this->get($key);
 
         // Let assertHas() handle throwing the error for consistency
         // if the key is not found
-        if ($item === null) {
+        if (null === $item) {
             $this->assertHas($key);
         }
 
-        Assert::assertSame($value, $this->get($key), "The cached item `{$key}` does not equal match expectation. Found: " . print_r($value, true));
+        Assert::assertSame($value, $this->get($key), "The cached item `{$key}` does not equal match expectation. Found: ".print_r($value, true));
     }
 
     /**
      * Asserts that the cache does NOT have an item named $key.
-     *
-     * @return void
      */
-    public function assertMissing(string $key)
+    public function assertMissing(string $key): void
     {
         Assert::assertArrayNotHasKey($key, $this->cache, "The cached item named `{$key}` exists.");
     }

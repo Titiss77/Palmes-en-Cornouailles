@@ -15,8 +15,6 @@ namespace CodeIgniter\CLI;
 
 use Config\Exceptions;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
-use Throwable;
 
 /**
  * BaseCommand is the base class used in creating CLI commands.
@@ -41,42 +39,42 @@ abstract class BaseCommand
     protected $group;
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name;
 
     /**
-     * the Command's usage description
+     * the Command's usage description.
      *
      * @var string
      */
     protected $usage;
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description;
 
     /**
-     * the Command's options description
+     * the Command's options description.
      *
      * @var array<string, string>
      */
     protected $options = [];
 
     /**
-     * the Command's Arguments description
+     * the Command's Arguments description.
      *
      * @var array<string, string>
      */
     protected $arguments = [];
 
     /**
-     * The Logger to use for a command
+     * The Logger to use for a command.
      *
      * @var LoggerInterface
      */
@@ -92,53 +90,41 @@ abstract class BaseCommand
 
     public function __construct(LoggerInterface $logger, Commands $commands)
     {
-        $this->logger   = $logger;
+        $this->logger = $logger;
         $this->commands = $commands;
+    }
+
+    /**
+     * Makes it simple to access our protected properties.
+     *
+     * @return null|array<string, string>|Commands|LoggerInterface|string
+     */
+    public function __get(string $key)
+    {
+        return $this->{$key} ?? null;
+    }
+
+    /**
+     * Makes it simple to check our protected properties.
+     */
+    public function __isset(string $key): bool
+    {
+        return isset($this->{$key});
     }
 
     /**
      * Actually execute a command.
      *
-     * @param array<int|string, string|null> $params
+     * @param array<int|string, null|string> $params
      *
      * @return int|void
      */
     abstract public function run(array $params);
 
     /**
-     * Can be used by a command to run other commands.
-     *
-     * @param array<int|string, string|null> $params
-     *
-     * @return int|void
-     *
-     * @throws ReflectionException
-     */
-    protected function call(string $command, array $params = [])
-    {
-        return $this->commands->run($command, $params);
-    }
-
-    /**
-     * A simple method to display an error with line/file, in child commands.
-     *
-     * @return void
-     */
-    protected function showError(Throwable $e)
-    {
-        $exception = $e;
-        $message   = $e->getMessage();
-        $config    = config(Exceptions::class);
-
-        require $config->errorViewPath . '/cli/error_exception.php';
-    }
-
-    /**
      * Show Help includes (Usage, Arguments, Description, Options).
-     *
-     * @return void
      */
-    public function showHelp()
+    public function showHelp(): void
     {
         CLI::write(lang('CLI.helpUsage'), 'yellow');
 
@@ -147,7 +133,7 @@ abstract class BaseCommand
         } else {
             $usage = $this->name;
 
-            if ($this->arguments !== []) {
+            if ([] !== $this->arguments) {
                 $usage .= ' [arguments]';
             }
         }
@@ -160,23 +146,23 @@ abstract class BaseCommand
             CLI::write($this->setPad($this->description, 0, 0, 2));
         }
 
-        if ($this->arguments !== []) {
+        if ([] !== $this->arguments) {
             CLI::newLine();
             CLI::write(lang('CLI.helpArguments'), 'yellow');
             $length = max(array_map(strlen(...), array_keys($this->arguments)));
 
             foreach ($this->arguments as $argument => $description) {
-                CLI::write(CLI::color($this->setPad($argument, $length, 2, 2), 'green') . $description);
+                CLI::write(CLI::color($this->setPad($argument, $length, 2, 2), 'green').$description);
             }
         }
 
-        if ($this->options !== []) {
+        if ([] !== $this->options) {
             CLI::newLine();
             CLI::write(lang('CLI.helpOptions'), 'yellow');
             $length = max(array_map(strlen(...), array_keys($this->options)));
 
             foreach ($this->options as $option => $description) {
-                CLI::write(CLI::color($this->setPad($option, $length, 2, 2), 'green') . $description);
+                CLI::write(CLI::color($this->setPad($option, $length, 2, 2), 'green').$description);
             }
         }
     }
@@ -190,15 +176,15 @@ abstract class BaseCommand
     {
         $max += $extra + $indent;
 
-        return str_pad(str_repeat(' ', $indent) . $item, $max);
+        return str_pad(str_repeat(' ', $indent).$item, $max);
     }
 
     /**
-     * Get pad for $key => $value array output
+     * Get pad for $key => $value array output.
      *
      * @param array<string, string> $array
      *
-     * @deprecated Use setPad() instead.
+     * @deprecated use setPad() instead
      *
      * @codeCoverageIgnore
      */
@@ -214,20 +200,28 @@ abstract class BaseCommand
     }
 
     /**
-     * Makes it simple to access our protected properties.
+     * Can be used by a command to run other commands.
      *
-     * @return array<string, string>|Commands|LoggerInterface|string|null
+     * @param array<int|string, null|string> $params
+     *
+     * @return int|void
+     *
+     * @throws \ReflectionException
      */
-    public function __get(string $key)
+    protected function call(string $command, array $params = [])
     {
-        return $this->{$key} ?? null;
+        return $this->commands->run($command, $params);
     }
 
     /**
-     * Makes it simple to check our protected properties.
+     * A simple method to display an error with line/file, in child commands.
      */
-    public function __isset(string $key): bool
+    protected function showError(\Throwable $e): void
     {
-        return isset($this->{$key});
+        $exception = $e;
+        $message = $e->getMessage();
+        $config = config(Exceptions::class);
+
+        require $config->errorViewPath.'/cli/error_exception.php';
     }
 }

@@ -148,11 +148,13 @@ class CallFinder
     ];
 
     /**
+     * @param mixed $function
+     *
      * @psalm-param callable-array|callable-string $function
      *
-     * @psalm-return list<array{parameters: list<CallParameter>, modifiers: list<PhpToken>}>
-     *
      * @return array List of matching calls on the relevant line
+     *
+     * @psalm-return list<array{parameters: list<CallParameter>, modifiers: list<PhpToken>}>
      */
     public static function getFunctionCalls(string $source, int $line, $function): array
     {
@@ -212,6 +214,7 @@ class CallFinder
             $function = \strtolower($function[1]);
         } else {
             $class = null;
+
             /**
              * @psalm-suppress RedundantFunctionCallGivenDocblockType
              * Psalm bug #11075
@@ -403,6 +406,7 @@ class CallFinder
                 foreach ($name as $token) {
                     if (self::tokenIsOperator($token)) {
                         $expression = true;
+
                         break;
                     }
                 }
@@ -427,11 +431,13 @@ class CallFinder
 
                         if (T_CLASS === $token[0]) {
                             $new_without_parens = false;
+
                             break;
                         }
 
                         if ('(' === $token && $had_name_token) {
                             $new_without_parens = false;
+
                             break;
                         }
 
@@ -445,7 +451,9 @@ class CallFinder
                         case T_LNUMBER:
                         case T_DNUMBER:
                             $literal = true;
+
                             break;
+
                         case T_STRING:
                             switch (\strtolower($name[0][1])) {
                                 case 'null':
@@ -464,6 +472,7 @@ class CallFinder
                             case 'array()':
                             case '[]':
                                 $literal = true;
+
                                 break;
                         }
                     }
@@ -499,12 +508,14 @@ class CallFinder
             while (isset($tokens[$index])) {
                 if (isset(self::$ignore[$tokens[$index][0]])) {
                     --$index;
+
                     continue;
                 }
 
                 if (isset($modifiers[$tokens[$index][0]])) {
                     $mods[] = $tokens[$index];
                     --$index;
+
                     continue;
                 }
 
@@ -540,6 +551,8 @@ class CallFinder
      * occasionally add "..." to short parameter versions. If we simply check
      * for `$token[0]` then "..." will incorrectly match the "." operator.
      *
+     * @param mixed $token
+     *
      * @psalm-param PhpToken $token The token to check
      */
     private static function tokenIsOperator($token): bool
@@ -548,6 +561,8 @@ class CallFinder
     }
 
     /**
+     * @param mixed $token
+     *
      * @psalm-param PhpToken $token The token to check
      */
     private static function tokenPreserveWhitespace($token): bool
@@ -606,9 +621,9 @@ class CallFinder
         $output = [];
         $last = null;
 
-        if (T_FUNCTION === $tokens[0][0] ||
-            T_FN === $tokens[0][0] ||
-            (KINT_PHP80 && T_MATCH === $tokens[0][0])
+        if (T_FUNCTION === $tokens[0][0]
+            || T_FN === $tokens[0][0]
+            || (KINT_PHP80 && T_MATCH === $tokens[0][0])
         ) {
             $ignorestrip = true;
         }

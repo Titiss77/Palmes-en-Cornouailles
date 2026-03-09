@@ -17,7 +17,7 @@ use CodeIgniter\Exceptions\DebugTraceableTrait;
 use CodeIgniter\Exceptions\RuntimeException;
 
 /**
- * CLIException
+ * CLIException.
  */
 class CLIException extends RuntimeException
 {

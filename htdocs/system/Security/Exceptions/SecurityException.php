@@ -49,7 +49,7 @@ class SecurityException extends FrameworkException implements HTTPExceptionInter
     public static function forInvalidUTF8Chars(string $source, string $string)
     {
         return new static(
-            'Invalid UTF-8 characters in ' . $source . ': ' . $string,
+            'Invalid UTF-8 characters in '.$source.': '.$string,
             400,
         );
     }
@@ -65,13 +65,13 @@ class SecurityException extends FrameworkException implements HTTPExceptionInter
     public static function forInvalidControlChars(string $source, string $string)
     {
         return new static(
-            'Invalid Control characters in ' . $source . ': ' . $string,
+            'Invalid Control characters in '.$source.': '.$string,
             400,
         );
     }
 
     /**
-     * @deprecated Use `CookieException::forInvalidSameSite()` instead.
+     * @deprecated use `CookieException::forInvalidSameSite()` instead
      *
      * @codeCoverageIgnore
      *

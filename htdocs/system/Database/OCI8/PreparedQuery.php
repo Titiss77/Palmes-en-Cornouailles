@@ -16,10 +16,9 @@ namespace CodeIgniter\Database\OCI8;
 use CodeIgniter\Database\BasePreparedQuery;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Exceptions\BadMethodCallException;
-use OCILob;
 
 /**
- * Prepared query for OCI8
+ * Prepared query for OCI8.
  *
  * @extends BasePreparedQuery<resource, resource, resource>
  */
@@ -49,13 +48,13 @@ class PreparedQuery extends BasePreparedQuery
      */
     public function _prepare(string $sql, array $options = []): PreparedQuery
     {
-        if (! $this->statement = oci_parse($this->db->connID, $this->parameterize($sql))) {
-            $error             = oci_error($this->db->connID);
-            $this->errorCode   = $error['code'] ?? 0;
+        if (!$this->statement = oci_parse($this->db->connID, $this->parameterize($sql))) {
+            $error = oci_error($this->db->connID);
+            $this->errorCode = $error['code'] ?? 0;
             $this->errorString = $error['message'] ?? '';
 
             if ($this->db->DBDebug) {
-                throw new DatabaseException($this->errorString . ' code: ' . $this->errorCode);
+                throw new DatabaseException($this->errorString.' code: '.$this->errorCode);
             }
         }
 
@@ -70,7 +69,7 @@ class PreparedQuery extends BasePreparedQuery
      */
     public function _execute(array $data): bool
     {
-        if (! isset($this->statement)) {
+        if (!isset($this->statement)) {
             throw new BadMethodCallException('You must call prepare before trying to execute a prepared statement.');
         }
 
@@ -80,19 +79,19 @@ class PreparedQuery extends BasePreparedQuery
             if (is_string($data[$key]) && $this->isBinary($data[$key])) {
                 $binaryData = oci_new_descriptor($this->db->connID, OCI_D_LOB);
                 $binaryData->writeTemporary($data[$key], OCI_TEMP_BLOB);
-                oci_bind_by_name($this->statement, ':' . $key, $binaryData, -1, OCI_B_BLOB);
+                oci_bind_by_name($this->statement, ':'.$key, $binaryData, -1, OCI_B_BLOB);
             } else {
-                oci_bind_by_name($this->statement, ':' . $key, $data[$key]);
+                oci_bind_by_name($this->statement, ':'.$key, $data[$key]);
             }
         }
 
         $result = oci_execute($this->statement, $this->db->commitMode);
 
-        if ($binaryData instanceof OCILob) {
+        if ($binaryData instanceof \OCILob) {
             $binaryData->free();
         }
 
-        if ($result && $this->lastInsertTableName !== '') {
+        if ($result && '' !== $this->lastInsertTableName) {
             $this->db->lastInsertedTableName = $this->lastInsertTableName;
         }
 
@@ -102,19 +101,11 @@ class PreparedQuery extends BasePreparedQuery
     /**
      * Returns the statement resource for the prepared query or false when preparing failed.
      *
-     * @return resource|null
+     * @return null|resource
      */
     public function _getResult()
     {
         return $this->statement;
-    }
-
-    /**
-     * Deallocate prepared statements.
-     */
-    protected function _close(): bool
-    {
-        return oci_free_statement($this->statement);
     }
 
     /**
@@ -127,7 +118,15 @@ class PreparedQuery extends BasePreparedQuery
         $count = 0;
 
         return preg_replace_callback('/\?/', static function ($matches) use (&$count): string {
-            return ':' . ($count++);
+            return ':'.($count++);
         }, $sql);
+    }
+
+    /**
+     * Deallocate prepared statements.
+     */
+    protected function _close(): bool
+    {
+        return oci_free_statement($this->statement);
     }
 }

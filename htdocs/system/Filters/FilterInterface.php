@@ -17,7 +17,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Filter interface
+ * Filter interface.
  */
 interface FilterInterface
 {
@@ -31,9 +31,9 @@ interface FilterInterface
      * sent back to the client, allowing for error pages,
      * redirects, etc.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      *
-     * @return RequestInterface|ResponseInterface|string|null
+     * @return null|RequestInterface|ResponseInterface|string
      */
     public function before(RequestInterface $request, $arguments = null);
 
@@ -43,9 +43,9 @@ interface FilterInterface
      * to stop execution of other after filters, short of
      * throwing an Exception or Error.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      *
-     * @return ResponseInterface|null
+     * @return null|ResponseInterface
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null);
 }

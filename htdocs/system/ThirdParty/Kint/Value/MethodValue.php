@@ -35,6 +35,7 @@ class MethodValue extends AbstractValue
 {
     /** @psalm-readonly */
     protected DeclaredCallableBag $callable_bag;
+
     /** @psalm-readonly */
     protected ?CallableDefinitionRepresentation $definition_rep;
 
@@ -50,7 +51,7 @@ class MethodValue extends AbstractValue
             return;
         }
 
-        /**
+        /*
          * @psalm-var string $this->callable_bag->filename
          * @psalm-var int $this->callable_bag->startline
          * Psalm issue #11121
@@ -70,7 +71,7 @@ class MethodValue extends AbstractValue
 
     public function getContext(): MethodContext
     {
-        /**
+        /*
          * @psalm-var MethodContext $this->context
          * Psalm discuss #11116
          */
@@ -126,7 +127,7 @@ class MethodValue extends AbstractValue
         $class = \str_replace('\\', '-', \strtolower($c->owner_class));
         $funcname = \str_replace('_', '-', \strtolower($c->getName()));
 
-        if (0 === \strpos($funcname, '--') && 0 !== \strpos($funcname, '-', 2)) {
+        if (\str_starts_with($funcname, '--') && 0 !== \strpos($funcname, '-', 2)) {
             $funcname = \substr($funcname, 2);
         }
 

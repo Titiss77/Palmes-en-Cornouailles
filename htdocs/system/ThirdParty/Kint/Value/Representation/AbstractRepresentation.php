@@ -31,8 +31,10 @@ abstract class AbstractRepresentation implements RepresentationInterface
 {
     /** @psalm-readonly */
     protected string $label;
+
     /** @psalm-readonly */
     protected string $name;
+
     /** @psalm-readonly */
     protected bool $implicit_label;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Public;
 
 use CodeIgniter\Model;
@@ -16,6 +18,7 @@ class PartenaireModel extends Model
             ->select('images.path as image_url')
             ->join('images', 'partenaires.image_id = images.id', 'left')
             ->orderBy('partenaires.ordre', 'ASC')
-            ->findAll();
+            ->findAll()
+        ;
     }
 }

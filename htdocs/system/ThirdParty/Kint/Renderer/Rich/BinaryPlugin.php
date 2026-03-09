@@ -35,6 +35,7 @@ class BinaryPlugin extends AbstractPlugin implements TabPluginInterface
 {
     /** @psalm-var positive-int */
     public static int $line_length = 0x10;
+
     /** @psalm-var positive-int */
     public static int $chunk_length = 0x2;
 
@@ -54,7 +55,7 @@ class BinaryPlugin extends AbstractPlugin implements TabPluginInterface
             $chunks = \str_split(\str_pad(\bin2hex($line), 2 * self::$line_length, ' '), 2 * self::$chunk_length);
 
             $out .= \implode(' ', $chunks);
-            $out .= "\t".\preg_replace('/[^\\x20-\\x7E]/', '.', $line)."\n";
+            $out .= "\t".\preg_replace('/[^\x20-\x7E]/', '.', $line)."\n";
         }
 
         $out .= '</pre>';

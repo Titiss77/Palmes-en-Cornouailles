@@ -17,16 +17,16 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Debug toolbar filter
+ * Debug toolbar filter.
  *
- * @see \CodeIgniter\Filters\DebugToolbarTest
+ * @see DebugToolbarTest
  */
 class DebugToolbar implements FilterInterface
 {
     /**
      * We don't need to do anything here.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -37,7 +37,7 @@ class DebugToolbar implements FilterInterface
      * If the debug flag is set (CI_DEBUG) then collect performance
      * and debug information and display it in a toolbar.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {

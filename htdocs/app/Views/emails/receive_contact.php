@@ -5,11 +5,11 @@
             Message Site Web</h2>
     </div>
     <div style="padding: 30px;">
-        <p><strong>Expéditeur :</strong> <?= esc($email_user) ?></p>
-        <p><strong>Motif du mail :</strong> <?= esc($destinataireNom) ?></p>
+        <p><strong>Expéditeur :</strong> <?php echo esc($email_user); ?></p>
+        <p><strong>Motif du mail :</strong> <?php echo esc($destinataireNom); ?></p>
         <hr>
         <div style="background-color: #fcfcfc; padding: 20px; border-left: 5px solid #002d5a;">
-            <?= $messageContenu ?>
+            <?php echo $messageContenu; ?>
         </div>
 
     </div>

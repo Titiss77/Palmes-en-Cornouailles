@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value;
 
-use InvalidArgumentException;
 use Kint\Value\Context\ContextInterface;
 
 /**
@@ -51,7 +50,7 @@ class FixedWidthValue extends AbstractValue
             parent::__construct($context, $type);
             $this->value = $value;
         } else {
-            throw new InvalidArgumentException('FixedWidthValue can only contain fixed width types, got '.$type);
+            throw new \InvalidArgumentException('FixedWidthValue can only contain fixed width types, got '.$type);
         }
     }
 

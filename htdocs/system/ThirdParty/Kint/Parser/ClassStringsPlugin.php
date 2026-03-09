@@ -30,7 +30,6 @@ namespace Kint\Parser;
 use Kint\Value\AbstractValue;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\InstanceValue;
-use ReflectionClass;
 
 class ClassStringsPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -81,7 +80,7 @@ class ClassStringsPlugin extends AbstractPlugin implements PluginCompleteInterfa
             return $v;
         }
 
-        $r = new ReflectionClass($var);
+        $r = new \ReflectionClass($var);
 
         $fakeC = new BaseContext($c->getName());
         $fakeC->access_path = null;

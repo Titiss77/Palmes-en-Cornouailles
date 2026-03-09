@@ -16,40 +16,40 @@ namespace CodeIgniter\Database;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
 /**
- * Class BaseUtils
+ * Class BaseUtils.
  */
 abstract class BaseUtils
 {
     /**
-     * Database object
+     * Database object.
      *
      * @var object
      */
     protected $db;
 
     /**
-     * List databases statement
+     * List databases statement.
      *
      * @var bool|string
      */
     protected $listDatabases = false;
 
     /**
-     * OPTIMIZE TABLE statement
+     * OPTIMIZE TABLE statement.
      *
      * @var bool|string
      */
     protected $optimizeTable = false;
 
     /**
-     * REPAIR TABLE statement
+     * REPAIR TABLE statement.
      *
      * @var bool|string
      */
     protected $repairTable = false;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct(ConnectionInterface $db)
     {
@@ -57,7 +57,7 @@ abstract class BaseUtils
     }
 
     /**
-     * List databases
+     * List databases.
      *
      * @return array|bool
      *
@@ -70,7 +70,7 @@ abstract class BaseUtils
             return $this->db->dataCache['db_names'];
         }
 
-        if ($this->listDatabases === false) {
+        if (false === $this->listDatabases) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('Unsupported feature of the database platform you are using.');
             }
@@ -81,11 +81,11 @@ abstract class BaseUtils
         $this->db->dataCache['db_names'] = [];
 
         $query = $this->db->query($this->listDatabases);
-        if ($query === false) {
+        if (false === $query) {
             return $this->db->dataCache['db_names'];
         }
 
-        for ($i = 0, $query = $query->getResultArray(), $c = count($query); $i < $c; $i++) {
+        for ($i = 0, $query = $query->getResultArray(), $c = count($query); $i < $c; ++$i) {
             $this->db->dataCache['db_names'][] = current($query[$i]);
         }
 
@@ -93,7 +93,7 @@ abstract class BaseUtils
     }
 
     /**
-     * Determine if a particular database exists
+     * Determine if a particular database exists.
      */
     public function databaseExists(string $databaseName): bool
     {
@@ -101,7 +101,7 @@ abstract class BaseUtils
     }
 
     /**
-     * Optimize Table
+     * Optimize Table.
      *
      * @return bool
      *
@@ -109,7 +109,7 @@ abstract class BaseUtils
      */
     public function optimizeTable(string $tableName)
     {
-        if ($this->optimizeTable === false) {
+        if (false === $this->optimizeTable) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('Unsupported feature of the database platform you are using.');
             }
@@ -119,11 +119,11 @@ abstract class BaseUtils
 
         $query = $this->db->query(sprintf($this->optimizeTable, $this->db->escapeIdentifiers($tableName)));
 
-        return $query !== false;
+        return false !== $query;
     }
 
     /**
-     * Optimize Database
+     * Optimize Database.
      *
      * @return mixed
      *
@@ -131,7 +131,7 @@ abstract class BaseUtils
      */
     public function optimizeDatabase()
     {
-        if ($this->optimizeTable === false) {
+        if (false === $this->optimizeTable) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('Unsupported feature of the database platform you are using.');
             }
@@ -155,8 +155,8 @@ abstract class BaseUtils
             if (empty($res)) {
                 $key = $tableName;
             } else {
-                $res  = current($res);
-                $key  = str_replace($this->db->database . '.', '', current($res));
+                $res = current($res);
+                $key = str_replace($this->db->database.'.', '', current($res));
                 $keys = array_keys($res);
                 unset($res[$keys[0]]);
             }
@@ -168,7 +168,7 @@ abstract class BaseUtils
     }
 
     /**
-     * Repair Table
+     * Repair Table.
      *
      * @return mixed
      *
@@ -176,7 +176,7 @@ abstract class BaseUtils
      */
     public function repairTable(string $tableName)
     {
-        if ($this->repairTable === false) {
+        if (false === $this->repairTable) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('Unsupported feature of the database platform you are using.');
             }
@@ -195,7 +195,7 @@ abstract class BaseUtils
     }
 
     /**
-     * Generate CSV from a query result object
+     * Generate CSV from a query result object.
      *
      * @return string
      */
@@ -204,65 +204,65 @@ abstract class BaseUtils
         $out = '';
 
         foreach ($query->getFieldNames() as $name) {
-            $out .= $enclosure . str_replace($enclosure, $enclosure . $enclosure, $name) . $enclosure . $delim;
+            $out .= $enclosure.str_replace($enclosure, $enclosure.$enclosure, $name).$enclosure.$delim;
         }
 
-        $out = substr($out, 0, -strlen($delim)) . $newline;
+        $out = substr($out, 0, -strlen($delim)).$newline;
 
         // Next blast through the result array and build out the rows
         while ($row = $query->getUnbufferedRow('array')) {
             $line = [];
 
             foreach ($row as $item) {
-                $line[] = $enclosure . str_replace(
+                $line[] = $enclosure.str_replace(
                     $enclosure,
-                    $enclosure . $enclosure,
+                    $enclosure.$enclosure,
                     (string) $item,
-                ) . $enclosure;
+                ).$enclosure;
             }
 
-            $out .= implode($delim, $line) . $newline;
+            $out .= implode($delim, $line).$newline;
         }
 
         return $out;
     }
 
     /**
-     * Generate XML data from a query result object
+     * Generate XML data from a query result object.
      */
     public function getXMLFromResult(ResultInterface $query, array $params = []): string
     {
         foreach (['root' => 'root', 'element' => 'element', 'newline' => "\n", 'tab' => "\t"] as $key => $val) {
-            if (! isset($params[$key])) {
+            if (!isset($params[$key])) {
                 $params[$key] = $val;
             }
         }
 
-        $root    = $params['root'];
+        $root = $params['root'];
         $newline = $params['newline'];
-        $tab     = $params['tab'];
+        $tab = $params['tab'];
         $element = $params['element'];
 
         helper('xml');
-        $xml = '<' . $root . '>' . $newline;
+        $xml = '<'.$root.'>'.$newline;
 
         while ($row = $query->getUnbufferedRow()) {
-            $xml .= $tab . '<' . $element . '>' . $newline;
+            $xml .= $tab.'<'.$element.'>'.$newline;
 
             foreach ($row as $key => $val) {
-                $val = (! empty($val)) ? xml_convert((string) $val) : '';
+                $val = (!empty($val)) ? xml_convert((string) $val) : '';
 
-                $xml .= $tab . $tab . '<' . $key . '>' . $val . '</' . $key . '>' . $newline;
+                $xml .= $tab.$tab.'<'.$key.'>'.$val.'</'.$key.'>'.$newline;
             }
 
-            $xml .= $tab . '</' . $element . '>' . $newline;
+            $xml .= $tab.'</'.$element.'>'.$newline;
         }
 
-        return $xml . '</' . $root . '>' . $newline;
+        return $xml.'</'.$root.'>'.$newline;
     }
 
     /**
-     * Database Backup
+     * Database Backup.
      *
      * @param array|string $params
      *
@@ -277,17 +277,17 @@ abstract class BaseUtils
         }
 
         $prefs = [
-            'tables'             => [],
-            'ignore'             => [],
-            'filename'           => '',
-            'format'             => 'gzip', // gzip, txt
-            'add_drop'           => true,
-            'add_insert'         => true,
-            'newline'            => "\n",
+            'tables' => [],
+            'ignore' => [],
+            'filename' => '',
+            'format' => 'gzip', // gzip, txt
+            'add_drop' => true,
+            'add_insert' => true,
+            'newline' => "\n",
             'foreign_key_checks' => true,
         ];
 
-        if (! empty($params)) {
+        if (!empty($params)) {
             foreach (array_keys($prefs) as $key) {
                 if (isset($params[$key])) {
                     $prefs[$key] = $params[$key];
@@ -299,11 +299,11 @@ abstract class BaseUtils
             $prefs['tables'] = $this->db->listTables();
         }
 
-        if (! in_array($prefs['format'], ['gzip', 'txt'], true)) {
+        if (!in_array($prefs['format'], ['gzip', 'txt'], true)) {
             $prefs['format'] = 'txt';
         }
 
-        if ($prefs['format'] === 'gzip' && ! function_exists('gzencode')) {
+        if ('gzip' === $prefs['format'] && !function_exists('gzencode')) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('The file compression format you chose is not supported by your server.');
             }
@@ -311,7 +311,7 @@ abstract class BaseUtils
             $prefs['format'] = 'txt';
         }
 
-        if ($prefs['format'] === 'txt') {
+        if ('txt' === $prefs['format']) {
             return $this->_backup($prefs);
         }
 

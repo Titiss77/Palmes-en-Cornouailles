@@ -17,7 +17,7 @@ use CodeIgniter\Exceptions\DebugTraceableTrait;
 use CodeIgniter\Exceptions\RuntimeException;
 
 /**
- * FormatException
+ * FormatException.
  */
 class FormatException extends RuntimeException
 {

@@ -19,20 +19,20 @@ $menuItems = [
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Mea+Culpa&family=Montserrat:wght@900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <title><?= $titrePage; ?></title>
-    <?php if (!empty($general['image'])): ?>
-    <link rel="icon" type="image/png" href="<?= base_url($general['image']); ?>">
-    <?php endif; ?>
-    <?= view('css/dynamic_root', ['root' => $root]); ?>
-    <link rel="stylesheet" href="<?= base_url('Assets/css/Public/global.css'); ?>">
-    <link rel="stylesheet" href="<?= base_url('Assets/css/' . $cssPage); ?>">
+    <title><?php echo $titrePage; ?></title>
+    <?php if (!empty($general['image'])) { ?>
+    <link rel="icon" type="image/png" href="<?php echo base_url($general['image']); ?>">
+    <?php } ?>
+    <?php echo view('css/dynamic_root', ['root' => $root]); ?>
+    <link rel="stylesheet" href="<?php echo base_url('Assets/css/Public/global.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('Assets/css/'.$cssPage); ?>">
 </head>
 
 <body>
     <nav>
         <div class="nav-brand">
-            <img src="<?= base_url('' . $general['image']); ?>" alt="logo du club" />
-            <h2><?= $general['nomClub']; ?></h2>
+            <img src="<?php echo base_url(''.$general['image']); ?>" alt="logo du club" />
+            <h2><?php echo $general['nomClub']; ?></h2>
         </div>
 
         <button class="menu-toggle" id="mobile-menu-btn" aria-label="Menu">
@@ -42,43 +42,43 @@ $menuItems = [
         </button>
 
         <ul class="nav-menu" id="nav-menu">
-            <?php foreach ($menuItems as $url => $label): ?>
+            <?php foreach ($menuItems as $url => $label) { ?>
             <li>
-                <?= anchor($url, $label); ?>
+                <?php echo anchor($url, $label); ?>
             </li>
-            <?php endforeach; ?>
+            <?php } ?>
         </ul>
     </nav>
 
-    <?= $this->renderSection('contenu') ?>
+    <?php echo $this->renderSection('contenu'); ?>
 
     <footer id="piedBlog">
         <nav class="footer-nav">
             <ul>
-                <?php foreach ($menuItems as $url => $label): ?>
+                <?php foreach ($menuItems as $url => $label) { ?>
                 <li>
-                    <?= anchor($url, $label); ?>
+                    <?php echo anchor($url, $label); ?>
                 </li>
-                <?php endforeach; ?>
+                <?php } ?>
             </ul>
         </nav>
 
         <div class="social-links">
-            <a href="<?= $general['lienFacebook']; ?>" target="_blank" aria-label="Facebook">
+            <a href="<?php echo $general['lienFacebook']; ?>" target="_blank" aria-label="Facebook">
                 <i class="bi bi-facebook"></i>
             </a>
-            <a href="<?= $general['lienInstagram']; ?>" target="_blank" aria-label="Instagram">
+            <a href="<?php echo $general['lienInstagram']; ?>" target="_blank" aria-label="Instagram">
                 <i class="bi bi-instagram"></i>
             </a>
-            <a class="fede" href="<?= $general['lienffessm']; ?>" target="_blank" aria-label="FFESSM">
-                <img src="<?= base_url('uploads/' . $general['logoffessm']); ?>" alt="FFESSM">
+            <a class="fede" href="<?php echo $general['lienffessm']; ?>" target="_blank" aria-label="FFESSM">
+                <img src="<?php echo base_url('uploads/'.$general['logoffessm']); ?>" alt="FFESSM">
             </a>
         </div>
 
-        <p>&copy; <?= date('Y'); ?> <?= esc($general['nomClub']); ?>. Tous droits réservés.</p>
-        <p class="admin-link"><?= anchor('/mentions-legales', 'Mentions légales'); ?></p>
-        <p class="admin-link"><?= anchor('/politique-confidentialite', 'Confidentialité'); ?></p>
-        <!--<p class="admin-link"><?= anchor('/login', '(administration)'); ?></p>-->
+        <p>&copy; <?php echo date('Y'); ?> <?php echo esc($general['nomClub']); ?>. Tous droits réservés.</p>
+        <p class="admin-link"><?php echo anchor('/mentions-legales', 'Mentions légales'); ?></p>
+        <p class="admin-link"><?php echo anchor('/politique-confidentialite', 'Confidentialité'); ?></p>
+        <!--<p class="admin-link"><?php echo anchor('/login', '(administration)'); ?></p>-->
     </footer>
 
     <script>

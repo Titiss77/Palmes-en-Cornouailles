@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
 class MaterielSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         // Table PRET (pas d'image)
         $pret = [
-            ['nom' => "À acheter via le club"],
+            ['nom' => 'À acheter via le club'],
             ['nom' => 'À acheter en magasin'],
         ];
         $this->db->table('pret')->insertBatch($pret);
-        
+
         // Table MATERIEL (avec image)
         $materiel = [
             [
@@ -74,10 +76,15 @@ class MaterielSeeder extends Seeder
 
     private function getImageId($path)
     {
-        if (empty($path)) return null;
+        if (empty($path)) {
+            return null;
+        }
         $existing = $this->db->table('images')->where('path', $path)->get()->getRow();
-        if ($existing) return $existing->id;
+        if ($existing) {
+            return $existing->id;
+        }
         $this->db->table('images')->insert(['path' => $path, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+
         return $this->db->insertID();
     }
 }

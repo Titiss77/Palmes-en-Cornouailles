@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\admin;
 
 use CodeIgniter\Model;
@@ -14,7 +16,9 @@ class MaterielModel extends Model
     protected $allowedFields = ['nom', 'description', 'idPret', 'image_id'];
 
     /**
-     * Récupère le matériel avec l'image et le type de prêt associé
+     * Récupère le matériel avec l'image et le type de prêt associé.
+     *
+     * @param null|mixed $id
      */
     public function getMaterielWithRelations($id = null)
     {
@@ -22,7 +26,8 @@ class MaterielModel extends Model
         $builder = $this
             ->select('materiel.*, images.path as image_path, images.alt, pret.nom as pret_nom')
             ->join('images', 'materiel.image_id = images.id', 'left')
-            ->join('pret', 'materiel.idPret = pret.id', 'left');
+            ->join('pret', 'materiel.idPret = pret.id', 'left')
+        ;
 
         if ($id) {
             return $builder->where('materiel.id', $id)->first();
@@ -32,7 +37,7 @@ class MaterielModel extends Model
     }
 
     /**
-     * Récupère la liste des status/types de prêt pour le menu déroulant
+     * Récupère la liste des status/types de prêt pour le menu déroulant.
      */
     public function getTypesPret()
     {

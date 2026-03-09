@@ -28,12 +28,11 @@ declare(strict_types=1);
 namespace Kint\Value\Representation;
 
 use Kint\Utils;
-use RuntimeException;
 use SplFileInfo;
 
 class SplFileInfoRepresentation extends StringRepresentation
 {
-    public function __construct(SplFileInfo $fileInfo)
+    public function __construct(\SplFileInfo $fileInfo)
     {
         $path = $fileInfo->getPathname();
 
@@ -68,8 +67,8 @@ class SplFileInfoRepresentation extends StringRepresentation
                 $lt = $fileInfo->getLinkTarget();
                 $linktarget = false === $lt ? null : $lt;
             }
-        } catch (RuntimeException $e) {
-            if (false === \strpos($e->getMessage(), ' open_basedir ')) {
+        } catch (\RuntimeException $e) {
+            if (!\str_contains($e->getMessage(), ' open_basedir ')) {
                 throw $e; // @codeCoverageIgnore
             }
         }
@@ -80,19 +79,27 @@ class SplFileInfoRepresentation extends StringRepresentation
             case 0xC000:
                 $typename = 'Socket';
                 $typeflag = 's';
+
                 break;
+
             case 0x6000:
                 $typename = 'Block device';
                 $typeflag = 'b';
+
                 break;
+
             case 0x2000:
                 $typename = 'Character device';
                 $typeflag = 'c';
+
                 break;
+
             case 0x1000:
                 $typename = 'Named pipe';
                 $typeflag = 'p';
+
                 break;
+
             default:
                 if ($is_file) {
                     if ($is_link) {
@@ -111,39 +118,40 @@ class SplFileInfoRepresentation extends StringRepresentation
                         $typeflag = 'd';
                     }
                 }
+
                 break;
         }
 
         $flags = [$typeflag];
 
         // User
-        $flags[] = (($perms & 0400) ? 'r' : '-');
-        $flags[] = (($perms & 0200) ? 'w' : '-');
-        if ($perms & 0100) {
-            $flags[] = ($perms & 04000) ? 's' : 'x';
+        $flags[] = (($perms & 0o400) ? 'r' : '-');
+        $flags[] = (($perms & 0o200) ? 'w' : '-');
+        if ($perms & 0o100) {
+            $flags[] = ($perms & 0o4000) ? 's' : 'x';
         } else {
-            $flags[] = ($perms & 04000) ? 'S' : '-';
+            $flags[] = ($perms & 0o4000) ? 'S' : '-';
         }
 
         // Group
-        $flags[] = (($perms & 0040) ? 'r' : '-');
-        $flags[] = (($perms & 0020) ? 'w' : '-');
-        if ($perms & 0010) {
-            $flags[] = ($perms & 02000) ? 's' : 'x';
+        $flags[] = (($perms & 0o040) ? 'r' : '-');
+        $flags[] = (($perms & 0o020) ? 'w' : '-');
+        if ($perms & 0o010) {
+            $flags[] = ($perms & 0o2000) ? 's' : 'x';
         } else {
-            $flags[] = ($perms & 02000) ? 'S' : '-';
+            $flags[] = ($perms & 0o2000) ? 'S' : '-';
         }
 
         // Other
-        $flags[] = (($perms & 0004) ? 'r' : '-');
-        $flags[] = (($perms & 0002) ? 'w' : '-');
-        if ($perms & 0001) {
-            $flags[] = ($perms & 01000) ? 's' : 'x';
+        $flags[] = (($perms & 0o004) ? 'r' : '-');
+        $flags[] = (($perms & 0o002) ? 'w' : '-');
+        if ($perms & 0o001) {
+            $flags[] = ($perms & 0o1000) ? 's' : 'x';
         } else {
-            $flags[] = ($perms & 01000) ? 'S' : '-';
+            $flags[] = ($perms & 0o1000) ? 'S' : '-';
         }
 
-        $contents = \implode($flags).' '.$owner.' '.$group.' '.$size.' ';
+        $contents = \implode('', $flags).' '.$owner.' '.$group.' '.$size.' ';
 
         if (null !== $mtime) {
             if (\date('Y', $mtime) === \date('Y')) {

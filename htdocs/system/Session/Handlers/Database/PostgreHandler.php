@@ -15,27 +15,41 @@ namespace CodeIgniter\Session\Handlers\Database;
 
 use CodeIgniter\Database\BaseBuilder;
 use CodeIgniter\Session\Handlers\DatabaseHandler;
-use ReturnTypeWillChange;
 
 /**
- * Session handler for Postgre
+ * Session handler for Postgre.
  *
- * @see \CodeIgniter\Session\Handlers\Database\PostgreHandlerTest
+ * @see PostgreHandlerTest
  */
 class PostgreHandler extends DatabaseHandler
 {
     /**
-     * Sets SELECT clause
+     * Cleans up expired sessions.
      *
-     * @return void
+     * @param int $max_lifetime sessions that have not updated
+     *                          for the last max_lifetime seconds will be removed
+     *
+     * @return false|int returns the number of deleted sessions on success, or false on failure
      */
-    protected function setSelect(BaseBuilder $builder)
+    #[\ReturnTypeWillChange]
+    public function gc($max_lifetime)
+    {
+        $separator = '\'';
+        $interval = implode($separator, ['', "{$max_lifetime} second", '']);
+
+        return $this->db->table($this->table)->where('timestamp <', "now() - INTERVAL {$interval}", false)->delete() ? 1 : $this->fail();
+    }
+
+    /**
+     * Sets SELECT clause.
+     */
+    protected function setSelect(BaseBuilder $builder): void
     {
         $builder->select("encode(data, 'base64') AS data");
     }
 
     /**
-     * Decodes column data
+     * Decodes column data.
      *
      * @param string $data
      *
@@ -47,28 +61,11 @@ class PostgreHandler extends DatabaseHandler
     }
 
     /**
-     * Prepare data to insert/update
+     * Prepare data to insert/update.
      */
     protected function prepareData(string $data): string
     {
-        return '\x' . bin2hex($data);
-    }
-
-    /**
-     * Cleans up expired sessions.
-     *
-     * @param int $max_lifetime Sessions that have not updated
-     *                          for the last max_lifetime seconds will be removed.
-     *
-     * @return false|int Returns the number of deleted sessions on success, or false on failure.
-     */
-    #[ReturnTypeWillChange]
-    public function gc($max_lifetime)
-    {
-        $separator = '\'';
-        $interval  = implode($separator, ['', "{$max_lifetime} second", '']);
-
-        return $this->db->table($this->table)->where('timestamp <', "now() - INTERVAL {$interval}", false)->delete() ? 1 : $this->fail();
+        return '\x'.bin2hex($data);
     }
 
     /**
@@ -76,8 +73,8 @@ class PostgreHandler extends DatabaseHandler
      */
     protected function lockSession(string $sessionID): bool
     {
-        $arg = "hashtext('{$sessionID}')" . ($this->matchIP ? ", hashtext('{$this->ipAddress}')" : '');
-        if ($this->db->simpleQuery("SELECT pg_advisory_lock({$arg})") !== false) {
+        $arg = "hashtext('{$sessionID}')".($this->matchIP ? ", hashtext('{$this->ipAddress}')" : '');
+        if (false !== $this->db->simpleQuery("SELECT pg_advisory_lock({$arg})")) {
             $this->lock = $arg;
 
             return true;
@@ -91,11 +88,11 @@ class PostgreHandler extends DatabaseHandler
      */
     protected function releaseLock(): bool
     {
-        if (! $this->lock) {
+        if (!$this->lock) {
             return true;
         }
 
-        if ($this->db->simpleQuery("SELECT pg_advisory_unlock({$this->lock})") !== false) {
+        if (false !== $this->db->simpleQuery("SELECT pg_advisory_unlock({$this->lock})")) {
             $this->lock = false;
 
             return true;

@@ -15,22 +15,22 @@ use CodeIgniter\I18n\Time;
 
 // CodeIgniter Date Helpers
 
-if (! function_exists('now')) {
+if (!function_exists('now')) {
     /**
-     * Get "now" time
+     * Get "now" time.
      *
      * Returns Time::now()->getTimestamp() based on the timezone parameter or on the
      * app_timezone() setting
      *
-     * @param non-empty-string|null $timezone
+     * @param null|non-empty-string $timezone
      *
      * @throws Exception
      */
     function now(?string $timezone = null): int
     {
-        $timezone = ($timezone === null || $timezone === '') ? app_timezone() : $timezone;
+        $timezone = (null === $timezone || '' === $timezone) ? app_timezone() : $timezone;
 
-        if ($timezone === 'local' || $timezone === date_default_timezone_get()) {
+        if ('local' === $timezone || $timezone === date_default_timezone_get()) {
             return Time::now()->getTimestamp();
         }
 
@@ -50,9 +50,9 @@ if (! function_exists('now')) {
     }
 }
 
-if (! function_exists('timezone_select')) {
+if (!function_exists('timezone_select')) {
     /**
-     * Generates a select field of all available timezones
+     * Generates a select field of all available timezones.
      *
      * Returns a string with the formatted HTML
      *
@@ -74,6 +74,6 @@ if (! function_exists('timezone_select')) {
             $buffer .= "<option value='{$timezone}' {$selected}>{$timezone}</option>\n";
         }
 
-        return $buffer . ("</select>\n");
+        return $buffer."</select>\n";
     }
 }

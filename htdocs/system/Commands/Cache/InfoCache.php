@@ -32,43 +32,43 @@ class InfoCache extends BaseCommand
     protected $group = 'Cache';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'cache:info';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Shows file cache information in the current system.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'cache:info';
 
     /**
-     * Clears the cache
+     * Clears the cache.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $config = config(Cache::class);
         helper('number');
 
-        if ($config->handler !== 'file') {
+        if ('file' !== $config->handler) {
             CLI::error('This command only supports the file cache handler.');
 
             return;
         }
 
-        $cache  = CacheFactory::getHandler($config);
+        $cache = CacheFactory::getHandler($config);
         $caches = $cache->getCacheInfo();
-        $tbody  = [];
+        $tbody = [];
 
         foreach ($caches as $key => $field) {
             $tbody[] = [

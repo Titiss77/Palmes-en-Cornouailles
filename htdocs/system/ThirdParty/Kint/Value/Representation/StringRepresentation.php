@@ -27,8 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value\Representation;
 
-use InvalidArgumentException;
-
 class StringRepresentation extends AbstractRepresentation
 {
     /**
@@ -42,7 +40,7 @@ class StringRepresentation extends AbstractRepresentation
     public function __construct(string $label, string $value, ?string $name = null, bool $implicit = false)
     {
         if ('' === $value) {
-            throw new InvalidArgumentException("StringRepresentation can't take empty string");
+            throw new \InvalidArgumentException("StringRepresentation can't take empty string");
         }
 
         parent::__construct($label, $name, $implicit);

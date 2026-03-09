@@ -38,18 +38,8 @@ class MockCURLRequest extends CURLRequest
         return $this;
     }
 
-    protected function sendRequest(array $curlOptions = []): string
-    {
-        $this->response = clone $this->responseOrig;
-
-        // Save so we can access later.
-        $this->curl_options = $curlOptions;
-
-        return $this->output;
-    }
-
     /**
-     * for testing purposes only
+     * for testing purposes only.
      *
      * @return URI
      */
@@ -59,12 +49,22 @@ class MockCURLRequest extends CURLRequest
     }
 
     /**
-     * for testing purposes only
+     * for testing purposes only.
      *
      * @return float
      */
     public function getDelay()
     {
         return $this->delay;
+    }
+
+    protected function sendRequest(array $curlOptions = []): string
+    {
+        $this->response = clone $this->responseOrig;
+
+        // Save so we can access later.
+        $this->curl_options = $curlOptions;
+
+        return $this->output;
     }
 }

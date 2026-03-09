@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Modules;
 
 /**
- * Modules Class
+ * Modules Class.
  *
  * @see https://codeigniter.com/user_guide/general/modules.html
  *
@@ -23,21 +23,21 @@ namespace CodeIgniter\Modules;
 class Modules
 {
     /**
-     * Auto-Discover
+     * Auto-Discover.
      *
      * @var bool
      */
     public $enabled = true;
 
     /**
-     * Auto-Discovery Within Composer Packages
+     * Auto-Discovery Within Composer Packages.
      *
      * @var bool
      */
     public $discoverInComposer = true;
 
     /**
-     * Auto-Discover Rules Handler
+     * Auto-Discover Rules Handler.
      *
      * @var list<string>
      */
@@ -46,18 +46,6 @@ class Modules
     public function __construct()
     {
         // For @phpstan-consistent-constructor
-    }
-
-    /**
-     * Should the application auto-discover the requested resource.
-     */
-    public function shouldDiscover(string $alias): bool
-    {
-        if (! $this->enabled) {
-            return false;
-        }
-
-        return in_array(strtolower($alias), $this->aliases, true);
     }
 
     public static function __set_state(array $array)
@@ -71,5 +59,17 @@ class Modules
         }
 
         return $obj;
+    }
+
+    /**
+     * Should the application auto-discover the requested resource.
+     */
+    public function shouldDiscover(string $alias): bool
+    {
+        if (!$this->enabled) {
+            return false;
+        }
+
+        return in_array(strtolower($alias), $this->aliases, true);
     }
 }

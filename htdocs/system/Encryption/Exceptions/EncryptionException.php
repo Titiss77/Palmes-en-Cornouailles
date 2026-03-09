@@ -17,7 +17,7 @@ use CodeIgniter\Exceptions\DebugTraceableTrait;
 use CodeIgniter\Exceptions\RuntimeException;
 
 /**
- * Encryption exception
+ * Encryption exception.
  */
 class EncryptionException extends RuntimeException
 {

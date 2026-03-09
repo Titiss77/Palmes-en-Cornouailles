@@ -37,8 +37,10 @@ class InstanceValue extends AbstractValue
      * @psalm-var class-string
      */
     protected string $classname;
+
     /** @psalm-readonly */
     protected string $spl_object_hash;
+
     /** @psalm-readonly */
     protected int $spl_object_id;
 

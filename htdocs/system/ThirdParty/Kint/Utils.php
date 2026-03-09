@@ -29,9 +29,7 @@ namespace Kint;
 
 use Kint\Value\StringValue;
 use Kint\Value\TraceFrameValue;
-use ReflectionNamedType;
 use ReflectionType;
-use UnexpectedValueException;
 
 /**
  * A collection of utility methods. Should all be static methods with no dependencies.
@@ -129,9 +127,7 @@ final class Utils
      *
      * @psalm-suppress UnusedConstructor
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Turns a byte value into a human-readable representation.
@@ -163,7 +159,7 @@ final class Utils
         }
 
         if ($i) {
-            $value = $value / \pow(1024, $i);
+            $value = $value / 1024 ** $i;
         }
 
         if ($negative) {
@@ -256,6 +252,7 @@ final class Utils
                     ];
                 } else {
                     unset($aliases[$index]);
+
                     continue;
                 }
             } elseif (\is_string($alias)) {
@@ -264,6 +261,7 @@ final class Utils
                     $aliases[$index] = \end($alias);
                 } else {
                     unset($aliases[$index]);
+
                     continue;
                 }
             } else {
@@ -277,7 +275,7 @@ final class Utils
     /** @psalm-pure */
     public static function isValidPhpName(string $name): bool
     {
-        return (bool) \preg_match('/^[a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*$/', $name);
+        return (bool) \preg_match('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $name);
     }
 
     /** @psalm-pure */
@@ -317,18 +315,18 @@ final class Utils
     }
 
     /** @psalm-pure */
-    public static function getTypeString(ReflectionType $type): string
+    public static function getTypeString(\ReflectionType $type): string
     {
         // @codeCoverageIgnoreStart
         // ReflectionType::__toString was deprecated in 7.4 and undeprecated in 8
         // and toString doesn't correctly show the nullable ? in the type before 8
         if (!KINT_PHP80) {
-            if (!$type instanceof ReflectionNamedType) {
-                throw new UnexpectedValueException('ReflectionType on PHP 7 must be ReflectionNamedType');
+            if (!$type instanceof \ReflectionNamedType) {
+                throw new \UnexpectedValueException('ReflectionType on PHP 7 must be ReflectionNamedType');
             }
 
             $name = $type->getName();
-            if ($type->allowsNull() && 'mixed' !== $name && false === \strpos($name, '|')) {
+            if ($type->allowsNull() && 'mixed' !== $name && !\str_contains($name, '|')) {
                 $name = '?'.$name;
             }
 
@@ -340,6 +338,8 @@ final class Utils
     }
 
     /**
+     * @param mixed $encoding
+     *
      * @psalm-param Encoding $encoding
      */
     public static function truncateString(string $input, int $length = PHP_INT_MAX, string $end = '...', $encoding = false): string
@@ -373,7 +373,7 @@ final class Utils
         // Pretty much every character encoding uses first 32 bytes as control
         // characters. If it's not a multi-byte format it's safe to say matching
         // any control character besides tab, nl, and cr means it's binary.
-        if (\preg_match('/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]/', $string)) {
+        if (\preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', $string)) {
             return false;
         }
 
@@ -398,6 +398,8 @@ final class Utils
     }
 
     /**
+     * @param mixed $encoding
+     *
      * @psalm-param Encoding $encoding
      */
     public static function strlen(string $string, $encoding = false): int
@@ -416,6 +418,8 @@ final class Utils
     }
 
     /**
+     * @param mixed $encoding
+     *
      * @psalm-param Encoding $encoding
      */
     public static function substr(string $string, int $start, ?int $length = null, $encoding = false): string
@@ -499,7 +503,7 @@ final class Utils
 
     public static function composerGetExtras(string $key = 'kint'): array
     {
-        if (0 === \strpos(KINT_DIR, 'phar://')) {
+        if (\str_starts_with(KINT_DIR, 'phar://')) {
             // Only run inside phar file, so skip for code coverage
             return []; // @codeCoverageIgnore
         }

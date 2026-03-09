@@ -16,12 +16,12 @@ namespace CodeIgniter\Debug;
 use CodeIgniter\Exceptions\RuntimeException;
 
 /**
- * Class Timer
+ * Class Timer.
  *
  * Provides a simple way to measure the amount of time
  * that elapses between two points.
  *
- * @see \CodeIgniter\Debug\TimerTest
+ * @see TimerTest
  */
 class Timer
 {
@@ -38,16 +38,16 @@ class Timer
      * Multiple calls can be made to this method so that several
      * execution points can be measured.
      *
-     * @param string     $name The name of this timer.
-     * @param float|null $time Allows user to provide time.
+     * @param string     $name the name of this timer
+     * @param null|float $time allows user to provide time
      *
      * @return Timer
      */
     public function start(string $name, ?float $time = null)
     {
         $this->timers[strtolower($name)] = [
-            'start' => ! empty($time) ? $time : microtime(true),
-            'end'   => null,
+            'start' => !empty($time) ? $time : microtime(true),
+            'end' => null,
         ];
 
         return $this;
@@ -59,7 +59,7 @@ class Timer
      * If the timer is not stopped before the timers() method is called,
      * it will be automatically stopped at that point.
      *
-     * @param string $name The name of this timer.
+     * @param string $name the name of this timer
      *
      * @return Timer
      */
@@ -79,10 +79,10 @@ class Timer
     /**
      * Returns the duration of a recorded timer.
      *
-     * @param string $name     The name of the timer.
-     * @param int    $decimals Number of decimal places.
+     * @param string $name     the name of the timer
+     * @param int    $decimals number of decimal places
      *
-     * @return float|null Returns null if timer does not exist by that name.
+     * @return null|float Returns null if timer does not exist by that name.
      *                    Returns a float representing the number of
      *                    seconds elapsed while that timer was running.
      */

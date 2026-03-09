@@ -14,38 +14,37 @@ declare(strict_types=1);
 namespace CodeIgniter\HTTP;
 
 use Config\UserAgents;
-use Stringable;
 
 /**
- * Abstraction for an HTTP user agent
+ * Abstraction for an HTTP user agent.
  *
- * @see \CodeIgniter\HTTP\UserAgentTest
+ * @see UserAgentTest
  */
-class UserAgent implements Stringable
+class UserAgent implements \Stringable
 {
     /**
-     * Current user-agent
+     * Current user-agent.
      *
      * @var string
      */
     protected $agent = '';
 
     /**
-     * Flag for if the user-agent belongs to a browser
+     * Flag for if the user-agent belongs to a browser.
      *
      * @var bool
      */
     protected $isBrowser = false;
 
     /**
-     * Flag for if the user-agent is a robot
+     * Flag for if the user-agent is a robot.
      *
      * @var bool
      */
     protected $isRobot = false;
 
     /**
-     * Flag for if the user-agent is a mobile browser
+     * Flag for if the user-agent is a mobile browser.
      *
      * @var bool
      */
@@ -59,49 +58,49 @@ class UserAgent implements Stringable
     protected $config;
 
     /**
-     * Current user-agent platform
+     * Current user-agent platform.
      *
      * @var string
      */
     protected $platform = '';
 
     /**
-     * Current user-agent browser
+     * Current user-agent browser.
      *
      * @var string
      */
     protected $browser = '';
 
     /**
-     * Current user-agent version
+     * Current user-agent version.
      *
      * @var string
      */
     protected $version = '';
 
     /**
-     * Current user-agent mobile name
+     * Current user-agent mobile name.
      *
      * @var string
      */
     protected $mobile = '';
 
     /**
-     * Current user-agent robot name
+     * Current user-agent robot name.
      *
      * @var string
      */
     protected $robot = '';
 
     /**
-     * HTTP Referer
+     * HTTP Referer.
      *
-     * @var bool|string|null
+     * @var null|bool|string
      */
     protected $referrer;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Sets the User Agent and runs the compilation routine
      */
@@ -116,16 +115,24 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Is Browser
+     * Outputs the original Agent String when cast as a string.
+     */
+    public function __toString(): string
+    {
+        return $this->getAgentString();
+    }
+
+    /**
+     * Is Browser.
      */
     public function isBrowser(?string $key = null): bool
     {
-        if (! $this->isBrowser) {
+        if (!$this->isBrowser) {
             return false;
         }
 
         // No need to be specific, it's a browser
-        if ((string) $key === '') {
+        if ('' === (string) $key) {
             return true;
         }
 
@@ -134,16 +141,16 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Is Robot
+     * Is Robot.
      */
     public function isRobot(?string $key = null): bool
     {
-        if (! $this->isRobot) {
+        if (!$this->isRobot) {
             return false;
         }
 
         // No need to be specific, it's a robot
-        if ((string) $key === '') {
+        if ('' === (string) $key) {
             return true;
         }
 
@@ -152,16 +159,16 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Is Mobile
+     * Is Mobile.
      */
     public function isMobile(?string $key = null): bool
     {
-        if (! $this->isMobile) {
+        if (!$this->isMobile) {
             return false;
         }
 
         // No need to be specific, it's a mobile
-        if ((string) $key === '') {
+        if ('' === (string) $key) {
             return true;
         }
 
@@ -174,12 +181,12 @@ class UserAgent implements Stringable
      */
     public function isReferral(): bool
     {
-        if (! isset($this->referrer)) {
+        if (!isset($this->referrer)) {
             if (empty($_SERVER['HTTP_REFERER'])) {
                 $this->referrer = false;
             } else {
                 $refererHost = @parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
-                $ownHost     = parse_url(\base_url(), PHP_URL_HOST);
+                $ownHost = parse_url(\base_url(), PHP_URL_HOST);
 
                 $this->referrer = ($refererHost && $refererHost !== $ownHost);
             }
@@ -189,7 +196,7 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Agent String
+     * Agent String.
      */
     public function getAgentString(): string
     {
@@ -197,7 +204,7 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Get Platform
+     * Get Platform.
      */
     public function getPlatform(): string
     {
@@ -205,7 +212,7 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Get Browser Name
+     * Get Browser Name.
      */
     public function getBrowser(): string
     {
@@ -213,7 +220,7 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Get the Browser Version
+     * Get the Browser Version.
      */
     public function getVersion(): string
     {
@@ -221,7 +228,7 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Get The Robot Name
+     * Get The Robot Name.
      */
     public function getRobot(): string
     {
@@ -229,7 +236,7 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Get the Mobile Device
+     * Get the Mobile Device.
      */
     public function getMobile(): string
     {
@@ -237,7 +244,7 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Get the referrer
+     * Get the referrer.
      */
     public function getReferrer(): string
     {
@@ -245,35 +252,31 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Parse a custom user-agent string
-     *
-     * @return void
+     * Parse a custom user-agent string.
      */
-    public function parse(string $string)
+    public function parse(string $string): void
     {
         // Reset values
         $this->isBrowser = false;
-        $this->isRobot   = false;
-        $this->isMobile  = false;
-        $this->browser   = '';
-        $this->version   = '';
-        $this->mobile    = '';
-        $this->robot     = '';
+        $this->isRobot = false;
+        $this->isMobile = false;
+        $this->browser = '';
+        $this->version = '';
+        $this->mobile = '';
+        $this->robot = '';
 
         // Set the new user-agent string and parse it, unless empty
         $this->agent = $string;
 
-        if ($string !== '') {
+        if ('' !== $string) {
             $this->compileData();
         }
     }
 
     /**
-     * Compile the User Agent Data
-     *
-     * @return void
+     * Compile the User Agent Data.
      */
-    protected function compileData()
+    protected function compileData(): void
     {
         $this->setPlatform();
 
@@ -285,13 +288,13 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Set the Platform
+     * Set the Platform.
      */
     protected function setPlatform(): bool
     {
-        if (is_array($this->config->platforms) && $this->config->platforms !== []) {
+        if (is_array($this->config->platforms) && [] !== $this->config->platforms) {
             foreach ($this->config->platforms as $key => $val) {
-                if (preg_match('|' . preg_quote($key, '|') . '|i', $this->agent)) {
+                if (preg_match('|'.preg_quote($key, '|').'|i', $this->agent)) {
                     $this->platform = $val;
 
                     return true;
@@ -305,16 +308,16 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Set the Browser
+     * Set the Browser.
      */
     protected function setBrowser(): bool
     {
-        if (is_array($this->config->browsers) && $this->config->browsers !== []) {
+        if (is_array($this->config->browsers) && [] !== $this->config->browsers) {
             foreach ($this->config->browsers as $key => $val) {
-                if (preg_match('|' . $key . '.*?([0-9\.]+)|i', $this->agent, $match)) {
+                if (preg_match('|'.$key.'.*?([0-9\.]+)|i', $this->agent, $match)) {
                     $this->isBrowser = true;
-                    $this->version   = $match[1];
-                    $this->browser   = $val;
+                    $this->version = $match[1];
+                    $this->browser = $val;
                     $this->setMobile();
 
                     return true;
@@ -326,15 +329,15 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Set the Robot
+     * Set the Robot.
      */
     protected function setRobot(): bool
     {
-        if (is_array($this->config->robots) && $this->config->robots !== []) {
+        if (is_array($this->config->robots) && [] !== $this->config->robots) {
             foreach ($this->config->robots as $key => $val) {
-                if (preg_match('|' . preg_quote($key, '|') . '|i', $this->agent)) {
+                if (preg_match('|'.preg_quote($key, '|').'|i', $this->agent)) {
                     $this->isRobot = true;
-                    $this->robot   = $val;
+                    $this->robot = $val;
                     $this->setMobile();
 
                     return true;
@@ -346,15 +349,15 @@ class UserAgent implements Stringable
     }
 
     /**
-     * Set the Mobile Device
+     * Set the Mobile Device.
      */
     protected function setMobile(): bool
     {
-        if (is_array($this->config->mobiles) && $this->config->mobiles !== []) {
+        if (is_array($this->config->mobiles) && [] !== $this->config->mobiles) {
             foreach ($this->config->mobiles as $key => $val) {
-                if (false !== (stripos($this->agent, $key))) {
+                if (false !== stripos($this->agent, $key)) {
                     $this->isMobile = true;
-                    $this->mobile   = $val;
+                    $this->mobile = $val;
 
                     return true;
                 }
@@ -362,13 +365,5 @@ class UserAgent implements Stringable
         }
 
         return false;
-    }
-
-    /**
-     * Outputs the original Agent String when cast as a string.
-     */
-    public function __toString(): string
-    {
-        return $this->getAgentString();
     }
 }

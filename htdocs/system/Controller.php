@@ -25,9 +25,9 @@ use Config\Validation;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Controller
+ * Class Controller.
  *
- * @see \CodeIgniter\ControllerTest
+ * @see ControllerTest
  */
 class Controller
 {
@@ -69,22 +69,20 @@ class Controller
     /**
      * Once validation has been run, will hold the Validation instance.
      *
-     * @var ValidationInterface|null
+     * @var null|ValidationInterface
      */
     protected $validator;
 
     /**
      * Constructor.
      *
-     * @return void
-     *
      * @throws HTTPException|RedirectException
      */
-    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger): void
     {
-        $this->request  = $request;
+        $this->request = $request;
         $this->response = $response;
-        $this->logger   = $logger;
+        $this->logger = $logger;
 
         if ($this->forceHTTPS > 0) {
             $this->forceHTTPS($this->forceHTTPS);
@@ -104,11 +102,9 @@ class Controller
      *                      considered secure for. Only with HSTS header.
      *                      Default value is 1 year.
      *
-     * @return void
-     *
      * @throws HTTPException|RedirectException
      */
-    protected function forceHTTPS(int $duration = 31_536_000)
+    protected function forceHTTPS(int $duration = 31_536_000): void
     {
         force_https($duration, $this->request, $this->response);
     }
@@ -117,10 +113,8 @@ class Controller
      * How long to cache the current page for.
      *
      * @params int $time time to live in seconds.
-     *
-     * @return void
      */
-    protected function cachePage(int $time)
+    protected function cachePage(int $time): void
     {
         service('responsecache')->setTtl($time);
     }
@@ -144,7 +138,7 @@ class Controller
      * @param array        $data     The data to validate
      * @param array|string $rules
      * @param array        $messages An array of custom error messages
-     * @param string|null  $dbGroup  The database group to use
+     * @param null|string  $dbGroup  The database group to use
      */
     protected function validateData(array $data, $rules, array $messages = [], ?string $dbGroup = null): bool
     {
@@ -166,14 +160,14 @@ class Controller
 
             // If the rule wasn't found in the \Config\Validation, we
             // should throw an exception so the developer can find it.
-            if (! isset($validation->{$rules})) {
+            if (!isset($validation->{$rules})) {
                 throw ValidationException::forRuleNotFound($rules);
             }
 
             // If no error message is defined, use the error message in the Config\Validation file
-            if ($messages === []) {
-                $errorName = $rules . '_errors';
-                $messages  = $validation->{$errorName} ?? [];
+            if ([] === $messages) {
+                $errorName = $rules.'_errors';
+                $messages = $validation->{$errorName} ?? [];
             }
 
             $rules = $validation->{$rules};

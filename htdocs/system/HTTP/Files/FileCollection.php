@@ -13,15 +13,14 @@ declare(strict_types=1);
 
 namespace CodeIgniter\HTTP\Files;
 
-use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 
 /**
- * Class FileCollection
+ * Class FileCollection.
  *
  * Provides easy access to uploaded files for a request.
  *
- * @see \CodeIgniter\HTTP\Files\FileCollectionTest
+ * @see FileCollectionTest
  */
 class FileCollection
 {
@@ -31,7 +30,7 @@ class FileCollection
      * Populated the first time either files(), file(), or hasFile()
      * is called.
      *
-     * @var array|null
+     * @var null|array
      */
     protected $files;
 
@@ -40,7 +39,7 @@ class FileCollection
      * Each element in the array will be an instance of UploadedFile.
      * The key of each element will be the client filename.
      *
-     * @return array|null
+     * @return null|array
      */
     public function all()
     {
@@ -52,7 +51,7 @@ class FileCollection
     /**
      * Attempts to get a single file from the collection of uploaded files.
      *
-     * @return UploadedFile|null
+     * @return null|UploadedFile
      */
     public function getFile(string $name)
     {
@@ -60,7 +59,7 @@ class FileCollection
 
         if ($this->hasFile($name)) {
             if (str_contains($name, '.')) {
-                $name         = explode('.', $name);
+                $name = explode('.', $name);
                 $uploadedFile = $this->getValueDotNotationSyntax($name, $this->files);
 
                 return $uploadedFile instanceof UploadedFile ? $uploadedFile : null;
@@ -79,7 +78,7 @@ class FileCollection
     /**
      * Verify if a file exist in the collection of uploaded files and is have been uploaded with multiple option.
      *
-     * @return list<UploadedFile>|null
+     * @return null|list<UploadedFile>
      */
     public function getFileMultiple(string $name)
     {
@@ -87,18 +86,18 @@ class FileCollection
 
         if ($this->hasFile($name)) {
             if (str_contains($name, '.')) {
-                $name         = explode('.', $name);
+                $name = explode('.', $name);
                 $uploadedFile = $this->getValueDotNotationSyntax($name, $this->files);
 
-                return (is_array($uploadedFile) && ($uploadedFile[array_key_first($uploadedFile)] instanceof UploadedFile)) ?
-                    $uploadedFile : null;
+                return (is_array($uploadedFile) && ($uploadedFile[array_key_first($uploadedFile)] instanceof UploadedFile))
+                    ? $uploadedFile : null;
             }
 
             if (array_key_exists($name, $this->files)) {
                 $uploadedFile = $this->files[$name];
 
-                return (is_array($uploadedFile) && ($uploadedFile[array_key_first($uploadedFile)] instanceof UploadedFile)) ?
-                    $uploadedFile : null;
+                return (is_array($uploadedFile) && ($uploadedFile[array_key_first($uploadedFile)] instanceof UploadedFile))
+                    ? $uploadedFile : null;
             }
         }
 
@@ -121,7 +120,7 @@ class FileCollection
             $el = $this->files;
 
             foreach ($segments as $segment) {
-                if (! array_key_exists($segment, $el)) {
+                if (!array_key_exists($segment, $el)) {
                     return false;
                 }
 
@@ -139,10 +138,8 @@ class FileCollection
      * of UploadedFile for each one, saving the results to this->files.
      *
      * Called by files(), file(), and hasFile()
-     *
-     * @return void
      */
-    protected function populateFiles()
+    protected function populateFiles(): void
     {
         if (is_array($this->files)) {
             return;
@@ -150,7 +147,7 @@ class FileCollection
 
         $this->files = [];
 
-        if ($_FILES === []) {
+        if ([] === $_FILES) {
             return;
         }
 
@@ -169,11 +166,11 @@ class FileCollection
      */
     protected function createFileObject(array $array)
     {
-        if (! isset($array['name'])) {
+        if (!isset($array['name'])) {
             $output = [];
 
             foreach ($array as $key => $values) {
-                if (! is_array($values)) {
+                if (!is_array($values)) {
                     continue;
                 }
 
@@ -210,16 +207,16 @@ class FileCollection
             foreach ($array as $field => $value) {
                 $pointer = &$output[$name];
 
-                if (! is_array($value)) {
+                if (!is_array($value)) {
                     $pointer[$field] = $value;
 
                     continue;
                 }
 
-                $stack    = [&$pointer];
-                $iterator = new RecursiveIteratorIterator(
-                    new RecursiveArrayIterator($value),
-                    RecursiveIteratorIterator::SELF_FIRST,
+                $stack = [&$pointer];
+                $iterator = new \RecursiveIteratorIterator(
+                    new \RecursiveArrayIterator($value),
+                    \RecursiveIteratorIterator::SELF_FIRST,
                 );
 
                 foreach ($iterator as $key => $val) {
@@ -231,7 +228,7 @@ class FileCollection
                     // RecursiveIteratorIterator::hasChildren() can be used. RecursiveIteratorIterator
                     // forwards all unknown method calls to the underlying RecursiveIterator internally.
                     // See https://github.com/php/doc-en/issues/787#issuecomment-881446121
-                    if (! $iterator->hasChildren()) {
+                    if (!$iterator->hasChildren()) {
                         $pointer[$field] = $val;
                     }
                 }
@@ -242,18 +239,18 @@ class FileCollection
     }
 
     /**
-     * Navigate through an array looking for a particular index
+     * Navigate through an array looking for a particular index.
      *
      * @param array $index The index sequence we are navigating down
      * @param array $value The portion of the array to process
      *
-     * @return list<UploadedFile>|UploadedFile|null
+     * @return null|list<UploadedFile>|UploadedFile
      */
     protected function getValueDotNotationSyntax(array $index, array $value)
     {
         $currentIndex = array_shift($index);
 
-        if (isset($currentIndex) && $index !== [] && array_key_exists($currentIndex, $value) && is_array($value[$currentIndex])) {
+        if (isset($currentIndex) && [] !== $index && array_key_exists($currentIndex, $value) && is_array($value[$currentIndex])) {
             return $this->getValueDotNotationSyntax($index, $value[$currentIndex]);
         }
 

@@ -21,9 +21,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Config\Cache as CacheConfig;
 
 /**
- * Web Page Caching
+ * Web Page Caching.
  *
- * @see \CodeIgniter\Cache\ResponseCacheTest
+ * @see ResponseCacheTest
  */
 final class ResponseCache
 {
@@ -83,7 +83,7 @@ final class ResponseCache
             ? $uri->getQuery(is_array($this->cacheQueryString) ? ['only' => $this->cacheQueryString] : [])
             : '';
 
-        return md5($request->getMethod() . ':' . $uri->setFragment('')->setQuery($query));
+        return md5($request->getMethod().':'.$uri->setFragment('')->setQuery($query));
     }
 
     /**
@@ -93,7 +93,7 @@ final class ResponseCache
      */
     public function make($request, ResponseInterface $response): bool
     {
-        if ($this->ttl === 0) {
+        if (0 === $this->ttl) {
             return true;
         }
 
@@ -127,15 +127,15 @@ final class ResponseCache
             $cachedResponse = unserialize($cachedResponse);
 
             if (
-                ! is_array($cachedResponse)
-                || ! isset($cachedResponse['output'])
-                || ! isset($cachedResponse['headers'])
+                !is_array($cachedResponse)
+                || !isset($cachedResponse['output'])
+                || !isset($cachedResponse['headers'])
             ) {
                 throw new RuntimeException('Error unserializing page cache');
             }
 
             $headers = $cachedResponse['headers'];
-            $output  = $cachedResponse['output'];
+            $output = $cachedResponse['output'];
 
             // Clear all default headers
             foreach (array_keys($response->headers()) as $key) {

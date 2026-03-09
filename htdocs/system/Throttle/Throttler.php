@@ -17,7 +17,7 @@ use CodeIgniter\Cache\CacheInterface;
 use CodeIgniter\I18n\Time;
 
 /**
- * Class Throttler
+ * Class Throttler.
  *
  * Uses an implementation of the Token Bucket algorithm to implement a
  * "rolling window" type of throttling that can be used for rate limiting
@@ -53,7 +53,7 @@ class Throttler implements ThrottlerInterface
     protected $prefix = 'throttler_';
 
     /**
-     * Timestamp to use (during testing)
+     * Timestamp to use (during testing).
      *
      * @var int
      */
@@ -86,32 +86,32 @@ class Throttler implements ThrottlerInterface
      *      die('You submitted over 60 requests within a minute.');
      *  }
      *
-     * @param string $key      The name to use as the "bucket" name.
+     * @param string $key      the name to use as the "bucket" name
      * @param int    $capacity The number of requests the "bucket" can hold
      * @param int    $seconds  The time it takes the "bucket" to completely refill
-     * @param int    $cost     The number of tokens this action uses.
+     * @param int    $cost     the number of tokens this action uses
      *
      * @internal param int $maxRequests
      */
     public function check(string $key, int $capacity, int $seconds, int $cost = 1): bool
     {
-        $tokenName = $this->prefix . $key;
+        $tokenName = $this->prefix.$key;
 
         // Number of tokens to add back per second
         $rate = $capacity / $seconds;
         // Number of seconds to get one token
         $refresh = 1 / $rate;
 
-        /** @var float|int|null $tokens */
+        /** @var null|float|int $tokens */
         $tokens = $this->cache->get($tokenName);
 
         // Check to see if the bucket has even been created yet.
-        if ($tokens === null) {
+        if (null === $tokens) {
             // If it hasn't been created, then we'll set it to the maximum
             // capacity - 1, and save it to the cache.
             $tokens = $capacity - $cost;
             $this->cache->save($tokenName, $tokens, $seconds);
-            $this->cache->save($tokenName . 'Time', $this->time(), $seconds);
+            $this->cache->save($tokenName.'Time', $this->time(), $seconds);
 
             $this->tokenTime = 0;
 
@@ -120,8 +120,8 @@ class Throttler implements ThrottlerInterface
 
         // If $tokens > 0, then we need to replenish the bucket
         // based on how long it's been since the last update.
-        $throttleTime = $this->cache->get($tokenName . 'Time');
-        $elapsed      = $this->time() - $throttleTime;
+        $throttleTime = $this->cache->get($tokenName.'Time');
+        $elapsed = $this->time() - $throttleTime;
 
         // Add tokens based up on number per second that
         // should be refilled, then checked against capacity
@@ -134,7 +134,7 @@ class Throttler implements ThrottlerInterface
         if ($tokens >= 1) {
             $tokens -= $cost;
             $this->cache->save($tokenName, $tokens, $seconds);
-            $this->cache->save($tokenName . 'Time', $this->time(), $seconds);
+            $this->cache->save($tokenName.'Time', $this->time(), $seconds);
 
             $this->tokenTime = 0;
 
@@ -145,7 +145,7 @@ class Throttler implements ThrottlerInterface
         // We must have a minimum wait of 1 second for a new token.
         // Primarily stored to allow devs to report back to users.
         $newTokenAvailable = (int) round((1 - $tokens) * $refresh);
-        $this->tokenTime   = max(1, $newTokenAvailable);
+        $this->tokenTime = max(1, $newTokenAvailable);
 
         return false;
     }
@@ -155,10 +155,10 @@ class Throttler implements ThrottlerInterface
      */
     public function remove(string $key): self
     {
-        $tokenName = $this->prefix . $key;
+        $tokenName = $this->prefix.$key;
 
         $this->cache->delete($tokenName);
-        $this->cache->delete($tokenName . 'Time');
+        $this->cache->delete($tokenName.'Time');
 
         return $this;
     }

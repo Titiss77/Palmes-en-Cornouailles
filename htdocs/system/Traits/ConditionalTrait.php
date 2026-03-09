@@ -16,22 +16,23 @@ namespace CodeIgniter\Traits;
 trait ConditionalTrait
 {
     /**
-     * Only runs the query when $condition evaluates to true
+     * Only runs the query when $condition evaluates to true.
      *
      * @template TWhen of mixed
+     *
+     * @param null|array|bool|float|int|object|resource|string $condition
      *
      * @phpstan-param TWhen                                            $condition
      * @phpstan-param callable(self, TWhen): mixed                     $callback
      * @phpstan-param (callable(self): mixed)|null                     $defaultCallback
-     * @param         array|bool|float|int|object|resource|string|null $condition
      *
      * @return $this
      */
     public function when($condition, callable $callback, ?callable $defaultCallback = null): self
     {
-        if ($condition !== '' && $condition !== false && $condition !== null) {
+        if ('' !== $condition && false !== $condition && null !== $condition) {
             $callback($this, $condition);
-        } elseif ($defaultCallback !== null) {
+        } elseif (null !== $defaultCallback) {
             $defaultCallback($this);
         }
 
@@ -39,22 +40,23 @@ trait ConditionalTrait
     }
 
     /**
-     * Only runs the query when $condition evaluates to false
+     * Only runs the query when $condition evaluates to false.
      *
      * @template TWhenNot of mixed
+     *
+     * @param null|array|bool|float|int|object|resource|string $condition
      *
      * @phpstan-param TWhenNot                                         $condition
      * @phpstan-param callable(self, TWhenNot): mixed                  $callback
      * @phpstan-param (callable(self): mixed)|null                     $defaultCallback
-     * @param         array|bool|float|int|object|resource|string|null $condition
      *
      * @return $this
      */
     public function whenNot($condition, callable $callback, ?callable $defaultCallback = null): self
     {
-        if ($condition === '' || $condition === null || $condition === false || $condition === '0') {
+        if ('' === $condition || null === $condition || false === $condition || '0' === $condition) {
             $callback($this, $condition);
-        } elseif ($defaultCallback !== null) {
+        } elseif (null !== $defaultCallback) {
             $defaultCallback($this);
         }
 

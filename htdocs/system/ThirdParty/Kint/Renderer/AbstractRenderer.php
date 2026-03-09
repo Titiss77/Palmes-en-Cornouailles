@@ -41,9 +41,7 @@ abstract class AbstractRenderer implements ConstructableRendererInterface
 
     protected bool $render_spl_ids = true;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function shouldRenderObjectIds(): bool
     {

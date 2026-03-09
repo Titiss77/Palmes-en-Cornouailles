@@ -25,35 +25,35 @@ class ScaffoldGenerator extends BaseCommand
     use GeneratorTrait;
 
     /**
-     * The Command's Group
+     * The Command's Group.
      *
      * @var string
      */
     protected $group = 'Generators';
 
     /**
-     * The Command's Name
+     * The Command's Name.
      *
      * @var string
      */
     protected $name = 'make:scaffold';
 
     /**
-     * The Command's Description
+     * The Command's Description.
      *
      * @var string
      */
     protected $description = 'Generates a complete set of scaffold files.';
 
     /**
-     * The Command's Usage
+     * The Command's Usage.
      *
      * @var string
      */
     protected $usage = 'make:scaffold <name> [options]';
 
     /**
-     * The Command's Arguments
+     * The Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -62,25 +62,25 @@ class ScaffoldGenerator extends BaseCommand
     ];
 
     /**
-     * The Command's Options
+     * The Command's Options.
      *
      * @var array<string, string>
      */
     protected $options = [
-        '--bare'      => 'Add the "--bare" option to controller component.',
-        '--restful'   => 'Add the "--restful" option to controller component.',
-        '--table'     => 'Add the "--table" option to the model component.',
-        '--dbgroup'   => 'Add the "--dbgroup" option to model component.',
-        '--return'    => 'Add the "--return" option to the model component.',
+        '--bare' => 'Add the "--bare" option to controller component.',
+        '--restful' => 'Add the "--restful" option to controller component.',
+        '--table' => 'Add the "--table" option to the model component.',
+        '--dbgroup' => 'Add the "--dbgroup" option to model component.',
+        '--return' => 'Add the "--return" option to the model component.',
         '--namespace' => 'Set root namespace. Default: "APP_NAMESPACE".',
-        '--suffix'    => 'Append the component title to the class name.',
-        '--force'     => 'Force overwrite existing file.',
+        '--suffix' => 'Append the component title to the class name.',
+        '--force' => 'Force overwrite existing file.',
     ];
 
     /**
      * Actually execute a command.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $this->params = $params;
 
@@ -107,9 +107,9 @@ class ScaffoldGenerator extends BaseCommand
         }
 
         $modelOpts = [
-            'table'   => $this->getOption('table'),
+            'table' => $this->getOption('table'),
             'dbgroup' => $this->getOption('dbgroup'),
-            'return'  => $this->getOption('return'),
+            'return' => $this->getOption('return'),
         ];
 
         $class = $params[0] ?? CLI::getSegment(2);

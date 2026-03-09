@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Parser;
 
-use InvalidArgumentException;
 use Kint\Utils;
 use Kint\Value\AbstractValue;
 use Kint\Value\ArrayValue;
@@ -57,11 +56,11 @@ class ArrayLimitPlugin extends AbstractPlugin implements PluginBeginInterface
     public function __construct(Parser $p)
     {
         if (self::$limit < 0) {
-            throw new InvalidArgumentException('ArrayLimitPlugin::$limit can not be lower than 0');
+            throw new \InvalidArgumentException('ArrayLimitPlugin::$limit can not be lower than 0');
         }
 
         if (self::$limit >= self::$trigger) {
-            throw new InvalidArgumentException('ArrayLimitPlugin::$limit can not be lower than ArrayLimitPlugin::$trigger');
+            throw new \InvalidArgumentException('ArrayLimitPlugin::$limit can not be lower than ArrayLimitPlugin::$trigger');
         }
 
         parent::__construct($p);

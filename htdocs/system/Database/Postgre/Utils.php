@@ -17,19 +17,19 @@ use CodeIgniter\Database\BaseUtils;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
 /**
- * Utils for Postgre
+ * Utils for Postgre.
  */
 class Utils extends BaseUtils
 {
     /**
-     * List databases statement
+     * List databases statement.
      *
      * @var string
      */
     protected $listDatabases = 'SELECT datname FROM pg_database';
 
     /**
-     * OPTIMIZE TABLE statement
+     * OPTIMIZE TABLE statement.
      *
      * @var string
      */

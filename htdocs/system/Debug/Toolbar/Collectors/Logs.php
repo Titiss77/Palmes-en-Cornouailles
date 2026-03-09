@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Debug\Toolbar\Collectors;
 
 /**
- * Loags collector
+ * Loags collector.
  */
 class Logs extends BaseCollector
 {
@@ -50,7 +50,7 @@ class Logs extends BaseCollector
     protected $data;
 
     /**
-     * Returns the data of this collector to be formatted in the toolbar
+     * Returns the data of this collector to be formatted in the toolbar.
      */
     public function display(): array
     {
@@ -86,7 +86,7 @@ class Logs extends BaseCollector
      */
     protected function collectLogs()
     {
-        if (! empty($this->data)) {
+        if (!empty($this->data)) {
             return $this->data;
         }
 

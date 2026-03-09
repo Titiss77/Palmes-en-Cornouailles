@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace CodeIgniter\Test\Mock;
 
 use CodeIgniter\Database\BaseResult;
-use stdClass;
 
 /**
  * @extends BaseResult<object|resource, object|resource>
@@ -47,12 +46,8 @@ class MockResult extends BaseResult
 
     /**
      * Frees the current result.
-     *
-     * @return void
      */
-    public function freeResult()
-    {
-    }
+    public function freeResult(): void {}
 
     /**
      * Moves the internal pointer to the desired offset. This is called
@@ -66,6 +61,14 @@ class MockResult extends BaseResult
     public function dataSeek($n = 0)
     {
         return true;
+    }
+
+    /**
+     * Gets the number of fields in the result set.
+     */
+    public function getNumRows(): int
+    {
+        return 0;
     }
 
     /**
@@ -87,18 +90,10 @@ class MockResult extends BaseResult
      *
      * @param string $className
      *
-     * @return object|stdClass
+     * @return object|\stdClass
      */
     protected function fetchObject($className = 'stdClass')
     {
         return new $className();
-    }
-
-    /**
-     * Gets the number of fields in the result set.
-     */
-    public function getNumRows(): int
-    {
-        return 0;
     }
 }

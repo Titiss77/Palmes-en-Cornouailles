@@ -1,31 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
 class PiscineSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         $data = [
             [
-                'nom'         => 'Kerlan vian',
-                'adresse'     => '47 Av. des Oiseaux, 29000 Quimper, France',
+                'nom' => 'Kerlan vian',
+                'adresse' => '47 Av. des Oiseaux, 29000 Quimper, France',
                 'type_bassin' => '25m',
-                'photo'       => 'piscines/kerlan_vian.jpg'
+                'photo' => 'piscines/kerlan_vian.jpg',
             ],
             [
-                'nom'         => 'Aquarive',
-                'adresse'     => "159 Bd de Créac'h Gwen, 29000 Quimper, France",
+                'nom' => 'Aquarive',
+                'adresse' => "159 Bd de Créac'h Gwen, 29000 Quimper, France",
                 'type_bassin' => '25m',
-                'photo'       => 'piscines/aquarive.png'
+                'photo' => 'piscines/aquarive.png',
             ],
             [
-                'nom'         => 'Aquaform',
-                'adresse'     => "Piscine aqua forme, Av. du Rouillen, 29500 Ergué-Gabéric, France",
+                'nom' => 'Aquaform',
+                'adresse' => 'Piscine aqua forme, Av. du Rouillen, 29500 Ergué-Gabéric, France',
                 'type_bassin' => '25m',
-                'photo'       => 'piscines/aquaform.jpg'
+                'photo' => 'piscines/aquaform.jpg',
             ],
         ];
 
@@ -42,7 +44,9 @@ class PiscineSeeder extends Seeder
 
     private function getImageId($path)
     {
-        if (empty($path)) return null;
+        if (empty($path)) {
+            return null;
+        }
 
         $existing = $this->db->table('images')->where('path', $path)->get()->getRow();
         if ($existing) {
@@ -50,10 +54,11 @@ class PiscineSeeder extends Seeder
         }
 
         $this->db->table('images')->insert([
-            'path'       => $path,
+            'path' => $path,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
+
         return $this->db->insertID();
     }
 }

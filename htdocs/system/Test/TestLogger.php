@@ -14,15 +14,14 @@ declare(strict_types=1);
 namespace CodeIgniter\Test;
 
 use CodeIgniter\Log\Logger;
-use Stringable;
 
 /**
- * @see \CodeIgniter\Test\TestLoggerTest
+ * @see TestLoggerTest
  */
 class TestLogger extends Logger
 {
     /**
-     * @var list<array{level: mixed, message: string, file: string|null}>
+     * @var list<array{level: mixed, message: string, file: null|string}>
      */
     protected static $op_logs = [];
 
@@ -33,7 +32,7 @@ class TestLogger extends Logger
      * @param mixed  $level
      * @param string $message
      */
-    public function log($level, string|Stringable $message, array $context = []): void
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         // While this requires duplicate work, we want to ensure
         // we have the final message to test against.
@@ -42,19 +41,20 @@ class TestLogger extends Logger
         // Determine the file and line by finding the first
         // backtrace that is not part of our logging system.
         $trace = debug_backtrace();
-        $file  = null;
+        $file = null;
 
         foreach ($trace as $row) {
-            if (! in_array($row['function'], ['log', 'log_message'], true)) {
+            if (!in_array($row['function'], ['log', 'log_message'], true)) {
                 $file = basename($row['file'] ?? '');
+
                 break;
             }
         }
 
         self::$op_logs[] = [
-            'level'   => $level,
+            'level' => $level,
             'message' => $logMessage,
-            'file'    => $file,
+            'file' => $file,
         ];
 
         // Let the parent do it's thing.

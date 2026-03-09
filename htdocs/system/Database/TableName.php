@@ -18,7 +18,7 @@ namespace CodeIgniter\Database;
  *
  * @interal
  *
- * @see \CodeIgniter\Database\TableNameTest
+ * @see TableNameTest
  */
 class TableName
 {
@@ -35,8 +35,7 @@ class TableName
         private readonly string $schema = '',
         private readonly string $database = '',
         private readonly string $alias = '',
-    ) {
-    }
+    ) {}
 
     /**
      * Creates a new instance.
@@ -47,7 +46,7 @@ class TableName
     public static function create(string $dbPrefix, string $table, string $alias = ''): self
     {
         return new self(
-            $dbPrefix . $table,
+            $dbPrefix.$table,
             $table,
             '',
             '',
@@ -63,7 +62,7 @@ class TableName
      */
     public static function fromActualName(string $dbPrefix, string $actualTable, string $alias = ''): self
     {
-        $prefix       = $dbPrefix;
+        $prefix = $dbPrefix;
         $logicalTable = '';
 
         if (str_starts_with($actualTable, $prefix)) {
@@ -94,7 +93,7 @@ class TableName
         string $alias = '',
     ): self {
         return new self(
-            $dbPrefix . $table,
+            $dbPrefix.$table,
             $table,
             $schema,
             $database,

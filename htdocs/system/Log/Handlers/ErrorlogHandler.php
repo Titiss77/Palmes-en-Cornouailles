@@ -16,9 +16,9 @@ namespace CodeIgniter\Log\Handlers;
 use CodeIgniter\Log\Exceptions\LogException;
 
 /**
- * Log handler that writes to PHP's `error_log()`
+ * Log handler that writes to PHP's `error_log()`.
  *
- * @see \CodeIgniter\Log\Handlers\ErrorlogHandlerTest
+ * @see ErrorlogHandlerTest
  */
 class ErrorlogHandler extends BaseHandler
 {
@@ -53,7 +53,7 @@ class ErrorlogHandler extends BaseHandler
 
         $messageType = $config['messageType'] ?? self::TYPE_OS;
 
-        if (! is_int($messageType) || ! in_array($messageType, [self::TYPE_OS, self::TYPE_SAPI], true)) {
+        if (!is_int($messageType) || !in_array($messageType, [self::TYPE_OS, self::TYPE_SAPI], true)) {
             throw LogException::forInvalidMessageType(print_r($messageType, true));
         }
 
@@ -71,7 +71,7 @@ class ErrorlogHandler extends BaseHandler
      */
     public function handle($level, $message): bool
     {
-        $message = strtoupper($level) . ' --> ' . $message . "\n";
+        $message = strtoupper($level).' --> '.$message."\n";
 
         return $this->errorLog($message, $this->messageType);
     }

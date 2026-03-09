@@ -24,7 +24,7 @@ final class FactoriesCache
     private $cache;
 
     /**
-     * @param CacheInterface|FileVarExportHandler|null $cache
+     * @param null|CacheInterface|FileVarExportHandler $cache
      */
     public function __construct($cache = null)
     {
@@ -33,7 +33,7 @@ final class FactoriesCache
 
     public function save(string $component): void
     {
-        if (! Factories::isUpdated($component)) {
+        if (!Factories::isUpdated($component)) {
             return;
         }
 
@@ -42,16 +42,11 @@ final class FactoriesCache
         $this->cache->save($this->getCacheKey($component), $data, 3600 * 24);
     }
 
-    private function getCacheKey(string $component): string
-    {
-        return 'FactoriesCache_' . $component;
-    }
-
     public function load(string $component): bool
     {
         $key = $this->getCacheKey($component);
 
-        if (! $data = $this->cache->get($key)) {
+        if (!$data = $this->cache->get($key)) {
             return false;
         }
 
@@ -63,5 +58,10 @@ final class FactoriesCache
     public function delete(string $component): void
     {
         $this->cache->delete($this->getCacheKey($component));
+    }
+
+    private function getCacheKey(string $component): string
+    {
+        return 'FactoriesCache_'.$component;
     }
 }

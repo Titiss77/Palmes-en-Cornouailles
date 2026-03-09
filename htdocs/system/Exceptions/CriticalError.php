@@ -16,6 +16,4 @@ namespace CodeIgniter\Exceptions;
 /**
  * Error: Critical conditions, like component unavailable, etc.
  */
-class CriticalError extends RuntimeException
-{
-}
+class CriticalError extends RuntimeException {}

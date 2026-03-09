@@ -16,22 +16,20 @@ namespace CodeIgniter\Database\SQLite3;
 use CodeIgniter\Database\BasePreparedQuery;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Exceptions\BadMethodCallException;
-use Exception;
 use SQLite3;
 use SQLite3Result;
-use SQLite3Stmt;
 
 /**
- * Prepared query for SQLite3
+ * Prepared query for SQLite3.
  *
- * @extends BasePreparedQuery<SQLite3, SQLite3Stmt, SQLite3Result>
+ * @extends BasePreparedQuery<\SQLite3, \SQLite3Stmt, \SQLite3Result>
  */
 class PreparedQuery extends BasePreparedQuery
 {
     /**
      * The SQLite3Result resource, or false.
      *
-     * @var false|SQLite3Result
+     * @var false|\SQLite3Result
      */
     protected $result;
 
@@ -47,12 +45,12 @@ class PreparedQuery extends BasePreparedQuery
      */
     public function _prepare(string $sql, array $options = []): PreparedQuery
     {
-        if (! ($this->statement = $this->db->connID->prepare($sql))) {
-            $this->errorCode   = $this->db->connID->lastErrorCode();
+        if (!($this->statement = $this->db->connID->prepare($sql))) {
+            $this->errorCode = $this->db->connID->lastErrorCode();
             $this->errorString = $this->db->connID->lastErrorMsg();
 
             if ($this->db->DBDebug) {
-                throw new DatabaseException($this->errorString . ' code: ' . $this->errorCode);
+                throw new DatabaseException($this->errorString.' code: '.$this->errorCode);
             }
         }
 
@@ -65,7 +63,7 @@ class PreparedQuery extends BasePreparedQuery
      */
     public function _execute(array $data): bool
     {
-        if (! isset($this->statement)) {
+        if (!isset($this->statement)) {
             throw new BadMethodCallException('You must call prepare before trying to execute a prepared statement.');
         }
 
@@ -87,7 +85,7 @@ class PreparedQuery extends BasePreparedQuery
 
         try {
             $this->result = $this->statement->execute();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException($e->getMessage(), $e->getCode(), $e);
             }
@@ -95,13 +93,13 @@ class PreparedQuery extends BasePreparedQuery
             return false;
         }
 
-        return $this->result !== false;
+        return false !== $this->result;
     }
 
     /**
      * Returns the result object for the prepared query or false on failure.
      *
-     * @return false|SQLite3Result
+     * @return false|\SQLite3Result
      */
     public function _getResult()
     {

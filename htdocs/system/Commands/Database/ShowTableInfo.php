@@ -23,7 +23,7 @@ use Config\Database;
 /**
  * Get table data if it exists in the database.
  *
- * @see \CodeIgniter\Commands\Database\ShowTableInfoTest
+ * @see ShowTableInfoTest
  */
 class ShowTableInfo extends BaseCommand
 {
@@ -36,21 +36,21 @@ class ShowTableInfo extends BaseCommand
     protected $group = 'Database';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'db:table';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Retrieves information on the selected table.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
@@ -66,7 +66,7 @@ class ShowTableInfo extends BaseCommand
         EOL;
 
     /**
-     * The Command's arguments
+     * The Command's arguments.
      *
      * @var array<string, string>
      */
@@ -75,28 +75,28 @@ class ShowTableInfo extends BaseCommand
     ];
 
     /**
-     * The Command's options
+     * The Command's options.
      *
      * @var array<string, string>
      */
     protected $options = [
-        '--show'              => 'Lists the names of all database tables.',
-        '--metadata'          => 'Retrieves list containing field information.',
-        '--desc'              => 'Sorts the table rows in DESC order.',
-        '--limit-rows'        => 'Limits the number of rows. Default: 10.',
+        '--show' => 'Lists the names of all database tables.',
+        '--metadata' => 'Retrieves list containing field information.',
+        '--desc' => 'Sorts the table rows in DESC order.',
+        '--limit-rows' => 'Limits the number of rows. Default: 10.',
         '--limit-field-value' => 'Limits the length of field values. Default: 15.',
-        '--dbgroup'           => 'Database group to show.',
+        '--dbgroup' => 'Database group to show.',
     ];
 
     /**
-     * @var list<list<int|string>> Table Data.
+     * @var list<list<int|string>> table Data
      */
     private array $tbody;
 
     private ?BaseConnection $db = null;
 
     /**
-     * @var bool Sort the table rows in DESC order or not.
+     * @var bool sort the table rows in DESC order or not
      */
     private bool $sortDesc = false;
 
@@ -124,7 +124,7 @@ class ShowTableInfo extends BaseCommand
             $this->sortDesc = true;
         }
 
-        if ($tables === []) {
+        if ([] === $tables) {
             CLI::error('Database has no tables!', 'light_gray', 'red');
             CLI::newLine();
 
@@ -137,11 +137,11 @@ class ShowTableInfo extends BaseCommand
             return EXIT_ERROR;
         }
 
-        $tableName       = $params[0] ?? null;
-        $limitRows       = (int) ($params['limit-rows'] ?? 10);
+        $tableName = $params[0] ?? null;
+        $limitRows = (int) ($params['limit-rows'] ?? 10);
         $limitFieldValue = (int) ($params['limit-field-value'] ?? 15);
 
-        while (! in_array($tableName, $tables, true)) {
+        while (!in_array($tableName, $tables, true)) {
             $tableNameNo = CLI::promptByKey(
                 ['Here is the list of your database tables:', 'Which table do you want to see?'],
                 $tables,
@@ -171,7 +171,7 @@ class ShowTableInfo extends BaseCommand
             'username' => $this->db->username,
             'DBDriver' => $this->db->getPlatform(),
             'DBPrefix' => $this->DBPrefix,
-            'port'     => $this->db->port,
+            'port' => $this->db->port,
         ]];
         CLI::table(
             $data,
@@ -190,11 +190,9 @@ class ShowTableInfo extends BaseCommand
     }
 
     /**
-     * Show Data of Table
-     *
-     * @return void
+     * Show Data of Table.
      */
-    private function showDataOfTable(string $tableName, int $limitRows, int $limitFieldValue)
+    private function showDataOfTable(string $tableName, int $limitRows, int $limitFieldValue): void
     {
         CLI::write("Data of Table \"{$tableName}\":", 'black', 'yellow');
         CLI::newLine();
@@ -214,18 +212,16 @@ class ShowTableInfo extends BaseCommand
     }
 
     /**
-     * Show All Tables
+     * Show All Tables.
      *
      * @param list<string> $tables
-     *
-     * @return void
      */
-    private function showAllTables(array $tables)
+    private function showAllTables(array $tables): void
     {
         CLI::write('The following is a list of the names of all database tables:', 'black', 'yellow');
         CLI::newLine();
 
-        $thead       = ['ID', 'Table Name', 'Num of Rows', 'Num of Fields'];
+        $thead = ['ID', 'Table Name', 'Num of Rows', 'Num of Fields'];
         $this->tbody = $this->makeTbodyForShowAllTables($tables);
 
         CLI::table($this->tbody, $thead);
@@ -233,7 +229,7 @@ class ShowTableInfo extends BaseCommand
     }
 
     /**
-     * Make body for table
+     * Make body for table.
      *
      * @param list<string> $tables
      *
@@ -243,9 +239,9 @@ class ShowTableInfo extends BaseCommand
     {
         $this->removeDBPrefix();
 
-        foreach ($tables  as $id => $tableName) {
+        foreach ($tables as $id => $tableName) {
             $table = $this->db->protectIdentifiers($tableName);
-            $db    = $this->db->query("SELECT * FROM {$table}");
+            $db = $this->db->query("SELECT * FROM {$table}");
 
             $this->tbody[] = [
                 $id + 1,
@@ -265,7 +261,7 @@ class ShowTableInfo extends BaseCommand
     }
 
     /**
-     * Make table rows
+     * Make table rows.
      *
      * @return list<list<int|string>>
      */
@@ -280,7 +276,7 @@ class ShowTableInfo extends BaseCommand
         $this->removeDBPrefix();
         $builder = $this->db->table(TableName::fromActualName($this->db->DBPrefix, $tableName));
         $builder->limit($limitRows);
-        if ($sortField !== null) {
+        if (null !== $sortField) {
             $builder->orderBy($sortField, $this->sortDesc ? 'DESC' : 'ASC');
         }
         $rows = $builder->get()->getResultArray();
@@ -289,14 +285,14 @@ class ShowTableInfo extends BaseCommand
         foreach ($rows as $row) {
             $row = array_map(
                 static fn ($item): string => mb_strlen((string) $item) > $limitFieldValue
-                    ? mb_substr((string) $item, 0, $limitFieldValue) . '...'
+                    ? mb_substr((string) $item, 0, $limitFieldValue).'...'
                     : (string) $item,
                 $row,
             );
             $this->tbody[] = $row;
         }
 
-        if ($sortField === null && $this->sortDesc) {
+        if (null === $sortField && $this->sortDesc) {
             krsort($this->tbody);
         }
 
@@ -333,7 +329,7 @@ class ShowTableInfo extends BaseCommand
     }
 
     /**
-     * @param bool|int|string|null $fieldValue
+     * @param null|bool|int|string $fieldValue
      */
     private function setYesOrNo($fieldValue): string
     {

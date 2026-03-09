@@ -13,37 +13,34 @@ declare(strict_types=1);
 
 namespace CodeIgniter\I18n;
 
-use DateTimeImmutable;
-use Stringable;
-
 /**
  * A localized date/time package inspired
  * by Nesbot/Carbon and CakePHP/Chronos.
  *
  * Requires the intl PHP extension.
  *
- * @property-read int    $age
- * @property-read string $day
- * @property-read string $dayOfWeek
- * @property-read string $dayOfYear
- * @property-read bool   $dst
- * @property-read string $hour
- * @property-read bool   $local
- * @property-read string $minute
- * @property-read string $month
- * @property-read string $quarter
- * @property-read string $second
- * @property-read int    $timestamp
- * @property-read bool   $utc
- * @property-read string $weekOfMonth
- * @property-read string $weekOfYear
- * @property-read string $year
+ * @property int    $age
+ * @property string $day
+ * @property string $dayOfWeek
+ * @property string $dayOfYear
+ * @property bool   $dst
+ * @property string $hour
+ * @property bool   $local
+ * @property string $minute
+ * @property string $month
+ * @property string $quarter
+ * @property string $second
+ * @property int    $timestamp
+ * @property bool   $utc
+ * @property string $weekOfMonth
+ * @property string $weekOfYear
+ * @property string $year
  *
  * @phpstan-consistent-constructor
  *
- * @see \CodeIgniter\I18n\TimeTest
+ * @see TimeTest
  */
-class Time extends DateTimeImmutable implements Stringable
+class Time extends \DateTimeImmutable implements \Stringable
 {
     use TimeTrait;
 }

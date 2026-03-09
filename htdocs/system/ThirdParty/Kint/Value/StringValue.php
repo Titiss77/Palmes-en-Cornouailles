@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value;
 
-use DomainException;
 use Kint\Value\Context\ContextInterface;
 
 /**
@@ -65,7 +64,7 @@ class StringValue extends AbstractValue
     public function getValueUtf8(): string
     {
         if (false === $this->encoding) {
-            throw new DomainException('StringValue with no encoding can\'t be converted to UTF-8');
+            throw new \DomainException('StringValue with no encoding can\'t be converted to UTF-8');
         }
 
         if ('ASCII' === $this->encoding || 'UTF-8' === $this->encoding) {

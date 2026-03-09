@@ -17,7 +17,7 @@ use CodeIgniter\Exceptions\DebugTraceableTrait;
 use CodeIgniter\Exceptions\RuntimeException;
 
 /**
- * CacheException
+ * CacheException.
  */
 class CacheException extends RuntimeException
 {

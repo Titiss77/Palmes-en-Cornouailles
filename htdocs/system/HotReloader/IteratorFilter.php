@@ -14,19 +14,17 @@ declare(strict_types=1);
 namespace CodeIgniter\HotReloader;
 
 use Config\Toolbar;
-use RecursiveFilterIterator;
-use RecursiveIterator;
 
 /**
  * @internal
  *
  * @psalm-suppress MissingTemplateParam
  */
-final class IteratorFilter extends RecursiveFilterIterator implements RecursiveIterator
+final class IteratorFilter extends \RecursiveFilterIterator implements \RecursiveIterator
 {
     private array $watchedExtensions = [];
 
-    public function __construct(RecursiveIterator $iterator)
+    public function __construct(\RecursiveIterator $iterator)
     {
         parent::__construct($iterator);
 
@@ -38,14 +36,14 @@ final class IteratorFilter extends RecursiveFilterIterator implements RecursiveI
      */
     public function accept(): bool
     {
-        if (! $this->current()->isFile()) {
+        if (!$this->current()->isFile()) {
             return true;
         }
 
         $filename = $this->current()->getFilename();
 
         // Skip hidden files and directories.
-        if ($filename[0] === '.') {
+        if ('.' === $filename[0]) {
             return false;
         }
 

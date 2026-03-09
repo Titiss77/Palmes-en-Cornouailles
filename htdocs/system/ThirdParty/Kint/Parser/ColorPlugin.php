@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Parser;
 
-use InvalidArgumentException;
 use Kint\Value\AbstractValue;
 use Kint\Value\ColorValue;
 use Kint\Value\Representation\ColorRepresentation;
@@ -57,13 +56,13 @@ class ColorPlugin extends AbstractPlugin implements PluginCompleteInterface
 
         $trimmed = \strtolower(\trim($var));
 
-        if (!isset(ColorRepresentation::$color_map[$trimmed]) && !\preg_match('/^(?:(?:rgb|hsl)[^\\)]{6,}\\)|#[0-9a-fA-F]{3,8})$/', $trimmed)) {
+        if (!isset(ColorRepresentation::$color_map[$trimmed]) && !\preg_match('/^(?:(?:rgb|hsl)[^\)]{6,}\)|#[0-9a-fA-F]{3,8})$/', $trimmed)) {
             return $v;
         }
 
         try {
             $rep = new ColorRepresentation($var);
-        } catch (InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             return $v;
         }
 

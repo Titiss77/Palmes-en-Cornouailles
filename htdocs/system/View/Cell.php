@@ -17,11 +17,9 @@ use CodeIgniter\Cache\CacheInterface;
 use CodeIgniter\Config\Factories;
 use CodeIgniter\View\Cells\Cell as BaseCell;
 use CodeIgniter\View\Exceptions\ViewException;
-use ReflectionException;
-use ReflectionMethod;
 
 /**
- * Class Cell
+ * Class Cell.
  *
  * A simple class that can call any other class that can be loaded,
  * and echo out it's result. Intended for displaying small blocks of
@@ -45,12 +43,12 @@ use ReflectionMethod;
  *             function method(array $params=null)
  *         }
  *
- * @see \CodeIgniter\View\CellTest
+ * @see CellTest
  */
 class Cell
 {
     /**
-     * Instance of the current Cache Instance
+     * Instance of the current Cache Instance.
      *
      * @var CacheInterface
      */
@@ -67,12 +65,12 @@ class Cell
     /**
      * Render a cell, returning its body as a string.
      *
-     * @param string                            $library   Cell class and method name.
-     * @param array<string, string>|string|null $params    Parameters to pass to the method.
-     * @param int                               $ttl       Number of seconds to cache the cell.
-     * @param string|null                       $cacheName Cache item name.
+     * @param string                            $library   cell class and method name
+     * @param null|array<string, string>|string $params    parameters to pass to the method
+     * @param int                               $ttl       number of seconds to cache the cell
+     * @param null|string                       $cacheName cache item name
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function render(string $library, $params = null, int $ttl = 0, ?string $cacheName = null): string
     {
@@ -85,7 +83,7 @@ class Cell
         $params = $this->prepareParams($params);
 
         // Is the output cached?
-        $cacheName ??= str_replace(['\\', '/'], '', $class) . $method . md5(serialize($params));
+        $cacheName ??= str_replace(['\\', '/'], '', $class).$method.md5(serialize($params));
 
         if ($output = $this->cache->get($cacheName)) {
             return $output;
@@ -95,7 +93,7 @@ class Cell
             $instance->initController(service('request'), service('response'), service('logger'));
         }
 
-        if (! method_exists($instance, $method)) {
+        if (!method_exists($instance, $method)) {
             throw ViewException::forInvalidCellMethod($class, $method);
         }
 
@@ -104,7 +102,7 @@ class Cell
             : $this->renderSimpleClass($instance, $method, $params, $class);
 
         // Can we cache it?
-        if ($ttl !== 0) {
+        if (0 !== $ttl) {
             $this->cache->save($cacheName, $output, $ttl);
         }
 
@@ -116,7 +114,8 @@ class Cell
      * If a string, it should be in the format "key1=value key2=value".
      * It will be split and returned as an array.
      *
-     * @param         array<string, string>|string|null       $params
+     * @param null|array<string, string>|string $params
+     *
      * @phpstan-param array<string, string>|string|float|null $params
      *
      * @return array<string, string>
@@ -124,8 +123,8 @@ class Cell
     public function prepareParams($params)
     {
         if (
-            ($params === null || $params === '' || $params === [])
-            || (! is_string($params) && ! is_array($params))
+            (null === $params || '' === $params || [] === $params)
+            || (!is_string($params) && !is_array($params))
         ) {
             return [];
         }
@@ -142,7 +141,7 @@ class Cell
             unset($separator);
 
             foreach ($params as $p) {
-                if ($p !== '') {
+                if ('' !== $p) {
                     [$key, $val] = explode('=', $p);
 
                     $newParams[trim($key)] = trim($val, ', ');
@@ -153,7 +152,7 @@ class Cell
             unset($newParams);
         }
 
-        if ($params === []) {
+        if ([] === $params) {
             return [];
         }
 
@@ -172,24 +171,24 @@ class Cell
 
         // controlled cells might be called with just
         // the class name, so add a default method
-        if (! str_contains($library, ':')) {
+        if (!str_contains($library, ':')) {
             $library .= ':render';
         }
 
         [$class, $method] = explode(':', $library);
 
-        if ($class === '') {
+        if ('' === $class) {
             throw ViewException::forNoCellClass();
         }
 
         // locate and return an instance of the cell
         $object = Factories::cells($class, ['getShared' => false]);
 
-        if (! is_object($object)) {
+        if (!is_object($object)) {
             throw ViewException::forInvalidCellClass($class);
         }
 
-        if ($method === '') {
+        if ('' === $method) {
             $method = 'index';
         }
 
@@ -206,12 +205,12 @@ class Cell
     {
         // Only allow public properties to be set, or protected/private
         // properties that have a method to get them (get<Foo>Property())
-        $publicProperties  = $instance->getPublicProperties();
+        $publicProperties = $instance->getPublicProperties();
         $privateProperties = array_column($instance->getNonPublicProperties(), 'name');
-        $publicParams      = array_intersect_key($params, $publicProperties);
+        $publicParams = array_intersect_key($params, $publicProperties);
 
         foreach ($params as $key => $value) {
-            $getter = 'get' . ucfirst((string) $key) . 'Property';
+            $getter = 'get'.ucfirst((string) $key).'Property';
             if (in_array($key, $privateProperties, true) && method_exists($instance, $getter)) {
                 $publicParams[$key] = $value;
             }
@@ -234,33 +233,6 @@ class Cell
     }
 
     /**
-     * Returns the values from $params that match the parameters
-     * for a method, in the order they are defined. This allows
-     * them to be passed directly into the method.
-     */
-    private function getMethodParams(BaseCell $instance, string $method, array $params): array
-    {
-        $mountParams = [];
-
-        try {
-            $reflectionMethod = new ReflectionMethod($instance, $method);
-            $reflectionParams = $reflectionMethod->getParameters();
-
-            foreach ($reflectionParams as $reflectionParam) {
-                $paramName = $reflectionParam->getName();
-
-                if (array_key_exists($paramName, $params)) {
-                    $mountParams[] = $params[$paramName];
-                }
-            }
-        } catch (ReflectionException) {
-            // do nothing
-        }
-
-        return $mountParams;
-    }
-
-    /**
      * Renders the non-Cell class, passing in the string/array params.
      *
      * @todo Determine if this can be refactored to use $this-getMethodParams().
@@ -271,24 +243,24 @@ class Cell
     {
         // Try to match up the parameter list we were provided
         // with the parameter name in the callback method.
-        $refMethod  = new ReflectionMethod($instance, $method);
+        $refMethod = new \ReflectionMethod($instance, $method);
         $paramCount = $refMethod->getNumberOfParameters();
-        $refParams  = $refMethod->getParameters();
+        $refParams = $refMethod->getParameters();
 
-        if ($paramCount === 0) {
-            if ($params !== []) {
+        if (0 === $paramCount) {
+            if ([] !== $params) {
                 throw ViewException::forMissingCellParameters($class, $method);
             }
 
             $output = $instance->{$method}();
-        } elseif (($paramCount === 1)
-            && ((! array_key_exists($refParams[0]->name, $params))
+        } elseif ((1 === $paramCount)
+            && ((!array_key_exists($refParams[0]->name, $params))
             || (array_key_exists($refParams[0]->name, $params)
-            && count($params) !== 1))
+            && 1 !== count($params)))
         ) {
             $output = $instance->{$method}($params);
         } else {
-            $fireArgs     = [];
+            $fireArgs = [];
             $methodParams = [];
 
             foreach ($refParams as $arg) {
@@ -299,7 +271,7 @@ class Cell
             }
 
             foreach (array_keys($params) as $key) {
-                if (! isset($methodParams[$key])) {
+                if (!isset($methodParams[$key])) {
                     throw ViewException::forInvalidCellParameter($key);
                 }
             }
@@ -308,5 +280,32 @@ class Cell
         }
 
         return $output;
+    }
+
+    /**
+     * Returns the values from $params that match the parameters
+     * for a method, in the order they are defined. This allows
+     * them to be passed directly into the method.
+     */
+    private function getMethodParams(BaseCell $instance, string $method, array $params): array
+    {
+        $mountParams = [];
+
+        try {
+            $reflectionMethod = new \ReflectionMethod($instance, $method);
+            $reflectionParams = $reflectionMethod->getParameters();
+
+            foreach ($reflectionParams as $reflectionParam) {
+                $paramName = $reflectionParam->getName();
+
+                if (array_key_exists($paramName, $params)) {
+                    $mountParams[] = $params[$paramName];
+                }
+            }
+        } catch (\ReflectionException) {
+            // do nothing
+        }
+
+        return $mountParams;
     }
 }

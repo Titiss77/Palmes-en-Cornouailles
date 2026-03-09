@@ -27,17 +27,16 @@ declare(strict_types=1);
 
 namespace Kint\Value;
 
-use DateTimeInterface;
 use Kint\Value\Context\ContextInterface;
 
 class DateTimeValue extends InstanceValue
 {
     /** @psalm-readonly */
-    protected DateTimeInterface $dt;
+    protected \DateTimeInterface $dt;
 
-    public function __construct(ContextInterface $context, DateTimeInterface $dt)
+    public function __construct(ContextInterface $context, \DateTimeInterface $dt)
     {
-        parent::__construct($context, \get_class($dt), \spl_object_hash($dt), \spl_object_id($dt));
+        parent::__construct($context, $dt::class, \spl_object_hash($dt), \spl_object_id($dt));
 
         $this->dt = clone $dt;
     }

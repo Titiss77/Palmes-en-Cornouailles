@@ -31,8 +31,6 @@ use Kint\Value\AbstractValue;
 use Kint\Value\InstanceValue;
 use Kint\Value\Representation\SourceRepresentation;
 use Kint\Value\ThrowableValue;
-use RuntimeException;
-use Throwable;
 
 class ThrowablePlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -48,7 +46,7 @@ class ThrowablePlugin extends AbstractPlugin implements PluginCompleteInterface
 
     public function parseComplete(&$var, AbstractValue $v, int $trigger): AbstractValue
     {
-        if (!$var instanceof Throwable || !$v instanceof InstanceValue) {
+        if (!$var instanceof \Throwable || !$v instanceof InstanceValue) {
             return $v;
         }
 
@@ -59,7 +57,7 @@ class ThrowablePlugin extends AbstractPlugin implements PluginCompleteInterface
 
         try {
             $throw->addRepresentation(new SourceRepresentation($var->getFile(), $var->getLine(), null, true), 0);
-        } catch (RuntimeException $e) {
+        } catch (\RuntimeException $e) {
         }
 
         return $throw;

@@ -20,9 +20,9 @@ use CodeIgniter\HTTP\RequestInterface;
 use Config\Mimes;
 
 /**
- * File validation rules
+ * File validation rules.
  *
- * @see \CodeIgniter\Validation\StrictRules\FileRulesTest
+ * @see FileRulesTest
  */
 class FileRules
 {
@@ -38,7 +38,7 @@ class FileRules
      */
     public function __construct(?RequestInterface $request = null)
     {
-        if (! $request instanceof RequestInterface) {
+        if (!$request instanceof RequestInterface) {
             $request = service('request');
         }
 
@@ -53,23 +53,23 @@ class FileRules
     public function uploaded(?string $blank, string $name): bool
     {
         $files = $this->request->getFileMultiple($name);
-        if ($files === null) {
+        if (null === $files) {
             $files = [$this->request->getFile($name)];
         }
 
         foreach ($files as $file) {
-            if ($file === null) {
+            if (null === $file) {
                 return false;
             }
 
             if (ENVIRONMENT === 'testing') {
-                if ($file->getError() !== 0) {
+                if (0 !== $file->getError()) {
                     return false;
                 }
             } else {
                 // Note: cannot unit test this; no way to over-ride ENVIRONMENT?
                 // @codeCoverageIgnoreStart
-                if (! $file->isValid()) {
+                if (!$file->isValid()) {
                     return false;
                 }
                 // @codeCoverageIgnoreEnd
@@ -87,26 +87,26 @@ class FileRules
         // Grab the file name off the top of the $params
         // after we split it.
         $paramArray = explode(',', $params);
-        if (count($paramArray) !== 2) {
-            throw new InvalidArgumentException('Invalid max_size parameter: "' . $params . '"');
+        if (2 !== count($paramArray)) {
+            throw new InvalidArgumentException('Invalid max_size parameter: "'.$params.'"');
         }
         $name = array_shift($paramArray);
 
         $files = $this->request->getFileMultiple($name);
-        if ($files === null) {
+        if (null === $files) {
             $files = [$this->request->getFile($name)];
         }
 
         foreach ($files as $file) {
-            if ($file === null) {
+            if (null === $file) {
                 return false;
             }
 
-            if ($file->getError() === UPLOAD_ERR_NO_FILE) {
+            if (UPLOAD_ERR_NO_FILE === $file->getError()) {
                 return true;
             }
 
-            if ($file->getError() === UPLOAD_ERR_INI_SIZE) {
+            if (UPLOAD_ERR_INI_SIZE === $file->getError()) {
                 return false;
             }
 
@@ -127,19 +127,19 @@ class FileRules
         // Grab the file name off the top of the $params
         // after we split it.
         $params = explode(',', $params);
-        $name   = array_shift($params);
+        $name = array_shift($params);
 
         $files = $this->request->getFileMultiple($name);
-        if ($files === null) {
+        if (null === $files) {
             $files = [$this->request->getFile($name)];
         }
 
         foreach ($files as $file) {
-            if ($file === null) {
+            if (null === $file) {
                 return false;
             }
 
-            if ($file->getError() === UPLOAD_ERR_NO_FILE) {
+            if (UPLOAD_ERR_NO_FILE === $file->getError()) {
                 return true;
             }
 
@@ -147,7 +147,7 @@ class FileRules
             // start with `image` even when then are multiple accepted types.
             $type = Mimes::guessTypeFromExtension($file->getExtension()) ?? '';
 
-            if (mb_strpos($type, 'image') !== 0) {
+            if (0 !== mb_strpos($type, 'image')) {
                 return false;
             }
         }
@@ -163,23 +163,23 @@ class FileRules
         // Grab the file name off the top of the $params
         // after we split it.
         $params = explode(',', $params);
-        $name   = array_shift($params);
+        $name = array_shift($params);
 
         $files = $this->request->getFileMultiple($name);
-        if ($files === null) {
+        if (null === $files) {
             $files = [$this->request->getFile($name)];
         }
 
         foreach ($files as $file) {
-            if ($file === null) {
+            if (null === $file) {
                 return false;
             }
 
-            if ($file->getError() === UPLOAD_ERR_NO_FILE) {
+            if (UPLOAD_ERR_NO_FILE === $file->getError()) {
                 return true;
             }
 
-            if (! in_array($file->getMimeType(), $params, true)) {
+            if (!in_array($file->getMimeType(), $params, true)) {
                 return false;
             }
         }
@@ -195,23 +195,23 @@ class FileRules
         // Grab the file name off the top of the $params
         // after we split it.
         $params = explode(',', $params);
-        $name   = array_shift($params);
+        $name = array_shift($params);
 
         $files = $this->request->getFileMultiple($name);
-        if ($files === null) {
+        if (null === $files) {
             $files = [$this->request->getFile($name)];
         }
 
         foreach ($files as $file) {
-            if ($file === null) {
+            if (null === $file) {
                 return false;
             }
 
-            if ($file->getError() === UPLOAD_ERR_NO_FILE) {
+            if (UPLOAD_ERR_NO_FILE === $file->getError()) {
                 return true;
             }
 
-            if (! in_array($file->guessExtension(), $params, true)) {
+            if (!in_array($file->guessExtension(), $params, true)) {
                 return false;
             }
         }
@@ -228,35 +228,35 @@ class FileRules
         // Grab the file name off the top of the $params
         // after we split it.
         $params = explode(',', $params);
-        $name   = array_shift($params);
+        $name = array_shift($params);
 
         $files = $this->request->getFileMultiple($name);
-        if ($files === null) {
+        if (null === $files) {
             $files = [$this->request->getFile($name)];
         }
 
         foreach ($files as $file) {
-            if ($file === null) {
+            if (null === $file) {
                 return false;
             }
 
-            if ($file->getError() === UPLOAD_ERR_NO_FILE) {
+            if (UPLOAD_ERR_NO_FILE === $file->getError()) {
                 return true;
             }
 
             // Get Parameter sizes
-            $allowedWidth  = $params[0] ?? 0;
+            $allowedWidth = $params[0] ?? 0;
             $allowedHeight = $params[1] ?? 0;
 
             // Get uploaded image size
             $info = getimagesize($file->getTempName());
 
-            if ($info === false) {
+            if (false === $info) {
                 // Cannot get the image size.
                 return false;
             }
 
-            $fileWidth  = $info[0];
+            $fileWidth = $info[0];
             $fileHeight = $info[1];
 
             if ($fileWidth > $allowedWidth || $fileHeight > $allowedHeight) {
@@ -276,35 +276,35 @@ class FileRules
         // Grab the file name off the top of the $params
         // after we split it.
         $params = explode(',', $params);
-        $name   = array_shift($params);
+        $name = array_shift($params);
 
         $files = $this->request->getFileMultiple($name);
-        if ($files === null) {
+        if (null === $files) {
             $files = [$this->request->getFile($name)];
         }
 
         foreach ($files as $file) {
-            if ($file === null) {
+            if (null === $file) {
                 return false;
             }
 
-            if ($file->getError() === UPLOAD_ERR_NO_FILE) {
+            if (UPLOAD_ERR_NO_FILE === $file->getError()) {
                 return true;
             }
 
             // Get Parameter sizes
-            $minimumWidth  = $params[0] ?? 0;
+            $minimumWidth = $params[0] ?? 0;
             $minimumHeight = $params[1] ?? 0;
 
             // Get uploaded image size
             $info = getimagesize($file->getTempName());
 
-            if ($info === false) {
+            if (false === $info) {
                 // Cannot get the image size.
                 return false;
             }
 
-            $fileWidth  = $info[0];
+            $fileWidth = $info[0];
             $fileHeight = $info[1];
 
             if ($fileWidth < $minimumWidth || $fileHeight < $minimumHeight) {

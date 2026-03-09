@@ -35,6 +35,8 @@ use Kint\Value\AbstractValue;
 interface PluginCompleteInterface extends PluginInterface
 {
     /**
+     * @param mixed $var
+     *
      * @psalm-param mixed &$var
      * @psalm-param ParserTrigger $trigger
      */

@@ -16,8 +16,6 @@ namespace CodeIgniter\CLI;
 use CodeIgniter\Autoloader\FileLocatorInterface;
 use CodeIgniter\Events\Events;
 use CodeIgniter\Log\Logger;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * Core functionality for running, listing, etc commands.
@@ -41,9 +39,9 @@ class Commands
     protected $logger;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param Logger|null $logger
+     * @param null|Logger $logger
      */
     public function __construct($logger = null)
     {
@@ -52,22 +50,22 @@ class Commands
     }
 
     /**
-     * Runs a command given
+     * Runs a command given.
      *
-     * @param array<int|string, string|null> $params
+     * @param array<int|string, null|string> $params
      *
      * @return int Exit code
      */
     public function run(string $command, array $params)
     {
-        if (! $this->verifyCommand($command, $this->commands)) {
+        if (!$this->verifyCommand($command, $this->commands)) {
             return EXIT_ERROR;
         }
 
         // The file would have already been loaded during the
         // createCommandList function...
         $className = $this->commands[$command]['class'];
-        $class     = new $className($this->logger, $this);
+        $class = new $className($this->logger, $this);
 
         Events::trigger('pre_command');
 
@@ -91,22 +89,20 @@ class Commands
     /**
      * Discovers all commands in the framework and within user code,
      * and collects instances of them to work with.
-     *
-     * @return void
      */
-    public function discoverCommands()
+    public function discoverCommands(): void
     {
-        if ($this->commands !== []) {
+        if ([] !== $this->commands) {
             return;
         }
 
         /** @var FileLocatorInterface */
         $locator = service('locator');
-        $files   = $locator->listFiles('Commands/');
+        $files = $locator->listFiles('Commands/');
 
         // If no matching command files were found, bail
         // This should never happen in unit testing.
-        if ($files === []) {
+        if ([] === $files) {
             return; // @codeCoverageIgnore
         }
 
@@ -116,30 +112,30 @@ class Commands
             /** @var class-string<BaseCommand>|false */
             $className = $locator->findQualifiedNameFromPath($file);
 
-            if ($className === false || ! class_exists($className)) {
+            if (false === $className || !class_exists($className)) {
                 continue;
             }
 
             try {
-                $class = new ReflectionClass($className);
+                $class = new \ReflectionClass($className);
 
-                if (! $class->isInstantiable() || ! $class->isSubclassOf(BaseCommand::class)) {
+                if (!$class->isInstantiable() || !$class->isSubclassOf(BaseCommand::class)) {
                     continue;
                 }
 
                 $class = new $className($this->logger, $this);
 
-                if (isset($class->group) && ! isset($this->commands[$class->name])) {
+                if (isset($class->group) && !isset($this->commands[$class->name])) {
                     $this->commands[$class->name] = [
-                        'class'       => $className,
-                        'file'        => $file,
-                        'group'       => $class->group,
+                        'class' => $className,
+                        'file' => $file,
+                        'group' => $class->group,
                         'description' => $class->description,
                     ];
                 }
 
                 unset($class);
-            } catch (ReflectionException $e) {
+            } catch (\ReflectionException $e) {
                 $this->logger->error($e->getMessage());
             }
         }
@@ -159,14 +155,14 @@ class Commands
             return true;
         }
 
-        $message      = lang('CLI.commandNotFound', [$command]);
+        $message = lang('CLI.commandNotFound', [$command]);
         $alternatives = $this->getCommandAlternatives($command, $commands);
 
-        if ($alternatives !== []) {
-            if (count($alternatives) === 1) {
-                $message .= "\n\n" . lang('CLI.altCommandSingular') . "\n    ";
+        if ([] !== $alternatives) {
+            if (1 === count($alternatives)) {
+                $message .= "\n\n".lang('CLI.altCommandSingular')."\n    ";
             } else {
-                $message .= "\n\n" . lang('CLI.altCommandPlural') . "\n    ";
+                $message .= "\n\n".lang('CLI.altCommandPlural')."\n    ";
             }
 
             $message .= implode("\n    ", $alternatives);

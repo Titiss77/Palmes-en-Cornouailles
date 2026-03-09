@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Debug\Toolbar\Collectors;
 
 /**
- * Files collector
+ * Files collector.
  */
 class Files extends BaseCollector
 {
@@ -47,15 +47,15 @@ class Files extends BaseCollector
      */
     public function getTitleDetails(): string
     {
-        return '( ' . count(get_included_files()) . ' )';
+        return '( '.count(get_included_files()).' )';
     }
 
     /**
-     * Returns the data of this collector to be formatted in the toolbar
+     * Returns the data of this collector to be formatted in the toolbar.
      */
     public function display(): array
     {
-        $rawFiles  = get_included_files();
+        $rawFiles = get_included_files();
         $coreFiles = [];
         $userFiles = [];
 

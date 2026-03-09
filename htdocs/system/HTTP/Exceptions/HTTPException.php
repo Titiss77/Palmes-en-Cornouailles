@@ -16,12 +16,12 @@ namespace CodeIgniter\HTTP\Exceptions;
 use CodeIgniter\Exceptions\FrameworkException;
 
 /**
- * Things that can go wrong with HTTP
+ * Things that can go wrong with HTTP.
  */
 class HTTPException extends FrameworkException implements ExceptionInterface
 {
     /**
-     * For CurlRequest
+     * For CurlRequest.
      *
      * @return HTTPException
      *
@@ -33,7 +33,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For CurlRequest
+     * For CurlRequest.
      *
      * @return HTTPException
      */
@@ -43,7 +43,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For CurlRequest
+     * For CurlRequest.
      *
      * @return HTTPException
      */
@@ -53,7 +53,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For CurlRequest
+     * For CurlRequest.
      *
      * @return HTTPException
      *
@@ -65,7 +65,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For IncomingRequest
+     * For IncomingRequest.
      *
      * @return HTTPException
      */
@@ -88,7 +88,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Message
+     * For Message.
      *
      * @return HTTPException
      */
@@ -98,7 +98,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Negotiate
+     * For Negotiate.
      *
      * @return HTTPException
      */
@@ -108,7 +108,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For RedirectResponse
+     * For RedirectResponse.
      *
      * @return HTTPException
      */
@@ -118,7 +118,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Response
+     * For Response.
      *
      * @return HTTPException
      */
@@ -128,7 +128,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Response
+     * For Response.
      *
      * @return HTTPException
      */
@@ -138,7 +138,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Response
+     * For Response.
      *
      * @return HTTPException
      */
@@ -148,7 +148,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For URI
+     * For URI.
      *
      * @return HTTPException
      */
@@ -158,7 +158,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For URI
+     * For URI.
      *
      * @return HTTPException
      */
@@ -168,7 +168,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For URI
+     * For URI.
      *
      * @return HTTPException
      */
@@ -178,7 +178,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For URI
+     * For URI.
      *
      * @return HTTPException
      */
@@ -188,7 +188,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Uploaded file move
+     * For Uploaded file move.
      *
      * @return HTTPException
      */
@@ -198,7 +198,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Uploaded file move
+     * For Uploaded file move.
      *
      * @return HTTPException
      */
@@ -208,7 +208,7 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Uploaded file move
+     * For Uploaded file move.
      *
      * @return HTTPException
      */
@@ -218,11 +218,11 @@ class HTTPException extends FrameworkException implements ExceptionInterface
     }
 
     /**
-     * For Invalid SameSite attribute setting
+     * For Invalid SameSite attribute setting.
      *
      * @return HTTPException
      *
-     * @deprecated Use `CookieException::forInvalidSameSite()` instead.
+     * @deprecated use `CookieException::forInvalidSameSite()` instead
      *
      * @codeCoverageIgnore
      */

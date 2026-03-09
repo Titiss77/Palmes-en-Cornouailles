@@ -15,10 +15,9 @@ namespace CodeIgniter\Database\OCI8;
 
 use CodeIgniter\Database\BaseResult;
 use CodeIgniter\Entity\Entity;
-use stdClass;
 
 /**
- * Result for OCI8
+ * Result for OCI8.
  *
  * @extends BaseResult<resource, resource>
  */
@@ -46,18 +45,16 @@ class Result extends BaseResult
     public function getFieldData(): array
     {
         return array_map(fn ($fieldIndex) => (object) [
-            'name'       => oci_field_name($this->resultID, $fieldIndex),
-            'type'       => oci_field_type($this->resultID, $fieldIndex),
+            'name' => oci_field_name($this->resultID, $fieldIndex),
+            'type' => oci_field_type($this->resultID, $fieldIndex),
             'max_length' => oci_field_size($this->resultID, $fieldIndex),
         ], range(1, $this->getFieldCount()));
     }
 
     /**
      * Frees the current result.
-     *
-     * @return void
      */
-    public function freeResult()
+    public function freeResult(): void
     {
         if (is_resource($this->resultID)) {
             oci_free_statement($this->resultID);
@@ -95,13 +92,13 @@ class Result extends BaseResult
      *
      * Overridden by child classes.
      *
-     * @return Entity|false|object|stdClass
+     * @return Entity|false|object|\stdClass
      */
     protected function fetchObject(string $className = 'stdClass')
     {
         $row = oci_fetch_object($this->resultID);
 
-        if ($className === 'stdClass' || ! $row) {
+        if ('stdClass' === $className || !$row) {
             return $row;
         }
         if (is_subclass_of($className, Entity::class)) {

@@ -17,7 +17,7 @@ use Closure;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Interface RouteCollectionInterface
+ * Interface RouteCollectionInterface.
  *
  * A Route Collection's sole job is to hold a series of routes. The required
  * number of methods is kept very small on purpose, but implementors may
@@ -28,9 +28,9 @@ interface RouteCollectionInterface
     /**
      * Adds a single route to the collection.
      *
-     * @param string                                                            $from    The route path (with placeholders or regex)
-     * @param array|(Closure(mixed...): (ResponseInterface|string|void))|string $to      The route handler
-     * @param array|null                                                        $options The route options
+     * @param string                                                             $from    The route path (with placeholders or regex)
+     * @param array|(\Closure(mixed...): (ResponseInterface|string|void))|string $to      The route handler
+     * @param null|array                                                         $options The route options
      *
      * @return RouteCollectionInterface
      */
@@ -45,7 +45,7 @@ interface RouteCollectionInterface
      * multiple placeholders added at once.
      *
      * @param array|string $placeholder
-     * @param string|null  $pattern     The regex pattern
+     * @param null|string  $pattern     The regex pattern
      *
      * @return RouteCollectionInterface
      */
@@ -113,11 +113,11 @@ interface RouteCollectionInterface
     /**
      * Sets the class/method that should be called if routing doesn't
      * find a match. It can be either a closure or the controller/method
-     * name exactly like a route is defined: Users::index
+     * name exactly like a route is defined: Users::index.
      *
      * This setting is passed to the Router class and handled there.
      *
-     * @param callable|null $callable
+     * @param null|callable $callable
      *
      * @TODO This method is not related to the route collection. So this should
      *      be removed in the future.
@@ -128,7 +128,7 @@ interface RouteCollectionInterface
      * Returns the 404 Override setting, which can be null, a closure
      * or the controller/string.
      *
-     * @return (Closure(string): (ResponseInterface|string|void))|string|null
+     * @return null|(\Closure(string): (ResponseInterface|string|void))|string
      *
      * @TODO This method is not related to the route collection. So this should
      *      be removed in the future.
@@ -175,16 +175,16 @@ interface RouteCollectionInterface
     /**
      * Returns the raw array of available routes.
      *
-     * @param non-empty-string|null $verb            HTTP verb like `GET`,`POST` or `*` or `CLI`.
-     * @param bool                  $includeWildcard Whether to include '*' routes.
+     * @param null|non-empty-string $verb            HTTP verb like `GET`,`POST` or `*` or `CLI`
+     * @param bool                  $includeWildcard whether to include '*' routes
      */
     public function getRoutes(?string $verb = null, bool $includeWildcard = true): array;
 
     /**
-     * Returns one or all routes options
+     * Returns one or all routes options.
      *
-     * @param string|null $from The route path (with placeholders or regex)
-     * @param string|null $verb HTTP verb like `GET`,`POST` or `*` or `CLI`.
+     * @param null|string $from The route path (with placeholders or regex)
+     * @param null|string $verb HTTP verb like `GET`,`POST` or `*` or `CLI`
      *
      * @return array<string, int|string> [key => value]
      */
@@ -222,7 +222,7 @@ interface RouteCollectionInterface
      * @param string     $search    Named route or Controller::method
      * @param int|string ...$params
      *
-     * @return false|string The route (URI path relative to baseURL) or false if not found.
+     * @return false|string the route (URI path relative to baseURL) or false if not found
      */
     public function reverseRoute(string $search, ...$params);
 
@@ -237,14 +237,14 @@ interface RouteCollectionInterface
     public function getRedirectCode(string $routeKey): int;
 
     /**
-     * Get the flag that limit or not the routes with {locale} placeholder to App::$supportedLocales
+     * Get the flag that limit or not the routes with {locale} placeholder to App::$supportedLocales.
      */
     public function shouldUseSupportedLocalesOnly(): bool;
 
     /**
      * Checks a route (using the "from") to see if it's filtered or not.
      *
-     * @param string|null $verb HTTP verb like `GET`,`POST` or `*` or `CLI`.
+     * @param null|string $verb HTTP verb like `GET`,`POST` or `*` or `CLI`
      */
     public function isFiltered(string $search, ?string $verb = null): bool;
 
@@ -259,7 +259,7 @@ interface RouteCollectionInterface
      * has a filter of "role", with parameters of ['admin', 'manager'].
      *
      * @param string      $search routeKey
-     * @param string|null $verb   HTTP verb like `GET`,`POST` or `*` or `CLI`.
+     * @param null|string $verb   HTTP verb like `GET`,`POST` or `*` or `CLI`
      *
      * @return list<string> filter_name or filter_name:arguments like 'role:admin,manager'
      */

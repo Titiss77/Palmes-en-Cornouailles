@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Kint\Value;
 
 use Kint\Value\Context\ContextInterface;
-use SimpleXMLElement;
 
 class SimpleXMLElementValue extends InstanceValue
 {
@@ -38,11 +37,11 @@ class SimpleXMLElementValue extends InstanceValue
     /** @psalm-param list<SimpleXMLElementValue> $children */
     public function __construct(
         ContextInterface $context,
-        SimpleXMLElement $element,
+        \SimpleXMLElement $element,
         array $children,
         ?string $text_content
     ) {
-        parent::__construct($context, \get_class($element), \spl_object_hash($element), \spl_object_id($element));
+        parent::__construct($context, $element::class, \spl_object_hash($element), \spl_object_id($element));
 
         $this->children = $children;
         $this->text_content = $text_content;

@@ -13,11 +13,6 @@ declare(strict_types=1);
 
 namespace CodeIgniter;
 
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
-
 /**
  * This class is used by Composer during installs and updates
  * to move files to locations within the system folder so that end-users
@@ -33,7 +28,7 @@ final class ComposerScripts
     /**
      * Path to the ThirdParty directory.
      */
-    private static string $path = __DIR__ . '/ThirdParty/';
+    private static string $path = __DIR__.'/ThirdParty/';
 
     /**
      * Direct dependencies of CodeIgniter to copy
@@ -43,23 +38,23 @@ final class ComposerScripts
      */
     private static array $dependencies = [
         'kint-src' => [
-            'license' => __DIR__ . '/../vendor/kint-php/kint/LICENSE',
-            'from'    => __DIR__ . '/../vendor/kint-php/kint/src/',
-            'to'      => __DIR__ . '/ThirdParty/Kint/',
+            'license' => __DIR__.'/../vendor/kint-php/kint/LICENSE',
+            'from' => __DIR__.'/../vendor/kint-php/kint/src/',
+            'to' => __DIR__.'/ThirdParty/Kint/',
         ],
         'kint-resources' => [
-            'from' => __DIR__ . '/../vendor/kint-php/kint/resources/',
-            'to'   => __DIR__ . '/ThirdParty/Kint/resources/',
+            'from' => __DIR__.'/../vendor/kint-php/kint/resources/',
+            'to' => __DIR__.'/ThirdParty/Kint/resources/',
         ],
         'escaper' => [
-            'license' => __DIR__ . '/../vendor/laminas/laminas-escaper/LICENSE.md',
-            'from'    => __DIR__ . '/../vendor/laminas/laminas-escaper/src/',
-            'to'      => __DIR__ . '/ThirdParty/Escaper/',
+            'license' => __DIR__.'/../vendor/laminas/laminas-escaper/LICENSE.md',
+            'from' => __DIR__.'/../vendor/laminas/laminas-escaper/src/',
+            'to' => __DIR__.'/ThirdParty/Escaper/',
         ],
         'psr-log' => [
-            'license' => __DIR__ . '/../vendor/psr/log/LICENSE',
-            'from'    => __DIR__ . '/../vendor/psr/log/src/',
-            'to'      => __DIR__ . '/ThirdParty/PSR/Log/',
+            'license' => __DIR__.'/../vendor/psr/log/LICENSE',
+            'from' => __DIR__.'/../vendor/psr/log/src/',
+            'to' => __DIR__.'/ThirdParty/PSR/Log/',
         ],
     ];
 
@@ -73,7 +68,7 @@ final class ComposerScripts
 
         foreach (self::$dependencies as $key => $dependency) {
             // Kint may be removed.
-            if (! is_dir($dependency['from']) && str_starts_with($key, 'kint')) {
+            if (!is_dir($dependency['from']) && str_starts_with($key, 'kint')) {
                 continue;
             }
 
@@ -81,7 +76,7 @@ final class ComposerScripts
 
             if (isset($dependency['license'])) {
                 $license = basename($dependency['license']);
-                copy($dependency['license'], $dependency['to'] . '/' . $license);
+                copy($dependency['license'], $dependency['to'].'/'.$license);
             }
         }
 
@@ -93,16 +88,16 @@ final class ComposerScripts
      */
     private static function recursiveDelete(string $directory): void
     {
-        if (! is_dir($directory)) {
-            echo sprintf('Cannot recursively delete "%s" as it does not exist.', $directory) . PHP_EOL;
+        if (!is_dir($directory)) {
+            echo sprintf('Cannot recursively delete "%s" as it does not exist.', $directory).PHP_EOL;
 
             return;
         }
 
-        /** @var SplFileInfo $file */
-        foreach (new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(rtrim($directory, '\\/'), FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST,
+        /** @var \SplFileInfo $file */
+        foreach (new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(rtrim($directory, '\/'), \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
         ) as $file) {
             $path = $file->getPathname();
 
@@ -120,10 +115,10 @@ final class ComposerScripts
      */
     private static function recursiveMirror(string $originDir, string $targetDir): void
     {
-        $originDir = rtrim($originDir, '\\/');
-        $targetDir = rtrim($targetDir, '\\/');
+        $originDir = rtrim($originDir, '\/');
+        $targetDir = rtrim($targetDir, '\/');
 
-        if (! is_dir($originDir)) {
+        if (!is_dir($originDir)) {
             echo sprintf('The origin directory "%s" was not found.', $originDir);
 
             exit(1);
@@ -135,24 +130,24 @@ final class ComposerScripts
             exit(1);
         }
 
-        if (! @mkdir($targetDir, 0755, true)) {
-            echo sprintf('Cannot create the target directory: "%s"', $targetDir) . PHP_EOL;
+        if (!@mkdir($targetDir, 0o755, true)) {
+            echo sprintf('Cannot create the target directory: "%s"', $targetDir).PHP_EOL;
 
             exit(1);
         }
 
         $dirLen = strlen($originDir);
 
-        /** @var SplFileInfo $file */
-        foreach (new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($originDir, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST,
+        /** @var \SplFileInfo $file */
+        foreach (new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($originDir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST,
         ) as $file) {
             $origin = $file->getPathname();
-            $target = $targetDir . substr($origin, $dirLen);
+            $target = $targetDir.substr($origin, $dirLen);
 
             if ($file->isDir()) {
-                @mkdir($target, 0755);
+                @mkdir($target, 0o755);
             } else {
                 @copy($origin, $target);
             }
@@ -160,15 +155,15 @@ final class ComposerScripts
     }
 
     /**
-     * Copy Kint's init files into `system/ThirdParty/Kint/`
+     * Copy Kint's init files into `system/ThirdParty/Kint/`.
      */
     private static function copyKintInitFiles(): void
     {
-        $originDir = self::$dependencies['kint-src']['from'] . '../';
+        $originDir = self::$dependencies['kint-src']['from'].'../';
         $targetDir = self::$dependencies['kint-src']['to'];
 
         foreach (['init.php', 'init_helpers.php'] as $kintInit) {
-            @copy($originDir . $kintInit, $targetDir . $kintInit);
+            @copy($originDir.$kintInit, $targetDir.$kintInit);
         }
     }
 }

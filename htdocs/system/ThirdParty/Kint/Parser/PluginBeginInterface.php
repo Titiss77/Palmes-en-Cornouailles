@@ -33,6 +33,8 @@ use Kint\Value\Context\ContextInterface;
 interface PluginBeginInterface extends PluginInterface
 {
     /**
+     * @param mixed $var
+     *
      * @psalm-param mixed &$var
      */
     public function parseBegin(&$var, ContextInterface $c): ?AbstractValue;

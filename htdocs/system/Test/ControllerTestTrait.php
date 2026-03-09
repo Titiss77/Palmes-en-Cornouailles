@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -20,10 +22,9 @@ use CodeIgniter\HTTP\URI;
 use Config\App;
 use Config\Services;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 /**
- * Controller Test Trait
+ * Controller Test Trait.
  *
  * Provides features that make testing controllers simple and fluent.
  *
@@ -83,46 +84,9 @@ trait ControllerTestTrait
     /**
      * Request body.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $body;
-
-    /**
-     * Initializes required components.
-     */
-    protected function setUpControllerTestTrait(): void
-    {
-        // The URL helper is always loaded by the system so ensure it is available.
-        helper('url');
-
-        if (! $this->appConfig instanceof App) {
-            $this->appConfig = config(App::class);
-        }
-
-        if (! $this->uri instanceof URI) {
-            $factory   = Services::siteurifactory($this->appConfig, service('superglobals'), false);
-            $this->uri = $factory->createFromGlobals();
-        }
-
-        if (! $this->request instanceof IncomingRequest) {
-            // Do some acrobatics, so we can use the Request service with our own URI
-            $tempUri = service('uri');
-            Services::injectMock('uri', $this->uri);
-
-            $this->withRequest(service('incomingrequest', $this->appConfig, false));
-
-            // Restore the URI service
-            Services::injectMock('uri', $tempUri);
-        }
-
-        if (! $this->response instanceof ResponseInterface) {
-            $this->response = service('response', $this->appConfig, false);
-        }
-
-        if (! $this->logger instanceof LoggerInterface) {
-            $this->logger = service('logger');
-        }
-    }
 
     /**
      * Loads the specified controller, and generates any needed dependencies.
@@ -131,8 +95,8 @@ trait ControllerTestTrait
      */
     public function controller(string $name)
     {
-        if (! class_exists($name)) {
-            throw new InvalidArgumentException('Invalid Controller: ' . $name);
+        if (!class_exists($name)) {
+            throw new InvalidArgumentException('Invalid Controller: '.$name);
         }
 
         $this->controller = new $name();
@@ -152,8 +116,8 @@ trait ControllerTestTrait
      */
     public function execute(string $method, ...$params)
     {
-        if (! method_exists($this->controller, $method) || ! is_callable([$this->controller, $method])) {
-            throw new InvalidArgumentException('Method does not exist or is not callable in controller: ' . $method);
+        if (!method_exists($this->controller, $method) || !is_callable([$this->controller, $method])) {
+            throw new InvalidArgumentException('Method does not exist or is not callable in controller: '.$method);
         }
 
         $response = null;
@@ -164,7 +128,7 @@ trait ControllerTestTrait
             // The controller method param types may not be string.
             // So cannot set `declare(strict_types=1)` in this file.
             $response = $this->controller->{$method}(...$params);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $code = $e->getCode();
 
             // If code is not a valid HTTP status then assume there is an error
@@ -177,11 +141,11 @@ trait ControllerTestTrait
 
         // If the controller returned a view then add it to the output
         if (is_string($response)) {
-            $output = is_string($output) ? $output . $response : $response;
+            $output = is_string($output) ? $output.$response : $response;
         }
 
         // If the controller did not return a response then start one
-        if (! $response instanceof ResponseInterface) {
+        if (!$response instanceof ResponseInterface) {
             $response = $this->response;
         }
 
@@ -189,7 +153,7 @@ trait ControllerTestTrait
         // @see \CodeIgniter\CodeIgniter::gatherOutput()
         if (is_string($output)) {
             if (is_string($response->getBody())) {
-                $response->setBody($output . $response->getBody());
+                $response->setBody($output.$response->getBody());
             } else {
                 $response->setBody($output);
             }
@@ -280,7 +244,7 @@ trait ControllerTestTrait
      */
     public function withUri(string $uri)
     {
-        $factory   = service('siteurifactory');
+        $factory = service('siteurifactory');
         $this->uri = $factory->createFromString($uri);
         Services::injectMock('uri', $this->uri);
 
@@ -294,7 +258,7 @@ trait ControllerTestTrait
     /**
      * Set the method's body, with method chaining.
      *
-     * @param string|null $body
+     * @param null|string $body
      *
      * @return $this
      */
@@ -303,5 +267,42 @@ trait ControllerTestTrait
         $this->body = $body;
 
         return $this;
+    }
+
+    /**
+     * Initializes required components.
+     */
+    protected function setUpControllerTestTrait(): void
+    {
+        // The URL helper is always loaded by the system so ensure it is available.
+        helper('url');
+
+        if (!$this->appConfig instanceof App) {
+            $this->appConfig = config(App::class);
+        }
+
+        if (!$this->uri instanceof URI) {
+            $factory = Services::siteurifactory($this->appConfig, service('superglobals'), false);
+            $this->uri = $factory->createFromGlobals();
+        }
+
+        if (!$this->request instanceof IncomingRequest) {
+            // Do some acrobatics, so we can use the Request service with our own URI
+            $tempUri = service('uri');
+            Services::injectMock('uri', $this->uri);
+
+            $this->withRequest(service('incomingrequest', $this->appConfig, false));
+
+            // Restore the URI service
+            Services::injectMock('uri', $tempUri);
+        }
+
+        if (!$this->response instanceof ResponseInterface) {
+            $this->response = service('response', $this->appConfig, false);
+        }
+
+        if (!$this->logger instanceof LoggerInterface) {
+            $this->logger = service('logger');
+        }
     }
 }

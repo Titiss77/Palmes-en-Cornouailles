@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\MaterielModel;
+use Config\Database;
 
 class Materiel extends BaseAdminController
 {
@@ -28,7 +31,7 @@ class Materiel extends BaseAdminController
         $data = $this->getCommonData('Nouveau Matériel', 'admin/page.css');
         // On récupère les types de prêt pour le select
         $data['typesPret'] = $this->matModel->getTypesPret();
-        
+
         return view('admin/materiel/create', $data);
     }
 
@@ -45,10 +48,10 @@ class Materiel extends BaseAdminController
         $imageId = $this->handleImageUpload('image', 'materiel', $this->request->getPost('nom'));
 
         $data = [
-            'nom'         => $this->request->getPost('nom'),
+            'nom' => $this->request->getPost('nom'),
             'description' => $this->request->getPost('description'),
-            'idPret'      => $this->request->getPost('idPret'),
-            'image_id'    => $imageId
+            'idPret' => $this->request->getPost('idPret'),
+            'image_id' => $imageId,
         ];
 
         $this->matModel->insert($data);
@@ -83,12 +86,11 @@ class Materiel extends BaseAdminController
         }
 
         $imageId = $this->handleImageUpload('image', 'materiel', $this->request->getPost('nom'));
-        
 
         $data = [
-            'nom'         => $this->request->getPost('nom'),
+            'nom' => $this->request->getPost('nom'),
             'description' => $this->request->getPost('description'),
-            'idPret'      => $this->request->getPost('idPret'),
+            'idPret' => $this->request->getPost('idPret'),
         ];
 
         if ($imageId) {
@@ -107,17 +109,18 @@ class Materiel extends BaseAdminController
 
         if ($item) {
             if (!empty($item['image_path'])) {
-                $cheminFichier = FCPATH . 'uploads/' . $item['image_path'];
+                $cheminFichier = FCPATH.'uploads/'.$item['image_path'];
                 if (file_exists($cheminFichier)) {
                     unlink($cheminFichier);
                 }
                 if (!empty($item['image_id'])) {
-                    $db = \Config\Database::connect();
+                    $db = Database::connect();
                     $db->table('images')->where('id', $item['image_id'])->delete();
                 }
             }
 
             $this->matModel->delete($id);
+
             return redirect()->to('/admin/materiel')->with('success', 'Élément supprimé.');
         }
 
@@ -138,11 +141,11 @@ class Materiel extends BaseAdminController
 
         $this->matModel->update($id, ['image_id' => null]);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('images')->where('id', $imageId)->delete();
 
         if (!empty($imagePath)) {
-            $fullPath = FCPATH . 'uploads/' . $imagePath;
+            $fullPath = FCPATH.'uploads/'.$imagePath;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }

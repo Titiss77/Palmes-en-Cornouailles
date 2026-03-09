@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Entity\Cast;
 
 /**
- * Interface CastInterface
+ * Interface CastInterface.
  *
  * The methods work at (1)(4) only.
  *   [App Code] --- (1) --> [Entity] --- (2) --> [Database]
@@ -25,20 +25,20 @@ interface CastInterface
     /**
      * Takes a raw value from Entity, returns its value for PHP.
      *
-     * @param array|bool|float|int|object|string|null $value  Data
+     * @param null|array|bool|float|int|object|string $value  Data
      * @param array                                   $params Additional param
      *
-     * @return array|bool|float|int|object|string|null
+     * @return null|array|bool|float|int|object|string
      */
     public static function get($value, array $params = []);
 
     /**
      * Takes a PHP value, returns its raw value for Entity.
      *
-     * @param array|bool|float|int|object|string|null $value  Data
+     * @param null|array|bool|float|int|object|string $value  Data
      * @param array                                   $params Additional param
      *
-     * @return array|bool|float|int|object|string|null
+     * @return null|array|bool|float|int|object|string
      */
     public static function set($value, array $params = []);
 }

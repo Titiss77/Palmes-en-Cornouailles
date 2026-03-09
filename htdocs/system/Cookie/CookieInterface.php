@@ -60,6 +60,13 @@ interface CookieInterface
     public const EXPIRES_FORMAT = 'D, d-M-Y H:i:s T';
 
     /**
+     * Returns the string representation of the Cookie object.
+     *
+     * @return string
+     */
+    public function __toString();
+
+    /**
      * Returns a unique identifier for the cookie consisting
      * of its prefixed name, path, and domain.
      */
@@ -143,7 +150,7 @@ interface CookieInterface
 
     /**
      * Gets the options that are passable to the `setcookie` variant
-     * available on PHP 7.3+
+     * available on PHP 7.3+.
      *
      * @return array<string, bool|int|string>
      */
@@ -153,13 +160,6 @@ interface CookieInterface
      * Returns the Cookie as a header value.
      */
     public function toHeaderString(): string;
-
-    /**
-     * Returns the string representation of the Cookie object.
-     *
-     * @return string
-     */
-    public function __toString();
 
     /**
      * Returns the array representation of the Cookie object.

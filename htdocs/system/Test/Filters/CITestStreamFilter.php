@@ -13,13 +13,11 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Test\Filters;
 
-use php_user_filter;
-
 /**
  * Used to capture output during unit testing, so that it can
  * be used in assertions.
  */
-class CITestStreamFilter extends php_user_filter
+class CITestStreamFilter extends \php_user_filter
 {
     /**
      * Buffer to capture stream content.
@@ -31,12 +29,12 @@ class CITestStreamFilter extends php_user_filter
     protected static bool $registered = false;
 
     /**
-     * @var resource|null
+     * @var null|resource
      */
     private static $err;
 
     /**
-     * @var resource|null
+     * @var null|resource
      */
     private static $out;
 
@@ -63,7 +61,7 @@ class CITestStreamFilter extends php_user_filter
 
     public static function registration(): void
     {
-        if (! static::$registered) {
+        if (!static::$registered) {
             static::$registered = stream_filter_register('CITestStreamFilter', self::class); // @codeCoverageIgnore
         }
 
@@ -93,13 +91,13 @@ class CITestStreamFilter extends php_user_filter
     }
 
     /**
-     * @param resource|null $stream
+     * @param null|resource $stream
      *
      * @param-out null $stream
      */
     protected static function removeFilter(&$stream): void
     {
-        if ($stream !== null) {
+        if (null !== $stream) {
             stream_filter_remove($stream);
             $stream = null;
         }

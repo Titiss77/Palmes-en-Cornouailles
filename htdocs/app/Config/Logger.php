@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
@@ -10,7 +12,7 @@ class Logger extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Error Logging Threshold
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * You can enable error logging by setting a threshold over zero. The
      * threshold determines what gets logged. Any values below or equal to the
@@ -43,7 +45,7 @@ class Logger extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Date Format for Logs
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * Each item that is logged has an associated date. You can use PHP date
      * codes to set your own date formatting
@@ -53,7 +55,7 @@ class Logger extends BaseConfig
     /**
      * --------------------------------------------------------------------------
      * Log Handlers
-     * --------------------------------------------------------------------------
+     * --------------------------------------------------------------------------.
      *
      * The logging system supports multiple actions to be taken when something
      * is logged. This is done by allowing for multiple Handlers, special classes
@@ -109,7 +111,7 @@ class Logger extends BaseConfig
              * IMPORTANT: This MUST be an integer (no quotes) and you MUST use octal
              * integer notation (i.e. 0700, 0644, etc.)
              */
-            'filePermissions' => 0644,
+            'filePermissions' => 0o644,
 
             /*
              * Logging Directory Path

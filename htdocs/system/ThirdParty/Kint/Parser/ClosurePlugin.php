@@ -27,13 +27,10 @@ declare(strict_types=1);
 
 namespace Kint\Parser;
 
-use Closure;
 use Kint\Value\AbstractValue;
 use Kint\Value\ClosureValue;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\Representation\ContainerRepresentation;
-use ReflectionFunction;
-use ReflectionReference;
 
 class ClosurePlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -49,7 +46,7 @@ class ClosurePlugin extends AbstractPlugin implements PluginCompleteInterface
 
     public function parseComplete(&$var, AbstractValue $v, int $trigger): AbstractValue
     {
-        if (!$var instanceof Closure) {
+        if (!$var instanceof \Closure) {
             return $v;
         }
 
@@ -61,7 +58,7 @@ class ClosurePlugin extends AbstractPlugin implements PluginCompleteInterface
 
         $object->removeRepresentation('properties');
 
-        $closure = new ReflectionFunction($var);
+        $closure = new \ReflectionFunction($var);
 
         $statics = [];
 
@@ -81,7 +78,7 @@ class ClosurePlugin extends AbstractPlugin implements PluginCompleteInterface
             foreach ($statics as $name => $_) {
                 $base = new BaseContext('$'.$name);
                 $base->depth = $cdepth + 1;
-                $base->reference = null !== ReflectionReference::fromArrayElement($statics, $name);
+                $base->reference = null !== \ReflectionReference::fromArrayElement($statics, $name);
                 $statics_parsed[$name] = $parser->parse($statics[$name], $base);
             }
 

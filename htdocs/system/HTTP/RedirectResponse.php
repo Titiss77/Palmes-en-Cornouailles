@@ -17,9 +17,9 @@ use CodeIgniter\Cookie\CookieStore;
 use CodeIgniter\HTTP\Exceptions\HTTPException;
 
 /**
- * Handle a redirect response
+ * Handle a redirect response.
  *
- * @see \CodeIgniter\HTTP\RedirectResponseTest
+ * @see RedirectResponseTest
  */
 class RedirectResponse extends Response
 {
@@ -28,7 +28,7 @@ class RedirectResponse extends Response
      * If no code is provided it will be automatically determined.
      *
      * @param string   $uri  The URI path (relative to baseURL) to redirect to
-     * @param int|null $code HTTP status code
+     * @param null|int $code HTTP status code
      *
      * @return $this
      */
@@ -36,7 +36,7 @@ class RedirectResponse extends Response
     {
         // If it appears to be a relative URL, then convert to full URL
         // for better security.
-        if (! str_starts_with($uri, 'http')) {
+        if (!str_starts_with($uri, 'http')) {
             $uri = site_url($uri);
         }
 
@@ -59,7 +59,7 @@ class RedirectResponse extends Response
 
         $route = service('routes')->reverseRoute($route, ...$params);
 
-        if (! $route) {
+        if (!$route) {
             throw HTTPException::forInvalidRedirectRoute($namedRoute);
         }
 
@@ -93,31 +93,11 @@ class RedirectResponse extends Response
     {
         $session = service('session');
         $session->setFlashdata('_ci_old_input', [
-            'get'  => $_GET ?? [], // @phpstan-ignore nullCoalesce.variable
+            'get' => $_GET ?? [], // @phpstan-ignore nullCoalesce.variable
             'post' => $_POST ?? [], // @phpstan-ignore nullCoalesce.variable
         ]);
 
         $this->withErrors();
-
-        return $this;
-    }
-
-    /**
-     * Sets validation errors in the session.
-     *
-     * If the validation has any errors, transmit those back
-     * so they can be displayed when the validation is handled
-     * within a method different than displaying the form.
-     *
-     * @return $this
-     */
-    private function withErrors(): self
-    {
-        $validation = service('validation');
-
-        if ($validation->getErrors() !== []) {
-            service('session')->setFlashdata('_ci_validation_errors', $validation->getErrors());
-        }
 
         return $this;
     }
@@ -169,6 +149,26 @@ class RedirectResponse extends Response
                     $this->addHeader($name, $header->getValue());
                 }
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets validation errors in the session.
+     *
+     * If the validation has any errors, transmit those back
+     * so they can be displayed when the validation is handled
+     * within a method different than displaying the form.
+     *
+     * @return $this
+     */
+    private function withErrors(): self
+    {
+        $validation = service('validation');
+
+        if ([] !== $validation->getErrors()) {
+            service('session')->setFlashdata('_ci_validation_errors', $validation->getErrors());
         }
 
         return $this;

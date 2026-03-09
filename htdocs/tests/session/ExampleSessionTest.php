@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use CodeIgniter\Test\CIUnitTestCase;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 final class ExampleSessionTest extends CIUnitTestCase
 {

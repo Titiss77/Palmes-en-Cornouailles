@@ -16,19 +16,19 @@ namespace CodeIgniter\Database;
 use Config\Database;
 
 /**
- * Class Migration
+ * Class Migration.
  */
 abstract class Migration
 {
     /**
      * The name of the database group to use.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $DBGroup;
 
     /**
-     * Database Connection instance
+     * Database Connection instance.
      *
      * @var ConnectionInterface
      */
@@ -64,15 +64,11 @@ abstract class Migration
 
     /**
      * Perform a migration step.
-     *
-     * @return void
      */
-    abstract public function up();
+    abstract public function up(): void;
 
     /**
      * Revert a migration step.
-     *
-     * @return void
      */
-    abstract public function down();
+    abstract public function down(): void;
 }

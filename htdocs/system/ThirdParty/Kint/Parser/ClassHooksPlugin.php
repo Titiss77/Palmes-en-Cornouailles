@@ -34,7 +34,6 @@ use Kint\Value\DeclaredCallableBag;
 use Kint\Value\InstanceValue;
 use Kint\Value\MethodValue;
 use Kint\Value\Representation\ContainerRepresentation;
-use ReflectionProperty;
 
 class ClassHooksPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -42,6 +41,7 @@ class ClassHooksPlugin extends AbstractPlugin implements PluginCompleteInterface
 
     /** @psalm-var array<class-string, array<string, MethodValue[]>> */
     private array $cache = [];
+
     /** @psalm-var array<class-string, array<string, MethodValue[]>> */
     private array $cache_verbose = [];
 
@@ -82,7 +82,7 @@ class ClassHooksPlugin extends AbstractPlugin implements PluginCompleteInterface
             $cowner = $c->owner_class;
 
             if (!isset($this->cache_verbose[$cowner][$cname])) {
-                $ref = new ReflectionProperty($cowner, $cname);
+                $ref = new \ReflectionProperty($cowner, $cname);
                 $hooks = $ref->getHooks();
 
                 foreach ($hooks as $hook) {

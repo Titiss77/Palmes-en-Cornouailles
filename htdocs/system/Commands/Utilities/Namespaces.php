@@ -22,7 +22,7 @@ use Config\Autoload;
  * full server path. Helps you to verify that you have
  * the namespaces setup correctly.
  *
- * @see \CodeIgniter\Commands\Utilities\NamespacesTest
+ * @see NamespacesTest
  */
 class Namespaces extends BaseCommand
 {
@@ -35,35 +35,35 @@ class Namespaces extends BaseCommand
     protected $group = 'CodeIgniter';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'namespaces';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Verifies your namespaces are setup correctly.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'namespaces';
 
     /**
-     * the Command's Arguments
+     * the Command's Arguments.
      *
      * @var array<string, string>
      */
     protected $arguments = [];
 
     /**
-     * the Command's Options
+     * the Command's Options.
      *
      * @var array<string, string>
      */
@@ -76,7 +76,7 @@ class Namespaces extends BaseCommand
     /**
      * Displays the help for the spark cli script itself.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
         $params['m'] = (int) ($params['m'] ?? 60);
 
@@ -123,7 +123,7 @@ class Namespaces extends BaseCommand
         $length = mb_strlen($string);
 
         if ($length > $max) {
-            return mb_substr($string, 0, $max - 3) . '...';
+            return mb_substr($string, 0, $max - 3).'...';
         }
 
         return $string;

@@ -31,7 +31,6 @@ use Kint\Value\AbstractValue;
 use Kint\Value\Context\BaseContext;
 use Kint\Value\EnumValue;
 use Kint\Value\Representation\ContainerRepresentation;
-use UnitEnum;
 
 class EnumPlugin extends AbstractPlugin implements PluginCompleteInterface
 {
@@ -53,12 +52,12 @@ class EnumPlugin extends AbstractPlugin implements PluginCompleteInterface
 
     public function parseComplete(&$var, AbstractValue $v, int $trigger): AbstractValue
     {
-        if (!$var instanceof UnitEnum) {
+        if (!$var instanceof \UnitEnum) {
             return $v;
         }
 
         $c = $v->getContext();
-        $class = \get_class($var);
+        $class = $var::class;
 
         if (!isset($this->cache[$class])) {
             $contents = [];
@@ -70,7 +69,7 @@ class EnumPlugin extends AbstractPlugin implements PluginCompleteInterface
                 $contents[] = new EnumValue($base, $case);
             }
 
-            /** @psalm-var non-empty-array<EnumValue> $contents */
+            // @psalm-var non-empty-array<EnumValue> $contents
             $this->cache[$class] = new ContainerRepresentation('Enum values', $contents, 'enum');
         }
 

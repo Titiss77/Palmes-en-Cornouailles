@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace CodeIgniter\HTTP;
 
 /**
- * HTTP Method List
+ * HTTP Method List.
  */
 class Method
 {
     /**
      * Safe: No
      * Idempotent: No
-     * Cacheable: No
+     * Cacheable: No.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT
      */
@@ -30,7 +30,7 @@ class Method
     /**
      * Safe: No
      * Idempotent: Yes
-     * Cacheable: No
+     * Cacheable: No.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE
      */
@@ -39,7 +39,7 @@ class Method
     /**
      * Safe: Yes
      * Idempotent: Yes
-     * Cacheable: Yes
+     * Cacheable: Yes.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET
      */
@@ -48,7 +48,7 @@ class Method
     /**
      * Safe: Yes
      * Idempotent: Yes
-     * Cacheable: Yes
+     * Cacheable: Yes.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD
      */
@@ -57,7 +57,7 @@ class Method
     /**
      * Safe: Yes
      * Idempotent: Yes
-     * Cacheable: No
+     * Cacheable: No.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
      */
@@ -66,7 +66,7 @@ class Method
     /**
      * Safe: No
      * Idempotent: No
-     * Cacheable: Only if freshness information is included
+     * Cacheable: Only if freshness information is included.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH
      */
@@ -75,7 +75,7 @@ class Method
     /**
      * Safe: No
      * Idempotent: No
-     * Cacheable: Only if freshness information is included
+     * Cacheable: Only if freshness information is included.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
      */
@@ -84,7 +84,7 @@ class Method
     /**
      * Safe: No
      * Idempotent: Yes
-     * Cacheable: No
+     * Cacheable: No.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT
      */
@@ -93,7 +93,7 @@ class Method
     /**
      * Safe: Yes
      * Idempotent: Yes
-     * Cacheable: No
+     * Cacheable: No.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE
      */

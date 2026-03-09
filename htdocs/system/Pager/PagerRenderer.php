@@ -16,13 +16,13 @@ namespace CodeIgniter\Pager;
 use CodeIgniter\HTTP\URI;
 
 /**
- * Class PagerRenderer
+ * Class PagerRenderer.
  *
  * This class is passed to the view that describes the pagination,
  * and is used to get the link information and provide utility
  * methods needed to work with pagination.
  *
- * @see \CodeIgniter\Pager\PagerRendererTest
+ * @see PagerRendererTest
  */
 class PagerRenderer
 {
@@ -62,7 +62,7 @@ class PagerRenderer
     protected $pageCount;
 
     /**
-     * URI base for pagination links
+     * URI base for pagination links.
      *
      * @var URI
      */
@@ -76,7 +76,7 @@ class PagerRenderer
     protected $segment;
 
     /**
-     * Name of $_GET parameter
+     * Name of $_GET parameter.
      *
      * @var string
      */
@@ -105,15 +105,15 @@ class PagerRenderer
         // `first` and `last` will be updated by `setSurroundCount()`.
         // You must call `setSurroundCount()` after instantiation.
         $this->first = 1;
-        $this->last  = $details['pageCount'];
+        $this->last = $details['pageCount'];
 
-        $this->current      = $details['currentPage'];
-        $this->total        = $details['total'];
-        $this->uri          = $details['uri'];
-        $this->pageCount    = $details['pageCount'];
-        $this->segment      = $details['segment'] ?? 0;
+        $this->current = $details['currentPage'];
+        $this->total = $details['total'];
+        $this->uri = $details['uri'];
+        $this->pageCount = $details['pageCount'];
+        $this->segment = $details['segment'] ?? 0;
         $this->pageSelector = $details['pageSelector'] ?? 'page';
-        $this->perPage      = $details['perPage'] ?? null;
+        $this->perPage = $details['perPage'] ?? null;
         $this->updatePerPages();
     }
 
@@ -144,17 +144,17 @@ class PagerRenderer
      * page before the current page, but is the page just before the
      * "first" page.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPrevious()
     {
-        if (! $this->hasPrevious()) {
+        if (!$this->hasPrevious()) {
             return null;
         }
 
         $uri = clone $this->uri;
 
-        if ($this->segment === 0) {
+        if (0 === $this->segment) {
             $uri->addQuery($this->pageSelector, $this->first - 1);
         } else {
             $uri->setSegment($this->segment, $this->first - 1);
@@ -182,17 +182,17 @@ class PagerRenderer
      * page after the current page, but is the page that follows the
      * "last" page.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getNext()
     {
-        if (! $this->hasNext()) {
+        if (!$this->hasNext()) {
             return null;
         }
 
         $uri = clone $this->uri;
 
-        if ($this->segment === 0) {
+        if (0 === $this->segment) {
             $uri->addQuery($this->pageSelector, $this->last + 1);
         } else {
             $uri->setSegment($this->segment, $this->last + 1);
@@ -214,7 +214,7 @@ class PagerRenderer
     {
         $uri = clone $this->uri;
 
-        if ($this->segment === 0) {
+        if (0 === $this->segment) {
             $uri->addQuery($this->pageSelector, 1);
         } else {
             $uri->setSegment($this->segment, 1);
@@ -236,7 +236,7 @@ class PagerRenderer
     {
         $uri = clone $this->uri;
 
-        if ($this->segment === 0) {
+        if (0 === $this->segment) {
             $uri->addQuery($this->pageSelector, $this->pageCount);
         } else {
             $uri->setSegment($this->segment, $this->pageCount);
@@ -258,7 +258,7 @@ class PagerRenderer
     {
         $uri = clone $this->uri;
 
-        if ($this->segment === 0) {
+        if (0 === $this->segment) {
             $uri->addQuery($this->pageSelector, $this->current);
         } else {
             $uri->setSegment($this->segment, $this->current);
@@ -287,8 +287,8 @@ class PagerRenderer
 
         $uri = clone $this->uri;
 
-        for ($i = $this->first; $i <= $this->last; $i++) {
-            $uri     = $this->segment === 0 ? $uri->addQuery($this->pageSelector, $i) : $uri->setSegment($this->segment, $i);
+        for ($i = $this->first; $i <= $this->last; ++$i) {
+            $uri = 0 === $this->segment ? $uri->addQuery($this->pageSelector, $i) : $uri->setSegment($this->segment, $i);
             $links[] = [
                 'uri' => URI::createURIString(
                     $uri->getScheme(),
@@ -297,53 +297,12 @@ class PagerRenderer
                     $uri->getQuery(),
                     $uri->getFragment(),
                 ),
-                'title'  => $i,
+                'title' => $i,
                 'active' => ($i === $this->current),
             ];
         }
 
         return $links;
-    }
-
-    /**
-     * Updates the first and last pages based on $surroundCount,
-     * which is the number of links surrounding the active page
-     * to show.
-     *
-     * @param int|null $count The new "surroundCount"
-     *
-     * @return void
-     */
-    protected function updatePages(?int $count = null)
-    {
-        if ($count === null) {
-            return;
-        }
-
-        $this->first = $this->current - $count > 0 ? $this->current - $count : 1;
-        $this->last  = $this->current + $count <= $this->pageCount ? $this->current + $count : (int) $this->pageCount;
-    }
-
-    /**
-     * Updates the start and end items per pages, which is
-     * the number of items displayed on the active page.
-     */
-    protected function updatePerPages(): void
-    {
-        if ($this->total === null || $this->perPage === null) {
-            return;
-        }
-
-        // When the page is the last, perform a different calculation.
-        if ($this->last === $this->current) {
-            $this->perPageStart = $this->perPage * ($this->current - 1) + 1;
-            $this->perPageEnd   = $this->total;
-
-            return;
-        }
-
-        $this->perPageStart = $this->current === 1 ? 1 : ($this->perPage * $this->current) - $this->perPage + 1;
-        $this->perPageEnd   = $this->perPage * $this->current;
     }
 
     /**
@@ -359,17 +318,17 @@ class PagerRenderer
      *
      * You MUST call hasPreviousPage() first, or this value may be invalid.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPreviousPage()
     {
-        if (! $this->hasPreviousPage()) {
+        if (!$this->hasPreviousPage()) {
             return null;
         }
 
         $uri = clone $this->uri;
 
-        if ($this->segment === 0) {
+        if (0 === $this->segment) {
             $uri->addQuery($this->pageSelector, $this->current - 1);
         } else {
             $uri->setSegment($this->segment, $this->current - 1);
@@ -397,17 +356,17 @@ class PagerRenderer
      *
      * You MUST call hasNextPage() first, or this value may be invalid.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getNextPage()
     {
-        if (! $this->hasNextPage()) {
+        if (!$this->hasNextPage()) {
             return null;
         }
 
         $uri = clone $this->uri;
 
-        if ($this->segment === 0) {
+        if (0 === $this->segment) {
             $uri->addQuery($this->pageSelector, $this->current + 1);
         } else {
             $uri->setSegment($this->segment, $this->current + 1);
@@ -459,7 +418,7 @@ class PagerRenderer
      */
     public function getPreviousPageNumber(): ?int
     {
-        return ($this->current === 1) ? null : $this->current - 1;
+        return (1 === $this->current) ? null : $this->current - 1;
     }
 
     /**
@@ -500,5 +459,44 @@ class PagerRenderer
     public function getPerPageEnd(): ?int
     {
         return $this->perPageEnd;
+    }
+
+    /**
+     * Updates the first and last pages based on $surroundCount,
+     * which is the number of links surrounding the active page
+     * to show.
+     *
+     * @param null|int $count The new "surroundCount"
+     */
+    protected function updatePages(?int $count = null): void
+    {
+        if (null === $count) {
+            return;
+        }
+
+        $this->first = $this->current - $count > 0 ? $this->current - $count : 1;
+        $this->last = $this->current + $count <= $this->pageCount ? $this->current + $count : (int) $this->pageCount;
+    }
+
+    /**
+     * Updates the start and end items per pages, which is
+     * the number of items displayed on the active page.
+     */
+    protected function updatePerPages(): void
+    {
+        if (null === $this->total || null === $this->perPage) {
+            return;
+        }
+
+        // When the page is the last, perform a different calculation.
+        if ($this->last === $this->current) {
+            $this->perPageStart = $this->perPage * ($this->current - 1) + 1;
+            $this->perPageEnd = $this->total;
+
+            return;
+        }
+
+        $this->perPageStart = 1 === $this->current ? 1 : ($this->perPage * $this->current) - $this->perPage + 1;
+        $this->perPageEnd = $this->perPage * $this->current;
     }
 }

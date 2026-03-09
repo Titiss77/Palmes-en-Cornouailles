@@ -28,22 +28,25 @@ declare(strict_types=1);
 namespace Kint\Value;
 
 use Kint\Utils;
-use ReflectionParameter;
 
 final class ParameterBag
 {
     /** @psalm-readonly */
     public string $name;
+
     /** @psalm-readonly */
     public int $position;
+
     /** @psalm-readonly */
     public bool $ref;
+
     /** @psalm-readonly */
     public ?string $type_hint;
+
     /** @psalm-readonly */
     public ?string $default;
 
-    public function __construct(ReflectionParameter $param)
+    public function __construct(\ReflectionParameter $param)
     {
         $this->name = $param->getName();
         $this->position = $param->getPosition();
@@ -53,26 +56,38 @@ final class ParameterBag
 
         if ($param->isDefaultValueAvailable()) {
             $default = $param->getDefaultValue();
+
             switch (\gettype($default)) {
                 case 'NULL':
                     $this->default = 'null';
+
                     break;
+
                 case 'boolean':
                     $this->default = $default ? 'true' : 'false';
+
                     break;
+
                 case 'array':
                     $this->default = \count($default) ? 'array(...)' : 'array()';
+
                     break;
+
                 case 'double':
                 case 'integer':
                 case 'string':
                     $this->default = \var_export($default, true);
+
                     break;
+
                 case 'object':
-                    $this->default = 'object('.\get_class($default).')';
+                    $this->default = 'object('.$default::class.')';
+
                     break;
+
                 default:
                     $this->default = \gettype($default);
+
                     break;
             }
         } else {

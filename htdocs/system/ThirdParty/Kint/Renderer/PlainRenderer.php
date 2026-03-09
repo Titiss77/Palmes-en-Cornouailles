@@ -141,14 +141,18 @@ class PlainRenderer extends TextRenderer
                             $output .= ' nonce="'.\htmlspecialchars(self::$js_nonce).'"';
                         }
                         $output .= '>'.$contents.'</script>';
+
                         break;
+
                     case 'style':
                         $output .= '<style class="kint-plain-style"';
                         if (null !== self::$css_nonce) {
                             $output .= ' nonce="'.\htmlspecialchars(self::$css_nonce).'"';
                         }
                         $output .= '>'.$contents.'</style>';
+
                         break;
+
                     default:
                         $output .= $contents;
                 }

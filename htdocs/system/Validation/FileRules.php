@@ -16,10 +16,8 @@ namespace CodeIgniter\Validation;
 use CodeIgniter\Validation\StrictRules\FileRules as StrictFileRules;
 
 /**
- * File validation rules
+ * File validation rules.
  *
- * @see \CodeIgniter\Validation\FileRulesTest
+ * @see FileRulesTest
  */
-class FileRules extends StrictFileRules
-{
-}
+class FileRules extends StrictFileRules {}

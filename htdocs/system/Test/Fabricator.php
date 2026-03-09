@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Test;
 
-use Closure;
 use CodeIgniter\Exceptions\FrameworkException;
 use CodeIgniter\Exceptions\InvalidArgumentException;
 use CodeIgniter\Exceptions\RuntimeException;
@@ -25,68 +24,75 @@ use Faker\Generator;
 use InvalidArgumentException as BaseInvalidArgumentException;
 
 /**
- * Fabricator
+ * Fabricator.
  *
  * Bridge class for using Faker to create example data based on
  * model specifications.
  *
- * @see \CodeIgniter\Test\FabricatorTest
+ * @see FabricatorTest
  */
 class Fabricator
 {
     /**
-     * Array of counts for fabricated items
+     * Default formatter to use when nothing is detected.
+     *
+     * @var string
+     */
+    public $defaultFormatter = 'word';
+
+    /**
+     * Array of counts for fabricated items.
      *
      * @var array
      */
     protected static $tableCounts = [];
 
     /**
-     * Locale-specific Faker instance
+     * Locale-specific Faker instance.
      *
      * @var Generator
      */
     protected $faker;
 
     /**
-     * Model instance (can be non-framework if it follows framework design)
+     * Model instance (can be non-framework if it follows framework design).
      *
      * @var Model|object
      */
     protected $model;
 
     /**
-     * Locale used to initialize Faker
+     * Locale used to initialize Faker.
      *
      * @var string
      */
     protected $locale;
 
     /**
-     * Map of properties and their formatter to use
+     * Map of properties and their formatter to use.
      *
-     * @var array|null
+     * @var null|array
      */
     protected $formatters;
 
     /**
-     * Date fields present in the model
+     * Date fields present in the model.
      *
      * @var array
      */
     protected $dateFields = [];
 
     /**
-     * Array of data to add or override faked versions
+     * Array of data to add or override faked versions.
      *
      * @var array
      */
     protected $overrides = [];
 
     /**
-     * Array of single-use data to override faked versions
+     * Array of single-use data to override faked versions.
      *
-     * @var array|null
+     * @var null|array
      */
     protected $tempOverrides;
 
@@ -96,24 +102,17 @@ class Fabricator
      * @var array{
      *   unique: array<non-empty-string, array{reset: bool, maxRetries: int}>,
      *   optional: array<non-empty-string, array{weight: float, default: mixed}>,
-     *   valid: array<non-empty-string, array{validator: Closure(mixed): bool|null, maxRetries: int}>
+     *   valid: array<non-empty-string, array{validator: null|\Closure(mixed): bool, maxRetries: int}>
      * }
      */
     private array $modifiedFields = ['unique' => [], 'optional' => [], 'valid' => []];
 
     /**
-     * Default formatter to use when nothing is detected
-     *
-     * @var string
-     */
-    public $defaultFormatter = 'word';
-
-    /**
      * Store the model instance and initialize Faker to the locale.
      *
      * @param object|string $model      Instance or classname of the model to use
-     * @param array|null    $formatters Array of property => formatter
-     * @param string|null   $locale     Locale for Faker provider
+     * @param null|array    $formatters Array of property => formatter
+     * @param null|string   $locale     Locale for Faker provider
      *
      * @throws InvalidArgumentException
      */
@@ -123,14 +122,14 @@ class Fabricator
             $model = model($model, false);
         }
 
-        if (! is_object($model)) {
+        if (!is_object($model)) {
             throw new InvalidArgumentException(lang('Fabricator.invalidModel'));
         }
 
         $this->model = $model;
 
         // If no locale was specified then use the App default
-        if ($locale === null) {
+        if (null === $locale) {
             $locale = config(App::class)->defaultLocale;
         }
 
@@ -152,27 +151,25 @@ class Fabricator
     }
 
     /**
-     * Reset internal counts
-     *
-     * @return void
+     * Reset internal counts.
      */
-    public static function resetCounts()
+    public static function resetCounts(): void
     {
         self::$tableCounts = [];
     }
 
     /**
-     * Get the count for a specific table
+     * Get the count for a specific table.
      *
      * @param string $table Name of the target table
      */
     public static function getCount(string $table): int
     {
-        return ! isset(self::$tableCounts[$table]) ? 0 : self::$tableCounts[$table];
+        return !isset(self::$tableCounts[$table]) ? 0 : self::$tableCounts[$table];
     }
 
     /**
-     * Set the count for a specific table
+     * Set the count for a specific table.
      *
      * @param string $table Name of the target table
      * @param int    $count Count value
@@ -187,7 +184,7 @@ class Fabricator
     }
 
     /**
-     * Increment the count for a table
+     * Increment the count for a table.
      *
      * @param string $table Name of the target table
      *
@@ -199,7 +196,7 @@ class Fabricator
     }
 
     /**
-     * Decrement the count for a table
+     * Decrement the count for a table.
      *
      * @param string $table Name of the target table
      *
@@ -211,7 +208,7 @@ class Fabricator
     }
 
     /**
-     * Returns the model instance
+     * Returns the model instance.
      *
      * @return object Framework or compatible model
      */
@@ -221,7 +218,7 @@ class Fabricator
     }
 
     /**
-     * Returns the locale
+     * Returns the locale.
      */
     public function getLocale(): string
     {
@@ -229,7 +226,7 @@ class Fabricator
     }
 
     /**
-     * Returns the Faker generator
+     * Returns the Faker generator.
      */
     public function getFaker(): Generator
     {
@@ -237,7 +234,7 @@ class Fabricator
     }
 
     /**
-     * Return and reset tempOverrides
+     * Return and reset tempOverrides.
      */
     public function getOverrides(): array
     {
@@ -249,7 +246,7 @@ class Fabricator
     }
 
     /**
-     * Set the overrides, once or persistent
+     * Set the overrides, once or persistent.
      *
      * @param array $overrides Array of [field => value]
      * @param bool  $persist   Whether these overrides should persist through the next operation
@@ -269,8 +266,8 @@ class Fabricator
      * Set a field to be unique.
      *
      * @param bool $reset      If set to true, resets the list of existing values
-     * @param int  $maxRetries Maximum number of retries to find a unique value,
-     *                         After which an OverflowException is thrown.
+     * @param int  $maxRetries maximum number of retries to find a unique value,
+     *                         After which an OverflowException is thrown
      */
     public function setUnique(string $field, bool $reset = false, int $maxRetries = 10000): static
     {
@@ -282,7 +279,7 @@ class Fabricator
     /**
      * Set a field to be optional.
      *
-     * @param float $weight A probability between 0 and 1, 0 means that we always get the default value.
+     * @param float $weight a probability between 0 and 1, 0 means that we always get the default value
      */
     public function setOptional(string $field, float $weight = 0.5, mixed $default = null): static
     {
@@ -294,11 +291,11 @@ class Fabricator
     /**
      * Set a field to be valid using a callback.
      *
-     * @param Closure(mixed): bool|null $validator  A function returning true for valid values
-     * @param int                       $maxRetries Maximum number of retries to find a valid value,
-     *                                              After which an OverflowException is thrown.
+     * @param null|\Closure(mixed): bool $validator  A function returning true for valid values
+     * @param int                        $maxRetries maximum number of retries to find a valid value,
+     *                                               After which an OverflowException is thrown
      */
-    public function setValid(string $field, ?Closure $validator = null, int $maxRetries = 10000): static
+    public function setValid(string $field, ?\Closure $validator = null, int $maxRetries = 10000): static
     {
         $this->modifiedFields['valid'][$field] = compact('validator', 'maxRetries');
 
@@ -306,7 +303,7 @@ class Fabricator
     }
 
     /**
-     * Returns the current formatters
+     * Returns the current formatters.
      */
     public function getFormatters(): ?array
     {
@@ -316,11 +313,11 @@ class Fabricator
     /**
      * Set the formatters to use. Will attempt to autodetect if none are available.
      *
-     * @param array|null $formatters Array of [field => formatter], or null to detect
+     * @param null|array $formatters Array of [field => formatter], or null to detect
      */
     public function setFormatters(?array $formatters = null): self
     {
-        if ($formatters !== null) {
+        if (null !== $formatters) {
             $this->formatters = $formatters;
         } elseif (method_exists($this->model, 'fake')) {
             $this->formatters = null;
@@ -329,6 +326,179 @@ class Fabricator
         }
 
         return $this;
+    }
+
+    /**
+     * Generate new entities with faked data.
+     *
+     * @param null|int $count Optional number to create a collection
+     *
+     * @return array|object An array or object (based on returnType), or an array of returnTypes
+     */
+    public function make(?int $count = null)
+    {
+        // If a singleton was requested then go straight to it
+        if (null === $count) {
+            return 'array' === $this->model->returnType
+                ? $this->makeArray()
+                : $this->makeObject();
+        }
+
+        $return = [];
+
+        for ($i = 0; $i < $count; ++$i) {
+            $return[] = 'array' === $this->model->returnType
+                ? $this->makeArray()
+                : $this->makeObject();
+        }
+
+        return $return;
+    }
+
+    /**
+     * Generate an array of faked data.
+     *
+     * @return array An array of faked data
+     *
+     * @throws RuntimeException
+     */
+    public function makeArray()
+    {
+        if (null !== $this->formatters) {
+            $result = [];
+
+            foreach ($this->formatters as $field => $formatter) {
+                $faker = $this->faker;
+
+                if (isset($this->modifiedFields['unique'][$field])) {
+                    $faker = $faker->unique(
+                        $this->modifiedFields['unique'][$field]['reset'],
+                        $this->modifiedFields['unique'][$field]['maxRetries'],
+                    );
+                }
+
+                if (isset($this->modifiedFields['optional'][$field])) {
+                    $faker = $faker->optional(
+                        $this->modifiedFields['optional'][$field]['weight'],
+                        $this->modifiedFields['optional'][$field]['default'],
+                    );
+                }
+
+                if (isset($this->modifiedFields['valid'][$field])) {
+                    $faker = $faker->valid(
+                        $this->modifiedFields['valid'][$field]['validator'],
+                        $this->modifiedFields['valid'][$field]['maxRetries'],
+                    );
+                }
+
+                $result[$field] = $faker->format($formatter);
+            }
+        }
+        // If no formatters were defined then look for a model fake() method
+        elseif (method_exists($this->model, 'fake')) {
+            $result = $this->model->fake($this->faker);
+
+            $result = is_object($result) && method_exists($result, 'toArray')
+                // This should cover entities
+                ? $result->toArray()
+                // Try to cast it
+                : (array) $result;
+        }
+        // Nothing left to do but give up
+        else {
+            throw new RuntimeException(lang('Fabricator.missingFormatters'));
+        }
+
+        // Replace overridden fields
+        return array_merge($result, $this->getOverrides());
+    }
+
+    /**
+     * Generate an object of faked data.
+     *
+     * @param null|string $className Class name of the object to create; null to use model default
+     *
+     * @return object An instance of the class with faked data
+     *
+     * @throws RuntimeException
+     */
+    public function makeObject(?string $className = null): object
+    {
+        if (null === $className) {
+            if ('object' === $this->model->returnType || 'array' === $this->model->returnType) {
+                $className = 'stdClass';
+            } else {
+                $className = $this->model->returnType;
+            }
+        }
+
+        // If using the model's fake() method then check it for the correct return type
+        if (null === $this->formatters && method_exists($this->model, 'fake')) {
+            $result = $this->model->fake($this->faker);
+
+            if ($result instanceof $className) {
+                // Set overrides manually
+                foreach ($this->getOverrides() as $key => $value) {
+                    $result->{$key} = $value;
+                }
+
+                return $result;
+            }
+        }
+
+        // Get the array values and apply them to the object
+        $array = $this->makeArray();
+        $object = new $className();
+
+        // Check for the entity method
+        if (method_exists($object, 'fill')) {
+            $object->fill($array);
+        } else {
+            foreach ($array as $key => $value) {
+                $object->{$key} = $value;
+            }
+        }
+
+        return $object;
+    }
+
+    /**
+     * Generate new entities from the database.
+     *
+     * @param null|int $count Optional number to create a collection
+     * @param bool     $mock  Whether to execute or mock the insertion
+     *
+     * @return array|object An array or object (based on returnType), or an array of returnTypes
+     *
+     * @throws FrameworkException
+     */
+    public function create(?int $count = null, bool $mock = false)
+    {
+        // Intercept mock requests
+        if ($mock) {
+            return $this->createMock($count);
+        }
+
+        $ids = [];
+
+        // Iterate over new entities and insert each one, storing insert IDs
+        foreach ($this->make($count ?? 1) as $result) {
+            if ($id = $this->model->insert($result, true)) {
+                $ids[] = $id;
+                self::upCount($this->model->table);
+
+                continue;
+            }
+
+            throw FrameworkException::forFabricatorCreateFailed($this->model->table, implode(' ', $this->model->errors() ?? []));
+        }
+
+        // If the model defines a "withDeleted" method for handling soft deletes then use it
+        if (method_exists($this->model, 'withDeleted')) {
+            $this->model->withDeleted();
+        }
+
+        return $this->model->find(null === $count ? reset($ids) : $ids);
     }
 
     /**
@@ -395,182 +565,9 @@ class Fabricator
     }
 
     /**
-     * Generate new entities with faked data
+     * Generate new database entities without actually inserting them.
      *
-     * @param int|null $count Optional number to create a collection
-     *
-     * @return array|object An array or object (based on returnType), or an array of returnTypes
-     */
-    public function make(?int $count = null)
-    {
-        // If a singleton was requested then go straight to it
-        if ($count === null) {
-            return $this->model->returnType === 'array'
-                ? $this->makeArray()
-                : $this->makeObject();
-        }
-
-        $return = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            $return[] = $this->model->returnType === 'array'
-                ? $this->makeArray()
-                : $this->makeObject();
-        }
-
-        return $return;
-    }
-
-    /**
-     * Generate an array of faked data
-     *
-     * @return array An array of faked data
-     *
-     * @throws RuntimeException
-     */
-    public function makeArray()
-    {
-        if ($this->formatters !== null) {
-            $result = [];
-
-            foreach ($this->formatters as $field => $formatter) {
-                $faker = $this->faker;
-
-                if (isset($this->modifiedFields['unique'][$field])) {
-                    $faker = $faker->unique(
-                        $this->modifiedFields['unique'][$field]['reset'],
-                        $this->modifiedFields['unique'][$field]['maxRetries'],
-                    );
-                }
-
-                if (isset($this->modifiedFields['optional'][$field])) {
-                    $faker = $faker->optional(
-                        $this->modifiedFields['optional'][$field]['weight'],
-                        $this->modifiedFields['optional'][$field]['default'],
-                    );
-                }
-
-                if (isset($this->modifiedFields['valid'][$field])) {
-                    $faker = $faker->valid(
-                        $this->modifiedFields['valid'][$field]['validator'],
-                        $this->modifiedFields['valid'][$field]['maxRetries'],
-                    );
-                }
-
-                $result[$field] = $faker->format($formatter);
-            }
-        }
-        // If no formatters were defined then look for a model fake() method
-        elseif (method_exists($this->model, 'fake')) {
-            $result = $this->model->fake($this->faker);
-
-            $result = is_object($result) && method_exists($result, 'toArray')
-                // This should cover entities
-                ? $result->toArray()
-                // Try to cast it
-                : (array) $result;
-        }
-        // Nothing left to do but give up
-        else {
-            throw new RuntimeException(lang('Fabricator.missingFormatters'));
-        }
-
-        // Replace overridden fields
-        return array_merge($result, $this->getOverrides());
-    }
-
-    /**
-     * Generate an object of faked data
-     *
-     * @param string|null $className Class name of the object to create; null to use model default
-     *
-     * @return object An instance of the class with faked data
-     *
-     * @throws RuntimeException
-     */
-    public function makeObject(?string $className = null): object
-    {
-        if ($className === null) {
-            if ($this->model->returnType === 'object' || $this->model->returnType === 'array') {
-                $className = 'stdClass';
-            } else {
-                $className = $this->model->returnType;
-            }
-        }
-
-        // If using the model's fake() method then check it for the correct return type
-        if ($this->formatters === null && method_exists($this->model, 'fake')) {
-            $result = $this->model->fake($this->faker);
-
-            if ($result instanceof $className) {
-                // Set overrides manually
-                foreach ($this->getOverrides() as $key => $value) {
-                    $result->{$key} = $value;
-                }
-
-                return $result;
-            }
-        }
-
-        // Get the array values and apply them to the object
-        $array  = $this->makeArray();
-        $object = new $className();
-
-        // Check for the entity method
-        if (method_exists($object, 'fill')) {
-            $object->fill($array);
-        } else {
-            foreach ($array as $key => $value) {
-                $object->{$key} = $value;
-            }
-        }
-
-        return $object;
-    }
-
-    /**
-     * Generate new entities from the database
-     *
-     * @param int|null $count Optional number to create a collection
-     * @param bool     $mock  Whether to execute or mock the insertion
-     *
-     * @return array|object An array or object (based on returnType), or an array of returnTypes
-     *
-     * @throws FrameworkException
-     */
-    public function create(?int $count = null, bool $mock = false)
-    {
-        // Intercept mock requests
-        if ($mock) {
-            return $this->createMock($count);
-        }
-
-        $ids = [];
-
-        // Iterate over new entities and insert each one, storing insert IDs
-        foreach ($this->make($count ?? 1) as $result) {
-            if ($id = $this->model->insert($result, true)) {
-                $ids[] = $id;
-                self::upCount($this->model->table);
-
-                continue;
-            }
-
-            throw FrameworkException::forFabricatorCreateFailed($this->model->table, implode(' ', $this->model->errors() ?? []));
-        }
-
-        // If the model defines a "withDeleted" method for handling soft deletes then use it
-        if (method_exists($this->model, 'withDeleted')) {
-            $this->model->withDeleted();
-        }
-
-        return $this->model->find($count === null ? reset($ids) : $ids);
-    }
-
-    /**
-     * Generate new database entities without actually inserting them
-     *
-     * @param int|null $count Optional number to create a collection
+     * @param null|int $count Optional number to create a collection
      *
      * @return array|object An array or object (based on returnType), or an array of returnTypes
      */
@@ -578,8 +575,8 @@ class Fabricator
     {
         $datetime = match ($this->model->dateFormat) {
             'datetime' => date('Y-m-d H:i:s'),
-            'date'     => date('Y-m-d'),
-            default    => Time::now()->getTimestamp(),
+            'date' => date('Y-m-d'),
+            default => Time::now()->getTimestamp(),
         };
 
         // Determine which fields we will need
@@ -613,6 +610,6 @@ class Fabricator
             $return[] = $result;
         }
 
-        return $count === null ? reset($return) : $return;
+        return null === $count ? reset($return) : $return;
     }
 }

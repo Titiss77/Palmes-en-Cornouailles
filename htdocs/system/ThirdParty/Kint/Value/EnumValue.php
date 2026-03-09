@@ -27,18 +27,16 @@ declare(strict_types=1);
 
 namespace Kint\Value;
 
-use BackedEnum;
 use Kint\Value\Context\ContextInterface;
-use UnitEnum;
 
 class EnumValue extends InstanceValue
 {
     /** @psalm-readonly */
-    protected UnitEnum $enumval;
+    protected \UnitEnum $enumval;
 
-    public function __construct(ContextInterface $context, UnitEnum $enumval)
+    public function __construct(ContextInterface $context, \UnitEnum $enumval)
     {
-        parent::__construct($context, \get_class($enumval), \spl_object_hash($enumval), \spl_object_id($enumval));
+        parent::__construct($context, $enumval::class, \spl_object_hash($enumval), \spl_object_id($enumval));
 
         $this->enumval = $enumval;
     }
@@ -55,7 +53,7 @@ class EnumValue extends InstanceValue
 
     public function getDisplayValue(): ?string
     {
-        if ($this->enumval instanceof BackedEnum) {
+        if ($this->enumval instanceof \BackedEnum) {
             if (\is_string($this->enumval->value)) {
                 return '"'.$this->enumval->value.'"';
             }

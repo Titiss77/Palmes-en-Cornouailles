@@ -43,12 +43,22 @@ class SeeInDatabase extends Constraint
      */
     public function __construct(ConnectionInterface $db, array $data)
     {
-        $this->db   = $db;
+        $this->db = $db;
         $this->data = $data;
     }
 
     /**
-     * Check if data is found in the table
+     * Gets a string representation of the constraint.
+     *
+     * @param int $options
+     */
+    public function toString(bool $exportObjects = false, $options = 0): string
+    {
+        return json_encode($this->data, $options);
+    }
+
+    /**
+     * Check if data is found in the table.
      *
      * @param mixed $table
      */
@@ -58,7 +68,7 @@ class SeeInDatabase extends Constraint
     }
 
     /**
-     * Get the description of the failure
+     * Get the description of the failure.
      *
      * @param mixed $table
      */
@@ -84,20 +94,21 @@ class SeeInDatabase extends Constraint
             $this->data[array_key_first($this->data)],
         )->limit($this->show)->get()->getResultArray();
 
-        if ($similar !== []) {
-            $description = 'Found similar results: ' . json_encode($similar, JSON_PRETTY_PRINT);
+        if ([] !== $similar) {
+            $description = 'Found similar results: '.json_encode($similar, JSON_PRETTY_PRINT);
         } else {
             // Does the table have any results at all?
             $results = $this->db->table($table)
                 ->limit($this->show)
                 ->get()
-                ->getResultArray();
+                ->getResultArray()
+            ;
 
-            if ($results !== []) {
+            if ([] !== $results) {
                 return 'The table is empty.';
             }
 
-            $description = 'Found: ' . json_encode($results, JSON_PRETTY_PRINT);
+            $description = 'Found: '.json_encode($results, JSON_PRETTY_PRINT);
         }
 
         $total = $this->db->table($table)->countAll();
@@ -106,15 +117,5 @@ class SeeInDatabase extends Constraint
         }
 
         return $description;
-    }
-
-    /**
-     * Gets a string representation of the constraint
-     *
-     * @param int $options
-     */
-    public function toString(bool $exportObjects = false, $options = 0): string
-    {
-        return json_encode($this->data, $options);
     }
 }

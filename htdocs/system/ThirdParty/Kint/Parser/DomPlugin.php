@@ -38,8 +38,6 @@ use Dom\Node;
 use Dom\NodeList;
 use DOMAttr;
 use DOMCharacterData;
-use DOMDocumentType;
-use DOMElement;
 use DOMNamedNodeMap;
 use DOMNode;
 use DOMNodeList;
@@ -54,7 +52,6 @@ use Kint\Value\FixedWidthValue;
 use Kint\Value\InstanceValue;
 use Kint\Value\Representation\ContainerRepresentation;
 use Kint\Value\StringValue;
-use LogicException;
 
 class DomPlugin extends AbstractPlugin implements PluginBeginInterface
 {
@@ -241,19 +238,78 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
     {
         // Attributes and chardata (Which is parent of comments and text
         // nodes) don't need children or attributes of their own
-        if ($var instanceof Attr || $var instanceof CharacterData || $var instanceof DOMAttr || $var instanceof DOMCharacterData) {
+        if ($var instanceof Attr || $var instanceof CharacterData || $var instanceof \DOMAttr || $var instanceof \DOMCharacterData) {
             return $this->parseText($var, $c);
         }
 
-        if ($var instanceof NamedNodeMap || $var instanceof NodeList || $var instanceof DOMNamedNodeMap || $var instanceof DOMNodeList) {
+        if ($var instanceof NamedNodeMap || $var instanceof NodeList || $var instanceof \DOMNamedNodeMap || $var instanceof \DOMNodeList) {
             return $this->parseList($var, $c);
         }
 
-        if ($var instanceof Node || $var instanceof DOMNode) {
+        if ($var instanceof Node || $var instanceof \DOMNode) {
             return $this->parseNode($var, $c);
         }
 
         return null;
+    }
+
+    /**
+     * @psalm-param Node|DOMNode $var
+     *
+     * @psalm-return non-empty-array<string, bool>
+     */
+    public static function getKnownProperties(object $var): array
+    {
+        if ($var instanceof Node) {
+            $known_properties = self::NODE_PROPS;
+            if ($var instanceof Element) {
+                $known_properties += self::ELEMENT_PROPS;
+            }
+
+            if ($var instanceof Document) {
+                $known_properties['textContent'] = true;
+            }
+
+            if ($var instanceof Attr || $var instanceof CharacterData) {
+                $known_properties['nodeValue'] = false;
+            }
+
+            foreach (self::DOM_NS_VERSIONS as $key => $val) {
+                /**
+                 * @psalm-var bool $val
+                 * Psalm bug #4509
+                 */
+                if (false === $val) {
+                    unset($known_properties[$key]); // @codeCoverageIgnore
+                }
+            }
+        } else {
+            $known_properties = self::DOMNODE_PROPS;
+            if ($var instanceof \DOMElement) {
+                $known_properties += self::DOMELEMENT_PROPS;
+            }
+
+            foreach (self::DOM_VERSIONS as $key => $val) {
+                /**
+                 * @psalm-var bool $val
+                 * Psalm bug #4509
+                 */
+                if (false === $val) {
+                    unset($known_properties[$key]); // @codeCoverageIgnore
+                }
+            }
+        }
+
+        // @psalm-var non-empty-array $known_properties
+        if (!self::$verbose) {
+            $known_properties = \array_intersect_key($known_properties, [
+                'nodeValue' => null,
+                'childNodes' => null,
+                'attributes' => null,
+            ]);
+        }
+
+        return $known_properties;
     }
 
     /** @psalm-param Node|DOMNode $var */
@@ -271,14 +327,14 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
         }
 
         if (isset(self::$blacklist[$prop])) {
-            $b = new InstanceValue($c, \get_class($value), \spl_object_hash($value), \spl_object_id($value));
+            $b = new InstanceValue($c, $value::class, \spl_object_hash($value), \spl_object_id($value));
             $b->flags |= AbstractValue::FLAG_GENERATED | AbstractValue::FLAG_BLACKLIST;
 
             return $b;
         }
 
         // Everything we can handle in parseBegin
-        if ($value instanceof Attr || $value instanceof CharacterData || $value instanceof DOMAttr || $value instanceof DOMCharacterData || $value instanceof NamedNodeMap || $value instanceof NodeList || $value instanceof DOMNamedNodeMap || $value instanceof DOMNodeList || $value instanceof Node || $value instanceof DOMNode) {
+        if ($value instanceof Attr || $value instanceof CharacterData || $value instanceof \DOMAttr || $value instanceof \DOMCharacterData || $value instanceof NamedNodeMap || $value instanceof NodeList || $value instanceof \DOMNamedNodeMap || $value instanceof \DOMNodeList || $value instanceof Node || $value instanceof \DOMNode) {
             $out = $this->parseBegin($value, $c);
         }
 
@@ -305,10 +361,10 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
     /** @psalm-param NamedNodeMap|NodeList|DOMNamedNodeMap|DOMNodeList $var */
     private function parseList(object $var, ContextInterface $c): InstanceValue
     {
-        if ($var instanceof NodeList || $var instanceof DOMNodeList) {
+        if ($var instanceof NodeList || $var instanceof \DOMNodeList) {
             $v = new DomNodeListValue($c, $var);
         } else {
-            $v = new InstanceValue($c, \get_class($var), \spl_object_hash($var), \spl_object_id($var));
+            $v = new InstanceValue($c, $var::class, \spl_object_hash($var), \spl_object_id($var));
         }
 
         $parser = $this->getParser();
@@ -316,7 +372,7 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
 
         // Depth limit
         // Use empty iterator representation since we need it to point out depth limits
-        if (($var instanceof NodeList || $var instanceof DOMNodeList) && $pdepth && $c->getDepth() >= $pdepth) {
+        if (($var instanceof NodeList || $var instanceof \DOMNodeList) && $pdepth && $c->getDepth() >= $pdepth) {
             $v->flags |= AbstractValue::FLAG_DEPTH_LIMIT;
 
             return $v;
@@ -341,7 +397,7 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
             $base_obj = new BaseContext($item->nodeName);
             $base_obj->depth = $cdepth + 1;
 
-            if ($var instanceof NamedNodeMap || $var instanceof DOMNamedNodeMap) {
+            if ($var instanceof NamedNodeMap || $var instanceof \DOMNamedNodeMap) {
                 if (null !== $ap) {
                     $base_obj->access_path = $ap.'['.\var_export($item->nodeName, true).']';
                 }
@@ -373,7 +429,7 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
     /** @psalm-param Node|DOMNode $var */
     private function parseNode(object $var, ContextInterface $c): DomNodeValue
     {
-        $class = \get_class($var);
+        $class = $var::class;
         $pdepth = $this->getParser()->getDepthLimit();
 
         if ($pdepth && $c->getDepth() >= $pdepth) {
@@ -383,7 +439,7 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
             return $v;
         }
 
-        if (($var instanceof DocumentType || $var instanceof DOMDocumentType) && $c instanceof BaseContext && $c->name === $var->nodeName) {
+        if (($var instanceof DocumentType || $var instanceof \DOMDocumentType) && $c instanceof BaseContext && $c->name === $var->nodeName) {
             $c->name = '!DOCTYPE '.$c->name;
         }
 
@@ -407,7 +463,7 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
 
             if ('childNodes' === $prop) {
                 if (!$prop_obj instanceof DomNodeListValue) {
-                    throw new LogicException('childNodes property parsed incorrectly'); // @codeCoverageIgnore
+                    throw new \LogicException('childNodes property parsed incorrectly'); // @codeCoverageIgnore
                 }
                 $children = self::getChildren($prop_obj);
             } elseif ('attributes' === $prop) {
@@ -443,65 +499,6 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
         return $v;
     }
 
-    /**
-     * @psalm-param Node|DOMNode $var
-     *
-     * @psalm-return non-empty-array<string, bool>
-     */
-    public static function getKnownProperties(object $var): array
-    {
-        if ($var instanceof Node) {
-            $known_properties = self::NODE_PROPS;
-            if ($var instanceof Element) {
-                $known_properties += self::ELEMENT_PROPS;
-            }
-
-            if ($var instanceof Document) {
-                $known_properties['textContent'] = true;
-            }
-
-            if ($var instanceof Attr || $var instanceof CharacterData) {
-                $known_properties['nodeValue'] = false;
-            }
-
-            foreach (self::DOM_NS_VERSIONS as $key => $val) {
-                /**
-                 * @psalm-var bool $val
-                 * Psalm bug #4509
-                 */
-                if (false === $val) {
-                    unset($known_properties[$key]); // @codeCoverageIgnore
-                }
-            }
-        } else {
-            $known_properties = self::DOMNODE_PROPS;
-            if ($var instanceof DOMElement) {
-                $known_properties += self::DOMELEMENT_PROPS;
-            }
-
-            foreach (self::DOM_VERSIONS as $key => $val) {
-                /**
-                 * @psalm-var bool $val
-                 * Psalm bug #4509
-                 */
-                if (false === $val) {
-                    unset($known_properties[$key]); // @codeCoverageIgnore
-                }
-            }
-        }
-
-        /** @psalm-var non-empty-array $known_properties */
-        if (!self::$verbose) {
-            $known_properties = \array_intersect_key($known_properties, [
-                'nodeValue' => null,
-                'childNodes' => null,
-                'attributes' => null,
-            ]);
-        }
-
-        return $known_properties;
-    }
-
     /** @psalm-return list<AbstractValue> */
     private static function getChildren(DomNodeListValue $property): array
     {
@@ -526,7 +523,7 @@ class DomPlugin extends AbstractPlugin implements PluginBeginInterface
         foreach ($list_items as $node) {
             // Remove text nodes if theyre empty
             if ($node instanceof StringValue && '#text' === $node->getContext()->getName()) {
-                /**
+                /*
                  * @psalm-suppress InvalidArgument
                  * Psalm bug #11055
                  */

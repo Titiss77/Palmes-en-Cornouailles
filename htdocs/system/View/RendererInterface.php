@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\View;
 
 /**
- * Interface RendererInterface
+ * Interface RendererInterface.
  *
  * The interface used for displaying Views and/or theme files.
  */
@@ -24,9 +24,9 @@ interface RendererInterface
      * Builds the output based upon a file name and any
      * data that has already been set.
      *
-     * @param array<string, mixed>|null $options  Reserved for 3rd-party uses since
+     * @param null|array<string, mixed> $options  reserved for 3rd-party uses since
      *                                            it might be needed to pass additional info
-     *                                            to other template engines.
+     *                                            to other template engines
      * @param bool                      $saveData Whether to save data for subsequent calls
      */
     public function render(string $view, ?array $options = null, bool $saveData = false): string;
@@ -36,9 +36,9 @@ interface RendererInterface
      * data that has already been set.
      *
      * @param string                    $view     The view contents
-     * @param array<string, mixed>|null $options  Reserved for 3rd-party uses since
+     * @param null|array<string, mixed> $options  reserved for 3rd-party uses since
      *                                            it might be needed to pass additional info
-     *                                            to other template engines.
+     *                                            to other template engines
      * @param bool                      $saveData Whether to save data for subsequent calls
      */
     public function renderString(string $view, ?array $options = null, bool $saveData = false): string;
@@ -46,9 +46,10 @@ interface RendererInterface
     /**
      * Sets several pieces of view data at once.
      *
-     * @param         array<string, mixed>                      $data
-     * @param         non-empty-string|null                     $context The context to escape it for.
-     *                                                                   If 'raw', no escaping will happen.
+     * @param array<string, mixed>  $data
+     * @param null|non-empty-string $context The context to escape it for.
+     *                                       If 'raw', no escaping will happen.
+     *
      * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
      *
      * @return RendererInterface
@@ -58,9 +59,10 @@ interface RendererInterface
     /**
      * Sets a single piece of view data.
      *
-     * @param         mixed                                     $value
-     * @param         non-empty-string|null                     $context The context to escape it for.
-     *                                                                   If 'raw', no escaping will happen.
+     * @param mixed                 $value
+     * @param null|non-empty-string $context The context to escape it for.
+     *                                       If 'raw', no escaping will happen.
+     *
      * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
      *
      * @return RendererInterface

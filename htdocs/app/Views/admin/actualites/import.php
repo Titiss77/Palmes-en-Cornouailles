@@ -1,6 +1,6 @@
-<?= $this->extend('admin/Layout/l_global') ?>
+<?php echo $this->extend('admin/Layout/l_global'); ?>
 
-<?= $this->section('contenu') ?>
+<?php echo $this->section('contenu'); ?>
 
 <div class="import-actu-container">
     <header class="import-actu-header">
@@ -10,26 +10,26 @@
         </p>
     </header>
 
-    <?php if (session()->has('errors')): ?>
+    <?php if (session()->has('errors')) { ?>
     <div class="alert alert-danger">
-        <?php foreach (session('errors') as $error): ?>
-        <p class="mb-0"><?= $error ?></p>
-        <?php endforeach ?>
+        <?php foreach (session('errors') as $error) { ?>
+        <p class="mb-0"><?php echo $error; ?></p>
+        <?php } ?>
     </div>
-    <?php endif ?>
+    <?php } ?>
 
     <div class="import-actu-step">
         <p class="import-actu-step-text">
             1. Téléchargez le modèle et complétez-le sans modifier l'en-tête.
         </p>
-        <a href="<?= base_url('uploads/DossierType.csv') ?>" target="_blank" class="import-actu-btn-download">
+        <a href="<?php echo base_url('uploads/DossierType.csv'); ?>" target="_blank" class="import-actu-btn-download">
             <i class="bi bi-download"></i> Télécharger le fichier modèle
         </a>
     </div>
 
-    <form action="<?= base_url('admin/actualites/processImport') ?>" method="post" enctype="multipart/form-data"
+    <form action="<?php echo base_url('admin/actualites/processImport'); ?>" method="post" enctype="multipart/form-data"
         class="import-actu-form">
-        <?= csrf_field() ?>
+        <?php echo csrf_field(); ?>
 
         <div class="import-actu-group">
             <label for="fichier_csv" class="import-actu-label">2. Choisir le fichier CSV complété</label>
@@ -41,9 +41,9 @@
             <button type="submit" class="import-actu-btn-submit">
                 <i class="bi bi-upload"></i> Importer
             </button>
-            <a href="<?= base_url('admin/actualites') ?>" class="import-actu-btn-cancel">Annuler</a>
+            <a href="<?php echo base_url('admin/actualites'); ?>" class="import-actu-btn-cancel">Annuler</a>
         </div>
     </form>
 </div>
 
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

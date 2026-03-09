@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Parser;
 
-use JsonException;
 use Kint\Value\AbstractValue;
 use Kint\Value\ArrayValue;
 use Kint\Value\Context\BaseContext;
@@ -54,7 +53,7 @@ class JsonPlugin extends AbstractPlugin implements PluginCompleteInterface
 
         try {
             $json = \json_decode($var, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $v;
         }
 

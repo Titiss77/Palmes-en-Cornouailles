@@ -22,7 +22,7 @@ use CodeIgniter\Security\Exceptions\SecurityException;
 interface SecurityInterface
 {
     /**
-     * CSRF Verify
+     * CSRF Verify.
      *
      * @return $this|false
      *
@@ -56,7 +56,7 @@ interface SecurityInterface
     public function shouldRedirect(): bool;
 
     /**
-     * Sanitize Filename
+     * Sanitize Filename.
      *
      * Tries to sanitize filenames in order to prevent directory traversal attempts
      * and other security threats, which is particularly useful for files that

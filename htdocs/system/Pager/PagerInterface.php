@@ -16,14 +16,14 @@ namespace CodeIgniter\Pager;
 use CodeIgniter\HTTP\URI;
 
 /**
- * Expected behavior for a Pager
+ * Expected behavior for a Pager.
  */
 interface PagerInterface
 {
     /**
-     * Handles creating and displaying the
+     * Handles creating and displaying the.
      *
-     * @param string $template The output template alias to render.
+     * @param string $template the output template alias to render
      */
     public function links(string $group = 'default', string $template = 'default'): string;
 
@@ -36,7 +36,7 @@ interface PagerInterface
      * Allows for a simple, manual, form of pagination where all of the data
      * is provided by the user. The URL is the current URI.
      *
-     * @param string $template The output template alias to render.
+     * @param string $template the output template alias to render
      */
     public function makeLinks(int $page, int $perPage, int $total, string $template = 'default'): string;
 
@@ -87,21 +87,21 @@ interface PagerInterface
     /**
      * Returns the last page, if we have a total that we can calculate with.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getLastPage(string $group = 'default');
 
     /**
      * Returns the full URI to the next page of results, or null.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getNextPageURI(string $group = 'default');
 
     /**
      * Returns the full URL to the previous page of results, or null.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPreviousPageURI(string $group = 'default');
 

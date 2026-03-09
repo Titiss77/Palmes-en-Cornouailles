@@ -19,7 +19,6 @@ use CodeIgniter\Files\FileCollection;
 use CodeIgniter\HTTP\URI;
 use CodeIgniter\Publisher\Exceptions\PublisherException;
 use Config\Publisher as PublisherConfig;
-use Throwable;
 
 /**
  * Publishers read in file paths from a variety of sources and copy
@@ -40,9 +39,23 @@ use Throwable;
 class Publisher extends FileCollection
 {
     /**
+     * Base path to use for the source.
+     *
+     * @var string
+     */
+    protected $source = ROOTPATH;
+
+    /**
+     * Base path to use for the destination.
+     *
+     * @var string
+     */
+    protected $destination = FCPATH;
+
+    /**
      * Array of discovered Publishers.
      *
-     * @var array<string, list<self>|null>
+     * @var array<string, null|list<self>>
      */
     private static array $discovered = [];
 
@@ -55,7 +68,7 @@ class Publisher extends FileCollection
     /**
      * Exceptions for specific files from the last write operation.
      *
-     * @var array<string, Throwable>
+     * @var array<string, \Throwable>
      */
     private array $errors = [];
 
@@ -76,85 +89,6 @@ class Publisher extends FileCollection
 
     private readonly ContentReplacer $replacer;
 
-    /**
-     * Base path to use for the source.
-     *
-     * @var string
-     */
-    protected $source = ROOTPATH;
-
-    /**
-     * Base path to use for the destination.
-     *
-     * @var string
-     */
-    protected $destination = FCPATH;
-
-    // --------------------------------------------------------------------
-    // Support Methods
-    // --------------------------------------------------------------------
-
-    /**
-     * Discovers and returns all Publishers in the specified namespace directory.
-     *
-     * @return list<self>
-     */
-    final public static function discover(string $directory = 'Publishers', string $namespace = ''): array
-    {
-        $key = implode('.', [$namespace, $directory]);
-
-        if (isset(self::$discovered[$key])) {
-            return self::$discovered[$key];
-        }
-
-        self::$discovered[$key] = [];
-
-        /** @var FileLocatorInterface */
-        $locator = service('locator');
-
-        $files = $namespace === ''
-            ? $locator->listFiles($directory)
-            : $locator->listNamespaceFiles($namespace, $directory);
-
-        if ([] === $files) {
-            return [];
-        }
-
-        // Loop over each file checking to see if it is a Publisher
-        foreach (array_unique($files) as $file) {
-            $className = $locator->findQualifiedNameFromPath($file);
-
-            if ($className !== false && class_exists($className) && is_a($className, self::class, true)) {
-                /** @var class-string<self> $className */
-                self::$discovered[$key][] = new $className();
-            }
-        }
-
-        sort(self::$discovered[$key]);
-
-        return self::$discovered[$key];
-    }
-
-    /**
-     * Removes a directory and all its files and subdirectories.
-     */
-    private static function wipeDirectory(string $directory): void
-    {
-        if (is_dir($directory)) {
-            // Try a few times in case of lingering locks
-            $attempts = 10;
-
-            while ((bool) $attempts && ! delete_files($directory, true, false, true)) {
-                // @codeCoverageIgnoreStart
-                $attempts--;
-                usleep(100000); // .1s
-                // @codeCoverageIgnoreEnd
-            }
-
-            @rmdir($directory);
-        }
-    }
-
     // --------------------------------------------------------------------
     // Class Core
     // --------------------------------------------------------------------
@@ -166,7 +100,7 @@ class Publisher extends FileCollection
     {
         helper(['filesystem']);
 
-        $this->source      = self::resolveDirectory($source ?? $this->source);
+        $this->source = self::resolveDirectory($source ?? $this->source);
         $this->destination = self::resolveDirectory($destination ?? $this->destination);
 
         $this->replacer = new ContentReplacer();
@@ -196,6 +130,51 @@ class Publisher extends FileCollection
         }
     }
 
+    // --------------------------------------------------------------------
+    // Support Methods
+    // --------------------------------------------------------------------
+
+    /**
+     * Discovers and returns all Publishers in the specified namespace directory.
+     *
+     * @return list<self>
+     */
+    final public static function discover(string $directory = 'Publishers', string $namespace = ''): array
+    {
+        $key = implode('.', [$namespace, $directory]);
+
+        if (isset(self::$discovered[$key])) {
+            return self::$discovered[$key];
+        }
+
+        self::$discovered[$key] = [];
+
+        /** @var FileLocatorInterface */
+        $locator = service('locator');
+
+        $files = '' === $namespace
+            ? $locator->listFiles($directory)
+            : $locator->listNamespaceFiles($namespace, $directory);
+
+        if ([] === $files) {
+            return [];
+        }
+
+        // Loop over each file checking to see if it is a Publisher
+        foreach (array_unique($files) as $file) {
+            $className = $locator->findQualifiedNameFromPath($file);
+
+            if (false !== $className && class_exists($className) && is_a($className, self::class, true)) {
+                // @var class-string<self> $className
+                self::$discovered[$key][] = new $className();
+            }
+        }
+
+        sort(self::$discovered[$key]);
+
+        return self::$discovered[$key];
+    }
+
     /**
      * Reads files from the sources and copies them out to their destinations.
      * This method should be reimplemented by child classes intended for
@@ -206,7 +185,7 @@ class Publisher extends FileCollection
     public function publish(): bool
     {
         // Safeguard against accidental misuse
-        if ($this->source === ROOTPATH && $this->destination === FCPATH) {
+        if (ROOTPATH === $this->source && FCPATH === $this->destination) {
             throw new RuntimeException('Child classes of Publisher should provide their own publish method or a source and destination.');
         }
 
@@ -238,10 +217,10 @@ class Publisher extends FileCollection
      */
     final public function getScratch(): string
     {
-        if ($this->scratch === null) {
-            $this->scratch = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . bin2hex(random_bytes(6)) . DIRECTORY_SEPARATOR;
-            mkdir($this->scratch, 0700);
-            $this->scratch = realpath($this->scratch) ? realpath($this->scratch) . DIRECTORY_SEPARATOR
+        if (null === $this->scratch) {
+            $this->scratch = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.bin2hex(random_bytes(6)).DIRECTORY_SEPARATOR;
+            mkdir($this->scratch, 0o700);
+            $this->scratch = realpath($this->scratch) ? realpath($this->scratch).DIRECTORY_SEPARATOR
                 : $this->scratch;
         }
 
@@ -251,7 +230,7 @@ class Publisher extends FileCollection
     /**
      * Returns errors from the last write operation if any.
      *
-     * @return array<string,Throwable>
+     * @return array<string,\Throwable>
      */
     final public function getErrors(): array
     {
@@ -295,7 +274,7 @@ class Publisher extends FileCollection
      */
     final public function addPath(string $path, bool $recursive = true)
     {
-        $this->add($this->source . $path, $recursive);
+        $this->add($this->source.$path, $recursive);
 
         return $this;
     }
@@ -326,7 +305,7 @@ class Publisher extends FileCollection
     final public function addUri(string $uri)
     {
         // Figure out a good filename (using URI strips queries and fragments)
-        $file = $this->getScratch() . basename((new URI($uri))->getPath());
+        $file = $this->getScratch().basename((new URI($uri))->getPath());
 
         // Get the content and write it to the scratch space
         write_file($file, service('curlrequest')->get($uri)->getBody());
@@ -353,7 +332,7 @@ class Publisher extends FileCollection
     /**
      * Copies all files into the destination, does not create directory structure.
      *
-     * @param bool $replace Whether to overwrite existing files.
+     * @param bool $replace whether to overwrite existing files
      *
      * @return bool Whether all files were copied successfully
      */
@@ -362,24 +341,24 @@ class Publisher extends FileCollection
         $this->errors = $this->published = [];
 
         foreach ($this->get() as $file) {
-            $to = $this->destination . basename($file);
+            $to = $this->destination.basename($file);
 
             try {
                 $this->safeCopyFile($file, $to, $replace);
                 $this->published[] = $to;
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 $this->errors[$file] = $e;
             }
         }
 
-        return $this->errors === [];
+        return [] === $this->errors;
     }
 
     /**
      * Merges all files into the destination.
      * Creates a mirrored directory structure only for files from source.
      *
-     * @param bool $replace Whether to overwrite existing files.
+     * @param bool $replace whether to overwrite existing files
      *
      * @return bool Whether all files were copied successfully
      */
@@ -397,21 +376,21 @@ class Publisher extends FileCollection
         // Copy each sourced file to its relative destination
         foreach ($sourced as $file) {
             // Resolve the destination path
-            $to = $this->destination . substr($file, strlen($this->source));
+            $to = $this->destination.substr($file, strlen($this->source));
 
             try {
                 $this->safeCopyFile($file, $to, $replace);
                 $this->published[] = $to;
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 $this->errors[$file] = $e;
             }
         }
 
-        return $this->errors === [];
+        return [] === $this->errors;
     }
 
     /**
-     * Replace content
+     * Replace content.
      *
      * @param array $replaces [search => replace]
      */
@@ -425,13 +404,13 @@ class Publisher extends FileCollection
 
         $return = file_put_contents($file, $newContent);
 
-        return $return !== false;
+        return false !== $return;
     }
 
     /**
-     * Add line after the line with the string
+     * Add line after the line with the string.
      *
-     * @param string $after String to search.
+     * @param string $after string to search
      */
     public function addLineAfter(string $file, string $line, string $after): bool
     {
@@ -441,19 +420,19 @@ class Publisher extends FileCollection
 
         $result = $this->replacer->addAfter($content, $line, $after);
 
-        if ($result !== null) {
+        if (null !== $result) {
             $return = file_put_contents($file, $result);
 
-            return $return !== false;
+            return false !== $return;
         }
 
         return false;
     }
 
     /**
-     * Add line before the line with the string
+     * Add line before the line with the string.
      *
-     * @param string $before String to search.
+     * @param string $before string to search
      */
     public function addLineBefore(string $file, string $line, string $before): bool
     {
@@ -463,13 +442,33 @@ class Publisher extends FileCollection
 
         $result = $this->replacer->addBefore($content, $line, $before);
 
-        if ($result !== null) {
+        if (null !== $result) {
             $return = file_put_contents($file, $result);
 
-            return $return !== false;
+            return false !== $return;
         }
 
         return false;
+    }
+
+    /**
+     * Removes a directory and all its files and subdirectories.
+     */
+    private static function wipeDirectory(string $directory): void
+    {
+        if (is_dir($directory)) {
+            // Try a few times in case of lingering locks
+            $attempts = 10;
+
+            while ((bool) $attempts && !delete_files($directory, true, false, true)) {
+                // @codeCoverageIgnoreStart
+                --$attempts;
+                usleep(100000); // .1s
+                // @codeCoverageIgnoreEnd
+            }
+
+            @rmdir($directory);
+        }
     }
 
     /**
@@ -479,7 +478,7 @@ class Publisher extends FileCollection
     {
         // Verify this is an allowed file for its destination
         foreach ($this->restrictions as $directory => $pattern) {
-            if (str_starts_with($to, $directory) && self::matchFiles([$to], $pattern) === []) {
+            if (str_starts_with($to, $directory) && [] === self::matchFiles([$to], $pattern)) {
                 throw PublisherException::forFileNotAllowed($from, $directory, $pattern);
             }
         }
@@ -499,7 +498,7 @@ class Publisher extends FileCollection
         // Check for an existing file
         if (file_exists($to)) {
             // If not replacing or if files are identical then consider successful
-            if (! $replace || same_file($from, $to)) {
+            if (!$replace || same_file($from, $to)) {
                 return;
             }
 
@@ -513,8 +512,8 @@ class Publisher extends FileCollection
         }
 
         // Make sure the directory exists
-        if (! is_dir($directory = pathinfo($to, PATHINFO_DIRNAME))) {
-            mkdir($directory, 0775, true);
+        if (!is_dir($directory = pathinfo($to, PATHINFO_DIRNAME))) {
+            mkdir($directory, 0o775, true);
         }
 
         // Allow copy() to throw errors

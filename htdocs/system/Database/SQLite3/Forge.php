@@ -18,12 +18,12 @@ use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Database\Forge as BaseForge;
 
 /**
- * Forge for SQLite3
+ * Forge for SQLite3.
  */
 class Forge extends BaseForge
 {
     /**
-     * DROP INDEX statement
+     * DROP INDEX statement.
      *
      * @var string
      */
@@ -35,14 +35,14 @@ class Forge extends BaseForge
     protected $db;
 
     /**
-     * UNSIGNED support
+     * UNSIGNED support.
      *
      * @var array|bool
      */
     protected $_unsigned = false;
 
     /**
-     * NULL value representation in CREATE/ALTER TABLE statements
+     * NULL value representation in CREATE/ALTER TABLE statements.
      *
      * @var string
      *
@@ -63,7 +63,7 @@ class Forge extends BaseForge
     }
 
     /**
-     * Create database
+     * Create database.
      *
      * @param bool $ifNotExists Whether to add IF NOT EXISTS condition
      */
@@ -75,14 +75,14 @@ class Forge extends BaseForge
     }
 
     /**
-     * Drop database
+     * Drop database.
      *
      * @throws DatabaseException
      */
     public function dropDatabase(string $dbName): bool
     {
         // In SQLite, a database is dropped when we delete a file
-        if (! is_file($dbName)) {
+        if (!is_file($dbName)) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('Unable to drop the specified database.');
             }
@@ -92,7 +92,7 @@ class Forge extends BaseForge
 
         // We need to close the pseudo-connection first
         $this->db->close();
-        if (! @unlink($dbName)) {
+        if (!@unlink($dbName)) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException('Unable to drop the specified database.');
             }
@@ -100,9 +100,9 @@ class Forge extends BaseForge
             return false;
         }
 
-        if (! empty($this->db->dataCache['db_names'])) {
+        if (!empty($this->db->dataCache['db_names'])) {
             $key = array_search(strtolower($dbName), array_map(strtolower(...), $this->db->dataCache['db_names']), true);
-            if ($key !== false) {
+            if (false !== $key) {
                 unset($this->db->dataCache['db_names'][$key]);
             }
         }
@@ -118,12 +118,13 @@ class Forge extends BaseForge
     public function dropColumn(string $table, $columnNames): bool
     {
         $columns = is_array($columnNames) ? $columnNames : array_map(trim(...), explode(',', $columnNames));
-        $result  = (new Table($this->db, $this))
-            ->fromTable($this->db->DBPrefix . $table)
+        $result = (new Table($this->db, $this))
+            ->fromTable($this->db->DBPrefix.$table)
             ->dropColumn($columns)
-            ->run();
+            ->run()
+        ;
 
-        if (! $result && $this->db->DBDebug) {
+        if (!$result && $this->db->DBDebug) {
             throw new DatabaseException(sprintf(
                 'Failed to drop column%s "%s" on "%s" table.',
                 count($columns) > 1 ? 's' : '',
@@ -136,11 +137,56 @@ class Forge extends BaseForge
     }
 
     /**
+     * Foreign Key Drop.
+     *
+     * @throws DatabaseException
+     */
+    public function dropForeignKey(string $table, string $foreignName): bool
+    {
+        // If this version of SQLite doesn't support it, we're done here
+        if (true !== $this->db->supportsForeignKeys()) {
+            return true;
+        }
+
+        // Otherwise we have to copy the table and recreate
+        // without the foreign key being involved now
+        $sqlTable = new Table($this->db, $this);
+
+        return $sqlTable->fromTable($this->db->DBPrefix.$table)
+            ->dropForeignKey($foreignName)
+            ->run()
+        ;
+    }
+
+    /**
+     * Drop Primary Key.
+     */
+    public function dropPrimaryKey(string $table, string $keyName = ''): bool
+    {
+        $sqlTable = new Table($this->db, $this);
+
+        return $sqlTable->fromTable($this->db->DBPrefix.$table)
+            ->dropPrimaryKey()
+            ->run()
+        ;
+    }
+
+    public function addForeignKey($fieldName = '', string $tableName = '', $tableField = '', string $onUpdate = '', string $onDelete = '', string $fkName = ''): BaseForge
+    {
+        if ('' === $fkName) {
+            return parent::addForeignKey($fieldName, $tableName, $tableField, $onUpdate, $onDelete, $fkName);
+        }
+
+        throw new DatabaseException('SQLite does not support foreign key names. CodeIgniter will refer to them in the format: prefix_table_column_referencecolumn_foreign');
+    }
+
+    /**
      * @param array|string $processedFields Processed column definitions
      *                                      or column names to DROP
      *
-     * @return         array|string|null
-     * @return         list<string>|string|null                            SQL string or null
+     * @return null|array|string
+     * @return null|list<string>|string SQL string or null
+     *
      * @phpstan-return ($alterType is 'DROP' ? string : list<string>|null)
      */
     protected function _alterTable(string $alterType, string $table, $processedFields)
@@ -150,16 +196,16 @@ class Forge extends BaseForge
                 $fieldsToModify = [];
 
                 foreach ($processedFields as $processedField) {
-                    $name    = $processedField['name'];
+                    $name = $processedField['name'];
                     $newName = $processedField['new_name'];
 
-                    $field             = $this->fields[$name];
-                    $field['name']     = $name;
+                    $field = $this->fields[$name];
+                    $field['name'] = $name;
                     $field['new_name'] = $newName;
 
                     // Unlike when creating a table, if `null` is not specified,
                     // the column will be `NULL`, not `NOT NULL`.
-                    if ($processedField['null'] === '') {
+                    if ('' === $processedField['null']) {
                         $field['null'] = true;
                     }
 
@@ -169,7 +215,8 @@ class Forge extends BaseForge
                 (new Table($this->db, $this))
                     ->fromTable($table)
                     ->modifyColumn($fieldsToModify)
-                    ->run();
+                    ->run()
+                ;
 
                 return null; // Why null?
 
@@ -179,38 +226,40 @@ class Forge extends BaseForge
     }
 
     /**
-     * Process column
+     * Process column.
      */
     protected function _processColumn(array $processedField): string
     {
-        if ($processedField['type'] === 'TEXT' && str_starts_with($processedField['length'], "('")) {
-            $processedField['type'] .= ' CHECK(' . $this->db->escapeIdentifiers($processedField['name'])
-                . ' IN ' . $processedField['length'] . ')';
+        if ('TEXT' === $processedField['type'] && str_starts_with($processedField['length'], "('")) {
+            $processedField['type'] .= ' CHECK('.$this->db->escapeIdentifiers($processedField['name'])
+                .' IN '.$processedField['length'].')';
         }
 
         return $this->db->escapeIdentifiers($processedField['name'])
-            . ' ' . $processedField['type']
-            . $processedField['auto_increment']
-            . $processedField['null']
-            . $processedField['unique']
-            . $processedField['default'];
+            .' '.$processedField['type']
+            .$processedField['auto_increment']
+            .$processedField['null']
+            .$processedField['unique']
+            .$processedField['default'];
     }
 
     /**
-     * Field attribute TYPE
+     * Field attribute TYPE.
      *
      * Performs a data type mapping between different databases.
      */
-    protected function _attributeType(array &$attributes)
+    protected function _attributeType(array &$attributes): void
     {
         switch (strtoupper($attributes['TYPE'])) {
             case 'ENUM':
             case 'SET':
                 $attributes['TYPE'] = 'TEXT';
+
                 break;
 
             case 'BOOLEAN':
                 $attributes['TYPE'] = 'INT';
+
                 break;
 
             default:
@@ -219,19 +268,19 @@ class Forge extends BaseForge
     }
 
     /**
-     * Field attribute AUTO_INCREMENT
+     * Field attribute AUTO_INCREMENT.
      */
-    protected function _attributeAutoIncrement(array &$attributes, array &$field)
+    protected function _attributeAutoIncrement(array &$attributes, array &$field): void
     {
         if (
-            ! empty($attributes['AUTO_INCREMENT'])
-            && $attributes['AUTO_INCREMENT'] === true
+            !empty($attributes['AUTO_INCREMENT'])
+            && true === $attributes['AUTO_INCREMENT']
             && str_contains(strtolower($field['type']), 'int')
         ) {
-            $field['type']           = 'INTEGER PRIMARY KEY';
-            $field['default']        = '';
-            $field['null']           = '';
-            $field['unique']         = '';
+            $field['type'] = 'INTEGER PRIMARY KEY';
+            $field['default'] = '';
+            $field['null'] = '';
+            $field['unique'] = '';
             $field['auto_increment'] = ' AUTOINCREMENT';
 
             $this->primaryKeys = [];
@@ -239,75 +288,34 @@ class Forge extends BaseForge
     }
 
     /**
-     * Foreign Key Drop
-     *
-     * @throws DatabaseException
-     */
-    public function dropForeignKey(string $table, string $foreignName): bool
-    {
-        // If this version of SQLite doesn't support it, we're done here
-        if ($this->db->supportsForeignKeys() !== true) {
-            return true;
-        }
-
-        // Otherwise we have to copy the table and recreate
-        // without the foreign key being involved now
-        $sqlTable = new Table($this->db, $this);
-
-        return $sqlTable->fromTable($this->db->DBPrefix . $table)
-            ->dropForeignKey($foreignName)
-            ->run();
-    }
-
-    /**
-     * Drop Primary Key
-     */
-    public function dropPrimaryKey(string $table, string $keyName = ''): bool
-    {
-        $sqlTable = new Table($this->db, $this);
-
-        return $sqlTable->fromTable($this->db->DBPrefix . $table)
-            ->dropPrimaryKey()
-            ->run();
-    }
-
-    public function addForeignKey($fieldName = '', string $tableName = '', $tableField = '', string $onUpdate = '', string $onDelete = '', string $fkName = ''): BaseForge
-    {
-        if ($fkName === '') {
-            return parent::addForeignKey($fieldName, $tableName, $tableField, $onUpdate, $onDelete, $fkName);
-        }
-
-        throw new DatabaseException('SQLite does not support foreign key names. CodeIgniter will refer to them in the format: prefix_table_column_referencecolumn_foreign');
-    }
-
-    /**
-     * Generates SQL to add primary key
+     * Generates SQL to add primary key.
      *
      * @param bool $asQuery When true recreates table with key, else partial SQL used with CREATE TABLE
      */
     protected function _processPrimaryKeys(string $table, bool $asQuery = false): string
     {
-        if ($asQuery === false) {
+        if (false === $asQuery) {
             return parent::_processPrimaryKeys($table, $asQuery);
         }
 
         $sqlTable = new Table($this->db, $this);
 
-        $sqlTable->fromTable($this->db->DBPrefix . $table)
+        $sqlTable->fromTable($this->db->DBPrefix.$table)
             ->addPrimaryKey($this->primaryKeys)
-            ->run();
+            ->run()
+        ;
 
         return '';
     }
 
     /**
-     * Generates SQL to add foreign keys
+     * Generates SQL to add foreign keys.
      *
      * @param bool $asQuery When true recreates table with key, else partial SQL used with CREATE TABLE
      */
     protected function _processForeignKeys(string $table, bool $asQuery = false): array
     {
-        if ($asQuery === false) {
+        if (false === $asQuery) {
             return parent::_processForeignKeys($table, $asQuery);
         }
 
@@ -315,13 +323,13 @@ class Forge extends BaseForge
 
         foreach ($this->foreignKeys as $name) {
             foreach ($name['field'] as $f) {
-                if (! isset($this->fields[$f])) {
+                if (!isset($this->fields[$f])) {
                     $errorNames[] = $f;
                 }
             }
         }
 
-        if ($errorNames !== []) {
+        if ([] !== $errorNames) {
             $errorNames = [implode(', ', $errorNames)];
 
             throw new DatabaseException(lang('Database.fieldNotExists', $errorNames));
@@ -329,9 +337,10 @@ class Forge extends BaseForge
 
         $sqlTable = new Table($this->db, $this);
 
-        $sqlTable->fromTable($this->db->DBPrefix . $table)
+        $sqlTable->fromTable($this->db->DBPrefix.$table)
             ->addForeignKey($this->foreignKeys)
-            ->run();
+            ->run()
+        ;
 
         return [];
     }

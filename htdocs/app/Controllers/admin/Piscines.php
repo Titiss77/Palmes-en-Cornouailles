@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\PiscinesModel;
+use Config\Database;
 
 class Piscines extends BaseadminController
 {
@@ -26,6 +29,7 @@ class Piscines extends BaseadminController
     public function new()
     {
         $data = $this->getCommonData('Nouveau Lieu', 'admin/page.css');
+
         return view('admin/piscines/create', $data);
     }
 
@@ -47,7 +51,7 @@ class Piscines extends BaseadminController
             'nom' => $this->request->getPost('nom'),
             'adresse' => $this->request->getPost('adresse'),
             'type_bassin' => $this->request->getPost('type_bassin'),
-            'image_id' => $imageId
+            'image_id' => $imageId,
         ];
 
         $this->piscineModel->insert($data);
@@ -66,6 +70,7 @@ class Piscines extends BaseadminController
         }
 
         $data['item'] = $item;
+
         return view('admin/piscines/edit', $data);
     }
 
@@ -81,7 +86,6 @@ class Piscines extends BaseadminController
         }
 
         $imageId = $this->handleImageUpload('image', 'piscines', $this->request->getPost('nom'));
-        
 
         $data = [
             'nom' => $this->request->getPost('nom'),
@@ -106,17 +110,18 @@ class Piscines extends BaseadminController
         if ($item) {
             // Suppression physique et BDD de l'image
             if (!empty($item['image_path'])) {
-                $cheminFichier = FCPATH . 'uploads/' . $item['image_path'];
+                $cheminFichier = FCPATH.'uploads/'.$item['image_path'];
                 if (file_exists($cheminFichier)) {
                     unlink($cheminFichier);
                 }
                 if (!empty($item['image_id'])) {
-                    $db = \Config\Database::connect();
+                    $db = Database::connect();
                     $db->table('images')->where('id', $item['image_id'])->delete();
                 }
             }
 
             $this->piscineModel->delete($id);
+
             return redirect()->to('/admin/piscines')->with('success', 'Lieu supprimé.');
         }
 
@@ -137,11 +142,11 @@ class Piscines extends BaseadminController
 
         $this->piscineModel->update($id, ['image_id' => null]);
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->table('images')->where('id', $imageId)->delete();
 
         if (!empty($imagePath)) {
-            $fullPath = FCPATH . 'uploads/' . $imagePath;
+            $fullPath = FCPATH.'uploads/'.$imagePath;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }

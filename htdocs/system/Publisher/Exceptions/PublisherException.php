@@ -16,7 +16,7 @@ namespace CodeIgniter\Publisher\Exceptions;
 use CodeIgniter\Exceptions\FrameworkException;
 
 /**
- * Publisher Exception Class
+ * Publisher Exception Class.
  *
  * Handles exceptions related to actions taken by a Publisher.
  */

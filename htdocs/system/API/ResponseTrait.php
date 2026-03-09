@@ -34,34 +34,34 @@ trait ResponseTrait
      * @var array<string, int>
      */
     protected $codes = [
-        'created'                   => 201,
-        'deleted'                   => 200,
-        'updated'                   => 200,
-        'no_content'                => 204,
-        'invalid_request'           => 400,
+        'created' => 201,
+        'deleted' => 200,
+        'updated' => 200,
+        'no_content' => 204,
+        'invalid_request' => 400,
         'unsupported_response_type' => 400,
-        'invalid_scope'             => 400,
-        'temporarily_unavailable'   => 400,
-        'invalid_grant'             => 400,
-        'invalid_credentials'       => 400,
-        'invalid_refresh'           => 400,
-        'no_data'                   => 400,
-        'invalid_data'              => 400,
-        'access_denied'             => 401,
-        'unauthorized'              => 401,
-        'invalid_client'            => 401,
-        'forbidden'                 => 403,
-        'resource_not_found'        => 404,
-        'not_acceptable'            => 406,
-        'resource_exists'           => 409,
-        'conflict'                  => 409,
-        'resource_gone'             => 410,
-        'payload_too_large'         => 413,
-        'unsupported_media_type'    => 415,
-        'too_many_requests'         => 429,
-        'server_error'              => 500,
-        'unsupported_grant_type'    => 501,
-        'not_implemented'           => 501,
+        'invalid_scope' => 400,
+        'temporarily_unavailable' => 400,
+        'invalid_grant' => 400,
+        'invalid_credentials' => 400,
+        'invalid_refresh' => 400,
+        'no_data' => 400,
+        'invalid_data' => 400,
+        'access_denied' => 401,
+        'unauthorized' => 401,
+        'invalid_client' => 401,
+        'forbidden' => 403,
+        'resource_not_found' => 404,
+        'not_acceptable' => 406,
+        'resource_exists' => 409,
+        'conflict' => 409,
+        'resource_gone' => 410,
+        'payload_too_large' => 413,
+        'unsupported_media_type' => 415,
+        'too_many_requests' => 429,
+        'server_error' => 500,
+        'unsupported_grant_type' => 501,
+        'not_implemented' => 501,
     ];
 
     /**
@@ -69,15 +69,16 @@ trait ResponseTrait
      * Either 'json' or 'xml'. If null is set, it will be determined through
      * content negotiation.
      *
-     * @var         string|null
+     * @var null|string
+     *
      * @phpstan-var 'html'|'json'|'xml'|null
      */
     protected $format = 'json';
 
     /**
-     * Current Formatter instance. This is usually set by ResponseTrait::format
+     * Current Formatter instance. This is usually set by ResponseTrait::format.
      *
-     * @var FormatterInterface|null
+     * @var null|FormatterInterface
      */
     protected $formatter;
 
@@ -85,17 +86,17 @@ trait ResponseTrait
      * Provides a single, simple method to return an API response, formatted
      * to match the requested format, with proper content-type and status code.
      *
-     * @param array|string|null $data
+     * @param null|array|string $data
      *
      * @return ResponseInterface
      */
     protected function respond($data = null, ?int $status = null, string $message = '')
     {
-        if ($data === null && $status === null) {
+        if (null === $data && null === $status) {
             $status = 404;
             $output = null;
             $this->format($data);
-        } elseif ($data === null && is_numeric($status)) {
+        } elseif (null === $data && is_numeric($status)) {
             $output = null;
             $this->format($data);
         } else {
@@ -103,12 +104,12 @@ trait ResponseTrait
             $output = $this->format($data);
         }
 
-        if ($output !== null) {
-            if ($this->format === 'json') {
+        if (null !== $output) {
+            if ('json' === $this->format) {
                 return $this->response->setJSON($output)->setStatusCode($status, $message);
             }
 
-            if ($this->format === 'xml') {
+            if ('xml' === $this->format) {
                 return $this->response->setXML($output)->setStatusCode($status, $message);
             }
         }
@@ -121,19 +122,19 @@ trait ResponseTrait
      *
      * @param array|string $messages
      * @param int          $status   HTTP status code
-     * @param string|null  $code     Custom, API-specific, error code
+     * @param null|string  $code     Custom, API-specific, error code
      *
      * @return ResponseInterface
      */
     protected function fail($messages, int $status = 400, ?string $code = null, string $customMessage = '')
     {
-        if (! is_array($messages)) {
+        if (!is_array($messages)) {
             $messages = ['error' => $messages];
         }
 
         $response = [
-            'status'   => $status,
-            'error'    => $code ?? $status,
+            'status' => $status,
+            'error' => $code ?? $status,
             'messages' => $messages,
         ];
 
@@ -147,7 +148,7 @@ trait ResponseTrait
     /**
      * Used after successfully creating a new resource.
      *
-     * @param array|string|null $data
+     * @param null|array|string $data
      *
      * @return ResponseInterface
      */
@@ -159,7 +160,7 @@ trait ResponseTrait
     /**
      * Used after a resource has been successfully deleted.
      *
-     * @param array|string|null $data
+     * @param null|array|string $data
      *
      * @return ResponseInterface
      */
@@ -171,7 +172,7 @@ trait ResponseTrait
     /**
      * Used after a resource has been successfully updated.
      *
-     * @param array|string|null $data
+     * @param null|array|string $data
      *
      * @return ResponseInterface
      */
@@ -271,9 +272,9 @@ trait ResponseTrait
     /**
      * Used when there is a server error.
      *
-     * @param string      $description The error message to show the user.
-     * @param string|null $code        A custom, API-specific, error code.
-     * @param string      $message     A custom "reason" message to return.
+     * @param string      $description the error message to show the user
+     * @param null|string $code        a custom, API-specific, error code
+     * @param string      $message     a custom "reason" message to return
      */
     protected function failServerError(string $description = 'Internal Server Error', ?string $code = null, string $message = ''): ResponseInterface
     {
@@ -286,22 +287,22 @@ trait ResponseTrait
 
     /**
      * Handles formatting a response. Currently, makes some heavy assumptions
-     * and needs updating! :)
+     * and needs updating! :).
      *
-     * @param array|string|null $data
+     * @param null|array|string $data
      *
-     * @return string|null
+     * @return null|string
      */
     protected function format($data = null)
     {
         $format = service('format');
 
-        $mime = ($this->format === null) ? $format->getConfig()->supportedResponseFormats[0]
+        $mime = (null === $this->format) ? $format->getConfig()->supportedResponseFormats[0]
             : "application/{$this->format}";
 
         // Determine correct response type through content negotiation if not explicitly declared
         if (
-            ! in_array($this->format, ['json', 'xml'], true)
+            !in_array($this->format, ['json', 'xml'], true)
             && $this->request instanceof IncomingRequest
         ) {
             $mime = $this->request->negotiate(
@@ -314,7 +315,7 @@ trait ResponseTrait
         $this->response->setContentType($mime);
 
         // if we don't have a formatter, make one
-        if (! isset($this->formatter)) {
+        if (!isset($this->formatter)) {
             // if no formatter, use the default
             $this->formatter = $format->getFormatter($mime);
         }
@@ -323,8 +324,8 @@ trait ResponseTrait
 
         // Returns as HTML.
         if (
-            ($mime === 'application/json' && $asHtml && is_string($data))
-            || ($mime !== 'application/json' && is_string($data))
+            ('application/json' === $mime && $asHtml && is_string($data))
+            || ('application/json' !== $mime && is_string($data))
         ) {
             // The content type should be text/... and not application/...
             $contentType = $this->response->getHeaderLine('Content-Type');
@@ -336,7 +337,7 @@ trait ResponseTrait
             return $data;
         }
 
-        if ($mime !== 'application/json') {
+        if ('application/json' !== $mime) {
             // Recursively convert objects into associative arrays
             // Conversion not required for JSONFormatter
             $data = json_decode(json_encode($data), true);
@@ -348,14 +349,15 @@ trait ResponseTrait
     /**
      * Sets the format the response should be in.
      *
-     * @param         string|null  $format Response format
+     * @param null|string $format Response format
+     *
      * @phpstan-param 'json'|'xml' $format
      *
      * @return $this
      */
     protected function setResponseFormat(?string $format = null)
     {
-        $this->format = ($format === null) ? null : strtolower($format);
+        $this->format = (null === $format) ? null : strtolower($format);
 
         return $this;
     }

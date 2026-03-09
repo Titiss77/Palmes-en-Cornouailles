@@ -18,9 +18,9 @@ use CodeIgniter\DataCaster\DataCaster;
 use CodeIgniter\Entity\Entity;
 
 /**
- * PHP data <==> DataSource data converter
+ * PHP data <==> DataSource data converter.
  *
- * @see \CodeIgniter\DataConverter\DataConverterTest
+ * @see DataConverterTest
  *
  * @template TEntity of object
  */
@@ -54,14 +54,14 @@ final class DataConverter
          *
          * @phpstan-var (Closure(array<string, mixed>): TEntity)|string|null
          */
-        private readonly Closure|string|null $reconstructor = 'reconstruct',
+        private readonly \Closure|string|null $reconstructor = 'reconstruct',
         /**
          * Extract method name or closure to extract data from an object.
          * Used by extract().
          *
          * @phpstan-var (Closure(TEntity, bool, bool): array<string, mixed>)|string|null
          */
-        private readonly Closure|string|null $extractor = null,
+        private readonly \Closure|string|null $extractor = null,
     ) {
         $this->dataCaster = new DataCaster($castHandlers, $types, $this->helper);
     }
@@ -105,9 +105,10 @@ final class DataConverter
     /**
      * Takes database data array and creates a specified type object.
      *
-     * @param         class-string          $classname
+     * @param class-string         $classname
+     * @param array<string, mixed> $row       Raw data from database
+     *
      * @phpstan-param class-string<TEntity> $classname
-     * @param         array<string, mixed>  $row       Raw data from database
      *
      * @phpstan-return TEntity
      *
@@ -125,7 +126,7 @@ final class DataConverter
         }
 
         // Use closure to reconstruct.
-        if ($this->reconstructor instanceof Closure) {
+        if ($this->reconstructor instanceof \Closure) {
             $closure = $this->reconstructor;
 
             return $closure($phpData);
@@ -140,7 +141,7 @@ final class DataConverter
             return $classObj;
         }
 
-        $classSet = Closure::bind(function ($key, $value): void {
+        $classSet = \Closure::bind(function ($key, $value): void {
             $this->{$key} = $value;
         }, $classObj, $classname);
 
@@ -168,15 +169,15 @@ final class DataConverter
         // Use extractor method.
         if (is_string($this->extractor) && method_exists($object, $this->extractor)) {
             $method = $this->extractor;
-            $row    = $object->{$method}($onlyChanged, $recursive);
+            $row = $object->{$method}($onlyChanged, $recursive);
 
             return $this->toDataSource($row);
         }
 
         // Use closure to extract.
-        if ($this->extractor instanceof Closure) {
+        if ($this->extractor instanceof \Closure) {
             $closure = $this->extractor;
-            $row     = $closure($object, $onlyChanged, $recursive);
+            $row = $closure($object, $onlyChanged, $recursive);
 
             return $this->toDataSource($row);
         }

@@ -19,7 +19,7 @@ use CodeIgniter\CLI\CLI;
 /**
  * Displays a list of all migrations and whether they've been run or not.
  *
- * @see \CodeIgniter\Commands\Database\MigrateStatusTest
+ * @see MigrateStatusTest
  */
 class MigrateStatus extends BaseCommand
 {
@@ -32,28 +32,28 @@ class MigrateStatus extends BaseCommand
     protected $group = 'Database';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'migrate:status';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Displays a list of all migrations and whether they\'ve been run or not.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'migrate:status [options]';
 
     /**
-     * the Command's Options
+     * the Command's Options.
      *
      * @var array<string, string>
      */
@@ -80,9 +80,9 @@ class MigrateStatus extends BaseCommand
      *
      * @param array<string, mixed> $params
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
-        $runner     = service('migrations');
+        $runner = service('migrations');
         $paramGroup = $params['g'] ?? CLI::getOption('g');
 
         // Get all namespaces
@@ -101,7 +101,7 @@ class MigrateStatus extends BaseCommand
                 continue;
             }
 
-            if (APP_NAMESPACE !== 'App' && $namespace === 'App') {
+            if (APP_NAMESPACE !== 'App' && 'App' === $namespace) {
                 continue; // @codeCoverageIgnore
             }
 
@@ -116,9 +116,9 @@ class MigrateStatus extends BaseCommand
             ksort($migrations);
 
             foreach ($migrations as $uid => $migration) {
-                $migrations[$uid]->name = mb_substr($migration->name, (int) mb_strpos($migration->name, $uid . '_'));
+                $migrations[$uid]->name = mb_substr($migration->name, (int) mb_strpos($migration->name, $uid.'_'));
 
-                $date  = '---';
+                $date = '---';
                 $group = '---';
                 $batch = '---';
 
@@ -128,7 +128,7 @@ class MigrateStatus extends BaseCommand
                         continue;
                     }
 
-                    $date  = date('Y-m-d H:i:s', (int) $row->time);
+                    $date = date('Y-m-d H:i:s', (int) $row->time);
                     $group = $row->group;
                     $batch = $row->batch;
                     // @codeCoverageIgnoreEnd
@@ -145,7 +145,7 @@ class MigrateStatus extends BaseCommand
             }
         }
 
-        if ($status === []) {
+        if ([] === $status) {
             // @codeCoverageIgnoreStart
             CLI::error(lang('Migrations.noneFound'), 'light_gray', 'red');
             CLI::newLine();

@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class Piscines extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $this->forge->addField([
-            'id'          => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'nom'         => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
-            'adresse'     => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'nom' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
+            'adresse' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
             'type_bassin' => ['type' => 'ENUM', 'constraint' => ['25m', '50m'], 'null' => true],
-            'image_id'    => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => true],
+            'image_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'null' => true],
         ]);
 
         $this->forge->addPrimaryKey('id');
@@ -21,7 +23,7 @@ class Piscines extends Migration
         $this->forge->createTable('piscines');
     }
 
-    public function down()
+    public function down(): void
     {
         $this->forge->dropTable('piscines');
     }

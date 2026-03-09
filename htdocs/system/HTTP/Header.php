@@ -13,17 +13,14 @@ declare(strict_types=1);
 
 namespace CodeIgniter\HTTP;
 
-use InvalidArgumentException;
-use Stringable;
-
 /**
- * Class Header
+ * Class Header.
  *
  * Represents a single HTTP header.
  *
- * @see \CodeIgniter\HTTP\HeaderTest
+ * @see HeaderTest
  */
-class Header implements Stringable
+class Header implements \Stringable
 {
     /**
      * The name of the header.
@@ -42,7 +39,7 @@ class Header implements Stringable
      *           'bar' => 'fizz',
      *       ],
      *       'baz' => 'buzz',
-     *   ]
+     *   ].
      *
      * @var array<int|string, array<string, string>|string>|string
      */
@@ -51,12 +48,21 @@ class Header implements Stringable
     /**
      * Header constructor. name is mandatory, if a value is provided, it will be set.
      *
-     * @param array<int|string, array<string, string>|string>|string|null $value
+     * @param null|array<int|string, array<string, string>|string>|string $value
      */
     public function __construct(string $name, $value = null)
     {
         $this->setName($name);
         $this->setValue($value);
+    }
+
+    /**
+     * Returns a representation of the entire header string, including
+     * the header name and all values converted to the proper format.
+     */
+    public function __toString(): string
+    {
+        return $this->name.': '.$this->getValueLine();
     }
 
     /**
@@ -83,7 +89,7 @@ class Header implements Stringable
      *
      * @return $this
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setName(string $name)
     {
@@ -96,11 +102,11 @@ class Header implements Stringable
     /**
      * Sets the value of the header, overwriting any previous value(s).
      *
-     * @param array<int|string, array<string, string>|string>|string|null $value
+     * @param null|array<int|string, array<string, string>|string>|string $value
      *
      * @return $this
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setValue($value = null)
     {
@@ -117,25 +123,25 @@ class Header implements Stringable
      * Appends a value to the list of values for this header. If the
      * header is a single value string, it will be converted to an array.
      *
-     * @param array<string, string>|string|null $value
+     * @param null|array<string, string>|string $value
      *
      * @return $this
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function appendValue($value = null)
     {
-        if ($value === null) {
+        if (null === $value) {
             return $this;
         }
 
         $this->validateValue($value);
 
-        if (! is_array($this->value)) {
+        if (!is_array($this->value)) {
             $this->value = [$this->value];
         }
 
-        if (! in_array($value, $this->value, true)) {
+        if (!in_array($value, $this->value, true)) {
             $this->value[] = is_array($value) ? $value : (string) $value;
         }
 
@@ -146,21 +152,21 @@ class Header implements Stringable
      * Prepends a value to the list of values for this header. If the
      * header is a single value string, it will be converted to an array.
      *
-     * @param array<string, string>|string|null $value
+     * @param null|array<string, string>|string $value
      *
      * @return $this
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function prependValue($value = null)
     {
-        if ($value === null) {
+        if (null === $value) {
             return $this;
         }
 
         $this->validateValue($value);
 
-        if (! is_array($this->value)) {
+        if (!is_array($this->value)) {
             $this->value = [$this->value];
         }
 
@@ -183,18 +189,18 @@ class Header implements Stringable
         if (is_string($this->value)) {
             return $this->value;
         }
-        if (! is_array($this->value)) {
+        if (!is_array($this->value)) {
             return '';
         }
 
         $options = [];
 
         foreach ($this->value as $key => $value) {
-            if (is_string($key) && ! is_array($value)) {
-                $options[] = $key . '=' . $value;
+            if (is_string($key) && !is_array($value)) {
+                $options[] = $key.'='.$value;
             } elseif (is_array($value)) {
-                $key       = key($value);
-                $options[] = $key . '=' . $value[$key];
+                $key = key($value);
+                $options[] = $key.'='.$value[$key];
             } elseif (is_numeric($key)) {
                 $options[] = $value;
             }
@@ -204,27 +210,18 @@ class Header implements Stringable
     }
 
     /**
-     * Returns a representation of the entire header string, including
-     * the header name and all values converted to the proper format.
-     */
-    public function __toString(): string
-    {
-        return $this->name . ': ' . $this->getValueLine();
-    }
-
-    /**
      * Validate header name.
      *
      * Regex is based on code from a guzzlehttp/psr7 library.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc7230#section-3.2
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function validateName(string $name): void
     {
-        if (preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/D', $name) !== 1) {
-            throw new InvalidArgumentException('The header name is not valid as per RFC 7230.');
+        if (1 !== preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/D', $name)) {
+            throw new \InvalidArgumentException('The header name is not valid as per RFC 7230.');
         }
     }
 
@@ -237,7 +234,7 @@ class Header implements Stringable
      *
      * @param array<int|string, array<string, string>|string>|int|string $value
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function validateValue(array|int|string $value): void
     {
@@ -257,8 +254,8 @@ class Header implements Stringable
         // The regular expression excludes obs-fold per RFC 7230#3.2.4, as sending folded lines
         // is deprecated and rare. This obscure HTTP/1.1 feature is unlikely to impact legitimate
         // use cases. Libraries like Guzzle and AMPHP follow the same principle.
-        if (preg_match('/^[\x20\x09\x21-\x7E\x80-\xFF]*$/D', $value) !== 1) {
-            throw new InvalidArgumentException('The header value is not valid as per RFC 7230.');
+        if (1 !== preg_match('/^[\x20\x09\x21-\x7E\x80-\xFF]*$/D', $value)) {
+            throw new \InvalidArgumentException('The header value is not valid as per RFC 7230.');
         }
     }
 }

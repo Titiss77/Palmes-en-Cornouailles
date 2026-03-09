@@ -23,25 +23,25 @@ use Config\Paths;
 use Config\Services;
 
 /**
- * Bootstrap for the application
+ * Bootstrap for the application.
  *
  * @codeCoverageIgnore
  */
 class Boot
 {
     /**
-     * Used by `public/index.php`
+     * Used by `public/index.php`.
      *
      * Context
      *   web:     Invoked by HTTP request
      *   php-cli: Invoked by CLI via `php public/index.php`
      *
-     * @return int Exit code.
+     * @return int exit code
      */
     public static function bootWeb(Paths $paths): int
     {
         static::definePathConstants($paths);
-        if (! defined('APP_NAMESPACE')) {
+        if (!defined('APP_NAMESPACE')) {
             static::loadConstants();
         }
         static::checkMissingExtensions();
@@ -76,14 +76,14 @@ class Boot
     }
 
     /**
-     * Used by `spark`
+     * Used by `spark`.
      *
-     * @return int Exit code.
+     * @return int exit code
      */
     public static function bootSpark(Paths $paths): int
     {
         static::definePathConstants($paths);
-        if (! defined('APP_NAMESPACE')) {
+        if (!defined('APP_NAMESPACE')) {
             static::loadConstants();
         }
         static::checkMissingExtensions();
@@ -105,7 +105,7 @@ class Boot
     }
 
     /**
-     * Used by `system/Test/bootstrap.php`
+     * Used by `system/Test/bootstrap.php`.
      */
     public static function bootTest(Paths $paths): void
     {
@@ -123,7 +123,7 @@ class Boot
     }
 
     /**
-     * Used by `preload.php`
+     * Used by `preload.php`.
      */
     public static function preload(Paths $paths): void
     {
@@ -136,17 +136,17 @@ class Boot
     }
 
     /**
-     * Load environment settings from .env files into $_SERVER and $_ENV
+     * Load environment settings from .env files into $_SERVER and $_ENV.
      */
     protected static function loadDotEnv(Paths $paths): void
     {
-        require_once $paths->systemDirectory . '/Config/DotEnv.php';
-        (new DotEnv($paths->appDirectory . '/../'))->load();
+        require_once $paths->systemDirectory.'/Config/DotEnv.php';
+        (new DotEnv($paths->appDirectory.'/../'))->load();
     }
 
     protected static function defineEnvironment(): void
     {
-        if (! defined('ENVIRONMENT')) {
+        if (!defined('ENVIRONMENT')) {
             // @phpstan-ignore-next-line
             $env = $_ENV['CI_ENVIRONMENT'] ?? $_SERVER['CI_ENVIRONMENT']
                 ?? getenv('CI_ENVIRONMENT')
@@ -158,8 +158,8 @@ class Boot
 
     protected static function loadEnvironmentBootstrap(Paths $paths, bool $exit = true): void
     {
-        if (is_file($paths->appDirectory . '/Config/Boot/' . ENVIRONMENT . '.php')) {
-            require_once $paths->appDirectory . '/Config/Boot/' . ENVIRONMENT . '.php';
+        if (is_file($paths->appDirectory.'/Config/Boot/'.ENVIRONMENT.'.php')) {
+            require_once $paths->appDirectory.'/Config/Boot/'.ENVIRONMENT.'.php';
 
             return;
         }
@@ -180,54 +180,54 @@ class Boot
     protected static function definePathConstants(Paths $paths): void
     {
         // The path to the application directory.
-        if (! defined('APPPATH')) {
-            define('APPPATH', realpath(rtrim($paths->appDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+        if (!defined('APPPATH')) {
+            define('APPPATH', realpath(rtrim($paths->appDirectory, '\/ ')).DIRECTORY_SEPARATOR);
         }
 
         // The path to the project root directory. Just above APPPATH.
-        if (! defined('ROOTPATH')) {
-            define('ROOTPATH', realpath(APPPATH . '../') . DIRECTORY_SEPARATOR);
+        if (!defined('ROOTPATH')) {
+            define('ROOTPATH', realpath(APPPATH.'../').DIRECTORY_SEPARATOR);
         }
 
         // The path to the system directory.
-        if (! defined('SYSTEMPATH')) {
-            define('SYSTEMPATH', realpath(rtrim($paths->systemDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+        if (!defined('SYSTEMPATH')) {
+            define('SYSTEMPATH', realpath(rtrim($paths->systemDirectory, '\/ ')).DIRECTORY_SEPARATOR);
         }
 
         // The path to the writable directory.
-        if (! defined('WRITEPATH')) {
-            $writePath = realpath(rtrim($paths->writableDirectory, '\\/ '));
+        if (!defined('WRITEPATH')) {
+            $writePath = realpath(rtrim($paths->writableDirectory, '\/ '));
 
-            if ($writePath === false) {
+            if (false === $writePath) {
                 header('HTTP/1.1 503 Service Unavailable.', true, 503);
                 echo 'The WRITEPATH is not set correctly.';
 
                 // EXIT_ERROR is not yet defined
                 exit(1);
             }
-            define('WRITEPATH', $writePath . DIRECTORY_SEPARATOR);
+            define('WRITEPATH', $writePath.DIRECTORY_SEPARATOR);
         }
 
         // The path to the tests directory
-        if (! defined('TESTPATH')) {
-            define('TESTPATH', realpath(rtrim($paths->testsDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+        if (!defined('TESTPATH')) {
+            define('TESTPATH', realpath(rtrim($paths->testsDirectory, '\/ ')).DIRECTORY_SEPARATOR);
         }
     }
 
     protected static function loadConstants(): void
     {
-        require_once APPPATH . 'Config/Constants.php';
+        require_once APPPATH.'Config/Constants.php';
     }
 
     protected static function loadCommonFunctions(): void
     {
         // Require app/Common.php file if exists.
-        if (is_file(APPPATH . 'Common.php')) {
-            require_once APPPATH . 'Common.php';
+        if (is_file(APPPATH.'Common.php')) {
+            require_once APPPATH.'Common.php';
         }
 
         // Require system/Common.php
-        require_once SYSTEMPATH . 'Common.php';
+        require_once SYSTEMPATH.'Common.php';
     }
 
     /**
@@ -237,17 +237,23 @@ class Boot
      */
     protected static function loadAutoloader(): void
     {
-        if (! class_exists(Autoload::class, false)) {
-            require_once SYSTEMPATH . 'Config/AutoloadConfig.php';
-            require_once APPPATH . 'Config/Autoload.php';
-            require_once SYSTEMPATH . 'Modules/Modules.php';
-            require_once APPPATH . 'Config/Modules.php';
+        if (!class_exists(Autoload::class, false)) {
+            require_once SYSTEMPATH.'Config/AutoloadConfig.php';
+
+            require_once APPPATH.'Config/Autoload.php';
+
+            require_once SYSTEMPATH.'Modules/Modules.php';
+
+            require_once APPPATH.'Config/Modules.php';
         }
 
-        require_once SYSTEMPATH . 'Autoloader/Autoloader.php';
-        require_once SYSTEMPATH . 'Config/BaseService.php';
-        require_once SYSTEMPATH . 'Config/Services.php';
-        require_once APPPATH . 'Config/Services.php';
+        require_once SYSTEMPATH.'Autoloader/Autoloader.php';
+
+        require_once SYSTEMPATH.'Config/BaseService.php';
+
+        require_once SYSTEMPATH.'Config/Services.php';
+
+        require_once APPPATH.'Config/Services.php';
 
         // Initialize and register the loader with the SPL autoloader stack.
         Services::autoloader()->initialize(new Autoload(), new Modules())->register();
@@ -277,12 +283,12 @@ class Boot
             'json',
             'mbstring',
         ] as $extension) {
-            if (! extension_loaded($extension)) {
+            if (!extension_loaded($extension)) {
                 $missingExtensions[] = $extension;
             }
         }
 
-        if ($missingExtensions === []) {
+        if ([] === $missingExtensions) {
             return;
         }
 

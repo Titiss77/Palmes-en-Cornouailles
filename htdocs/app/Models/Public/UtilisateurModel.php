@@ -1,21 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Public;
 
 use CodeIgniter\Model;
 
 class UtilisateurModel extends Model
 {
-    protected $table            = 'utilisateurs';
-    protected $primaryKey       = 'id';
+    protected $table = 'utilisateurs';
+    protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    
+    protected $returnType = 'array';
+
     // Champs autorisés pour les insert/update
-    protected $allowedFields    = ['username', 'password', 'nom', 'role'];
+    protected $allowedFields = ['username', 'password', 'nom', 'role'];
 
     /**
-     * Récupère un utilisateur par son identifiant (username)
+     * Récupère un utilisateur par son identifiant (username).
+     *
+     * @param mixed $identifiant
      */
     public function getUtilisateur($identifiant)
     {

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Database;
 
 /**
- * Interface QueryInterface
+ * Interface QueryInterface.
  *
  * Represents a single statement that can be executed against the database.
  * Statements are platform-specific and can handle binding of binds.
@@ -51,7 +51,7 @@ interface QueryInterface
      * Returns the duration of this query during execution, or null if
      * the query has not been executed yet.
      *
-     * @param int $decimals The accuracy of the returned time.
+     * @param int $decimals the accuracy of the returned time
      */
     public function getDuration(int $decimals = 6): string;
 

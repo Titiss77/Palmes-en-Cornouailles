@@ -32,7 +32,6 @@ use Kint\Value\Context\PropertyContext;
 use Kint\Value\InstanceValue;
 use Kint\Value\Representation\ContainerRepresentation;
 use mysqli;
-use Throwable;
 
 /**
  * Adds support for mysqli object parsing.
@@ -85,10 +84,12 @@ class MysqliPlugin extends AbstractPlugin implements PluginCompleteInterface
     /**
      * Before 8.1: Properties were nulls when cast to array
      * After 8.1: Properties are readonly and uninitialized when cast to array (Aka missing).
+     *
+     * @param mixed $var
      */
     public function parseComplete(&$var, AbstractValue $v, int $trigger): AbstractValue
     {
-        if (!$var instanceof mysqli || !$v instanceof InstanceValue) {
+        if (!$var instanceof \mysqli || !$v instanceof InstanceValue) {
             return $v;
         }
 
@@ -98,20 +99,20 @@ class MysqliPlugin extends AbstractPlugin implements PluginCompleteInterface
             return $v;
         }
 
-        /**
+        /*
          * @psalm-var ?string $var->sqlstate
          * @psalm-var ?string $var->client_info
          * Psalm bug #4502
          */
         try {
             $connected = \is_string(@$var->sqlstate);
-        } catch (Throwable $t) {
+        } catch (\Throwable $t) {
             $connected = false;
         }
 
         try {
             $empty = !$connected && \is_string(@$var->client_info);
-        } catch (Throwable $t) { // @codeCoverageIgnore
+        } catch (\Throwable $t) { // @codeCoverageIgnore
             // Only possible in PHP 8.0. Before 8.0 there's no exception,
             // after 8.1 there are no failed connection objects
             $empty = false; // @codeCoverageIgnore

@@ -13,6 +13,6 @@ declare(strict_types=1);
 
 // Filters language settings
 return [
-    'noFilter'           => '"{0}" filter must have a matching alias defined.',
+    'noFilter' => '"{0}" filter must have a matching alias defined.',
     'incorrectInterface' => '"{0}" must implement CodeIgniter\Filters\FilterInterface.',
 ];

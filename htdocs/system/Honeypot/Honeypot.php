@@ -20,9 +20,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Config\Honeypot as HoneypotConfig;
 
 /**
- * class Honeypot
+ * class Honeypot.
  *
- * @see \CodeIgniter\Honeypot\HoneypotTest
+ * @see HoneypotTest
  */
 class Honeypot
 {
@@ -42,17 +42,17 @@ class Honeypot
     {
         $this->config = $config;
 
-        if ($this->config->container === '' || ! str_contains($this->config->container, '{template}')) {
+        if ('' === $this->config->container || !str_contains($this->config->container, '{template}')) {
             $this->config->container = '<div style="display:none">{template}</div>';
         }
 
         $this->config->containerId ??= 'hpc';
 
-        if ($this->config->template === '') {
+        if ('' === $this->config->template) {
             throw HoneypotException::forNoTemplate();
         }
 
-        if ($this->config->name === '') {
+        if ('' === $this->config->name) {
             throw HoneypotException::forNoNameField();
         }
     }
@@ -66,17 +66,15 @@ class Honeypot
     {
         assert($request instanceof IncomingRequest);
 
-        return ! empty($request->getPost($this->config->name));
+        return !empty($request->getPost($this->config->name));
     }
 
     /**
      * Attaches Honeypot template to response.
-     *
-     * @return void
      */
-    public function attachHoneypot(ResponseInterface $response)
+    public function attachHoneypot(ResponseInterface $response): void
     {
-        if ($response->getBody() === null) {
+        if (null === $response->getBody()) {
             return;
         }
 
@@ -84,7 +82,7 @@ class Honeypot
             // Add id attribute to the container tag.
             $this->config->container = str_ireplace(
                 '>{template}',
-                ' id="' . $this->config->containerId . '">{template}',
+                ' id="'.$this->config->containerId.'">{template}',
                 $this->config->container,
             );
         }
@@ -92,12 +90,12 @@ class Honeypot
         $prepField = $this->prepareTemplate($this->config->template);
 
         $bodyBefore = $response->getBody();
-        $bodyAfter  = str_ireplace('</form>', $prepField . '</form>', $bodyBefore);
+        $bodyAfter = str_ireplace('</form>', $prepField.'</form>', $bodyBefore);
 
         if ($response->getCSP()->enabled() && ($bodyBefore !== $bodyAfter)) {
             // Add style tag for the container tag in the head tag.
-            $style     = '<style ' . csp_style_nonce() . '>#' . $this->config->containerId . ' { display:none }</style>';
-            $bodyAfter = str_ireplace('</head>', $style . '</head>', $bodyAfter);
+            $style = '<style '.csp_style_nonce().'>#'.$this->config->containerId.' { display:none }</style>';
+            $bodyAfter = str_ireplace('</head>', $style.'</head>', $bodyAfter);
         }
 
         $response->setBody($bodyAfter);

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace CodeIgniter\Database\SQLite3;
 
 use CodeIgniter\Database\Exceptions\DataException;
-use stdClass;
 
 /**
  * Provides missing features for altering tables that are common
@@ -28,7 +27,7 @@ class Table
     /**
      * All of the fields this table represents.
      *
-     * @var array<string, array<string, bool|int|string|null>> [name => attributes]
+     * @var array<string, array<string, null|bool|int|string>> [name => attributes]
      */
     protected $fields = [];
 
@@ -54,7 +53,7 @@ class Table
     protected $tableName;
 
     /**
-     * The name of the table, with database prefix
+     * The name of the table, with database prefix.
      *
      * @var string
      */
@@ -79,7 +78,7 @@ class Table
      */
     public function __construct(Connection $db, Forge $forge)
     {
-        $this->db    = $db;
+        $this->db = $db;
         $this->forge = $forge;
     }
 
@@ -96,11 +95,11 @@ class Table
 
         $prefix = $this->db->DBPrefix;
 
-        if (! empty($prefix) && str_starts_with($table, $prefix)) {
+        if (!empty($prefix) && str_starts_with($table, $prefix)) {
             $table = substr($table, strlen($prefix));
         }
 
-        if (! $this->db->tableExists($this->prefixedTableName)) {
+        if (!$this->db->tableExists($this->prefixedTableName)) {
             throw DataException::forTableNotFound($this->prefixedTableName);
         }
 
@@ -111,9 +110,9 @@ class Table
         $this->keys = array_merge($this->keys, $this->formatKeys($this->db->getIndexData($table)));
 
         // if primary key index exists twice then remove psuedo index name 'primary'.
-        $primaryIndexes = array_filter($this->keys, static fn ($index): bool => $index['type'] === 'primary');
+        $primaryIndexes = array_filter($this->keys, static fn ($index): bool => 'primary' === $index['type']);
 
-        if ($primaryIndexes !== [] && count($primaryIndexes) > 1 && array_key_exists('primary', $this->keys)) {
+        if ([] !== $primaryIndexes && count($primaryIndexes) > 1 && array_key_exists('primary', $this->keys)) {
             unset($this->keys['primary']);
         }
 
@@ -156,7 +155,7 @@ class Table
     /**
      * Drops columns from the table.
      *
-     * @param list<string>|string $columns Column names to drop.
+     * @param list<string>|string $columns column names to drop
      *
      * @return Table
      */
@@ -179,7 +178,7 @@ class Table
     /**
      * Modifies a field, including changing data type, renaming, etc.
      *
-     * @param list<array<string, bool|int|string|null>> $fieldsToModify
+     * @param list<array<string, null|bool|int|string>> $fieldsToModify
      *
      * @return Table
      */
@@ -196,11 +195,11 @@ class Table
     }
 
     /**
-     * Drops the primary key
+     * Drops the primary key.
      */
     public function dropPrimaryKey(): Table
     {
-        $primaryIndexes = array_filter($this->keys, static fn ($index): bool => strtolower($index['type']) === 'primary');
+        $primaryIndexes = array_filter($this->keys, static fn ($index): bool => 'primary' === strtolower($index['type']));
 
         foreach (array_keys($primaryIndexes) as $key) {
             unset($this->keys[$key]);
@@ -229,21 +228,21 @@ class Table
     }
 
     /**
-     * Adds primary key
+     * Adds primary key.
      */
     public function addPrimaryKey(array $fields): Table
     {
-        $primaryIndexes = array_filter($this->keys, static fn ($index): bool => strtolower($index['type']) === 'primary');
+        $primaryIndexes = array_filter($this->keys, static fn ($index): bool => 'primary' === strtolower($index['type']));
 
         // if primary key already exists we can't add another one
-        if ($primaryIndexes !== []) {
+        if ([] !== $primaryIndexes) {
             return $this;
         }
 
         // add array to keys of fields
         $pk = [
             'fields' => $fields['fields'],
-            'type'   => 'primary',
+            'type' => 'primary',
         ];
 
         $this->keys['primary'] = $pk;
@@ -252,7 +251,7 @@ class Table
     }
 
     /**
-     * Add a foreign key
+     * Add a foreign key.
      *
      * @return $this
      */
@@ -262,12 +261,12 @@ class Table
 
         // convert to object
         foreach ($foreignKeys as $row) {
-            $obj                      = new stdClass();
-            $obj->column_name         = $row['field'];
-            $obj->foreign_table_name  = $row['referenceTable'];
+            $obj = new \stdClass();
+            $obj->column_name = $row['field'];
+            $obj->foreign_table_name = $row['referenceTable'];
             $obj->foreign_column_name = $row['referenceField'];
-            $obj->on_delete           = $row['onDelete'];
-            $obj->on_update           = $row['onUpdate'];
+            $obj->on_delete = $row['onDelete'];
+            $obj->on_update = $row['onUpdate'];
 
             $fk[] = $obj;
         }
@@ -315,14 +314,17 @@ class Table
                 switch ($key['type']) {
                     case 'primary':
                         $this->forge->addPrimaryKey($key['fields']);
+
                         break;
 
                     case 'unique':
                         $this->forge->addUniqueKey($key['fields'], $keyName);
+
                         break;
 
                     case 'index':
                         $this->forge->addKey($key['fields'], false, false, $keyName);
+
                         break;
                 }
             }
@@ -343,17 +345,15 @@ class Table
      * Copies data from our old table to the new one,
      * taking care map data correctly based on any columns
      * that have been renamed.
-     *
-     * @return void
      */
-    protected function copyData()
+    protected function copyData(): void
     {
-        $exFields  = [];
+        $exFields = [];
         $newFields = [];
 
         foreach ($this->fields as $name => $details) {
             $newFields[] = $details['new_name'] ?? $name;
-            $exFields[]  = $name;
+            $exFields[] = $name;
         }
 
         $exFields = implode(
@@ -376,12 +376,13 @@ class Table
      *
      * @param array|bool $fields
      *
-     * @return         mixed
+     * @return mixed
+     *
      * @phpstan-return ($fields is array ? array : mixed)
      */
     protected function formatFields($fields)
     {
-        if (! is_array($fields)) {
+        if (!is_array($fields)) {
             return $fields;
         }
 
@@ -389,15 +390,15 @@ class Table
 
         foreach ($fields as $field) {
             $return[$field->name] = [
-                'type'    => $field->type,
+                'type' => $field->type,
                 'default' => $field->default,
-                'null'    => $field->nullable,
+                'null' => $field->nullable,
             ];
 
-            if ($field->default === null) {
+            if (null === $field->default) {
                 // `null` means that the default value is not defined.
                 unset($return[$field->name]['default']);
-            } elseif ($field->default === 'NULL') {
+            } elseif ('NULL' === $field->default) {
                 // 'NULL' means that the default value is NULL.
                 $return[$field->name]['default'] = null;
             } else {
@@ -415,12 +416,53 @@ class Table
             if ($field->primary_key) {
                 $this->keys['primary'] = [
                     'fields' => [$field->name],
-                    'type'   => 'primary',
+                    'type' => 'primary',
                 ];
             }
         }
 
         return $return;
+    }
+
+    /**
+     * Converts keys retrieved from the database to
+     * the format needed to create later.
+     *
+     * @param array<string, \stdClass> $keys
+     *
+     * @return array<string, array{fields: string, type: string}>
+     */
+    protected function formatKeys($keys)
+    {
+        $return = [];
+
+        foreach ($keys as $name => $key) {
+            $return[strtolower($name)] = [
+                'fields' => $key->fields,
+                'type' => strtolower($key->type),
+            ];
+        }
+
+        return $return;
+    }
+
+    /**
+     * Attempts to drop all indexes and constraints
+     * from the database for this table.
+     */
+    protected function dropIndexes(): void
+    {
+        if (!is_array($this->keys) || [] === $this->keys) {
+            return;
+        }
+
+        foreach (array_keys($this->keys) as $name) {
+            if ('primary' === $name) {
+                continue;
+            }
+
+            $this->db->query("DROP INDEX IF EXISTS '{$name}'");
+        }
     }
 
     /**
@@ -445,48 +487,5 @@ class Table
     private function isNumericType(string $type): bool
     {
         return in_array(strtoupper($type), ['NUMERIC', 'DECIMAL'], true);
-    }
-
-    /**
-     * Converts keys retrieved from the database to
-     * the format needed to create later.
-     *
-     * @param array<string, stdClass> $keys
-     *
-     * @return array<string, array{fields: string, type: string}>
-     */
-    protected function formatKeys($keys)
-    {
-        $return = [];
-
-        foreach ($keys as $name => $key) {
-            $return[strtolower($name)] = [
-                'fields' => $key->fields,
-                'type'   => strtolower($key->type),
-            ];
-        }
-
-        return $return;
-    }
-
-    /**
-     * Attempts to drop all indexes and constraints
-     * from the database for this table.
-     *
-     * @return void
-     */
-    protected function dropIndexes()
-    {
-        if (! is_array($this->keys) || $this->keys === []) {
-            return;
-        }
-
-        foreach (array_keys($this->keys) as $name) {
-            if ($name === 'primary') {
-                continue;
-            }
-
-            $this->db->query("DROP INDEX IF EXISTS '{$name}'");
-        }
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Debug\Toolbar\Collectors;
 
 /**
- * Base Toolbar collector
+ * Base Toolbar collector.
  */
 class BaseCollector
 {
@@ -108,7 +108,7 @@ class BaseCollector
      */
     public function timelineData(): array
     {
-        if (! $this->hasTimeline) {
+        if (!$this->hasTimeline) {
             return [];
         }
 
@@ -140,7 +140,7 @@ class BaseCollector
      *      ],
      *  ];
      *
-     * @return array|null
+     * @return null|array
      */
     public function getVarData()
     {
@@ -148,25 +148,7 @@ class BaseCollector
     }
 
     /**
-     * Child classes should implement this to return the timeline data
-     * formatted for correct usage.
-     *
-     * Timeline data should be formatted into arrays that look like:
-     *
-     *  [
-     *      'name'      => 'Database::Query',
-     *      'component' => 'Database',
-     *      'start'     => 10       // milliseconds
-     *      'duration'  => 15       // milliseconds
-     *  ]
-     */
-    protected function formatTimelineData(): array
-    {
-        return [];
-    }
-
-    /**
-     * Returns the data of this collector to be formatted in the toolbar
+     * Returns the data of this collector to be formatted in the toolbar.
      *
      * @return array|string
      */
@@ -178,7 +160,7 @@ class BaseCollector
     /**
      * This makes nicer looking paths for the error output.
      *
-     * @deprecated Use the dedicated `clean_path()` function.
+     * @deprecated use the dedicated `clean_path()` function
      */
     public function cleanPath(string $file): string
     {
@@ -188,7 +170,7 @@ class BaseCollector
     /**
      * Gets the "badge" value for the button.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getBadgeValue()
     {
@@ -222,17 +204,35 @@ class BaseCollector
     public function getAsArray(): array
     {
         return [
-            'title'           => $this->getTitle(),
-            'titleSafe'       => $this->getTitle(true),
-            'titleDetails'    => $this->getTitleDetails(),
-            'display'         => $this->display(),
-            'badgeValue'      => $this->getBadgeValue(),
-            'isEmpty'         => $this->isEmpty(),
-            'hasTabContent'   => $this->hasTabContent(),
-            'hasLabel'        => $this->hasLabel(),
-            'icon'            => $this->icon(),
+            'title' => $this->getTitle(),
+            'titleSafe' => $this->getTitle(true),
+            'titleDetails' => $this->getTitleDetails(),
+            'display' => $this->display(),
+            'badgeValue' => $this->getBadgeValue(),
+            'isEmpty' => $this->isEmpty(),
+            'hasTabContent' => $this->hasTabContent(),
+            'hasLabel' => $this->hasLabel(),
+            'icon' => $this->icon(),
             'hasTimelineData' => $this->hasTimelineData(),
-            'timelineData'    => $this->timelineData(),
+            'timelineData' => $this->timelineData(),
         ];
+    }
+
+    /**
+     * Child classes should implement this to return the timeline data
+     * formatted for correct usage.
+     *
+     * Timeline data should be formatted into arrays that look like:
+     *
+     *  [
+     *      'name'      => 'Database::Query',
+     *      'component' => 'Database',
+     *      'start'     => 10       // milliseconds
+     *      'duration'  => 15       // milliseconds
+     *  ]
+     */
+    protected function formatTimelineData(): array
+    {
+        return [];
     }
 }

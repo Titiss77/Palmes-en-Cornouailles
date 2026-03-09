@@ -72,7 +72,7 @@ class CallablePlugin extends AbstractPlugin implements ValuePluginInterface
                 $header .= ': <var>';
                 $header .= $this->renderer->escape($rt).'</var>';
             } elseif (null !== ($ds = $v->getCallableBag()->docstring)) {
-                if (\preg_match('/@return\\s+(.*)\\r?\\n/m', $ds, $matches)) {
+                if (\preg_match('/@return\s+(.*)\r?\n/m', $ds, $matches)) {
                     if (\trim($matches[1])) {
                         $header .= ': <var>'.$this->renderer->escape(\trim($matches[1])).'</var>';
                     }

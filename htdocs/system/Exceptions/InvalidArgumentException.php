@@ -16,6 +16,4 @@ namespace CodeIgniter\Exceptions;
 /**
  * Exception thrown if an argument is not of the expected type.
  */
-class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
-{
-}
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {}

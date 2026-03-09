@@ -10,8 +10,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-
-if (! function_exists('is_cli')) {
+if (!function_exists('is_cli')) {
     /**
      * Is CLI?
      *
@@ -25,7 +24,7 @@ if (! function_exists('is_cli')) {
         // PHPUnit always runs via CLI.
         static $returnValue = true;
 
-        if ($newReturn !== null) {
+        if (null !== $newReturn) {
             $returnValue = $newReturn;
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\admin;
 
 use CodeIgniter\Model;
@@ -14,13 +16,16 @@ class CalendriersModel extends Model
     protected $allowedFields = ['categorie', 'date', 'image_id'];
 
     /**
-     * Récupère les calendriers avec le chemin du fichier (image ou pdf)
+     * Récupère les calendriers avec le chemin du fichier (image ou pdf).
+     *
+     * @param null|mixed $id
      */
     public function getCalendriersWithRelations($id = null)
     {
         $builder = $this
             ->select('calendriers.*, images.path as image_path, images.alt')
-            ->join('images', 'calendriers.image_id = images.id', 'left');
+            ->join('images', 'calendriers.image_id = images.id', 'left')
+        ;
 
         if ($id) {
             return $builder->where('calendriers.id', $id)->first();
@@ -30,6 +35,7 @@ class CalendriersModel extends Model
         return $builder
             ->orderBy('calendriers.categorie', 'ASC')
             ->orderBy('calendriers.id', 'DESC')
-            ->findAll();
+            ->findAll()
+        ;
     }
 }

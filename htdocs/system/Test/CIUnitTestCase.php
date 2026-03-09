@@ -31,7 +31,6 @@ use Config\Email;
 use Config\Modules;
 use Config\Services;
 use Config\Session;
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -70,11 +69,6 @@ abstract class CIUnitTestCase extends TestCase
      */
     protected $tearDownMethods = [];
 
-    /**
-     * Store of identified traits.
-     */
-    private ?array $traits = null;
-
     // --------------------------------------------------------------------
     // Database Properties
     // --------------------------------------------------------------------
@@ -109,7 +103,7 @@ abstract class CIUnitTestCase extends TestCase
 
     /**
      * The seed file(s) used for all tests within this test case.
-     * Should be fully-namespaced or relative to $basePath
+     * Should be fully-namespaced or relative to $basePath.
      *
      * @var class-string<Seeder>|list<class-string<Seeder>>
      */
@@ -121,15 +115,15 @@ abstract class CIUnitTestCase extends TestCase
      *
      * @var string
      */
-    protected $basePath = SUPPORTPATH . 'Database';
+    protected $basePath = SUPPORTPATH.'Database';
 
     /**
      * The namespace(s) to help us find the migration classes.
      * `null` is equivalent to running `spark migrate --all`.
      * Note that running "all" runs migrations in date order,
-     * but specifying namespaces runs them in namespace order (then date)
+     * but specifying namespaces runs them in namespace order (then date).
      *
-     * @var array|string|null
+     * @var null|array|string
      */
     protected $namespace = 'Tests\Support';
 
@@ -151,12 +145,12 @@ abstract class CIUnitTestCase extends TestCase
     /**
      * Migration Runner instance.
      *
-     * @var MigrationRunner|null
+     * @var null|MigrationRunner
      */
     protected $migrations;
 
     /**
-     * Seeder instance
+     * Seeder instance.
      *
      * @var Seeder
      */
@@ -164,7 +158,7 @@ abstract class CIUnitTestCase extends TestCase
 
     /**
      * Stores information needed to remove any
-     * rows inserted via $this->hasInDatabase();
+     * rows inserted via $this->hasInDatabase();.
      *
      * @var array
      */
@@ -178,7 +172,7 @@ abstract class CIUnitTestCase extends TestCase
      * If present, will override application
      * routes when using call().
      *
-     * @var RouteCollection|null
+     * @var null|RouteCollection
      */
     protected $routes;
 
@@ -191,14 +185,14 @@ abstract class CIUnitTestCase extends TestCase
     protected $session = [];
 
     /**
-     * Enabled auto clean op buffer after request call
+     * Enabled auto clean op buffer after request call.
      *
      * @var bool
      */
     protected $clean = true;
 
     /**
-     * Custom request's headers
+     * Custom request's headers.
      *
      * @var array
      */
@@ -206,7 +200,7 @@ abstract class CIUnitTestCase extends TestCase
 
     /**
      * Allows for formatting the request body to what
-     * the controller is going to expect
+     * the controller is going to expect.
      *
      * @var string
      */
@@ -219,6 +213,11 @@ abstract class CIUnitTestCase extends TestCase
      * @var mixed
      */
     protected $requestBody = '';
+
+    /**
+     * Store of identified traits.
+     */
+    private ?array $traits = null;
 
     // --------------------------------------------------------------------
     // Staging
@@ -238,7 +237,7 @@ abstract class CIUnitTestCase extends TestCase
     {
         parent::setUp();
 
-        if (! $this->app instanceof CodeIgniter) {
+        if (!$this->app instanceof CodeIgniter) {
             $this->app = $this->createApplication();
         }
 
@@ -272,86 +271,6 @@ abstract class CIUnitTestCase extends TestCase
         $this->callTraitMethods('tearDown');
     }
 
-    /**
-     * Checks for traits with corresponding
-     * methods for setUp or tearDown.
-     *
-     * @param string $stage 'setUp' or 'tearDown'
-     */
-    private function callTraitMethods(string $stage): void
-    {
-        if ($this->traits === null) {
-            $this->traits = class_uses_recursive($this);
-        }
-
-        foreach ($this->traits as $trait) {
-            $method = $stage . class_basename($trait);
-
-            if (method_exists($this, $method)) {
-                $this->{$method}();
-            }
-        }
-    }
-
-    // --------------------------------------------------------------------
-    // Mocking
-    // --------------------------------------------------------------------
-
-    /**
-     * Resets shared instanced for all Factories components
-     *
-     * @return void
-     */
-    protected function resetFactories()
-    {
-        Factories::reset();
-    }
-
-    /**
-     * Resets shared instanced for all Services
-     *
-     * @return void
-     */
-    protected function resetServices(bool $initAutoloader = true)
-    {
-        Services::reset($initAutoloader);
-    }
-
-    /**
-     * Injects the mock Cache driver to prevent filesystem collisions
-     *
-     * @return void
-     */
-    protected function mockCache()
-    {
-        Services::injectMock('cache', new MockCache());
-    }
-
-    /**
-     * Injects the mock email driver so no emails really send
-     *
-     * @return void
-     */
-    protected function mockEmail()
-    {
-        Services::injectMock('email', new MockEmail(config(Email::class)));
-    }
-
-    /**
-     * Injects the mock session driver into Services
-     *
-     * @return void
-     */
-    protected function mockSession()
-    {
-        $_SESSION = [];
-
-        $config  = config(Session::class);
-        $session = new MockSession(new ArrayHandler($config, '0.0.0.0'), $config);
-
-        Services::injectMock('session', $session);
-    }
-
     // --------------------------------------------------------------------
     // Assertions
     // --------------------------------------------------------------------
@@ -360,7 +279,7 @@ abstract class CIUnitTestCase extends TestCase
      * Custom function to hook into CodeIgniter's Logging mechanism
      * to check if certain messages were logged during code execution.
      *
-     * @param string|null $expectedMessage
+     * @param null|string $expectedMessage
      *
      * @return bool
      */
@@ -384,7 +303,7 @@ abstract class CIUnitTestCase extends TestCase
     {
         $this->assertTrue(
             TestLogger::didLog($level, $logMessage, false),
-            $message !== '' ? $message : sprintf(
+            '' !== $message ? $message : sprintf(
                 'Failed asserting that logs have a record of message containing "%s" with level "%s".',
                 $logMessage,
                 $level,
@@ -396,11 +315,11 @@ abstract class CIUnitTestCase extends TestCase
      * Hooks into CodeIgniter's Events system to check if a specific
      * event was triggered or not.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function assertEventTriggered(string $eventName): bool
     {
-        $found     = false;
+        $found = false;
         $eventName = strtolower($eventName);
 
         foreach (Events::getPerformanceLogs() as $log) {
@@ -409,6 +328,7 @@ abstract class CIUnitTestCase extends TestCase
             }
 
             $found = true;
+
             break;
         }
 
@@ -453,11 +373,9 @@ abstract class CIUnitTestCase extends TestCase
      *
      * @param float|int $actual
      *
-     * @return void
-     *
-     * @throws Exception
+     * @throws \Exception
      */
-    public function assertCloseEnough(int $expected, $actual, string $message = '', int $tolerance = 1)
+    public function assertCloseEnough(int $expected, $actual, string $message = '', int $tolerance = 1): void
     {
         $difference = abs($expected - (int) floor($actual));
 
@@ -473,29 +391,78 @@ abstract class CIUnitTestCase extends TestCase
      * @param mixed $expected
      * @param mixed $actual
      *
-     * @return bool|null
+     * @return null|bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function assertCloseEnoughString($expected, $actual, string $message = '', int $tolerance = 1)
     {
         $expected = (string) $expected;
-        $actual   = (string) $actual;
+        $actual = (string) $actual;
         if (strlen($expected) !== strlen($actual)) {
             return false;
         }
 
         try {
-            $expected   = (int) substr($expected, -2);
-            $actual     = (int) substr($actual, -2);
+            $expected = (int) substr($expected, -2);
+            $actual = (int) substr($actual, -2);
             $difference = abs($expected - $actual);
 
             $this->assertLessThanOrEqual($tolerance, $difference, $message);
-        } catch (Exception) {
+        } catch (\Exception) {
             return false;
         }
 
         return null;
+    }
+
+    // --------------------------------------------------------------------
+    // Mocking
+    // --------------------------------------------------------------------
+
+    /**
+     * Resets shared instanced for all Factories components.
+     */
+    protected function resetFactories(): void
+    {
+        Factories::reset();
+    }
+
+    /**
+     * Resets shared instanced for all Services.
+     */
+    protected function resetServices(bool $initAutoloader = true): void
+    {
+        Services::reset($initAutoloader);
+    }
+
+    /**
+     * Injects the mock Cache driver to prevent filesystem collisions.
+     */
+    protected function mockCache(): void
+    {
+        Services::injectMock('cache', new MockCache());
+    }
+
+    /**
+     * Injects the mock email driver so no emails really send.
+     */
+    protected function mockEmail(): void
+    {
+        Services::injectMock('email', new MockEmail(config(Email::class)));
+    }
+
+    /**
+     * Injects the mock session driver into Services.
+     */
+    protected function mockSession(): void
+    {
+        $_SESSION = [];
+
+        $config = config(Session::class);
+        $session = new MockSession(new ArrayHandler($config, '0.0.0.0'), $config);
+
+        Services::injectMock('session', $session);
     }
 
     // --------------------------------------------------------------------
@@ -524,8 +491,8 @@ abstract class CIUnitTestCase extends TestCase
      */
     protected function getHeaderEmitted(string $header, bool $ignoreCase = false, string $method = __METHOD__): ?string
     {
-        if (! function_exists('xdebug_get_headers')) {
-            $this->markTestSkipped($method . '() requires xdebug.');
+        if (!function_exists('xdebug_get_headers')) {
+            $this->markTestSkipped($method.'() requires xdebug.');
         }
 
         foreach (xdebug_get_headers() as $emittedHeader) {
@@ -539,5 +506,26 @@ abstract class CIUnitTestCase extends TestCase
         }
 
         return null;
+    }
+
+    /**
+     * Checks for traits with corresponding
+     * methods for setUp or tearDown.
+     *
+     * @param string $stage 'setUp' or 'tearDown'
+     */
+    private function callTraitMethods(string $stage): void
+    {
+        if (null === $this->traits) {
+            $this->traits = class_uses_recursive($this);
+        }
+
+        foreach ($this->traits as $trait) {
+            $method = $stage.class_basename($trait);
+
+            if (method_exists($this, $method)) {
+                $this->{$method}();
+            }
+        }
     }
 }

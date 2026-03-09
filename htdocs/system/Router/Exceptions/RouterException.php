@@ -16,7 +16,7 @@ namespace CodeIgniter\Router\Exceptions;
 use CodeIgniter\Exceptions\FrameworkException;
 
 /**
- * RouterException
+ * RouterException.
  */
 class RouterException extends FrameworkException implements ExceptionInterface
 {

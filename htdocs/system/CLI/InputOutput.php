@@ -32,12 +32,12 @@ class InputOutput
     }
 
     /**
-     * Get input from the shell, using readline or the standard STDIN
+     * Get input from the shell, using readline or the standard STDIN.
      *
      * Named options must be in the following formats:
      * php index.php user -v --v -name=John --name=John
      *
-     * @param string|null $prefix You may specify a string with which to prompt the user.
+     * @param null|string $prefix you may specify a string with which to prompt the user
      */
     public function input(?string $prefix = null): string
     {
@@ -50,7 +50,7 @@ class InputOutput
 
         $input = fgets(fopen('php://stdin', 'rb'));
 
-        if ($input === false) {
+        if (false === $input) {
             $input = '';
         }
 
@@ -69,7 +69,7 @@ class InputOutput
      */
     public function fwrite($handle, string $string): void
     {
-        if (! is_cli()) {
+        if (!is_cli()) {
             echo $string;
 
             return;

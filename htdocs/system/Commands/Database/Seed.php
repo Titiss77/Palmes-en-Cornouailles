@@ -17,7 +17,6 @@ use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Database\Seeder;
 use Config\Database;
-use Throwable;
 
 /**
  * Runs the specified Seeder file to populate the database
@@ -34,28 +33,28 @@ class Seed extends BaseCommand
     protected $group = 'Database';
 
     /**
-     * The Command's name
+     * The Command's name.
      *
      * @var string
      */
     protected $name = 'db:seed';
 
     /**
-     * the Command's short description
+     * the Command's short description.
      *
      * @var string
      */
     protected $description = 'Runs the specified seeder to populate known data into the database.';
 
     /**
-     * the Command's usage
+     * the Command's usage.
      *
      * @var string
      */
     protected $usage = 'db:seed <seeder_name>';
 
     /**
-     * the Command's Arguments
+     * the Command's Arguments.
      *
      * @var array<string, string>
      */
@@ -66,9 +65,9 @@ class Seed extends BaseCommand
     /**
      * Passes to Seeder to populate the database.
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
-        $seeder   = new Seeder(new Database());
+        $seeder = new Seeder(new Database());
         $seedName = array_shift($params);
 
         if (empty($seedName)) {
@@ -77,7 +76,7 @@ class Seed extends BaseCommand
 
         try {
             $seeder->call($seedName);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $this->showError($e);
         }
     }

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
 class DisciplineSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         $data = [
             ['nom' => 'Surface (SF)', 'description' => "La discipline reine de la vitesse. Équipé d'une monopalme et d'un tuba frontal, le nageur évolue à la surface de l'eau en utilisant un mouvement d'ondulation dauphin. C'est une pratique spectaculaire qui allie puissance musculaire, souplesse et un hydrodynamisme parfait pour atteindre des records de vitesse.", 'image' => 'disciplines/monopalme.jpg'],
@@ -28,7 +30,9 @@ class DisciplineSeeder extends Seeder
 
     private function getImageId($path)
     {
-        if (empty($path)) return null;
+        if (empty($path)) {
+            return null;
+        }
 
         $existing = $this->db->table('images')->where('path', $path)->get()->getRow();
         if ($existing) {
@@ -36,10 +40,11 @@ class DisciplineSeeder extends Seeder
         }
 
         $this->db->table('images')->insert([
-            'path'       => $path,
+            'path' => $path,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
+
         return $this->db->insertID();
     }
 }

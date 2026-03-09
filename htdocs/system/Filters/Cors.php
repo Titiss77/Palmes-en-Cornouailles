@@ -19,7 +19,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * @see \CodeIgniter\Filters\CorsTest
+ * @see CorsTest
  */
 class Cors implements FilterInterface
 {
@@ -40,19 +40,19 @@ class Cors implements FilterInterface
      */
     public function __construct(array $config = [])
     {
-        if ($config !== []) {
+        if ([] !== $config) {
             $this->cors = new CorsService($config);
         }
     }
 
     /**
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      *
-     * @return ResponseInterface|null
+     * @return null|ResponseInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (! $request instanceof IncomingRequest) {
+        if (!$request instanceof IncomingRequest) {
             return null;
         }
 
@@ -87,20 +87,11 @@ class Cors implements FilterInterface
     }
 
     /**
-     * @param list<string>|null $arguments
-     */
-    private function createCorsService(?array $arguments): void
-    {
-        $this->cors ??= ($arguments === null) ? CorsService::factory()
-            : CorsService::factory($arguments[0]);
-    }
-
-    /**
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        if (! $request instanceof IncomingRequest) {
+        if (!$request instanceof IncomingRequest) {
             return null;
         }
 
@@ -119,5 +110,14 @@ class Cors implements FilterInterface
         }
 
         return $this->cors->addResponseHeaders($request, $response);
+    }
+
+    /**
+     * @param null|list<string> $arguments
+     */
+    private function createCorsService(?array $arguments): void
+    {
+        $this->cors ??= (null === $arguments) ? CorsService::factory()
+            : CorsService::factory($arguments[0]);
     }
 }

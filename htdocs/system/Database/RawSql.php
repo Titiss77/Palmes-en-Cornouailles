@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Database;
 
-use Stringable;
-
 /**
- * @see \CodeIgniter\Database\RawSqlTest
+ * @see RawSqlTest
  */
-class RawSql implements Stringable
+class RawSql implements \Stringable
 {
     /**
      * @var string Raw SQL string
@@ -36,21 +34,21 @@ class RawSql implements Stringable
     }
 
     /**
-     * Create new instance with new SQL string
+     * Create new instance with new SQL string.
      */
     public function with(string $newSqlString): self
     {
-        $new         = clone $this;
+        $new = clone $this;
         $new->string = $newSqlString;
 
         return $new;
     }
 
     /**
-     * Returns unique id for binding key
+     * Returns unique id for binding key.
      */
     public function getBindingKey(): string
     {
-        return 'RawSql' . spl_object_id($this);
+        return 'RawSql'.spl_object_id($this);
     }
 }

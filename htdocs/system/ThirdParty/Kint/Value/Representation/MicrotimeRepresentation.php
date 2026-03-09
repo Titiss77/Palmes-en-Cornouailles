@@ -27,28 +27,33 @@ declare(strict_types=1);
 
 namespace Kint\Value\Representation;
 
-use DateTimeImmutable;
-use DateTimeInterface;
-
 class MicrotimeRepresentation extends AbstractRepresentation
 {
     /** @psalm-readonly */
     protected int $seconds;
+
     /** @psalm-readonly */
     protected int $microseconds;
+
     /** @psalm-readonly */
     protected string $group;
+
     /** @psalm-readonly */
     protected ?float $lap_time;
+
     /** @psalm-readonly */
     protected ?float $total_time;
     protected ?float $avg_time = null;
+
     /** @psalm-readonly */
     protected int $mem;
+
     /** @psalm-readonly */
     protected int $mem_real;
+
     /** @psalm-readonly */
     protected int $mem_peak;
+
     /** @psalm-readonly */
     protected int $mem_peak_real;
 
@@ -118,8 +123,8 @@ class MicrotimeRepresentation extends AbstractRepresentation
         return $this->mem_peak_real;
     }
 
-    public function getDateTime(): ?DateTimeInterface
+    public function getDateTime(): ?\DateTimeInterface
     {
-        return DateTimeImmutable::createFromFormat('U u', $this->seconds.' '.\str_pad((string) $this->microseconds, 6, '0', STR_PAD_LEFT)) ?: null;
+        return \DateTimeImmutable::createFromFormat('U u', $this->seconds.' '.\str_pad((string) $this->microseconds, 6, '0', STR_PAD_LEFT)) ?: null;
     }
 }

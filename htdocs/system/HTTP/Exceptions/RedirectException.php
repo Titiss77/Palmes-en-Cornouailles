@@ -19,15 +19,14 @@ use CodeIgniter\Exceptions\LogicException;
 use CodeIgniter\Exceptions\RuntimeException;
 use CodeIgniter\HTTP\ResponsableInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Throwable;
 
 /**
- * RedirectException
+ * RedirectException.
  */
 class RedirectException extends RuntimeException implements ExceptionInterface, ResponsableInterface, HTTPExceptionInterface
 {
     /**
-     * HTTP status code for redirects
+     * HTTP status code for redirects.
      *
      * @var int
      */
@@ -36,12 +35,12 @@ class RedirectException extends RuntimeException implements ExceptionInterface, 
     protected ?ResponseInterface $response = null;
 
     /**
-     * @param ResponseInterface|string $message Response object or a string containing a relative URI.
-     * @param int                      $code    HTTP status code to redirect if $message is a string.
+     * @param ResponseInterface|string $message response object or a string containing a relative URI
+     * @param int                      $code    HTTP status code to redirect if $message is a string
      */
-    public function __construct($message = '', int $code = 0, ?Throwable $previous = null)
+    public function __construct($message = '', int $code = 0, ?\Throwable $previous = null)
     {
-        if (! is_string($message) && ! $message instanceof ResponseInterface) {
+        if (!is_string($message) && !$message instanceof ResponseInterface) {
             throw new InvalidArgumentException(
                 'RedirectException::__construct() first argument must be a string or ResponseInterface',
                 0,
@@ -54,7 +53,7 @@ class RedirectException extends RuntimeException implements ExceptionInterface, 
 
             $message = '';
 
-            if ($this->response->getHeaderLine('Location') === '' && $this->response->getHeaderLine('Refresh') === '') {
+            if ('' === $this->response->getHeaderLine('Location') && '' === $this->response->getHeaderLine('Refresh')) {
                 throw new LogicException(
                     'The Response object passed to RedirectException does not contain a redirect address.',
                 );
@@ -70,7 +69,7 @@ class RedirectException extends RuntimeException implements ExceptionInterface, 
 
     public function getResponse(): ResponseInterface
     {
-        if (! $this->response instanceof ResponseInterface) {
+        if (!$this->response instanceof ResponseInterface) {
             $this->response = service('response')->redirect(
                 base_url($this->getMessage()),
                 'auto',
@@ -80,9 +79,9 @@ class RedirectException extends RuntimeException implements ExceptionInterface, 
 
         $location = $this->response->getHeaderLine('Location');
 
-        service(('logger'))->info(sprintf(
+        service('logger')->info(sprintf(
             'REDIRECTED ROUTE at %s',
-            $location !== '' ? $location : substr($this->response->getHeaderLine('Refresh'), 6),
+            '' !== $location ? $location : substr($this->response->getHeaderLine('Refresh'), 6),
         ));
 
         return $this->response;

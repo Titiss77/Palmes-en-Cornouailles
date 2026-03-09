@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace CodeIgniter\Images;
 
 /**
- * Expected behavior of an Image handler
+ * Expected behavior of an Image handler.
  */
 interface ImageHandlerInterface
 {
     /**
-     * Resize the image
+     * Resize the image.
      *
-     * @param bool $maintainRatio If true, will get the closest match possible while keeping aspect ratio true.
+     * @param bool $maintainRatio if true, will get the closest match possible while keeping aspect ratio true
      *
      * @return $this
      */
@@ -32,8 +32,8 @@ interface ImageHandlerInterface
      * is not provided, that value will be set the appropriate value based on offsets and
      * image dimensions.
      *
-     * @param int|null $x X-axis coord to start cropping from the left of image
-     * @param int|null $y Y-axis coord to start cropping from the top of image
+     * @param null|int $x X-axis coord to start cropping from the left of image
+     * @param null|int $y Y-axis coord to start cropping from the top of image
      *
      * @return $this
      */
@@ -57,7 +57,7 @@ interface ImageHandlerInterface
     public function rotate(float $angle);
 
     /**
-     * Flattens transparencies, default white background
+     * Flattens transparencies, default white background.
      *
      * @return $this
      */
@@ -75,14 +75,14 @@ interface ImageHandlerInterface
      * Retrieve the EXIF information from the image, if possible. Returns
      * an array of the information, or null if nothing can be found.
      *
-     * @param string|null $key If specified, will only return this piece of EXIF data.
+     * @param null|string $key if specified, will only return this piece of EXIF data
      *
      * @return mixed
      */
     public function getEXIF(?string $key = null);
 
     /**
-     * Flip an image horizontally or vertically
+     * Flip an image horizontally or vertically.
      *
      * @param string $dir Direction to flip, either 'vertical' or 'horizontal'
      *
@@ -144,7 +144,7 @@ interface ImageHandlerInterface
      *    $image->resize(100, 200, true)
      *          ->save($target);
      *
-     * @param non-empty-string|null $target The path to save the file to.
+     * @param null|non-empty-string $target the path to save the file to
      *
      * @return bool
      */

@@ -29,19 +29,19 @@ namespace Kint\Value;
 
 use Kint\Utils;
 use Kint\Value\Context\ContextInterface;
-use RuntimeException;
 use SplFileInfo;
 
 class SplFileInfoValue extends InstanceValue
 {
     /** @psalm-readonly */
     protected string $path;
+
     /** @psalm-readonly */
     protected ?int $filesize = null;
 
-    public function __construct(ContextInterface $context, SplFileInfo $info)
+    public function __construct(ContextInterface $context, \SplFileInfo $info)
     {
-        parent::__construct($context, \get_class($info), \spl_object_hash($info), \spl_object_id($info));
+        parent::__construct($context, $info::class, \spl_object_hash($info), \spl_object_id($info));
 
         $this->path = $info->getPathname();
 
@@ -50,8 +50,8 @@ class SplFileInfoValue extends InstanceValue
             if ('' !== $this->path && $info->getRealPath()) {
                 $this->filesize = $info->getSize();
             }
-        } catch (RuntimeException $e) {
-            if (false === \strpos($e->getMessage(), ' open_basedir ')) {
+        } catch (\RuntimeException $e) {
+            if (!\str_contains($e->getMessage(), ' open_basedir ')) {
                 throw $e; // @codeCoverageIgnore
             }
         }

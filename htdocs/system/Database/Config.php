@@ -18,7 +18,7 @@ use CodeIgniter\Exceptions\InvalidArgumentException;
 use Config\Database as DbConfig;
 
 /**
- * @see \CodeIgniter\Database\ConfigTest
+ * @see ConfigTest
  */
 class Config extends BaseConfig
 {
@@ -34,16 +34,16 @@ class Config extends BaseConfig
      * The main instance used to manage all of
      * our open database connections.
      *
-     * @var Database|null
+     * @var null|Database
      */
     protected static $factory;
 
     /**
-     * Returns the database connection
+     * Returns the database connection.
      *
-     * @param array|BaseConnection|non-empty-string|null $group     The name of the connection group to use,
-     *                                                              or an array of configuration settings.
-     * @param bool                                       $getShared Whether to return a shared instance of the connection.
+     * @param null|array|BaseConnection|non-empty-string $group     the name of the connection group to use,
+     *                                                              or an array of configuration settings
+     * @param bool                                       $getShared whether to return a shared instance of the connection
      *
      * @return BaseConnection
      */
@@ -56,18 +56,18 @@ class Config extends BaseConfig
 
         if (is_array($group)) {
             $config = $group;
-            $group  = 'custom-' . md5(json_encode($config));
+            $group = 'custom-'.md5(json_encode($config));
         } else {
             $dbConfig = config(DbConfig::class);
 
-            if ($group === null) {
+            if (null === $group) {
                 $group = (ENVIRONMENT === 'testing') ? 'tests' : $dbConfig->defaultGroup;
             }
 
             assert(is_string($group));
 
-            if (! isset($dbConfig->{$group})) {
-                throw new InvalidArgumentException('"' . $group . '" is not a valid database connection group.');
+            if (!isset($dbConfig->{$group})) {
+                throw new InvalidArgumentException('"'.$group.'" is not a valid database connection group.');
             }
 
             $config = $dbConfig->{$group};
@@ -98,7 +98,7 @@ class Config extends BaseConfig
      * Loads and returns an instance of the Forge for the specified
      * database group, and loads the group if it hasn't been loaded yet.
      *
-     * @param array|ConnectionInterface|string|null $group
+     * @param null|array|ConnectionInterface|string $group
      *
      * @return Forge
      */
@@ -112,7 +112,7 @@ class Config extends BaseConfig
     /**
      * Returns a new instance of the Database Utilities class.
      *
-     * @param array|string|null $group
+     * @param null|array|string $group
      *
      * @return BaseUtils
      */
@@ -126,7 +126,7 @@ class Config extends BaseConfig
     /**
      * Returns a new instance of the Database Seeder.
      *
-     * @param non-empty-string|null $group
+     * @param null|non-empty-string $group
      *
      * @return Seeder
      */
@@ -139,10 +139,8 @@ class Config extends BaseConfig
 
     /**
      * Ensures the database Connection Manager/Factory is loaded and ready to use.
-     *
-     * @return void
      */
-    protected static function ensureFactory()
+    protected static function ensureFactory(): void
     {
         if (static::$factory instanceof Database) {
             return;

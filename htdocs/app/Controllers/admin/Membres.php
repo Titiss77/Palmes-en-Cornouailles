@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\admin;
 
 use App\Models\admin\FonctionsModel;
 use App\Models\admin\MembresModel;
+use Config\Database;
 
 class Membres extends BaseAdminController
 {
+    // CHEMIN EXACT DE L'IMAGE PAR DÉFAUT (relatif au dossier uploads/)
+    public const DEFAULT_IMAGE_PATH = 'membres/vide.jpg';
     protected $membresModel;
     protected $fonctionsModel;
-
-    // CHEMIN EXACT DE L'IMAGE PAR DÉFAUT (relatif au dossier uploads/)
-    const DEFAULT_IMAGE_PATH = 'membres/vide.jpg';
 
     public function __construct()
     {
@@ -54,7 +56,7 @@ class Membres extends BaseAdminController
         // 2. Création
         $memberData = [
             'nom' => $this->request->getPost('nom'),
-            'image_id' => $imageId
+            'image_id' => $imageId,
         ];
 
         $newId = $this->membresModel->insert($memberData);
@@ -80,19 +82,20 @@ class Membres extends BaseAdminController
         $data['item'] = $item;
         $data['fonctions'] = $this
             ->fonctionsModel
-            ->select('*, CASE 
-        WHEN titre = "President" THEN 1 
-        WHEN titre = "Vice-Président" THEN 2 
-        WHEN titre = "Comptable" THEN 3 
-        WHEN titre = "Secrétaire" THEN 4 
-        WHEN titre = "Sponsoring" THEN 5 
+            ->select('*, CASE
+        WHEN titre = "President" THEN 1
+        WHEN titre = "Vice-Président" THEN 2
+        WHEN titre = "Comptable" THEN 3
+        WHEN titre = "Secrétaire" THEN 4
+        WHEN titre = "Sponsoring" THEN 5
         WHEN titre = "Informatique" THEN 6
-        WHEN titre = "Coach" THEN 7 
+        WHEN titre = "Coach" THEN 7
         WHEN titre = "Coach en formation" THEN 8
-        ELSE 99 
+        ELSE 99
     END as ordre_affichage', false)  // <--- AJOUT DE false ICI
             ->orderBy('ordre_affichage', 'ASC')
-            ->findAll();
+            ->findAll()
+        ;
         $data['currentRoles'] = !empty($item['roles_ids']) ? explode(',', $item['roles_ids']) : [];
 
         return view('admin/membres/edit', $data);
@@ -124,7 +127,7 @@ class Membres extends BaseAdminController
 
         // Nettoyage ancienne image SI on a changé ET que ce n'est pas l'image par défaut
         if ($newImageId && $oldImageId && $newImageId !== $oldImageId) {
-            $oldImageRow = \Config\Database::connect()->table('images')->where('id', $oldImageId)->get()->getRow();
+            $oldImageRow = Database::connect()->table('images')->where('id', $oldImageId)->get()->getRow();
             if ($oldImageRow) {
                 $this->nettoyerImageOrpheline($oldImageId, $oldImageRow->path);
             }
@@ -191,7 +194,7 @@ class Membres extends BaseAdminController
      */
     private function getDefaultImageId()
     {
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $builder = $db->table('images');
 
         // On cherche le chemin exact "membres/vide.jpg"
@@ -218,27 +221,30 @@ class Membres extends BaseAdminController
      * Supprime une image physiquement et en BDD seulement si :
      * 1. Elle n'est plus utilisée par aucun membre
      * 2. Ce n'est PAS l'image par défaut (membres/vide.jpg)
+     *
+     * @param mixed $imageId
+     * @param mixed $imagePath
      */
-    private function nettoyerImageOrpheline($imageId, $imagePath)
+    private function nettoyerImageOrpheline($imageId, $imagePath): void
     {
         // =========================================================
         // PROTECTION ABSOLUE
         // Si le chemin correspond à l'image par défaut, ON ARRÊTE TOUT.
         // =========================================================
-        if ($imagePath === self::DEFAULT_IMAGE_PATH) {
+        if (self::DEFAULT_IMAGE_PATH === $imagePath) {
             return;  // On ne touche ni à la BDD ni au fichier
         }
 
         // Si ce n'est pas l'image par défaut, on vérifie si elle est encore utilisée
         $count = $this->membresModel->where('image_id', $imageId)->countAllResults();
 
-        if ($count == 0) {
+        if (0 == $count) {
             // Suppression BDD
-            $db = \Config\Database::connect();
+            $db = Database::connect();
             $db->table('images')->where('id', $imageId)->delete();
 
             // Suppression Fichier
-            $fullPath = FCPATH . 'uploads/' . $imagePath;
+            $fullPath = FCPATH.'uploads/'.$imagePath;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }

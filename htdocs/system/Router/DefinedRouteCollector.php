@@ -13,24 +13,19 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Router;
 
-use Closure;
-use Generator;
-
 /**
  * Collect all defined routes for display.
  *
- * @see \CodeIgniter\Router\DefinedRouteCollectorTest
+ * @see DefinedRouteCollectorTest
  */
 final class DefinedRouteCollector
 {
-    public function __construct(private readonly RouteCollectionInterface $routeCollection)
-    {
-    }
+    public function __construct(private readonly RouteCollectionInterface $routeCollection) {}
 
     /**
-     * @return Generator<array{method: string, route: string, name: string, handler: string}>
+     * @return \Generator<array{method: string, route: string, name: string, handler: string}>
      */
-    public function collect(): Generator
+    public function collect(): \Generator
     {
         $methods = Router::HTTP_METHODS;
 
@@ -42,19 +37,19 @@ final class DefinedRouteCollector
                 // it might be an integer.
                 $route = (string) $route;
 
-                if (is_string($handler) || $handler instanceof Closure) {
-                    if ($handler instanceof Closure) {
+                if (is_string($handler) || $handler instanceof \Closure) {
+                    if ($handler instanceof \Closure) {
                         $view = $this->routeCollection->getRoutesOptions($route, $method)['view'] ?? false;
 
-                        $handler = $view ? '(View) ' . $view : '(Closure)';
+                        $handler = $view ? '(View) '.$view : '(Closure)';
                     }
 
                     $routeName = $this->routeCollection->getRoutesOptions($route, $method)['as'] ?? $route;
 
                     yield [
-                        'method'  => $method,
-                        'route'   => $route,
-                        'name'    => $routeName,
+                        'method' => $method,
+                        'route' => $route,
+                        'name' => $routeName,
                         'handler' => $handler,
                     ];
                 }

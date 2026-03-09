@@ -27,8 +27,6 @@ declare(strict_types=1);
 
 namespace Kint\Value\Representation;
 
-use RuntimeException;
-
 class SourceRepresentation extends AbstractRepresentation
 {
     private const DEFAULT_PADDING = 7;
@@ -39,10 +37,13 @@ class SourceRepresentation extends AbstractRepresentation
      * @psalm-var non-empty-array<string>
      */
     protected array $source;
+
     /** @psalm-readonly */
     protected string $filename;
+
     /** @psalm-readonly */
     protected int $line;
+
     /** @psalm-readonly */
     protected bool $showfilename;
 
@@ -105,7 +106,7 @@ class SourceRepresentation extends AbstractRepresentation
     private static function readSource(string $filename, int $start_line = 1, ?int $length = null): array
     {
         if (!$filename || !\file_exists($filename) || !\is_readable($filename)) {
-            throw new RuntimeException("Couldn't read file");
+            throw new \RuntimeException("Couldn't read file");
         }
 
         $source = \preg_split("/\r\n|\n|\r/", \file_get_contents($filename));
@@ -113,7 +114,7 @@ class SourceRepresentation extends AbstractRepresentation
         $source = \array_slice($source, $start_line - 1, $length, true);
 
         if (0 === \count($source)) {
-            throw new RuntimeException('File seemed to be empty');
+            throw new \RuntimeException('File seemed to be empty');
         }
 
         return $source;

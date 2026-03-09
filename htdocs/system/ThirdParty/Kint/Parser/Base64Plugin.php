@@ -64,7 +64,7 @@ class Base64Plugin extends AbstractPlugin implements PluginCompleteInterface
             return $v;
         }
 
-        if (!\preg_match('/^[A-Za-z0-9+\\/=]+$/', $var)) {
+        if (!\preg_match('/^[A-Za-z0-9+\/=]+$/', $var)) {
             return $v;
         }
 

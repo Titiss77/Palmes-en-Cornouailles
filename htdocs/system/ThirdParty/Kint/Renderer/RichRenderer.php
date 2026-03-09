@@ -290,7 +290,7 @@ class RichRenderer extends AbstractRenderer
         }
 
         if (null !== ($s = $v->getDisplayValue())) {
-            $s = \preg_replace('/\\s+/', ' ', $s);
+            $s = \preg_replace('/\s+/', ' ', $s);
 
             if (self::$strlen_max) {
                 $s = Utils::truncateString($s, self::$strlen_max);
@@ -376,14 +376,18 @@ class RichRenderer extends AbstractRenderer
                             $output .= ' nonce="'.\htmlspecialchars(self::$js_nonce).'"';
                         }
                         $output .= '>'.$contents.'</script>';
+
                         break;
+
                     case 'style':
                         $output .= '<style class="kint-rich-style"';
                         if (null !== self::$css_nonce) {
                             $output .= ' nonce="'.\htmlspecialchars(self::$css_nonce).'"';
                         }
                         $output .= '>'.$contents.'</style>';
+
                         break;
+
                     default:
                         $output .= $contents;
                 }
@@ -438,8 +442,8 @@ class RichRenderer extends AbstractRenderer
                 }
 
                 $output .= '<li>'.$this->ideLink($step['file'], $step['line']); // closing tag not required
-                if (isset($step['function']) &&
-                    !\in_array($step['function'], ['include', 'include_once', 'require', 'require_once'], true)
+                if (isset($step['function'])
+                    && !\in_array($step['function'], ['include', 'include_once', 'require', 'require_once'], true)
                 ) {
                     $output .= ' [';
                     $output .= $step['class'] ?? '';
@@ -456,6 +460,8 @@ class RichRenderer extends AbstractRenderer
     }
 
     /**
+     * @param mixed $encoding
+     *
      * @psalm-param Encoding $encoding
      */
     public function escape(string $string, $encoding = false): string
@@ -504,10 +510,10 @@ class RichRenderer extends AbstractRenderer
         }
 
         if (
-            isset($this->callee['function']) &&
-            (
-                !empty($this->callee['class']) ||
-                !\in_array(
+            isset($this->callee['function'])
+            && (
+                !empty($this->callee['class'])
+                || !\in_array(
                     $this->callee['function'],
                     ['include', 'include_once', 'require', 'require_once'],
                     true
@@ -558,7 +564,7 @@ class RichRenderer extends AbstractRenderer
             // If we're dealing with the content representation
             if ($v instanceof StringValue && $rep->getValue() === $v->getValue()) {
                 // Only show the contents if:
-                if (\preg_match('/(:?[\\r\\n\\t\\f\\v]| {2})/', $rep->getValue())) {
+                if (\preg_match('/(:?[\r\n\t\f\v]| {2})/', $rep->getValue())) {
                     // We have unrepresentable whitespace (Without whitespace preservation)
                     $show_contents = true;
                 } elseif (self::$strlen_max && Utils::strlen($v->getDisplayValue()) > self::$strlen_max) {

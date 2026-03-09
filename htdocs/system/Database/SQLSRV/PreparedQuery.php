@@ -18,7 +18,7 @@ use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Exceptions\BadMethodCallException;
 
 /**
- * Prepared query for Postgre
+ * Prepared query for Postgre.
  *
  * @extends BasePreparedQuery<resource, resource, resource>
  */
@@ -64,13 +64,13 @@ class PreparedQuery extends BasePreparedQuery
         // Prepare the query
         $this->statement = sqlsrv_prepare($this->db->connID, $sql, $parameters);
 
-        if (! $this->statement) {
+        if (!$this->statement) {
             if ($this->db->DBDebug) {
                 throw new DatabaseException($this->db->getAllErrorMessages());
             }
 
-            $info              = $this->db->error();
-            $this->errorCode   = $info['code'];
+            $info = $this->db->error();
+            $this->errorCode = $info['code'];
             $this->errorString = $info['message'];
         }
 
@@ -83,7 +83,7 @@ class PreparedQuery extends BasePreparedQuery
      */
     public function _execute(array $data): bool
     {
-        if (! isset($this->statement)) {
+        if (!isset($this->statement)) {
             throw new BadMethodCallException('You must call prepare before trying to execute a prepared statement.');
         }
 
@@ -93,7 +93,7 @@ class PreparedQuery extends BasePreparedQuery
 
         $result = sqlsrv_execute($this->statement);
 
-        if ($result === false && $this->db->DBDebug) {
+        if (false === $result && $this->db->DBDebug) {
             throw new DatabaseException($this->db->getAllErrorMessages());
         }
 
@@ -103,7 +103,7 @@ class PreparedQuery extends BasePreparedQuery
     /**
      * Returns the statement resource for the prepared query or false when preparing failed.
      *
-     * @return resource|null
+     * @return null|resource
      */
     public function _getResult()
     {
@@ -129,7 +129,7 @@ class PreparedQuery extends BasePreparedQuery
 
         $params = [];
 
-        for ($c = 0; $c < $numberOfVariables; $c++) {
+        for ($c = 0; $c < $numberOfVariables; ++$c) {
             $this->parameters[$c] = null;
             if (isset($options[$c])) {
                 $params[] = [&$this->parameters[$c], SQLSRV_PARAM_IN, $options[$c]];

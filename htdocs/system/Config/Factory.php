@@ -31,11 +31,11 @@ class Factory extends BaseConfig
      * @var array
      */
     public static $default = [
-        'component'  => null,
-        'path'       => null,
+        'component' => null,
+        'path' => null,
         'instanceOf' => null,
-        'getShared'  => true,
-        'preferApp'  => true,
+        'getShared' => true,
+        'preferApp' => true,
     ];
 
     /**

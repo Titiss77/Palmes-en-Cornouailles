@@ -17,32 +17,48 @@ use CodeIgniter\Database\BaseConnection;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Database\Query;
 use CodeIgniter\Database\TableName;
-use ErrorException;
-use stdClass;
 
 /**
- * Connection for OCI8
+ * Connection for OCI8.
  *
  * @extends BaseConnection<resource, resource>
  */
 class Connection extends BaseConnection
 {
     /**
-     * Database driver
-     *
-     * @var string
-     */
-    protected $DBDriver = 'OCI8';
-
-    /**
-     * Identifier escape character
+     * Identifier escape character.
      *
      * @var string
      */
     public $escapeChar = '"';
 
     /**
-     * List of reserved identifiers
+     * Commit mode flag.
+     *
+     * @used-by PreparedQuery::_execute()
+     *
+     * @var int
+     */
+    public $commitMode = OCI_COMMIT_ON_SUCCESS;
+
+    /**
+     * Latest inserted table name.
+     *
+     * @used-by PreparedQuery::_execute()
+     *
+     * @var null|string
+     */
+    public $lastInsertedTableName;
+
+    /**
+     * Database driver.
+     *
+     * @var string
+     */
+    protected $DBDriver = 'OCI8';
+
+    /**
+     * List of reserved identifiers.
      *
      * Identifiers that must NOT be escaped.
      *
@@ -75,7 +91,7 @@ class Connection extends BaseConnection
     ];
 
     /**
-     * Reset $stmtId flag
+     * Reset $stmtId flag.
      *
      * Used by storedProcedure() to prevent execute() from
      * re-setting the statement ID.
@@ -83,54 +99,18 @@ class Connection extends BaseConnection
     protected $resetStmtId = true;
 
     /**
-     * Statement ID
+     * Statement ID.
      *
      * @var resource
      */
     protected $stmtId;
 
     /**
-     * Commit mode flag
-     *
-     * @used-by PreparedQuery::_execute()
-     *
-     * @var int
-     */
-    public $commitMode = OCI_COMMIT_ON_SUCCESS;
-
-    /**
-     * Cursor ID
+     * Cursor ID.
      *
      * @var resource
      */
     protected $cursorId;
-
-    /**
-     * Latest inserted table name.
-     *
-     * @used-by PreparedQuery::_execute()
-     *
-     * @var string|null
-     */
-    public $lastInsertedTableName;
-
-    /**
-     * confirm DSN format.
-     */
-    private function isValidDSN(): bool
-    {
-        if ($this->DSN === null || $this->DSN === '') {
-            return false;
-        }
-
-        foreach ($this->validDSNs as $regexp) {
-            if (preg_match($regexp, $this->DSN)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     /**
      * Connect to the database.
@@ -139,13 +119,13 @@ class Connection extends BaseConnection
      */
     public function connect(bool $persistent = false)
     {
-        if (! $this->isValidDSN()) {
+        if (!$this->isValidDSN()) {
             $this->buildDSN();
         }
 
         $func = $persistent ? 'oci_pconnect' : 'oci_connect';
 
-        return ($this->charset === '')
+        return ('' === $this->charset)
             ? $func($this->username, $this->password, $this->DSN)
             : $func($this->username, $this->password, $this->DSN, $this->charset);
     }
@@ -153,28 +133,8 @@ class Connection extends BaseConnection
     /**
      * Keep or establish the connection if no queries have been sent for
      * a length of time exceeding the server's idle timeout.
-     *
-     * @return void
      */
-    public function reconnect()
-    {
-    }
-
-    /**
-     * Close the database connection.
-     *
-     * @return void
-     */
-    protected function _close()
-    {
-        if (is_resource($this->cursorId)) {
-            oci_free_statement($this->cursorId);
-        }
-        if (is_resource($this->stmtId)) {
-            oci_free_statement($this->stmtId);
-        }
-        oci_close($this->connID);
-    }
+    public function reconnect(): void {}
 
     /**
      * Select a specific database table to use.
@@ -193,7 +153,7 @@ class Connection extends BaseConnection
             return $this->dataCache['version'];
         }
 
-        if ($this->connID === false) {
+        if (false === $this->connID) {
             $this->initialize();
         }
 
@@ -209,47 +169,14 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Executes the query against the database.
-     *
-     * @return false|resource
-     */
-    protected function execute(string $sql)
-    {
-        try {
-            if ($this->resetStmtId === true) {
-                $this->stmtId = oci_parse($this->connID, $sql);
-            }
-
-            oci_set_prefetch($this->stmtId, 1000);
-
-            $result          = oci_execute($this->stmtId, $this->commitMode) ? $this->stmtId : false;
-            $insertTableName = $this->parseInsertTableName($sql);
-
-            if ($result && $insertTableName !== '') {
-                $this->lastInsertedTableName = $insertTableName;
-            }
-
-            return $result;
-        } catch (ErrorException $e) {
-            log_message('error', (string) $e);
-
-            if ($this->DBDebug) {
-                throw new DatabaseException($e->getMessage(), $e->getCode(), $e);
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Get the table name for the insert statement from sql.
      */
     public function parseInsertTableName(string $sql): string
     {
         $commentStrippedSql = preg_replace(['/\/\*(.|\n)*?\*\//m', '/--.+/'], '', $sql);
-        $isInsertQuery      = str_starts_with(strtoupper(ltrim($commentStrippedSql)), 'INSERT');
+        $isInsertQuery = str_starts_with(strtoupper(ltrim($commentStrippedSql)), 'INSERT');
 
-        if (! $isInsertQuery) {
+        if (!$isInsertQuery) {
             return '';
         }
 
@@ -268,21 +195,197 @@ class Connection extends BaseConnection
     }
 
     /**
+     * Get cursor. Returns a cursor from the database.
+     *
+     * @return resource
+     */
+    public function getCursor()
+    {
+        return $this->cursorId = oci_new_cursor($this->connID);
+    }
+
+    /**
+     * Executes a stored procedure.
+     *
+     * @param string $procedureName procedure name to execute
+     * @param array  $params        params array keys
+     *                              KEY      OPTIONAL  NOTES
+     *                              name     no        the name of the parameter should be in :<param_name> format
+     *                              value    no        the value of the parameter.  If this is an OUT or IN OUT parameter,
+     *                              this should be a reference to a variable
+     *                              type     yes       the type of the parameter
+     *                              length   yes       the max size of the parameter
+     *
+     * @return bool|Query|Result
+     */
+    public function storedProcedure(string $procedureName, array $params)
+    {
+        if ('' === $procedureName) {
+            throw new DatabaseException(lang('Database.invalidArgument', [$procedureName]));
+        }
+
+        // Build the query string
+        $sql = sprintf(
+            'BEGIN %s ('.substr(str_repeat(',%s', count($params)), 1).'); END;',
+            $procedureName,
+            ...array_map(static fn ($row) => $row['name'], $params),
+        );
+
+        $this->resetStmtId = false;
+        $this->stmtId = oci_parse($this->connID, $sql);
+        $this->bindParams($params);
+        $result = $this->query($sql);
+        $this->resetStmtId = true;
+
+        return $result;
+    }
+
+    /**
+     * Returns the last error code and message.
+     *
+     * Must return an array with keys 'code' and 'message':
+     *
+     *  return ['code' => null, 'message' => null);
+     */
+    public function error(): array
+    {
+        // oci_error() returns an array that already contains
+        // 'code' and 'message' keys, but it can return false
+        // if there was no error ....
+        $error = oci_error();
+        $resources = [$this->cursorId, $this->stmtId, $this->connID];
+
+        foreach ($resources as $resource) {
+            if (is_resource($resource)) {
+                $error = oci_error($resource);
+
+                break;
+            }
+        }
+
+        return is_array($error)
+            ? $error
+            : [
+                'code' => '',
+                'message' => '',
+            ];
+    }
+
+    public function insertID(): int
+    {
+        if (empty($this->lastInsertedTableName)) {
+            return 0;
+        }
+
+        $indexs = $this->getIndexData($this->lastInsertedTableName);
+        $fieldDatas = $this->getFieldData($this->lastInsertedTableName);
+
+        if ([] === $indexs || [] === $fieldDatas) {
+            return 0;
+        }
+
+        $columnTypeList = array_column($fieldDatas, 'type', 'name');
+        $primaryColumnName = '';
+
+        foreach ($indexs as $index) {
+            if ('PRIMARY' !== $index->type || 1 !== count($index->fields)) {
+                continue;
+            }
+
+            $primaryColumnName = $this->protectIdentifiers($index->fields[0], false, false);
+            $primaryColumnType = $columnTypeList[$primaryColumnName];
+
+            if ('NUMBER' !== $primaryColumnType) {
+                $primaryColumnName = '';
+            }
+        }
+
+        if ('' === $primaryColumnName) {
+            return 0;
+        }
+
+        $query = $this->query('SELECT DATA_DEFAULT FROM USER_TAB_COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = ?', [$this->lastInsertedTableName, $primaryColumnName])->getRow();
+        $lastInsertValue = str_replace('nextval', 'currval', $query->DATA_DEFAULT ?? '0');
+        $query = $this->query(sprintf('SELECT %s SEQ FROM DUAL', $lastInsertValue))->getRow();
+
+        return (int) ($query->SEQ ?? 0);
+    }
+
+    /**
+     * Returns the name of the current database being used.
+     */
+    public function getDatabase(): string
+    {
+        if (!empty($this->database)) {
+            return $this->database;
+        }
+
+        return $this->query('SELECT DEFAULT_TABLESPACE FROM USER_USERS')->getRow()->DEFAULT_TABLESPACE ?? '';
+    }
+
+    /**
+     * Close the database connection.
+     */
+    protected function _close(): void
+    {
+        if (is_resource($this->cursorId)) {
+            oci_free_statement($this->cursorId);
+        }
+        if (is_resource($this->stmtId)) {
+            oci_free_statement($this->stmtId);
+        }
+        oci_close($this->connID);
+    }
+
+    /**
+     * Executes the query against the database.
+     *
+     * @return false|resource
+     */
+    protected function execute(string $sql)
+    {
+        try {
+            if (true === $this->resetStmtId) {
+                $this->stmtId = oci_parse($this->connID, $sql);
+            }
+
+            oci_set_prefetch($this->stmtId, 1000);
+
+            $result = oci_execute($this->stmtId, $this->commitMode) ? $this->stmtId : false;
+            $insertTableName = $this->parseInsertTableName($sql);
+
+            if ($result && '' !== $insertTableName) {
+                $this->lastInsertedTableName = $insertTableName;
+            }
+
+            return $result;
+        } catch (\ErrorException $e) {
+            log_message('error', (string) $e);
+
+            if ($this->DBDebug) {
+                throw new DatabaseException($e->getMessage(), $e->getCode(), $e);
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Generates the SQL for listing tables in a platform-dependent manner.
      *
-     * @param string|null $tableName If $tableName is provided will return only this table if exists.
+     * @param null|string $tableName if $tableName is provided will return only this table if exists
      */
     protected function _listTables(bool $prefixLimit = false, ?string $tableName = null): string
     {
         $sql = 'SELECT "TABLE_NAME" FROM "USER_TABLES"';
 
-        if ($tableName !== null) {
-            return $sql . ' WHERE "TABLE_NAME" LIKE ' . $this->escape($tableName);
+        if (null !== $tableName) {
+            return $sql.' WHERE "TABLE_NAME" LIKE '.$this->escape($tableName);
         }
 
-        if ($prefixLimit && $this->DBPrefix !== '') {
-            return $sql . ' WHERE "TABLE_NAME" LIKE \'' . $this->escapeLikeString($this->DBPrefix) . "%' "
-                    . sprintf($this->likeEscapeStr, $this->likeEscapeChar);
+        if ($prefixLimit && '' !== $this->DBPrefix) {
+            return $sql.' WHERE "TABLE_NAME" LIKE \''.$this->escapeLikeString($this->DBPrefix)."%' "
+                    .sprintf($this->likeEscapeStr, $this->likeEscapeChar);
         }
 
         return $sql;
@@ -297,24 +400,24 @@ class Connection extends BaseConnection
     {
         if ($table instanceof TableName) {
             $tableName = $this->escape(strtoupper($table->getActualTableName()));
-            $owner     = $this->username;
+            $owner = $this->username;
         } elseif (str_contains($table, '.')) {
             sscanf($table, '%[^.].%s', $owner, $tableName);
-            $tableName = $this->escape(strtoupper($this->DBPrefix . $tableName));
+            $tableName = $this->escape(strtoupper($this->DBPrefix.$tableName));
         } else {
-            $owner     = $this->username;
-            $tableName = $this->escape(strtoupper($this->DBPrefix . $table));
+            $owner = $this->username;
+            $tableName = $this->escape(strtoupper($this->DBPrefix.$table));
         }
 
         return 'SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS
-			WHERE UPPER(OWNER) = ' . $this->escape(strtoupper($owner)) . '
-				AND UPPER(TABLE_NAME) = ' . $tableName;
+			WHERE UPPER(OWNER) = '.$this->escape(strtoupper($owner)).'
+				AND UPPER(TABLE_NAME) = '.$tableName;
     }
 
     /**
-     * Returns an array of objects with field data
+     * Returns an array of objects with field data.
      *
-     * @return list<stdClass>
+     * @return list<\stdClass>
      *
      * @throws DatabaseException
      */
@@ -328,8 +431,8 @@ class Connection extends BaseConnection
 
         $sql = 'SELECT COLUMN_NAME, DATA_TYPE, CHAR_LENGTH, DATA_PRECISION, DATA_LENGTH, DATA_DEFAULT, NULLABLE
 			FROM ALL_TAB_COLUMNS
-			WHERE UPPER(OWNER) = ' . $this->escape(strtoupper($owner)) . '
-				AND UPPER(TABLE_NAME) = ' . $this->escape(strtoupper($table));
+			WHERE UPPER(OWNER) = '.$this->escape(strtoupper($owner)).'
+				AND UPPER(TABLE_NAME) = '.$this->escape(strtoupper($table));
 
         if (($query = $this->query($sql)) === false) {
             throw new DatabaseException(lang('Database.failGetFieldData'));
@@ -338,8 +441,8 @@ class Connection extends BaseConnection
 
         $retval = [];
 
-        for ($i = 0, $c = count($query); $i < $c; $i++) {
-            $retval[$i]       = new stdClass();
+        for ($i = 0, $c = count($query); $i < $c; ++$i) {
+            $retval[$i] = new \stdClass();
             $retval[$i]->name = $query[$i]->COLUMN_NAME;
             $retval[$i]->type = $query[$i]->DATA_TYPE;
 
@@ -348,17 +451,17 @@ class Connection extends BaseConnection
 
             $retval[$i]->max_length = $length;
 
-            $retval[$i]->nullable = $query[$i]->NULLABLE === 'Y';
-            $retval[$i]->default  = $query[$i]->DATA_DEFAULT;
+            $retval[$i]->nullable = 'Y' === $query[$i]->NULLABLE;
+            $retval[$i]->default = $query[$i]->DATA_DEFAULT;
         }
 
         return $retval;
     }
 
     /**
-     * Returns an array of objects with index data
+     * Returns an array of objects with index data.
      *
-     * @return array<string, stdClass>
+     * @return array<string, \stdClass>
      *
      * @throws DatabaseException
      */
@@ -371,18 +474,18 @@ class Connection extends BaseConnection
         }
 
         $sql = 'SELECT AIC.INDEX_NAME, UC.CONSTRAINT_TYPE, AIC.COLUMN_NAME '
-            . ' FROM ALL_IND_COLUMNS AIC '
-            . ' LEFT JOIN USER_CONSTRAINTS UC ON AIC.INDEX_NAME = UC.CONSTRAINT_NAME AND AIC.TABLE_NAME = UC.TABLE_NAME '
-            . 'WHERE AIC.TABLE_NAME = ' . $this->escape(strtolower($table)) . ' '
-            . 'AND AIC.TABLE_OWNER = ' . $this->escape(strtoupper($owner)) . ' '
-            . ' ORDER BY UC.CONSTRAINT_TYPE, AIC.COLUMN_POSITION';
+            .' FROM ALL_IND_COLUMNS AIC '
+            .' LEFT JOIN USER_CONSTRAINTS UC ON AIC.INDEX_NAME = UC.CONSTRAINT_NAME AND AIC.TABLE_NAME = UC.TABLE_NAME '
+            .'WHERE AIC.TABLE_NAME = '.$this->escape(strtolower($table)).' '
+            .'AND AIC.TABLE_OWNER = '.$this->escape(strtoupper($owner)).' '
+            .' ORDER BY UC.CONSTRAINT_TYPE, AIC.COLUMN_POSITION';
 
         if (($query = $this->query($sql)) === false) {
             throw new DatabaseException(lang('Database.failGetIndexData'));
         }
         $query = $query->getResultObject();
 
-        $retVal          = [];
+        $retVal = [];
         $constraintTypes = [
             'P' => 'PRIMARY',
             'U' => 'UNIQUE',
@@ -395,19 +498,19 @@ class Connection extends BaseConnection
                 continue;
             }
 
-            $retVal[$row->INDEX_NAME]         = new stdClass();
-            $retVal[$row->INDEX_NAME]->name   = $row->INDEX_NAME;
+            $retVal[$row->INDEX_NAME] = new \stdClass();
+            $retVal[$row->INDEX_NAME]->name = $row->INDEX_NAME;
             $retVal[$row->INDEX_NAME]->fields = [$row->COLUMN_NAME];
-            $retVal[$row->INDEX_NAME]->type   = $constraintTypes[$row->CONSTRAINT_TYPE] ?? 'INDEX';
+            $retVal[$row->INDEX_NAME]->type = $constraintTypes[$row->CONSTRAINT_TYPE] ?? 'INDEX';
         }
 
         return $retVal;
     }
 
     /**
-     * Returns an array of objects with Foreign key data
+     * Returns an array of objects with Foreign key data.
      *
-     * @return array<string, stdClass>
+     * @return array<string, \stdClass>
      *
      * @throws DatabaseException
      */
@@ -428,27 +531,27 @@ class Connection extends BaseConnection
                 JOIN all_cons_columns accu ON accu.constraint_name = ccu.constraint_name
                 AND accu.position = acc.position
                 AND accu.table_name = ccu.table_name
-                WHERE ac.constraint_type = ' . $this->escape('R') . '
-                AND acc.table_name = ' . $this->escape($table);
+                WHERE ac.constraint_type = '.$this->escape('R').'
+                AND acc.table_name = '.$this->escape($table);
 
         $query = $this->query($sql);
 
-        if ($query === false) {
+        if (false === $query) {
             throw new DatabaseException(lang('Database.failGetForeignKeyData'));
         }
 
-        $query   = $query->getResultObject();
+        $query = $query->getResultObject();
         $indexes = [];
 
         foreach ($query as $row) {
-            $indexes[$row->CONSTRAINT_NAME]['constraint_name']       = $row->CONSTRAINT_NAME;
-            $indexes[$row->CONSTRAINT_NAME]['table_name']            = $row->TABLE_NAME;
-            $indexes[$row->CONSTRAINT_NAME]['column_name'][]         = $row->COLUMN_NAME;
-            $indexes[$row->CONSTRAINT_NAME]['foreign_table_name']    = $row->FOREIGN_TABLE_NAME;
+            $indexes[$row->CONSTRAINT_NAME]['constraint_name'] = $row->CONSTRAINT_NAME;
+            $indexes[$row->CONSTRAINT_NAME]['table_name'] = $row->TABLE_NAME;
+            $indexes[$row->CONSTRAINT_NAME]['column_name'][] = $row->COLUMN_NAME;
+            $indexes[$row->CONSTRAINT_NAME]['foreign_table_name'] = $row->FOREIGN_TABLE_NAME;
             $indexes[$row->CONSTRAINT_NAME]['foreign_column_name'][] = $row->FOREIGN_COLUMN_NAME;
-            $indexes[$row->CONSTRAINT_NAME]['on_delete']             = $row->DELETE_RULE;
-            $indexes[$row->CONSTRAINT_NAME]['on_update']             = null;
-            $indexes[$row->CONSTRAINT_NAME]['match']                 = null;
+            $indexes[$row->CONSTRAINT_NAME]['on_delete'] = $row->DELETE_RULE;
+            $indexes[$row->CONSTRAINT_NAME]['on_update'] = null;
+            $indexes[$row->CONSTRAINT_NAME]['match'] = null;
         }
 
         return $this->foreignKeyDataToObjects($indexes);
@@ -503,61 +606,13 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Get cursor. Returns a cursor from the database
-     *
-     * @return resource
-     */
-    public function getCursor()
-    {
-        return $this->cursorId = oci_new_cursor($this->connID);
-    }
-
-    /**
-     * Executes a stored procedure
-     *
-     * @param string $procedureName procedure name to execute
-     * @param array  $params        params array keys
-     *                              KEY      OPTIONAL  NOTES
-     *                              name     no        the name of the parameter should be in :<param_name> format
-     *                              value    no        the value of the parameter.  If this is an OUT or IN OUT parameter,
-     *                              this should be a reference to a variable
-     *                              type     yes       the type of the parameter
-     *                              length   yes       the max size of the parameter
-     *
-     * @return bool|Query|Result
-     */
-    public function storedProcedure(string $procedureName, array $params)
-    {
-        if ($procedureName === '') {
-            throw new DatabaseException(lang('Database.invalidArgument', [$procedureName]));
-        }
-
-        // Build the query string
-        $sql = sprintf(
-            'BEGIN %s (' . substr(str_repeat(',%s', count($params)), 1) . '); END;',
-            $procedureName,
-            ...array_map(static fn ($row) => $row['name'], $params),
-        );
-
-        $this->resetStmtId = false;
-        $this->stmtId      = oci_parse($this->connID, $sql);
-        $this->bindParams($params);
-        $result            = $this->query($sql);
-        $this->resetStmtId = true;
-
-        return $result;
-    }
-
-    /**
-     * Bind parameters
+     * Bind parameters.
      *
      * @param array $params
-     *
-     * @return void
      */
-    protected function bindParams($params)
+    protected function bindParams($params): void
     {
-        if (! is_array($params) || ! is_resource($this->stmtId)) {
+        if (!is_array($params) || !is_resource($this->stmtId)) {
             return;
         }
 
@@ -573,83 +628,11 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Returns the last error code and message.
-     *
-     * Must return an array with keys 'code' and 'message':
-     *
-     *  return ['code' => null, 'message' => null);
+     * Build a DSN from the provided parameters.
      */
-    public function error(): array
+    protected function buildDSN(): void
     {
-        // oci_error() returns an array that already contains
-        // 'code' and 'message' keys, but it can return false
-        // if there was no error ....
-        $error     = oci_error();
-        $resources = [$this->cursorId, $this->stmtId, $this->connID];
-
-        foreach ($resources as $resource) {
-            if (is_resource($resource)) {
-                $error = oci_error($resource);
-                break;
-            }
-        }
-
-        return is_array($error)
-            ? $error
-            : [
-                'code'    => '',
-                'message' => '',
-            ];
-    }
-
-    public function insertID(): int
-    {
-        if (empty($this->lastInsertedTableName)) {
-            return 0;
-        }
-
-        $indexs     = $this->getIndexData($this->lastInsertedTableName);
-        $fieldDatas = $this->getFieldData($this->lastInsertedTableName);
-
-        if ($indexs === [] || $fieldDatas === []) {
-            return 0;
-        }
-
-        $columnTypeList    = array_column($fieldDatas, 'type', 'name');
-        $primaryColumnName = '';
-
-        foreach ($indexs as $index) {
-            if ($index->type !== 'PRIMARY' || count($index->fields) !== 1) {
-                continue;
-            }
-
-            $primaryColumnName = $this->protectIdentifiers($index->fields[0], false, false);
-            $primaryColumnType = $columnTypeList[$primaryColumnName];
-
-            if ($primaryColumnType !== 'NUMBER') {
-                $primaryColumnName = '';
-            }
-        }
-
-        if ($primaryColumnName === '') {
-            return 0;
-        }
-
-        $query           = $this->query('SELECT DATA_DEFAULT FROM USER_TAB_COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = ?', [$this->lastInsertedTableName, $primaryColumnName])->getRow();
-        $lastInsertValue = str_replace('nextval', 'currval', $query->DATA_DEFAULT ?? '0');
-        $query           = $this->query(sprintf('SELECT %s SEQ FROM DUAL', $lastInsertValue))->getRow();
-
-        return (int) ($query->SEQ ?? 0);
-    }
-
-    /**
-     * Build a DSN from the provided parameters
-     *
-     * @return void
-     */
-    protected function buildDSN()
-    {
-        if ($this->DSN !== '') {
+        if ('' !== $this->DSN) {
             $this->DSN = '';
         }
 
@@ -662,11 +645,11 @@ class Connection extends BaseConnection
             return;
         }
 
-        $isEasyConnectableHostName = $this->hostname !== '' && ! str_contains($this->hostname, '/') && ! str_contains($this->hostname, ':');
-        $easyConnectablePort       = ($this->port !== '') && ctype_digit((string) $this->port) ? ':' . $this->port : '';
-        $easyConnectableDatabase   = $this->database !== '' ? '/' . ltrim($this->database, '/') : '';
+        $isEasyConnectableHostName = '' !== $this->hostname && !str_contains($this->hostname, '/') && !str_contains($this->hostname, ':');
+        $easyConnectablePort = ('' !== $this->port) && ctype_digit((string) $this->port) ? ':'.$this->port : '';
+        $easyConnectableDatabase = '' !== $this->database ? '/'.ltrim($this->database, '/') : '';
 
-        if ($isEasyConnectableHostName && ($easyConnectablePort !== '' || $easyConnectableDatabase !== '')) {
+        if ($isEasyConnectableHostName && ('' !== $easyConnectablePort || '' !== $easyConnectableDatabase)) {
             /* If the hostname field isn't empty, doesn't contain
              * ':' and/or '/' and if port and/or database aren't
              * empty, then the hostname field is most likely indeed
@@ -674,7 +657,7 @@ class Connection extends BaseConnection
              * Easy Connect string from these 3 settings, assuming
              * that the database field is a service name.
              */
-            $this->DSN = $this->hostname . $easyConnectablePort . $easyConnectableDatabase;
+            $this->DSN = $this->hostname.$easyConnectablePort.$easyConnectableDatabase;
 
             if (preg_match($this->validDSNs['ec'], $this->DSN)) {
                 return;
@@ -706,7 +689,7 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Begin Transaction
+     * Begin Transaction.
      */
     protected function _transBegin(): bool
     {
@@ -716,7 +699,7 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Commit Transaction
+     * Commit Transaction.
      */
     protected function _transCommit(): bool
     {
@@ -726,7 +709,7 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Rollback Transaction
+     * Rollback Transaction.
      */
     protected function _transRollback(): bool
     {
@@ -736,22 +719,28 @@ class Connection extends BaseConnection
     }
 
     /**
-     * Returns the name of the current database being used.
-     */
-    public function getDatabase(): string
-    {
-        if (! empty($this->database)) {
-            return $this->database;
-        }
-
-        return $this->query('SELECT DEFAULT_TABLESPACE FROM USER_USERS')->getRow()->DEFAULT_TABLESPACE ?? '';
-    }
-
-    /**
      * Get the prefix of the function to access the DB.
      */
     protected function getDriverFunctionPrefix(): string
     {
         return 'oci_';
+    }
+
+    /**
+     * confirm DSN format.
+     */
+    private function isValidDSN(): bool
+    {
+        if (null === $this->DSN || '' === $this->DSN) {
+            return false;
+        }
+
+        foreach ($this->validDSNs as $regexp) {
+            if (preg_match($regexp, $this->DSN)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

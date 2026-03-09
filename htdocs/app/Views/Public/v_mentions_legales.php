@@ -1,6 +1,6 @@
-<?= $this->extend('Public/Layout/l_global') ?>
+<?php echo $this->extend('Public/Layout/l_global'); ?>
 
-<?= $this->section('contenu') ?>
+<?php echo $this->section('contenu'); ?>
 <div class="container" style="padding: 50px 0;">
     <h1 class="h1">Mentions Légales</h1>
 
@@ -8,9 +8,9 @@
     <p class="paragraph">
         <strong>Nom du Club :</strong> Palmes en Cornouailles<br>
         <strong>Forme juridique :</strong> Association Loi 1901<br>
-        <strong>Adresse :</strong><?= $general['adresse'] ?> <br>
-        <strong>Email :</strong><?= $general['mailClub'] ?><br>
-        <strong>Directeur de la publication :</strong> <?= $president['nom'] ?> (Président)
+        <strong>Adresse :</strong><?php echo $general['adresse']; ?> <br>
+        <strong>Email :</strong><?php echo $general['mailClub']; ?><br>
+        <strong>Directeur de la publication :</strong> <?php echo $president['nom']; ?> (Président)
     </p>
 
     <h2 class="h2">2. Hébergement</h2>
@@ -29,4 +29,4 @@
         autorisation.
     </p>
 </div>
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

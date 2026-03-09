@@ -17,9 +17,9 @@ use CodeIgniter\Exceptions\ConfigException;
 use Config\Cors as CorsConfig;
 
 /**
- * Cross-Origin Resource Sharing (CORS)
+ * Cross-Origin Resource Sharing (CORS).
  *
- * @see \CodeIgniter\HTTP\CorsTest
+ * @see CorsTest
  */
 class Cors
 {
@@ -35,17 +35,17 @@ class Cors
      * }
      */
     private array $config = [
-        'allowedOrigins'         => [],
+        'allowedOrigins' => [],
         'allowedOriginsPatterns' => [],
-        'supportsCredentials'    => false,
-        'allowedHeaders'         => [],
-        'exposedHeaders'         => [],
-        'allowedMethods'         => [],
-        'maxAge'                 => 7200,
+        'supportsCredentials' => false,
+        'allowedHeaders' => [],
+        'exposedHeaders' => [],
+        'allowedMethods' => [],
+        'maxAge' => 7200,
     ];
 
     /**
-     * @param array{
+     * @param null|array{
      *     allowedOrigins?: list<string>,
      *     allowedOriginsPatterns?: list<string>,
      *     supportsCredentials?: bool,
@@ -53,7 +53,7 @@ class Cors
      *     exposedHeaders?: list<string>,
      *     allowedMethods?: list<string>,
      *     maxAge?: int,
-     * }|CorsConfig|null $config
+     * }|CorsConfig $config
      */
     public function __construct($config = null)
     {
@@ -102,12 +102,47 @@ class Cors
         return $response;
     }
 
+    /**
+     * Adds CORS headers to the Response.
+     */
+    public function addResponseHeaders(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $this->setAllowOrigin($request, $response);
+
+        if ($response->hasHeader('Access-Control-Allow-Origin')) {
+            $this->setAllowCredentials($response);
+            $this->setExposeHeaders($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Check if response headers were set.
+     */
+    public function hasResponseHeaders(RequestInterface $request, ResponseInterface $response): bool
+    {
+        if (!$response->hasHeader('Access-Control-Allow-Origin')) {
+            return false;
+        }
+
+        if ($this->config['supportsCredentials']
+            && !$response->hasHeader('Access-Control-Allow-Credentials')) {
+            return false;
+        }
+
+        return !([] !== $this->config['exposedHeaders'] && (!$response->hasHeader('Access-Control-Expose-Headers') || !str_contains(
+            $response->getHeaderLine('Access-Control-Expose-Headers'),
+            implode(', ', $this->config['exposedHeaders']),
+        )));
+    }
+
     private function checkWildcard(string $name, int $count): void
     {
         if (in_array('*', $this->config[$name], true) && $count > 1) {
             throw new ConfigException(
                 "If wildcard is specified, you must set `'{$name}' => ['*']`."
-                . ' But using wildcard is not recommended.',
+                .' But using wildcard is not recommended.',
             );
         }
     }
@@ -120,29 +155,29 @@ class Cors
         ) {
             throw new ConfigException(
                 'When responding to a credentialed request, '
-                . 'the server must not specify the "*" wildcard for the '
-                . $header . ' response-header value.',
+                .'the server must not specify the "*" wildcard for the '
+                .$header.' response-header value.',
             );
         }
     }
 
     private function setAllowOrigin(RequestInterface $request, ResponseInterface $response): void
     {
-        $originCount        = count($this->config['allowedOrigins']);
+        $originCount = count($this->config['allowedOrigins']);
         $originPatternCount = count($this->config['allowedOriginsPatterns']);
 
         $this->checkWildcard('allowedOrigins', $originCount);
         $this->checkWildcardAndCredentials('allowedOrigins', 'Access-Control-Allow-Origin');
 
         // Single Origin.
-        if ($originCount === 1 && $originPatternCount === 0) {
+        if (1 === $originCount && 0 === $originPatternCount) {
             $response->setHeader('Access-Control-Allow-Origin', $this->config['allowedOrigins'][0]);
 
             return;
         }
 
         // Multiple Origins.
-        if (! $request->hasHeader('Origin')) {
+        if (!$request->hasHeader('Origin')) {
             return;
         }
 
@@ -157,7 +192,7 @@ class Cors
 
         if ($originPatternCount > 0) {
             foreach ($this->config['allowedOriginsPatterns'] as $pattern) {
-                $regex = '#\A' . $pattern . '\z#';
+                $regex = '#\A'.$pattern.'\z#';
 
                 if (preg_match($regex, $origin)) {
                     $response->setHeader('Access-Control-Allow-Origin', $origin);
@@ -203,48 +238,13 @@ class Cors
         }
     }
 
-    /**
-     * Adds CORS headers to the Response.
-     */
-    public function addResponseHeaders(RequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        $this->setAllowOrigin($request, $response);
-
-        if ($response->hasHeader('Access-Control-Allow-Origin')) {
-            $this->setAllowCredentials($response);
-            $this->setExposeHeaders($response);
-        }
-
-        return $response;
-    }
-
     private function setExposeHeaders(ResponseInterface $response): void
     {
-        if ($this->config['exposedHeaders'] !== []) {
+        if ([] !== $this->config['exposedHeaders']) {
             $response->setHeader(
                 'Access-Control-Expose-Headers',
                 implode(', ', $this->config['exposedHeaders']),
             );
         }
-    }
-
-    /**
-     * Check if response headers were set
-     */
-    public function hasResponseHeaders(RequestInterface $request, ResponseInterface $response): bool
-    {
-        if (! $response->hasHeader('Access-Control-Allow-Origin')) {
-            return false;
-        }
-
-        if ($this->config['supportsCredentials']
-            && ! $response->hasHeader('Access-Control-Allow-Credentials')) {
-            return false;
-        }
-
-        return ! ($this->config['exposedHeaders'] !== [] && (! $response->hasHeader('Access-Control-Expose-Headers') || ! str_contains(
-            $response->getHeaderLine('Access-Control-Expose-Headers'),
-            implode(', ', $this->config['exposedHeaders']),
-        )));
     }
 }

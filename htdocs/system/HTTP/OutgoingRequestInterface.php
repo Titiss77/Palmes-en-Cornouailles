@@ -25,7 +25,7 @@ interface OutgoingRequestInterface extends MessageInterface
     /**
      * Retrieves the HTTP method of the request.
      *
-     * @return string Returns the request method.
+     * @return string returns the request method
      */
     public function getMethod(): string;
 
@@ -40,11 +40,11 @@ interface OutgoingRequestInterface extends MessageInterface
      * immutability of the message, and MUST return an instance that has the
      * changed request method.
      *
-     * @param string $method Case-sensitive method.
+     * @param string $method case-sensitive method
      *
      * @return static
      *
-     * @throws InvalidArgumentException for invalid HTTP methods.
+     * @throws InvalidArgumentException for invalid HTTP methods
      */
     public function withMethod($method);
 
@@ -84,8 +84,8 @@ interface OutgoingRequestInterface extends MessageInterface
      *
      * @see http://tools.ietf.org/html/rfc3986#section-4.3
      *
-     * @param URI  $uri          New request URI to use.
-     * @param bool $preserveHost Preserve the original state of the Host header.
+     * @param URI  $uri          new request URI to use
+     * @param bool $preserveHost preserve the original state of the Host header
      *
      * @return static
      */

@@ -18,7 +18,7 @@ use CodeIgniter\Exceptions\CriticalError;
 use CodeIgniter\Exceptions\InvalidArgumentException;
 
 /**
- * Database Connection Factory
+ * Database Connection Factory.
  *
  * Creates and returns an instance of the appropriate Database Connection.
  */
@@ -44,11 +44,11 @@ class Database
      */
     public function load(array $params = [], string $alias = '')
     {
-        if ($alias === '') {
+        if ('' === $alias) {
             throw new InvalidArgumentException('You must supply the parameter: alias.');
         }
 
-        if (! empty($params['DSN']) && str_contains($params['DSN'], '://')) {
+        if (!empty($params['DSN']) && str_contains($params['DSN'], '://')) {
             $params = $this->parseDSN($params);
         }
 
@@ -68,7 +68,7 @@ class Database
      */
     public function loadForge(ConnectionInterface $db): Forge
     {
-        if (! $db->connID) {
+        if (!$db->connID) {
             $db->initialize();
         }
 
@@ -80,7 +80,7 @@ class Database
      */
     public function loadUtils(ConnectionInterface $db): BaseUtils
     {
-        if (! $db->connID) {
+        if (!$db->connID) {
             $db->initialize();
         }
 
@@ -88,7 +88,7 @@ class Database
     }
 
     /**
-     * Parses universal DSN string
+     * Parses universal DSN string.
      *
      * @throws InvalidArgumentException
      */
@@ -96,26 +96,26 @@ class Database
     {
         $dsn = parse_url($params['DSN']);
 
-        if ($dsn === 0 || $dsn === '' || $dsn === '0' || $dsn === [] || $dsn === false || $dsn === null) {
+        if (0 === $dsn || '' === $dsn || '0' === $dsn || [] === $dsn || false === $dsn || null === $dsn) {
             throw new InvalidArgumentException('Your DSN connection string is invalid.');
         }
 
         $dsnParams = [
-            'DSN'      => '',
+            'DSN' => '',
             'DBDriver' => $dsn['scheme'],
             'hostname' => isset($dsn['host']) ? rawurldecode($dsn['host']) : '',
-            'port'     => isset($dsn['port']) ? rawurldecode((string) $dsn['port']) : '',
+            'port' => isset($dsn['port']) ? rawurldecode((string) $dsn['port']) : '',
             'username' => isset($dsn['user']) ? rawurldecode($dsn['user']) : '',
             'password' => isset($dsn['pass']) ? rawurldecode($dsn['pass']) : '',
             'database' => isset($dsn['path']) ? rawurldecode(substr($dsn['path'], 1)) : '',
         ];
 
-        if (isset($dsn['query']) && ($dsn['query'] !== '')) {
+        if (isset($dsn['query']) && ('' !== $dsn['query'])) {
             parse_str($dsn['query'], $extra);
 
             foreach ($extra as $key => $val) {
                 if (is_string($val) && in_array(strtolower($val), ['true', 'false', 'null'], true)) {
-                    $val = $val === 'null' ? null : filter_var($val, FILTER_VALIDATE_BOOLEAN);
+                    $val = 'null' === $val ? null : filter_var($val, FILTER_VALIDATE_BOOLEAN);
                 }
 
                 $dsnParams[$key] = $val;
@@ -136,9 +136,9 @@ class Database
      */
     protected function initDriver(string $driver, string $class, $argument): object
     {
-        $classname = (! str_contains($driver, '\\'))
+        $classname = (!str_contains($driver, '\\'))
             ? "CodeIgniter\\Database\\{$driver}\\{$class}"
-            : $driver . '\\' . $class;
+            : $driver.'\\'.$class;
 
         return new $classname($argument);
     }
@@ -157,17 +157,17 @@ class Database
 
         $extensionMap = [
             // DBDriver => PHP extension
-            'MySQLi'  => 'mysqli',
+            'MySQLi' => 'mysqli',
             'SQLite3' => 'sqlite3',
             'Postgre' => 'pgsql',
-            'SQLSRV'  => 'sqlsrv',
-            'OCI8'    => 'oci8',
+            'SQLSRV' => 'sqlsrv',
+            'OCI8' => 'oci8',
         ];
 
         $extension = $extensionMap[$driver] ?? '';
 
-        if ($extension === '') {
-            $message = 'Invalid DBDriver name: "' . $driver . '"';
+        if ('' === $extension) {
+            $message = 'Invalid DBDriver name: "'.$driver.'"';
 
             throw new ConfigException($message);
         }
@@ -176,8 +176,8 @@ class Database
             return true;
         }
 
-        $message = 'The required PHP extension "' . $extension . '" is not loaded.'
-            . ' Install and enable it to use "' . $driver . '" driver.';
+        $message = 'The required PHP extension "'.$extension.'" is not loaded.'
+            .' Install and enable it to use "'.$driver.'" driver.';
 
         throw new CriticalError($message);
     }

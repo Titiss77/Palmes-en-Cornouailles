@@ -35,9 +35,9 @@ abstract class BaseCast implements CastInterface
 
     protected static function invalidTypeValueError(mixed $value): never
     {
-        $message = '[' . static::class . '] Invalid value type: ' . get_debug_type($value);
+        $message = '['.static::class.'] Invalid value type: '.get_debug_type($value);
         if (is_scalar($value)) {
-            $message .= ', and its value: ' . var_export($value, true);
+            $message .= ', and its value: '.var_export($value, true);
         }
 
         throw new InvalidArgumentException($message);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\admin;
 
 use CodeIgniter\Model;
@@ -15,17 +17,20 @@ class GroupesModel extends Model
     protected $allowedFields = [
         'nom', 'description', 'tranche_age',
         'horaire_resume', 'prix', 'image_id',
-        'ordre', 'codeCouleur'
+        'ordre', 'codeCouleur',
     ];
 
     /**
-     * Récupère les groupes avec le chemin de l'image (jointure)
+     * Récupère les groupes avec le chemin de l'image (jointure).
+     *
+     * @param null|mixed $id
      */
     public function getGroupesWithRelations($id = null)
     {
         $builder = $this
             ->select('groupes.*, images.path as image_path, images.alt')
-            ->join('images', 'groupes.image_id = images.id', 'left');
+            ->join('images', 'groupes.image_id = images.id', 'left')
+        ;
 
         if ($id) {
             return $builder->where('groupes.id', $id)->first();

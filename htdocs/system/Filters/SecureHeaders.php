@@ -17,9 +17,9 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Add Common Security Headers
+ * Add Common Security Headers.
  *
- * @see \CodeIgniter\Filters\SecureHeadersTest
+ * @see SecureHeadersTest
  */
 class SecureHeaders implements FilterInterface
 {
@@ -51,7 +51,7 @@ class SecureHeaders implements FilterInterface
     /**
      * We don't have anything to do here.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function before(RequestInterface $request, $arguments = null)
     {
@@ -61,7 +61,7 @@ class SecureHeaders implements FilterInterface
     /**
      * Add security headers.
      *
-     * @param list<string>|null $arguments
+     * @param null|list<string> $arguments
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {

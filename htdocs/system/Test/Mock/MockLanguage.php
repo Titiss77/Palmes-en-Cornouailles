@@ -40,21 +40,19 @@ class MockLanguage extends Language
     }
 
     /**
+     * Arbitrarily turnoff internationalization support for testing.
+     */
+    public function disableIntlSupport(): void
+    {
+        $this->intlSupport = false;
+    }
+
+    /**
      * Provides an override that allows us to set custom
      * data to be returned easily during testing.
      */
     protected function requireFile(string $path): array
     {
         return $this->data ?? [];
-    }
-
-    /**
-     * Arbitrarily turnoff internationalization support for testing
-     *
-     * @return void
-     */
-    public function disableIntlSupport()
-    {
-        $this->intlSupport = false;
     }
 }

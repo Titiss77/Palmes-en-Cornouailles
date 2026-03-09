@@ -16,17 +16,17 @@ namespace CodeIgniter\Encryption;
 use CodeIgniter\Encryption\Exceptions\EncryptionException;
 
 /**
- * CodeIgniter Encryption Handler
+ * CodeIgniter Encryption Handler.
  *
  * Provides two-way keyed encryption
  */
 interface EncrypterInterface
 {
     /**
-     * Encrypt - convert plaintext into ciphertext
+     * Encrypt - convert plaintext into ciphertext.
      *
      * @param string            $data   Input data
-     * @param array|string|null $params Overridden parameters, specifically the key
+     * @param null|array|string $params Overridden parameters, specifically the key
      *
      * @return string
      *
@@ -35,10 +35,10 @@ interface EncrypterInterface
     public function encrypt($data, $params = null);
 
     /**
-     * Decrypt - convert ciphertext into plaintext
+     * Decrypt - convert ciphertext into plaintext.
      *
      * @param string            $data   Encrypted data
-     * @param array|string|null $params Overridden parameters, specifically the key
+     * @param null|array|string $params Overridden parameters, specifically the key
      *
      * @return string
      *

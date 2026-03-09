@@ -21,37 +21,12 @@ use Config\Mimes;
 /**
  * HTTP response when a download is requested.
  *
- * @see \CodeIgniter\HTTP\DownloadResponseTest
+ * @see DownloadResponseTest
  */
 class DownloadResponse extends Response
 {
     /**
-     * Download file name
-     */
-    private string $filename;
-
-    /**
-     * Download for file
-     */
-    private ?File $file = null;
-
-    /**
-     * mime set flag
-     */
-    private readonly bool $setMime;
-
-    /**
-     * Download for binary
-     */
-    private ?string $binary = null;
-
-    /**
-     * Download charset
-     */
-    private string $charset = 'UTF-8';
-
-    /**
-     * Download reason
+     * Download reason.
      *
      * @var string
      */
@@ -65,6 +40,31 @@ class DownloadResponse extends Response
     protected $statusCode = 200;
 
     /**
+     * Download file name.
+     */
+    private string $filename;
+
+    /**
+     * Download for file.
+     */
+    private ?File $file = null;
+
+    /**
+     * mime set flag.
+     */
+    private readonly bool $setMime;
+
+    /**
+     * Download for binary.
+     */
+    private ?string $binary = null;
+
+    /**
+     * Download charset.
+     */
+    private string $charset = 'UTF-8';
+
+    /**
      * Constructor.
      */
     public function __construct(string $filename, bool $setMime)
@@ -72,7 +72,7 @@ class DownloadResponse extends Response
         parent::__construct(config(App::class));
 
         $this->filename = $filename;
-        $this->setMime  = $setMime;
+        $this->setMime = $setMime;
 
         // Make sure the content type is either specified or detected
         $this->removeHeader('Content-Type');
@@ -80,10 +80,8 @@ class DownloadResponse extends Response
 
     /**
      * set download for binary string.
-     *
-     * @return void
      */
-    public function setBinary(string $binary)
+    public function setBinary(string $binary): void
     {
         if ($this->file instanceof File) {
             throw DownloadException::forCannotSetBinary();
@@ -94,12 +92,10 @@ class DownloadResponse extends Response
 
     /**
      * set download for file.
-     *
-     * @return void
      */
-    public function setFilePath(string $filepath)
+    public function setFilePath(string $filepath): void
     {
-        if ($this->binary !== null) {
+        if (null !== $this->binary) {
             throw DownloadException::forCannotSetFilePath($filepath);
         }
 
@@ -135,80 +131,11 @@ class DownloadResponse extends Response
     }
 
     /**
-     * Set content type by guessing mime type from file extension
-     */
-    private function setContentTypeByMimeType(): void
-    {
-        $mime    = null;
-        $charset = '';
-
-        if ($this->setMime && ($lastDotPosition = strrpos($this->filename, '.')) !== false) {
-            $mime    = Mimes::guessTypeFromExtension(substr($this->filename, $lastDotPosition + 1));
-            $charset = $this->charset;
-        }
-
-        if (! is_string($mime)) {
-            // Set the default MIME type to send
-            $mime    = 'application/octet-stream';
-            $charset = '';
-        }
-
-        $this->setContentType($mime, $charset);
-    }
-
-    /**
-     * get download filename.
-     */
-    private function getDownloadFileName(): string
-    {
-        $filename  = $this->filename;
-        $x         = explode('.', $this->filename);
-        $extension = end($x);
-
-        /* It was reported that browsers on Android 2.1 (and possibly older as well)
-         * need to have the filename extension upper-cased in order to be able to
-         * download it.
-         *
-         * Reference: http://digiblog.de/2011/04/19/android-and-the-download-file-headers/
-         */
-        // @todo: depend super global
-        if (count($x) !== 1 && isset($_SERVER['HTTP_USER_AGENT'])
-                && preg_match('/Android\s(1|2\.[01])/', $_SERVER['HTTP_USER_AGENT'])) {
-            $x[count($x) - 1] = strtoupper($extension);
-            $filename         = implode('.', $x);
-        }
-
-        return $filename;
-    }
-
-    /**
-     * get Content-Disposition Header string.
-     */
-    private function getContentDisposition(): string
-    {
-        $downloadFilename = $this->getDownloadFileName();
-
-        $utf8Filename = $downloadFilename;
-
-        if (strtoupper($this->charset) !== 'UTF-8') {
-            $utf8Filename = mb_convert_encoding($downloadFilename, 'UTF-8', $this->charset);
-        }
-
-        $result = sprintf('attachment; filename="%s"', $downloadFilename);
-
-        if ($utf8Filename !== '') {
-            $result .= '; filename*=UTF-8\'\'' . rawurlencode($utf8Filename);
-        }
-
-        return $result;
-    }
-
-    /**
      * Disallows status changing.
      *
      * @throws DownloadException
      */
-    public function setStatusCode(int $code, string $reason = '')
+    public function setStatusCode(int $code, string $reason = ''): void
     {
         throw DownloadException::forCannotSetStatusCode($code, $reason);
     }
@@ -223,7 +150,7 @@ class DownloadResponse extends Response
     {
         parent::setContentType($mime, $charset);
 
-        if ($charset !== '') {
+        if ('' !== $charset) {
             $this->charset = $charset;
         }
 
@@ -243,8 +170,6 @@ class DownloadResponse extends Response
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return $this
      *
      * @todo Do downloads need CSP or Cookies? Compare with ResponseTrait::send()
@@ -267,16 +192,14 @@ class DownloadResponse extends Response
 
     /**
      * set header for file download.
-     *
-     * @return void
      */
-    public function buildHeaders()
+    public function buildHeaders(): void
     {
-        if (! $this->hasHeader('Content-Type')) {
+        if (!$this->hasHeader('Content-Type')) {
             $this->setContentTypeByMimeType();
         }
 
-        if (! $this->hasHeader('Content-Disposition')) {
+        if (!$this->hasHeader('Content-Disposition')) {
             $this->setHeader('Content-Disposition', $this->getContentDisposition());
         }
 
@@ -293,7 +216,7 @@ class DownloadResponse extends Response
      */
     public function sendBody()
     {
-        if ($this->binary !== null) {
+        if (null !== $this->binary) {
             return $this->sendBodyByBinary();
         }
 
@@ -302,6 +225,87 @@ class DownloadResponse extends Response
         }
 
         throw DownloadException::forNotFoundDownloadSource();
+    }
+
+    /**
+     * Sets the response header to display the file in the browser.
+     *
+     * @return DownloadResponse
+     */
+    public function inline()
+    {
+        $this->setHeader('Content-Disposition', 'inline');
+
+        return $this;
+    }
+
+    /**
+     * Set content type by guessing mime type from file extension.
+     */
+    private function setContentTypeByMimeType(): void
+    {
+        $mime = null;
+        $charset = '';
+
+        if ($this->setMime && ($lastDotPosition = strrpos($this->filename, '.')) !== false) {
+            $mime = Mimes::guessTypeFromExtension(substr($this->filename, $lastDotPosition + 1));
+            $charset = $this->charset;
+        }
+
+        if (!is_string($mime)) {
+            // Set the default MIME type to send
+            $mime = 'application/octet-stream';
+            $charset = '';
+        }
+
+        $this->setContentType($mime, $charset);
+    }
+
+    /**
+     * get download filename.
+     */
+    private function getDownloadFileName(): string
+    {
+        $filename = $this->filename;
+        $x = explode('.', $this->filename);
+        $extension = end($x);
+
+        /* It was reported that browsers on Android 2.1 (and possibly older as well)
+         * need to have the filename extension upper-cased in order to be able to
+         * download it.
+         *
+         * Reference: http://digiblog.de/2011/04/19/android-and-the-download-file-headers/
+         */
+        // @todo: depend super global
+        if (1 !== count($x) && isset($_SERVER['HTTP_USER_AGENT'])
+                && preg_match('/Android\s(1|2\.[01])/', $_SERVER['HTTP_USER_AGENT'])) {
+            $x[count($x) - 1] = strtoupper($extension);
+            $filename = implode('.', $x);
+        }
+
+        return $filename;
+    }
+
+    /**
+     * get Content-Disposition Header string.
+     */
+    private function getContentDisposition(): string
+    {
+        $downloadFilename = $this->getDownloadFileName();
+
+        $utf8Filename = $downloadFilename;
+
+        if ('UTF-8' !== strtoupper($this->charset)) {
+            $utf8Filename = mb_convert_encoding($downloadFilename, 'UTF-8', $this->charset);
+        }
+
+        $result = sprintf('attachment; filename="%s"', $downloadFilename);
+
+        if ('' !== $utf8Filename) {
+            $result .= '; filename*=UTF-8\'\''.rawurlencode($utf8Filename);
+        }
+
+        return $result;
     }
 
     /**
@@ -314,7 +318,7 @@ class DownloadResponse extends Response
         $splFileObject = $this->file->openFile('rb');
 
         // Flush 1MB chunks of data
-        while (! $splFileObject->eof() && ($data = $splFileObject->fread(1_048_576)) !== false) {
+        while (!$splFileObject->eof() && ($data = $splFileObject->fread(1_048_576)) !== false) {
             echo $data;
             unset($data);
         }
@@ -323,25 +327,13 @@ class DownloadResponse extends Response
     }
 
     /**
-     * output download text by binary
+     * output download text by binary.
      *
      * @return DownloadResponse
      */
     private function sendBodyByBinary()
     {
         echo $this->binary;
-
-        return $this;
-    }
-
-    /**
-     * Sets the response header to display the file in the browser.
-     *
-     * @return DownloadResponse
-     */
-    public function inline()
-    {
-        $this->setHeader('Content-Disposition', 'inline');
 
         return $this;
     }

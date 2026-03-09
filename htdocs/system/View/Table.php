@@ -16,84 +16,84 @@ namespace CodeIgniter\View;
 use CodeIgniter\Database\BaseResult;
 
 /**
- * HTML Table Generating Class
+ * HTML Table Generating Class.
  *
  * Lets you create tables manually or from database result objects, or arrays.
  *
- * @see \CodeIgniter\View\TableTest
+ * @see TableTest
  */
 class Table
 {
     /**
-     * Data for table rows
+     * Data for table rows.
      *
      * @var list<array<string, string>>|list<list<array<string, string>>>
      */
     public $rows = [];
 
     /**
-     * Data for table heading
+     * Data for table heading.
      *
      * @var array<int, mixed>
      */
     public $heading = [];
 
     /**
-     * Data for table footing
+     * Data for table footing.
      *
      * @var array<int, mixed>
      */
     public $footing = [];
 
     /**
-     * Whether or not to automatically create the table header
+     * Whether or not to automatically create the table header.
      *
      * @var bool
      */
     public $autoHeading = true;
 
     /**
-     * Table caption
+     * Table caption.
      *
-     * @var string|null
+     * @var null|string
      */
     public $caption;
 
     /**
-     * Table layout template
+     * Table layout template.
      *
      * @var array<string, string>
      */
     public $template;
 
     /**
-     * Newline setting
+     * Newline setting.
      *
      * @var string
      */
     public $newline = "\n";
 
     /**
-     * Contents of empty cells
+     * Contents of empty cells.
      *
      * @var string
      */
     public $emptyCells = '';
 
     /**
-     * Callback for custom table layout
+     * Callback for custom table layout.
      *
-     * @var callable|null
+     * @var null|callable
      */
     public $function;
 
     /**
-     * Order each inserted row by heading keys
+     * Order each inserted row by heading keys.
      */
     private bool $syncRowsWithHeading = false;
 
     /**
-     * Set the template from the table config file if it exists
+     * Set the template from the table config file if it exists.
      *
      * @param array<string, string> $config (default: array())
      */
@@ -106,16 +106,17 @@ class Table
     }
 
     /**
-     * Set the template
+     * Set the template.
      *
-     * @param         array<string, string>        $template
+     * @param array<string, string> $template
+     *
      * @phpstan-param array<string, string>|string $template
      *
      * @return bool
      */
     public function setTemplate($template)
     {
-        if (! is_array($template)) {
+        if (!is_array($template)) {
             return false;
         }
 
@@ -125,7 +126,7 @@ class Table
     }
 
     /**
-     * Set the table heading
+     * Set the table heading.
      *
      * Can be passed as an array or discreet params
      *
@@ -139,7 +140,7 @@ class Table
     }
 
     /**
-     * Set the table footing
+     * Set the table footing.
      *
      * Can be passed as an array or discreet params
      *
@@ -165,16 +166,16 @@ class Table
      */
     public function makeColumns($array = [], $columnLimit = 0)
     {
-        if (! is_array($array) || $array === [] || ! is_int($columnLimit)) {
+        if (!is_array($array) || [] === $array || !is_int($columnLimit)) {
             return false;
         }
 
         // Turn off the auto-heading feature since it's doubtful we
         // will want headings from a one-dimensional array
-        $this->autoHeading         = false;
+        $this->autoHeading = false;
         $this->syncRowsWithHeading = false;
 
-        if ($columnLimit === 0) {
+        if (0 === $columnLimit) {
             return $array;
         }
 
@@ -184,19 +185,19 @@ class Table
             $temp = array_splice($array, 0, $columnLimit);
 
             if (count($temp) < $columnLimit) {
-                for ($i = count($temp); $i < $columnLimit; $i++) {
+                for ($i = count($temp); $i < $columnLimit; ++$i) {
                     $temp[] = '&nbsp;';
                 }
             }
 
             $new[] = $temp;
-        } while ($array !== []);
+        } while ([] !== $array);
 
         return $new;
     }
 
     /**
-     * Set "empty" cells
+     * Set "empty" cells.
      *
      * @param string $value
      *
@@ -210,7 +211,7 @@ class Table
     }
 
     /**
-     * Add a table row
+     * Add a table row.
      *
      * Can be passed as an array or discreet params
      *
@@ -220,7 +221,7 @@ class Table
     {
         $tmpRow = $this->_prepArgs(func_get_args());
 
-        if ($this->syncRowsWithHeading && $this->heading !== []) {
+        if ($this->syncRowsWithHeading && [] !== $this->heading) {
             // each key has an index
             $keyIndex = array_flip(array_keys($this->heading));
 
@@ -257,34 +258,7 @@ class Table
     }
 
     /**
-     * Prep Args
-     *
-     * Ensures a standard associative array format for all cell data
-     *
-     * @param array<int, mixed> $args
-     *
-     * @return array<string, array<string, mixed>>|list<array<string, mixed>>
-     */
-    protected function _prepArgs(array $args)
-    {
-        // If there is no $args[0], skip this and treat as an associative array
-        // This can happen if there is only a single key, for example this is passed to table->generate
-        // array(array('foo'=>'bar'))
-        if (isset($args[0]) && count($args) === 1 && is_array($args[0])) {
-            $args = $args[0];
-        }
-
-        foreach ($args as $key => $val) {
-            if (! is_array($val)) {
-                $args[$key] = ['data' => $val];
-            }
-        }
-
-        return $args;
-    }
-
-    /**
-     * Add a table caption
+     * Add a table caption.
      *
      * @param string $caption
      *
@@ -298,9 +272,9 @@ class Table
     }
 
     /**
-     * Generate the table
+     * Generate the table.
      *
-     * @param array<int, mixed>|BaseResult|null $tableData
+     * @param null|array<int, mixed>|BaseResult $tableData
      *
      * @return string
      */
@@ -308,7 +282,7 @@ class Table
     {
         // The table data can optionally be passed to this function
         // either as a database result object or an array
-        if ($tableData !== null && $tableData !== []) {
+        if (null !== $tableData && [] !== $tableData) {
             if ($tableData instanceof BaseResult) {
                 $this->_setFromDBResult($tableData);
             } elseif (is_array($tableData)) {
@@ -317,7 +291,7 @@ class Table
         }
 
         // Is there anything to display? No? Smite them!
-        if ($this->heading === [] && $this->rows === []) {
+        if ([] === $this->heading && [] === $this->rows) {
             return 'Undefined table data';
         }
 
@@ -325,68 +299,68 @@ class Table
         $this->_compileTemplate();
 
         // Validate a possibly existing custom cell manipulation function
-        if (isset($this->function) && ! is_callable($this->function)) {
+        if (isset($this->function) && !is_callable($this->function)) {
             $this->function = null;
         }
 
         // Build the table!
-        $out = $this->template['table_open'] . $this->newline;
+        $out = $this->template['table_open'].$this->newline;
 
         // Add any caption here
-        if (isset($this->caption) && $this->caption !== '') {
-            $out .= '<caption>' . $this->caption . '</caption>' . $this->newline;
+        if (isset($this->caption) && '' !== $this->caption) {
+            $out .= '<caption>'.$this->caption.'</caption>'.$this->newline;
         }
 
         // Is there a table heading to display?
-        if ($this->heading !== []) {
+        if ([] !== $this->heading) {
             $headerTag = null;
 
-            if (preg_match('/(<)(td|th)(?=\h|>)/i', $this->template['heading_cell_start'], $matches) === 1) {
+            if (1 === preg_match('/(<)(td|th)(?=\h|>)/i', $this->template['heading_cell_start'], $matches)) {
                 $headerTag = $matches[0];
             }
 
-            $out .= $this->template['thead_open'] . $this->newline . $this->template['heading_row_start'] . $this->newline;
+            $out .= $this->template['thead_open'].$this->newline.$this->template['heading_row_start'].$this->newline;
 
             foreach ($this->heading as $heading) {
                 $temp = $this->template['heading_cell_start'];
 
                 foreach ($heading as $key => $val) {
-                    if ($key !== 'data' && $headerTag !== null) {
-                        $temp = str_replace($headerTag, $headerTag . ' ' . $key . '="' . $val . '"', $temp);
+                    if ('data' !== $key && null !== $headerTag) {
+                        $temp = str_replace($headerTag, $headerTag.' '.$key.'="'.$val.'"', $temp);
                     }
                 }
 
-                $out .= $temp . ($heading['data'] ?? '') . $this->template['heading_cell_end'];
+                $out .= $temp.($heading['data'] ?? '').$this->template['heading_cell_end'];
             }
 
-            $out .= $this->template['heading_row_end'] . $this->newline . $this->template['thead_close'] . $this->newline;
+            $out .= $this->template['heading_row_end'].$this->newline.$this->template['thead_close'].$this->newline;
         }
 
         // Build the table rows
-        if ($this->rows !== []) {
-            $out .= $this->template['tbody_open'] . $this->newline;
+        if ([] !== $this->rows) {
+            $out .= $this->template['tbody_open'].$this->newline;
 
             $i = 1;
 
             foreach ($this->rows as $row) {
                 // We use modulus to alternate the row colors
-                $name = fmod($i++, 2) !== 0.0 ? '' : 'alt_';
+                $name = 0.0 !== fmod($i++, 2) ? '' : 'alt_';
 
-                $out .= $this->template['row_' . $name . 'start'] . $this->newline;
+                $out .= $this->template['row_'.$name.'start'].$this->newline;
 
                 foreach ($row as $cell) {
-                    $temp = $this->template['cell_' . $name . 'start'];
+                    $temp = $this->template['cell_'.$name.'start'];
 
                     foreach ($cell as $key => $val) {
-                        if ($key !== 'data') {
-                            $temp = str_replace('<td', '<td ' . $key . '="' . $val . '"', $temp);
+                        if ('data' !== $key) {
+                            $temp = str_replace('<td', '<td '.$key.'="'.$val.'"', $temp);
                         }
                     }
 
                     $cell = $cell['data'] ?? '';
                     $out .= $temp;
 
-                    if ($cell === '') {
+                    if ('' === $cell) {
                         $out .= $this->emptyCells;
                     } elseif (isset($this->function)) {
                         $out .= ($this->function)($cell);
@@ -394,38 +368,38 @@ class Table
                         $out .= $cell;
                     }
 
-                    $out .= $this->template['cell_' . $name . 'end'];
+                    $out .= $this->template['cell_'.$name.'end'];
                 }
 
-                $out .= $this->template['row_' . $name . 'end'] . $this->newline;
+                $out .= $this->template['row_'.$name.'end'].$this->newline;
             }
 
-            $out .= $this->template['tbody_close'] . $this->newline;
+            $out .= $this->template['tbody_close'].$this->newline;
         }
 
         // Any table footing to display?
-        if ($this->footing !== []) {
+        if ([] !== $this->footing) {
             $footerTag = null;
 
             if (preg_match('/(<)(td|th)(?=\h|>)/i', $this->template['footing_cell_start'], $matches)) {
                 $footerTag = $matches[0];
             }
 
-            $out .= $this->template['tfoot_open'] . $this->newline . $this->template['footing_row_start'] . $this->newline;
+            $out .= $this->template['tfoot_open'].$this->newline.$this->template['footing_row_start'].$this->newline;
 
             foreach ($this->footing as $footing) {
                 $temp = $this->template['footing_cell_start'];
 
                 foreach ($footing as $key => $val) {
-                    if ($key !== 'data' && $footerTag !== null) {
-                        $temp = str_replace($footerTag, $footerTag . ' ' . $key . '="' . $val . '"', $temp);
+                    if ('data' !== $key && null !== $footerTag) {
+                        $temp = str_replace($footerTag, $footerTag.' '.$key.'="'.$val.'"', $temp);
                     }
                 }
 
-                $out .= $temp . ($footing['data'] ?? '') . $this->template['footing_cell_end'];
+                $out .= $temp.($footing['data'] ?? '').$this->template['footing_cell_end'];
             }
 
-            $out .= $this->template['footing_row_end'] . $this->newline . $this->template['tfoot_close'] . $this->newline;
+            $out .= $this->template['footing_row_end'].$this->newline.$this->template['tfoot_close'].$this->newline;
         }
 
         // And finally, close off the table
@@ -438,32 +412,57 @@ class Table
     }
 
     /**
-     * Clears the table arrays.  Useful if multiple tables are being generated
+     * Clears the table arrays.  Useful if multiple tables are being generated.
      *
      * @return Table
      */
     public function clear()
     {
-        $this->rows        = [];
-        $this->heading     = [];
-        $this->footing     = [];
+        $this->rows = [];
+        $this->heading = [];
+        $this->footing = [];
         $this->autoHeading = true;
-        $this->caption     = null;
+        $this->caption = null;
 
         return $this;
     }
 
     /**
-     * Set table data from a database result object
+     * Prep Args.
+     *
+     * Ensures a standard associative array format for all cell data
+     *
+     * @param array<int, mixed> $args
+     *
+     * @return array<string, array<string, mixed>>|list<array<string, mixed>>
+     */
+    protected function _prepArgs(array $args)
+    {
+        // If there is no $args[0], skip this and treat as an associative array
+        // This can happen if there is only a single key, for example this is passed to table->generate
+        // array(array('foo'=>'bar'))
+        if (isset($args[0]) && 1 === count($args) && is_array($args[0])) {
+            $args = $args[0];
+        }
+
+        foreach ($args as $key => $val) {
+            if (!is_array($val)) {
+                $args[$key] = ['data' => $val];
+            }
+        }
+
+        return $args;
+    }
+
+    /**
+     * Set table data from a database result object.
      *
      * @param BaseResult $object Database result object
-     *
-     * @return void
      */
-    protected function _setFromDBResult($object)
+    protected function _setFromDBResult($object): void
     {
         // First generate the headings from the table column names
-        if ($this->autoHeading && $this->heading === []) {
+        if ($this->autoHeading && [] === $this->heading) {
             $this->heading = $this->_prepArgs($object->getFieldNames());
         }
 
@@ -473,15 +472,13 @@ class Table
     }
 
     /**
-     * Set table data from an array
+     * Set table data from an array.
      *
      * @param array<int, mixed> $data
-     *
-     * @return void
      */
-    protected function _setFromArray($data)
+    protected function _setFromArray($data): void
     {
-        if ($this->autoHeading && $this->heading === []) {
+        if ($this->autoHeading && [] === $this->heading) {
             $this->heading = $this->_prepArgs(array_shift($data));
         }
 
@@ -491,57 +488,55 @@ class Table
     }
 
     /**
-     * Compile Template
-     *
-     * @return void
+     * Compile Template.
      */
-    protected function _compileTemplate()
+    protected function _compileTemplate(): void
     {
-        if ($this->template === null) {
+        if (null === $this->template) {
             $this->template = $this->_defaultTemplate();
 
             return;
         }
 
         foreach ($this->_defaultTemplate() as $field => $template) {
-            if (! isset($this->template[$field])) {
+            if (!isset($this->template[$field])) {
                 $this->template[$field] = $template;
             }
         }
     }
 
     /**
-     * Default Template
+     * Default Template.
      *
      * @return array<string, string>
      */
     protected function _defaultTemplate()
     {
         return [
-            'table_open'         => '<table border="0" cellpadding="4" cellspacing="0">',
-            'thead_open'         => '<thead>',
-            'thead_close'        => '</thead>',
-            'heading_row_start'  => '<tr>',
-            'heading_row_end'    => '</tr>',
+            'table_open' => '<table border="0" cellpadding="4" cellspacing="0">',
+            'thead_open' => '<thead>',
+            'thead_close' => '</thead>',
+            'heading_row_start' => '<tr>',
+            'heading_row_end' => '</tr>',
             'heading_cell_start' => '<th>',
-            'heading_cell_end'   => '</th>',
-            'tfoot_open'         => '<tfoot>',
-            'tfoot_close'        => '</tfoot>',
-            'footing_row_start'  => '<tr>',
-            'footing_row_end'    => '</tr>',
+            'heading_cell_end' => '</th>',
+            'tfoot_open' => '<tfoot>',
+            'tfoot_close' => '</tfoot>',
+            'footing_row_start' => '<tr>',
+            'footing_row_end' => '</tr>',
             'footing_cell_start' => '<td>',
-            'footing_cell_end'   => '</td>',
-            'tbody_open'         => '<tbody>',
-            'tbody_close'        => '</tbody>',
-            'row_start'          => '<tr>',
-            'row_end'            => '</tr>',
-            'cell_start'         => '<td>',
-            'cell_end'           => '</td>',
-            'row_alt_start'      => '<tr>',
-            'row_alt_end'        => '</tr>',
-            'cell_alt_start'     => '<td>',
-            'cell_alt_end'       => '</td>',
-            'table_close'        => '</table>',
+            'footing_cell_end' => '</td>',
+            'tbody_open' => '<tbody>',
+            'tbody_close' => '</tbody>',
+            'row_start' => '<tr>',
+            'row_end' => '</tr>',
+            'cell_start' => '<td>',
+            'cell_end' => '</td>',
+            'row_alt_start' => '<tr>',
+            'row_alt_end' => '</tr>',
+            'cell_alt_start' => '<td>',
+            'cell_alt_end' => '</td>',
+            'table_close' => '</table>',
         ];
     }
 }

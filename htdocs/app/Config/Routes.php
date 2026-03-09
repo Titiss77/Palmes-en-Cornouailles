@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use CodeIgniter\Router\RouteCollection;
 
-/** @var RouteCollection $routes */
+// @var RouteCollection $routes
 
 // --- ROUTES PUBLIQUES ---
 $routes->get('/', 'Public\Home::index');
@@ -27,7 +29,7 @@ $routes->get('mentions-legales', 'Public\Home::mentions_legales');
 $routes->get('politique-confidentialite', 'Public\Home::confidentialite');
 
 // --- GROUPE admin SÉCURISÉ ---
-$routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\admin'], function ($routes) {
+$routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\admin'], function ($routes): void {
     // 1. Tableau de bord
     $routes->get('/', 'Dashboard::index');
 

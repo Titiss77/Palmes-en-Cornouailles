@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psr\Log;
 
 /**
@@ -89,10 +91,10 @@ interface LoggerInterface
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed $level
+     * @param mixed   $level
      * @param mixed[] $context
      *
-     * @throws \Psr\Log\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function log($level, string|\Stringable $message, array $context = []): void;
 }

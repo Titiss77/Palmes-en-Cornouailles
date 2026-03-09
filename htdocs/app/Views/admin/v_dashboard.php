@@ -1,15 +1,16 @@
-<?= $this->extend('admin/Layout/l_global') ?>
-<?= $this->section('contenu') ?>
+<?php echo $this->extend('admin/Layout/l_global'); ?>
+<?php echo $this->section('contenu'); ?>
 
 <?php
 $isLogged = session()->get('isLoggedIn');
 $sections = [];
-include __DIR__ . '/section.php';
+
+include __DIR__.'/section.php';
 
 $currentUri = uri_string();
 
 // Détermine la section active
-$targetSection = (strpos($currentUri, 'contact') !== false) ? 'contact' : 'accueil';
+$targetSection = (str_contains($currentUri, 'contact')) ? 'contact' : 'accueil';
 
 // 1. D'abord on filtre correctement
 $sections = array_filter($sections, function ($s) use ($targetSection) {
@@ -17,56 +18,55 @@ $sections = array_filter($sections, function ($s) use ($targetSection) {
     return $s['section'] === $targetSection;
 });
 
-
 unset($section);  // Bonnes pratiques : on détruit la référence
 ?>
 
 <div class="site-container">
-    <?php if ($isLogged): ?>
+    <?php if ($isLogged) { ?>
     <div class="deconnexion-section">
-        <a href="<?= base_url('logout') ?>" class="admin-nav-link logout-btn"
+        <a href="<?php echo base_url('logout'); ?>" class="admin-nav-link logout-btn"
             onclick="return confirm('Voulez-vous vraiment vous déconnecter ?')">
             <i class="bi bi-box-arrow-right"></i> <span>Déconnexion</span>
         </a>
     </div>
 
     <div class="admin-header">
-        <h2 class="title-section" style="margin-top: 0;">Tableau de Bord : <?= session()->get('nom') ?></h2>
+        <h2 class="title-section" style="margin-top: 0;">Tableau de Bord : <?php echo session()->get('nom'); ?></h2>
     </div>
-    <?php endif; ?>
+    <?php } ?>
 
-    <?php foreach ($sections as $section): ?>
+    <?php foreach ($sections as $section) { ?>
     <p class="grey-text">* Vous êtes invités à changer d'onglet afin de trouver les paramètres que vous
         souhaitez modifier</p>
     <h3 class="admin-subtitle">
-        <i class="bi <?= esc($section['icon']) ?>"></i> <?= esc($section['titre']) ?>
+        <i class="bi <?php echo esc($section['icon']); ?>"></i> <?php echo esc($section['titre']); ?>
     </h3>
 
     <div class="grid-3 mb-5">
 
-        <?php foreach ($section['cards'] as $card): ?>
+        <?php foreach ($section['cards'] as $card) { ?>
         <div class="card-item admin-nav-card">
             <div class="card-icon">
-                <i class="bi <?= $card['icon'] ?>"></i>
+                <i class="bi <?php echo $card['icon']; ?>"></i>
             </div>
 
             <div class="card-info">
                 <h4>
-                    <?= isset($card['count']) ? esc($card['count']) . ' ' : '' ?>
-                    <?= esc($card['label']) ?>
+                    <?php echo isset($card['count']) ? esc($card['count']).' ' : ''; ?>
+                    <?php echo esc($card['label']); ?>
                 </h4>
-                <p><?= esc($card['desc']) ?></p>
+                <p><?php echo esc($card['desc']); ?></p>
             </div>
 
-            <a href="<?= base_url($card['url']) ?>" class="btn-admin-nav">
-                <?= esc($card['btn']) ?> <i class="bi bi-chevron-right"></i>
+            <a href="<?php echo base_url($card['url']); ?>" class="btn-admin-nav">
+                <?php echo esc($card['btn']); ?> <i class="bi bi-chevron-right"></i>
             </a>
         </div>
-        <?php endforeach; ?>
+        <?php } ?>
 
     </div>
-    <?php endforeach; ?>
+    <?php } ?>
 
 </div>
 
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

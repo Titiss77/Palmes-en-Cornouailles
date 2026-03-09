@@ -17,12 +17,12 @@ use CodeIgniter\Encryption\EncrypterInterface;
 use Config\Encryption;
 
 /**
- * Base class for encryption handling
+ * Base class for encryption handling.
  */
 abstract class BaseHandler implements EncrypterInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct(?Encryption $config = null)
     {
@@ -37,25 +37,11 @@ abstract class BaseHandler implements EncrypterInterface
     }
 
     /**
-     * Byte-safe substr()
-     *
-     * @param string $str
-     * @param int    $start
-     * @param int    $length
-     *
-     * @return string
-     */
-    protected static function substr($str, $start, $length = null)
-    {
-        return mb_substr($str, $start, $length, '8bit');
-    }
-
-    /**
-     * __get() magic, providing readonly access to some of our properties
+     * __get() magic, providing readonly access to some of our properties.
      *
      * @param string $key Property name
      *
-     * @return array|bool|int|string|null
+     * @return null|array|bool|int|string
      */
     public function __get($key)
     {
@@ -67,12 +53,26 @@ abstract class BaseHandler implements EncrypterInterface
     }
 
     /**
-     * __isset() magic, providing checking for some of our properties
+     * __isset() magic, providing checking for some of our properties.
      *
      * @param string $key Property name
      */
     public function __isset($key): bool
     {
         return property_exists($this, $key);
+    }
+
+    /**
+     * Byte-safe substr().
+     *
+     * @param string $str
+     * @param int    $start
+     * @param int    $length
+     *
+     * @return string
+     */
+    protected static function substr($str, $start, $length = null)
+    {
+        return mb_substr($str, $start, $length, '8bit');
     }
 }

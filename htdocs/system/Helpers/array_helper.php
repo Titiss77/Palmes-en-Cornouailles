@@ -15,12 +15,12 @@ use CodeIgniter\Helpers\Array\ArrayHelper;
 
 // CodeIgniter Array Helpers
 
-if (! function_exists('dot_array_search')) {
+if (!function_exists('dot_array_search')) {
     /**
      * Searches an array through dot syntax. Supports
-     * wildcard searches, like foo.*.bar
+     * wildcard searches, like foo.*.bar.
      *
-     * @return array|bool|int|object|string|null
+     * @return null|array|bool|int|object|string
      */
     function dot_array_search(string $index, array $array)
     {
@@ -28,13 +28,13 @@ if (! function_exists('dot_array_search')) {
     }
 }
 
-if (! function_exists('array_deep_search')) {
+if (!function_exists('array_deep_search')) {
     /**
      * Returns the value of an element at a key in an array of uncertain depth.
      *
      * @param int|string $key
      *
-     * @return array|bool|float|int|object|string|null
+     * @return null|array|bool|float|int|object|string
      */
     function array_deep_search($key, array $array)
     {
@@ -52,7 +52,7 @@ if (! function_exists('array_deep_search')) {
     }
 }
 
-if (! function_exists('array_sort_by_multiple_keys')) {
+if (!function_exists('array_sort_by_multiple_keys')) {
     /**
      * Sorts a multidimensional array by its elements values. The array
      * columns to be used for sorting are passed as an associative
@@ -81,7 +81,7 @@ if (! function_exists('array_sort_by_multiple_keys')) {
     function array_sort_by_multiple_keys(array &$array, array $sortColumns): bool
     {
         // Check if there really are columns to sort after
-        if ($sortColumns === [] || $array === []) {
+        if ([] === $sortColumns || [] === $array) {
             return false;
         }
 
@@ -121,7 +121,7 @@ if (! function_exists('array_sort_by_multiple_keys')) {
     }
 }
 
-if (! function_exists('array_flatten_with_dots')) {
+if (!function_exists('array_flatten_with_dots')) {
     /**
      * Flatten a multidimensional array using dots as separators.
      *
@@ -135,10 +135,10 @@ if (! function_exists('array_flatten_with_dots')) {
         $flattened = [];
 
         foreach ($array as $key => $value) {
-            $newKey = $id . $key;
+            $newKey = $id.$key;
 
-            if (is_array($value) && $value !== []) {
-                $flattened = array_merge($flattened, array_flatten_with_dots($value, $newKey . '.'));
+            if (is_array($value) && [] !== $value) {
+                $flattened = array_merge($flattened, array_flatten_with_dots($value, $newKey.'.'));
             } else {
                 $flattened[$newKey] = $value;
             }
@@ -148,15 +148,15 @@ if (! function_exists('array_flatten_with_dots')) {
     }
 }
 
-if (! function_exists('array_group_by')) {
+if (!function_exists('array_group_by')) {
     /**
-     * Groups all rows by their index values. Result's depth equals number of indexes
+     * Groups all rows by their index values. Result's depth equals number of indexes.
      *
      * @param array $array        Data array (i.e. from query result)
      * @param array $indexes      Indexes to group by. Dot syntax used. Returns $array if empty
      * @param bool  $includeEmpty If true, null and '' are also added as valid keys to group
      *
-     * @return array Result array where rows are grouped together by indexes values.
+     * @return array result array where rows are grouped together by indexes values
      */
     function array_group_by(array $array, array $indexes, bool $includeEmpty = false): array
     {
