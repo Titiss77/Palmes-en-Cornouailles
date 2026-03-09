@@ -40,6 +40,7 @@ final class CmiCmdletLogicalFinder extends ProcOpenBasedFinder
         }
 
         /** @phpstan-ignore offsetAccess.notFound */
+        $count = $matches['count'];
 
         return parent::countCpuCores($count);
     }
