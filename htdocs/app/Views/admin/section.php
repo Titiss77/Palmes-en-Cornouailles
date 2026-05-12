@@ -15,7 +15,7 @@ $sections = [
                 'btn' => 'Modifier les infos',
             ],
             [
-                'count' => $count['actualites'],
+                'count' => $count['actualites'] ?? 0,
                 'label' => 'Événements',
                 'desc' => 'Articles',
                 'icon' => 'bi-newspaper',
@@ -23,7 +23,7 @@ $sections = [
                 'btn' => 'Gérer les contenus',
             ],
             [
-                'count' => $count['disciplines'],
+                'count' => $count['disciplines'] ?? 0,
                 'label' => 'Disciplines',
                 'desc' => "Types d'activités & Sports proposés",
                 'icon' => 'bi-geo-alt',
@@ -31,7 +31,7 @@ $sections = [
                 'btn' => 'Gérer les disciplines',
             ],
             [
-                'count' => $count['membres'],
+                'count' => $count['membres'] ?? 0,
                 'label' => 'Membres',
                 'desc' => 'Bureau, Coachs & Fonctions',
                 'icon' => 'bi-people',
@@ -39,7 +39,7 @@ $sections = [
                 'btn' => "Gérer l'équipe",
             ],
             [
-                'count' => $count['piscines'],
+                'count' => $count['piscines'] ?? 0,
                 'label' => 'Lieux',
                 'desc' => "Piscines & Bassins d'entraînement",
                 'icon' => 'bi-geo-alt',
@@ -47,7 +47,7 @@ $sections = [
                 'btn' => 'Gérer les sites',
             ],
             [
-                'count' => $count['partenaires'],
+                'count' => $count['partenaires'] ?? 0,
                 'label' => 'Partenaires',
                 'desc' => 'Organismes & Collaborateurs',
                 'icon' => 'bi-people',
@@ -62,7 +62,7 @@ $sections = [
         'icon' => 'bi-gear',
         'cards' => [
             [
-                'count' => $count['groupes'],
+                'count' => $count['groupes'] ?? 0,
                 'label' => 'Groupes',
                 'desc' => 'Configuration des tarifs de chaques groupes',
                 'icon' => 'bi-sliders',
@@ -70,7 +70,7 @@ $sections = [
                 'btn' => 'Modifier les infos',
             ],
             [
-                'count' => $count['materiel'],
+                'count' => $count['materiel'] ?? 0,
                 'label' => 'Matériel',
                 'desc' => 'Inventaire & Prêts de palmes',
                 'icon' => 'bi-tools',
@@ -78,7 +78,7 @@ $sections = [
                 'btn' => 'Gérer le stock',
             ],
             [
-                'count' => $count['membres'],
+                'count' => $count['membres'] ?? 0,
                 'label' => 'Membres',
                 'desc' => 'Modifications des membres en général',
                 'icon' => 'bi-people',
