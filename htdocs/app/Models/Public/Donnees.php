@@ -230,6 +230,7 @@ class Donnees extends Model
             ->join('fonctions f', 'mf.fonction_id = f.id')
             ->where('f.titre', $titreFonction)
             ->get()
-            ->getResultArray();
+            ->getResultArray()
+        ;
     }
 }

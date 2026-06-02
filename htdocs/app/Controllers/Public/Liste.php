@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Controllers\Public;
 
@@ -49,7 +51,7 @@ class Liste extends BaseController
 
         // Au lieu de : $envLogin = env('USER_LOGIN');
         // On lit le fichier dédié :
-        $clubConfig = parse_ini_file(ROOTPATH . 'club.ini');
+        $clubConfig = parse_ini_file(ROOTPATH.'club.ini');
 
         $envUserLogin = $clubConfig['USER_LOGIN'];
         $envUserPassword = $clubConfig['USER_PASSWORD'];

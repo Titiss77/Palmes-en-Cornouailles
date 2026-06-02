@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Controllers\admin;
 
@@ -49,7 +51,7 @@ class Login extends BaseController
 
         // Au lieu de : $envLogin = env('ADMIN_LOGIN');
         // On lit le fichier dédié :
-        $clubConfig = parse_ini_file(ROOTPATH . 'club.ini');
+        $clubConfig = parse_ini_file(ROOTPATH.'club.ini');
 
         $envLogin = $clubConfig['ADMIN_LOGIN'];
         $envPassword = $clubConfig['ADMIN_PASSWORD'];
