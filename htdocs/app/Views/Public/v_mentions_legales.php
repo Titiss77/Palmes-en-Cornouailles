@@ -16,9 +16,10 @@
     <h2 class="h2">2. Hébergement</h2>
     <p class="paragraph">
         Le site est hébergé par :<br>
-        <strong>Nom de l'hébergeur :</strong> [À COMPLÉTER PAR L'HÉBERGEUR, EX: O2SWITCH]<br>
-        <strong>Adresse :</strong> [ADRESSE DE L'HÉBERGEUR]<br>
-        <strong>Téléphone :</strong> [TÉLÉPHONE HÉBERGEUR]
+        <strong>Nom de l'hébergeur :</strong> Byet Internet Services (iFastNet)<br>
+        <strong>Adresse :</strong> 275 New North Road, Islington, London, N1 7AA, Royaume-Uni<br>
+        <strong>Site Web :</strong> <a href="https://byethost.com" target="_blank"
+            rel="noopener noreferrer">byethost.com</a>
     </p>
 
     <h2 class="h2">3. Propriété intellectuelle</h2>
