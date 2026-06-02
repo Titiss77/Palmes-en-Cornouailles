@@ -62,8 +62,10 @@ $destinataires = [
                 <?php if (!empty($groupes)) { ?>
                 <?php foreach ($groupes as $g) { ?>
                 <tr>
-                    <td style="background-color:<?php echo esc($g['codeCouleur']); ?>;"><?php echo esc($g['nom']); ?></td>
-                    <td style="background-color:<?php echo esc($g['codeCouleur']); ?>;"><?php echo esc($g['description']); ?></td>
+                    <td style="background-color:<?php echo esc($g['codeCouleur']); ?>;"><?php echo esc($g['nom']); ?>
+                    </td>
+                    <td style="background-color:<?php echo esc($g['codeCouleur']); ?>;">
+                        <?php echo esc($g['description']); ?></td>
                     <td class="text-right" style="background-color:<?php echo esc($g['codeCouleur']); ?>;">
                         <strong><?php echo esc($g['prix']); ?>€</strong>
                     </td>
@@ -84,7 +86,8 @@ $destinataires = [
             <?php foreach ($membres as $m) { ?>
             <div class="trombi-card">
                 <div class="photo-container">
-                    <img src="<?php echo base_url('uploads/'.esc($m['photo'])); ?>" alt="<?php echo esc($m['nom']); ?>">
+                    <img src="<?php echo base_url('uploads/' . esc($m['photo'])); ?>"
+                        alt="<?php echo esc($m['nom']); ?>">
                 </div>
                 <div class="info">
                     <h3><?php echo esc($m['nom']); ?></h3>
@@ -116,7 +119,10 @@ $destinataires = [
                         <label for="destinataire">Vous avez une question concernant :</label>
                         <select name="destinataire" id="destinataire" class="form-input">
                             <?php foreach ($destinataires as $value => $label) { ?>
-                            <option value="<?php echo esc($value); ?>"><?php echo esc($label); ?></option>
+                            <option value="<?php echo esc($value); ?>"
+                                <?php echo old('destinataire') === (string) $value ? 'selected' : ''; ?>>
+                                <?php echo esc($label); ?>
+                            </option>
                             <?php } ?>
                         </select>
                     </div>
@@ -124,21 +130,22 @@ $destinataires = [
                     <div class="form-group">
                         <label for="email">Votre adresse email :</label>
                         <input type="email" name="email" id="email" placeholder="exemple@mail.com" class="form-input"
-                            required>
+                            value="<?php echo old('email'); ?>" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="message">Votre message :</label>
                     <textarea name="message" id="message" placeholder="Détaillez votre demande ici..." rows="4"
-                        class="form-input" required></textarea>
+                        class="form-input" required><?php echo old('message'); ?></textarea>
                 </div>
 
                 <div class="politique-form" style="margin: 20px 0;">
                     <input type="checkbox" name="rgpd_consent" id="rgpd_consent" required>
                     <label for="rgpd_consent" style="display:inline;">
                         J'accepte que mes données soient utilisées pour traiter ma demande.
-                        <a href="<?php echo base_url('politique-confidentialite'); ?>" target="_blank">En savoir plus</a>.
+                        <a href="<?php echo base_url('politique-confidentialite'); ?>" target="_blank">En savoir
+                            plus</a>.
                     </label>
                 </div>
 
