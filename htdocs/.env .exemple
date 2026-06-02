@@ -55,15 +55,3 @@ email.SMTPPass =
 email.SMTPPort = 465
 email.SMTPCrypto = ssl
 email.mailType = html
-
-#--------------------------------------------------------------------
-# INFOS CLUB
-#--------------------------------------------------------------------
-
-ADMIN_LOGIN = 
-ADMIN_PASSWORD = 
-USER_LOGIN = 
-USER_PASSWORD = 
-
-CLUB_EMAIL = 
-CLUB_ADRESSE =
