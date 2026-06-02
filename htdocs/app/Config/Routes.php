@@ -31,6 +31,8 @@ $routes->get('politique-confidentialite', 'Public\Home::confidentialite');
 // --- GROUPE admin SÉCURISÉ ---
 $routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\admin'], function ($routes): void {
     // 1. Tableau de bord
+    $routes->get('dashboard', 'Dashboard::index');
+    
     $routes->get('/', 'Dashboard::index');
 
     $routes->get('contact', 'Dashboard::contact');

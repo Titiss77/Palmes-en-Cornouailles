@@ -1,24 +1,19 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
 use App\Controllers\Root;
-use App\Models\Public\Donnees; // Ajout du modèle utilisateur
-use App\Models\Public\UtilisateurModel;
+use App\Models\Public\Donnees;
 
 class Liste extends BaseController
 {
     protected $donneesModel;
-    protected $userModel;
     protected $root;
 
     public function __construct()
     {
         $this->donneesModel = new Donnees();
-        $this->userModel = new UtilisateurModel(); // Instanciation
         $this->root = new Root();
     }
 
@@ -27,7 +22,7 @@ class Liste extends BaseController
      */
     public function index()
     {
-        // Si l'admin est déjà connecté, on le redirige directement vers le dashboard
+        // Si l'adhérent est déjà connecté, on le redirige directement vers l'accueil
         if (session()->get('isLoggedIn') && 'user' === session()->get('role')) {
             return redirect()->to(base_url('/'));
         }
@@ -52,17 +47,28 @@ class Liste extends BaseController
         $username = $this->request->getPost('identifiant');
         $passwordRaw = $this->request->getPost('password');
 
-        // 1. Recherche via le Modèle (plus propre)
-        $user = $this->userModel->where('username', $username)->first();
+        // Au lieu de : $envLogin = env('USER_LOGIN');
+        // On lit le fichier dédié :
+        $clubConfig = parse_ini_file(ROOTPATH . 'club.ini');
 
-        if ($user) {
-            // 2. Vérification du mot de passe
-            if (password_verify($passwordRaw, $user['password'])) {
-                return redirect()->to($general);
-            }
+        $envUserLogin = $clubConfig['USER_LOGIN'];
+        $envUserPassword = $clubConfig['USER_PASSWORD'];
+
+        // Vérification
+        if ($username === $envUserLogin && $passwordRaw === $envUserPassword) {
+            // On peut créer une session pour l'adhérent s'il doit rester connecté
+            $session = session();
+            $session->regenerate();
+            $session->set([
+                'username' => $username,
+                'role' => 'user',
+                'isLoggedIn' => true,
+            ]);
+
+            return redirect()->to($general);
         }
 
-        // En cas d'échec (utilisateur inconnu OU mauvais mot de passe)
+        // En cas d'échec
         return redirect()->back()->withInput()->with('error', 'Identifiants invalides.');
     }
 

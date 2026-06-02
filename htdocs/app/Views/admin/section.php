@@ -16,7 +16,7 @@ $sections = [
             ],
             [
                 'count' => $count['actualites'] ?? 0,
-                'label' => 'Événements',
+                'label' => 'Événement(s)',
                 'desc' => 'Articles',
                 'icon' => 'bi-newspaper',
                 'url' => 'admin/actualites',
@@ -24,7 +24,7 @@ $sections = [
             ],
             [
                 'count' => $count['disciplines'] ?? 0,
-                'label' => 'Disciplines',
+                'label' => 'Discipline(s)',
                 'desc' => "Types d'activités & Sports proposés",
                 'icon' => 'bi-geo-alt',
                 'url' => 'admin/disciplines',
@@ -32,7 +32,7 @@ $sections = [
             ],
             [
                 'count' => $count['membres'] ?? 0,
-                'label' => 'Membres',
+                'label' => 'Membre(s)',
                 'desc' => 'Bureau, Coachs & Fonctions',
                 'icon' => 'bi-people',
                 'url' => 'admin/membres',
@@ -48,7 +48,7 @@ $sections = [
             ],
             [
                 'count' => $count['partenaires'] ?? 0,
-                'label' => 'Partenaires',
+                'label' => 'Partenaire(s)',
                 'desc' => 'Organismes & Collaborateurs',
                 'icon' => 'bi-people',
                 'url' => 'admin/partenaires',
@@ -63,7 +63,7 @@ $sections = [
         'cards' => [
             [
                 'count' => $count['groupes'] ?? 0,
-                'label' => 'Groupes',
+                'label' => 'Groupe(s)',
                 'desc' => 'Configuration des tarifs de chaques groupes',
                 'icon' => 'bi-sliders',
                 'url' => 'admin/groupes',
@@ -71,7 +71,7 @@ $sections = [
             ],
             [
                 'count' => $count['materiel'] ?? 0,
-                'label' => 'Matériel',
+                'label' => 'Matériel(s)',
                 'desc' => 'Inventaire & Prêts de palmes',
                 'icon' => 'bi-tools',
                 'url' => 'admin/materiel',
@@ -79,7 +79,7 @@ $sections = [
             ],
             [
                 'count' => $count['membres'] ?? 0,
-                'label' => 'Membres',
+                'label' => 'Membre(s)',
                 'desc' => 'Modifications des membres en général',
                 'icon' => 'bi-people',
                 'url' => 'admin/membres',

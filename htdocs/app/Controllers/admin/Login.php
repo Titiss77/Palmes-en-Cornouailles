@@ -1,24 +1,19 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Controllers\admin;
 
 use App\Controllers\BaseController;
 use App\Controllers\Root;
 use App\Models\Public\Donnees;
-use App\Models\Public\UtilisateurModel;  // Ajout du modèle utilisateur
 
 class Login extends BaseController
 {
     protected $donneesModel;
-    protected $userModel;
     protected $root;
 
     public function __construct()
     {
         $this->donneesModel = new Donnees();
-        $this->userModel = new UtilisateurModel();  // Instanciation
         $this->root = new Root();
     }
 
@@ -51,36 +46,31 @@ class Login extends BaseController
 
         $username = $this->request->getPost('identifiant');
         $passwordRaw = $this->request->getPost('password');
-        $passwordEnv = password_hash(env('ADMIN_PASSWORD'), PASSWORD_DEFAULT);
 
-        // 1. Recherche via le Modèle (plus propre)
-        $user = $this->userModel->where('username', $username)->first();
+        // Au lieu de : $envLogin = env('ADMIN_LOGIN');
+        // On lit le fichier dédié :
+        $clubConfig = parse_ini_file(ROOTPATH . 'club.ini');
 
-        if ($user) {
-            // 2. Vérification du mot de passe
-            if (password_verify($passwordRaw, $passwordEnv)) {
-                // 3. SÉCURITÉ : Vérification du Rôle admin
-                if ('admin' !== $user['role']) {
-                    return redirect()->back()->withInput()->with('error', 'Accès refusé : Droits insuffisants.');
-                }
+        $envLogin = $clubConfig['ADMIN_LOGIN'];
+        $envPassword = $clubConfig['ADMIN_PASSWORD'];
 
-                // 4. SÉCURITÉ : Régénération de l'ID de session (anti-fixation)
-                $session->regenerate();
+        // Vérification directe avec les variables d'environnement
+        if ($username === $envLogin && $passwordRaw === $envPassword) {
+            // SÉCURITÉ : Régénération de l'ID de session (anti-fixation)
+            $session->regenerate();
 
-                // Création de la session
-                $session->set([
-                    'user_id' => $user['id'],
-                    'nom' => $user['nom'],
-                    'username' => $user['username'],
-                    'role' => $user['role'],  // Important de stocker le rôle
-                    'isLoggedIn' => true,
-                ]);
+            // Création de la session
+            $session->set([
+                'nom' => 'Administrateur',
+                'username' => $username,
+                'role' => 'admin',
+                'isLoggedIn' => true,
+            ]);
 
-                return redirect()->to(base_url('admin'));  // Ou 'admin/dashboard' selon tes routes
-            }
+            return redirect()->to(base_url('admin/dashboard'));
         }
 
-        // En cas d'échec (utilisateur inconnu OU mauvais mot de passe)
+        // En cas d'échec
         return redirect()->back()->withInput()->with('error', 'Identifiants invalides.');
     }
 

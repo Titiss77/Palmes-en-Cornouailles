@@ -1,4 +1,41 @@
+# ----------------------------------------------------------------------
+# SÉCURISATION DES FICHIERS ET DOSSIERS SENSIBLES
+# ----------------------------------------------------------------------
+
+# 1. Empêcher l'affichage du contenu des répertoires (Directory Listing)
+Options -Indexes
+
+# 2. Bloquer l'accès aux fichiers sensibles (comme .env, composer.json, etc.)
+<FilesMatch "^\.env|composer\.json|composer\.lock|README\.md|package\.json|package-lock\.json|phpunit\.xml.*|\.gitignore|\.gitattributes|\.log|\.sql|\.ini|\.sh|spark$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# 3. Bloquer l'accès aux dossiers sensibles du framework (CodeIgniter 4)
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
+    RewriteRule ^(\.git|\.svn|vendor|app|system|tests|writable|writable/logs)/ - [F,L]
+</IfModule>
+
+# 4. Protection contre les attaques XSS et Clickjacking (Optionnel mais recommandé)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# ----------------------------------------------------------------------
+# REDIRECTION VERS LE DOSSIER PUBLIC (Si CodeIgniter n'est pas bien configuré sur le vhost)
+# ----------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Si la requête n'est pas déjà dans le dossier public
+    RewriteCond %{REQUEST_URI} !^/public/
+    # Redirige toutes les requêtes vers le dossier public
+    RewriteRule ^(.*)$ /public/$1 [L,QSA]
 </IfModule>
