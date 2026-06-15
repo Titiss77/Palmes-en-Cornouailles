@@ -69,6 +69,7 @@ $sections = [
                 'url' => 'admin/groupes',
                 'btn' => 'Modifier les infos',
             ],
+            /*
             [
                 'count' => $count['materiel'] ?? 0,
                 'label' => 'Matériel(s)',
@@ -76,7 +77,7 @@ $sections = [
                 'icon' => 'bi-tools',
                 'url' => 'admin/materiel',
                 'btn' => 'Gérer le stock',
-            ],
+            ]*/
             [
                 'count' => $count['membres'] ?? 0,
                 'label' => 'Membre(s)',
