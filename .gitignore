@@ -1,3 +1,4 @@
 /htdocs/writable
 /htdocs/.env
 /htdocs/*.sql
+/htdocs/.ftp-deploy-sync-state.json
