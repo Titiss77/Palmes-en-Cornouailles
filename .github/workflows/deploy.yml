@@ -20,10 +20,10 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          server-dir: /
+          server-dir: palmes-en-cornouailles.22web.org/
           
           # 👇 AJOUTEZ CETTE LIGNE POUR DÉLOCALISER LE FICHIER DE SYNCHRO
-          state-name: htdocs/.ftp-deploy-sync-state.json
+          state-name: deployState/.ftp-deploy-sync-state.json
           
           exclude: |
             **/.git*
