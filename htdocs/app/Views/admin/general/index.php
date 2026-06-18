@@ -74,7 +74,7 @@
             <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-link-45deg"></i> Liens & Réseaux</h5>
 
             <div class="form-group mb-3">
-                <label class="fw-bold mb-1"><i class="bi bi-facebook text-primary"></i> Dossier de réinscription</label>
+                <label class="fw-bold mb-1">Dossier d'inscription</label>
                 <input type="url" name="lienFormulaire" class="form-input w-100 p-2"
                     value="<?php echo old('lienFormulaire', $item['lienFormulaire'] ?? $item['LienFormulaire'] ?? ''); ?>">
             </div>

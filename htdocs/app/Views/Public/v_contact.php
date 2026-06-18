@@ -56,7 +56,7 @@ $destinataires = [
                 <?php if ($lienFormulaire) { ?>
                 <a href="<?php echo esc($lienFormulaire); ?>" target="_blank"
                     class="btn-home d-inline-flex align-items-center gap-2 text-decoration-none">
-                    Acceder au formulaire d'inscription en ligne
+                    Accéder au formulaire d'inscription
                 </a>
                 <?php } ?>
             </ul>
