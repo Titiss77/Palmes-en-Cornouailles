@@ -73,11 +73,17 @@
 
             <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-link-45deg"></i> Liens & Réseaux</h5>
 
+            <div class="form-group mb-3">
+                <label class="fw-bold mb-1"><i class="bi bi-facebook text-primary"></i> Dossier de réinscription</label>
+                <input type="url" name="lienFormulaire" class="form-input w-100 p-2"
+                    value="<?php echo old('lienFormulaire', $item['lienFormulaire'] ?? $item['LienFormulaire'] ?? ''); ?>">
+            </div>
+
             <div class="grid-2 gap-4">
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1"><i class="bi bi-facebook text-primary"></i> Facebook</label>
                     <input type="url" name="lienFacebook" class="form-input w-100 p-2"
-                        value="<?php echo old('lienFacebook', $item['lienFacebook']); ?>">
+                        value="<?php echo old('lienFacebook', $item['lienFacebook'] ?? ''); ?>">
                 </div>
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1"><i class="bi bi-instagram text-danger"></i> Instagram</label>

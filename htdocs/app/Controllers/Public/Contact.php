@@ -32,6 +32,7 @@ class Contact extends BaseController
             'materiel' => $this->inscrModel->getMateriel(),
             'membres' => $this->donneesModel->getBureau(),
             'groupes' => $this->groupeModel->getGroupes(),
+            'lienFormulaire' => $this->inscrModel->getForm(),
         ];
 
         return $this->_render('Public/v_contact', $data);

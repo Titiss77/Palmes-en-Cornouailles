@@ -27,6 +27,7 @@ class General extends BaseAdminController
                 'description' => '', 'philosophie' => '',
                 'nombreNageurs' => 0, 'nombreHommes' => 0,
                 'projetSportif' => '',
+                'lienFormulaire' => '',
                 'lienFacebook' => '', 'lienInstagram' => '', 'lienffessm' => '', 'lienDrive' => '', 'lienDecatPro' => '',
                 'logo_path' => null, 'groupe_path' => null, 'ffessm_path' => null,
             ];
@@ -71,6 +72,7 @@ class General extends BaseAdminController
             'nombreNageurs' => $this->request->getPost('nombreNageurs'),
             'nombreHommes' => $this->request->getPost('nombreHommes'),
             'projetSportif' => $this->request->getPost('projetSportif'),
+            'lienFormulaire' => $this->request->getPost('lienFormulaire'),
             'lienFacebook' => $this->request->getPost('lienFacebook'),
             'lienInstagram' => $this->request->getPost('lienInstagram'),
             'lienffessm' => $this->request->getPost('lienffessm'),

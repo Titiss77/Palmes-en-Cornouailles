@@ -16,7 +16,7 @@ class GeneralModel extends Model
     // Champs correspondant strictement à la migration
     protected $allowedFields = [
         'nomClub', 'description', 'philosophie',
-        'nombreNageurs', 'nombreHommes', 'projetSportif',
+        'nombreNageurs', 'nombreHommes', 'projetSportif', 'lienFormulaire',
         'lienFacebook', 'lienInstagram', 'lienffessm', 'lienDrive',
         'mailClub', 'adresse', 'image_id', 'image_groupe_id', 'logoffessm_id', 'lienDecatPro',
     ];

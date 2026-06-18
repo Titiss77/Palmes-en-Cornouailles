@@ -53,6 +53,12 @@ $destinataires = [
                     class="btn-home d-inline-flex align-items-center gap-2 text-decoration-none">
                     <i class="bi bi-download"></i> Télécharger le certificat
                 </a>
+                <?php if ($lienFormulaire) { ?>
+                <a href="<?php echo esc($lienFormulaire); ?>" target="_blank"
+                    class="btn-home d-inline-flex align-items-center gap-2 text-decoration-none">
+                    Acceder au formulaire d'inscription en ligne
+                </a>
+                <?php } ?>
             </ul>
         </section>
 

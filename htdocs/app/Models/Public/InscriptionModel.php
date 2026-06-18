@@ -29,4 +29,13 @@ class InscriptionModel extends Model
         // On retourne 'mailClub' si le résultat existe, sinon null
         return $result ? $result->mailClub : null;
     }
+
+    public function getForm()
+    {
+        // On sélectionne la colonne 'LienFormulaire'
+        $result = $this->db->table('general')->select('LienFormulaire')->limit(1)->get()->getRow();
+
+        // On retourne 'LienFormulaire' si le résultat existe, sinon null
+        return $result ? $result->LienFormulaire : null;
+    }
 }
