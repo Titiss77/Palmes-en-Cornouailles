@@ -229,6 +229,7 @@ class Donnees extends Model
             ->join('membre_fonction mf', 'm.id = mf.membre_id')
             ->join('fonctions f', 'mf.fonction_id = f.id')
             ->where('f.titre', $titreFonction)
+            ->orderBy('m.nom', 'ASC')
             ->get()
             ->getResultArray()
         ;
