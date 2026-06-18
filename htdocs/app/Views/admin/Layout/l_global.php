@@ -19,7 +19,7 @@ $menuItems = [
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Mea+Culpa&family=Montserrat:wght@900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <title><?php echo $titrePage; ?></title>
+    <title><?php echo $titrePage; ?> - Administration</title>
     <?php if (!empty($general['image'])) { ?>
     <link rel="icon" type="image/png" href="<?php echo base_url($general['image']); ?>">
     <?php } ?>
