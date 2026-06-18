@@ -23,7 +23,7 @@ jobs:
           server-dir: palmes-en-cornouailles.22web.org/
           
           # 👇 AJOUTEZ CETTE LIGNE POUR DÉLOCALISER LE FICHIER DE SYNCHRO
-          state-name: deployState/.ftp-deploy-sync-state.json
+          state-name: palmes-en-cornouailles.22web.org/.ftp-deploy-sync-state.json
           
           exclude: |
             **/.git*
