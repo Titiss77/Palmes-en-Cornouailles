@@ -67,10 +67,14 @@ class BaseAdminController extends BaseController
                 if (empty($extension)) {
                     $extension = $file->guessExtension();
                 }
-                $newName = $this->sanitizeFilename($customName).'.'.$extension;
+                
+                // AJOUT DU TIMESTAMP (time) POUR CASSER LE CACHE ET FORCER UN NOUVEL ID
+                $newName = $this->sanitizeFilename($customName) . '_' . time() . '.' . $extension;
             } else {
-                // Sinon comportement par défaut (nom du fichier d'origine)
-                $newName = $file->getName();
+                // Comportement par défaut (nom d'origine + timestamp pour sécuriser aussi)
+                $extension = $file->getExtension() ?: $file->guessExtension();
+                $baseName = pathinfo($file->getName(), PATHINFO_FILENAME);
+                $newName = $this->sanitizeFilename($baseName) . '_' . time() . '.' . $extension;
             }
             // FIN MODIFICATION --------------------------------
 
@@ -80,8 +84,6 @@ class BaseAdminController extends BaseController
                 mkdir(FCPATH.'uploads/'.$pathStr, 0o777, true);
             }
 
-            // Note: CodeIgniter gère automatiquement les doublons en ajoutant _1, _2 si le fichier existe déjà
-            // sauf si vous ajoutez le paramètre true pour écraser : $file->move(..., ..., true);
             $file->move(FCPATH.'uploads/'.$pathStr, $newName);
             $fullPath = $pathStr.$newName;
 
@@ -96,7 +98,7 @@ class BaseAdminController extends BaseController
 
             $builder->insert([
                 'path' => $fullPath,
-                'alt' => $customName ?: $file->getClientName(),  // On peut aussi utiliser le nom comme ALT
+                'alt' => $customName ?: $file->getClientName(),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
