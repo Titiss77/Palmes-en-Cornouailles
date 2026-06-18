@@ -1,0 +1,39 @@
+name: Deploiement vers ByetHost FTP
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: 🎉 Déploiement FTP
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Récupération du code
+        uses: actions/checkout@v3
+
+      - name: 📂 Synchronisation FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          server-dir: /
+          
+          # 👇 AJOUTEZ CETTE LIGNE POUR DÉLOCALISER LE FICHIER DE SYNCHRO
+          state-name: htdocs/.ftp-deploy-sync-state.json
+          
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            !**/.gitignore
+            tests/**
+            user_guide_src/**
+            phpunit.xml.dist
+            .env
+            spark
+            README.md
+            LICENSE
