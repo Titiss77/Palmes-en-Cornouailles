@@ -43,7 +43,7 @@
         padding: 12px 25px;
         text-decoration: none;
         display: inline-block;
-        margin-top: 10px;
+        margin: 10px;
         transition: all 0.3s ease;
     }
 
