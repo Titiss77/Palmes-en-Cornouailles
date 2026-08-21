@@ -1,6 +1,6 @@
 version: '3.8'
 
-name: palmes-en-cornouailles
+name: PEC
 
 services:
   web:
