@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 $sections = [
     [
         'section' => 'accueil',
@@ -12,49 +10,57 @@ $sections = [
                 'desc' => 'Configuration générale du club',
                 'icon' => 'bi-sliders',
                 'url' => 'admin/general',
-                'btn' => 'Modifier les infos',
+                'btn' => 'Modifier les infos'
             ],
             [
-                'count' => $count['actualites'] ?? 0,
-                'label' => 'Événement(s)',
+                'count' => $count['actualites'],
+                'label' => 'Événements',
                 'desc' => 'Articles',
                 'icon' => 'bi-newspaper',
                 'url' => 'admin/actualites',
-                'btn' => 'Gérer les contenus',
+                'btn' => 'Gérer les contenus'
             ],
             [
-                'count' => $count['disciplines'] ?? 0,
-                'label' => 'Discipline(s)',
+                'count' => $count['palmares'],
+                'label' => 'Palmares',
+                'desc' => 'Résultats des compétitions',
+                'icon' => 'bi-trophy',
+                'url' => 'admin/palmares',
+                'btn' => 'Gérer les contenus'
+            ],
+            [
+                'count' => $count['disciplines'],
+                'label' => 'Disciplines',
                 'desc' => "Types d'activités & Sports proposés",
                 'icon' => 'bi-geo-alt',
                 'url' => 'admin/disciplines',
-                'btn' => 'Gérer les disciplines',
+                'btn' => 'Gérer les disciplines'
             ],
             [
-                'count' => $count['membres'] ?? 0,
-                'label' => 'Membre(s)',
+                'count' => $count['membres'],
+                'label' => 'Membres',
                 'desc' => 'Bureau, Coachs & Fonctions',
                 'icon' => 'bi-people',
                 'url' => 'admin/membres',
-                'btn' => "Gérer l'équipe",
+                'btn' => "Gérer l'équipe"
             ],
             [
-                'count' => $count['piscines'] ?? 0,
+                'count' => $count['piscines'],
                 'label' => 'Lieux',
                 'desc' => "Piscines & Bassins d'entraînement",
                 'icon' => 'bi-geo-alt',
                 'url' => 'admin/piscines',
-                'btn' => 'Gérer les sites',
+                'btn' => 'Gérer les sites'
             ],
             [
-                'count' => $count['partenaires'] ?? 0,
-                'label' => 'Partenaire(s)',
+                'count' => $count['partenaires'],
+                'label' => 'Partenaires',
                 'desc' => 'Organismes & Collaborateurs',
                 'icon' => 'bi-people',
                 'url' => 'admin/partenaires',
-                'btn' => 'Gérer les partenaires',
+                'btn' => 'Gérer les partenaires'
             ],
-        ],
+        ]
     ],
     [
         'section' => 'contact',
@@ -62,30 +68,29 @@ $sections = [
         'icon' => 'bi-gear',
         'cards' => [
             [
-                'count' => $count['groupes'] ?? 0,
-                'label' => 'Groupe(s)',
+                'count' => $count['groupes'],
+                'label' => 'Groupes',
                 'desc' => 'Configuration des tarifs de chaques groupes',
                 'icon' => 'bi-sliders',
                 'url' => 'admin/groupes',
-                'btn' => 'Modifier les infos',
+                'btn' => 'Modifier les infos'
             ],
-            /*
             [
-                'count' => $count['materiel'] ?? 0,
-                'label' => 'Matériel(s)',
+                'count' => $count['materiel'],
+                'label' => 'Matériel',
                 'desc' => 'Inventaire & Prêts de palmes',
                 'icon' => 'bi-tools',
                 'url' => 'admin/materiel',
-                'btn' => 'Gérer le stock',
-            ]*/
+                'btn' => 'Gérer le stock'
+            ],
             [
-                'count' => $count['membres'] ?? 0,
-                'label' => 'Membre(s)',
+                'count' => $count['membres'],
+                'label' => 'Membres',
                 'desc' => 'Modifications des membres en général',
                 'icon' => 'bi-people',
                 'url' => 'admin/membres',
-                'btn' => "Gérer l'équipe",
+                'btn' => "Gérer l'équipe"
             ],
-        ],
-    ],
+        ]
+    ]
 ];

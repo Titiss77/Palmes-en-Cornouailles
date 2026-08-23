@@ -9,6 +9,7 @@ use CodeIgniter\Router\RouteCollection;
 // --- ROUTES PUBLIQUES ---
 $routes->get('/', 'Public\Home::index');
 $routes->get('groupes', 'Public\Home::groupes');
+$routes->get('palmares', 'Public\Home::palmares');
 $routes->get('actu/(:segment)', 'Public\Home::actu/$1');
 $routes->get('calendriers', 'Public\Home::calendriers');
 $routes->get('boutique', 'Public\Home::boutique');
@@ -76,6 +77,10 @@ $routes->group('admin', ['filter' => 'auth', 'namespace' => 'App\Controllers\adm
     $routes->post('actualites/processImport', 'Actualites::processImport');
     $routes->get('actualites/(:num)/delete', 'Actualites::delete/$1');
     $routes->get('actualites/(:num)/deleteImage', 'Actualites::deleteImage/$1');
+
+    $routes->get('palmares/(:num)/delete', 'Palmares::delete/$1');
+    $routes->get('palmares/(:num)/deleteImage', 'Palmares::deleteImage/$1');
+    $routes->resource('palmares', ['controller' => 'Palmares']);
 
     $routes->resource('actualites', ['controller' => 'Actualites']);
     $routes->resource('boutiques', ['controller' => 'Boutiques']);

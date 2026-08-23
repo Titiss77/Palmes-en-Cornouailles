@@ -115,10 +115,10 @@
 
         <h3 class="title-section">Nos groupes</h3>
         <div class="grid-responsive">
-            <?php foreach ($groupes as $d) { ?>
-            <div class="card-item hover-effect" style="background:<?php echo esc($d['codeCouleur'], 'attr'); ?>;">
-                <img src="<?php echo esc(base_url('uploads/' . $d['image']), 'attr'); ?>"
-                    alt="<?php echo esc($d['nom'], 'attr'); ?>" class="img-card" />
+            <?php foreach ($groupes as $d): ?>
+            <div class="card-item hover-effect" style="background:<?= esc($d['codeCouleur'], 'attr') ?>;">
+                <img src="<?= esc(base_url('uploads/' . $d['image']), 'attr'); ?>" alt="<?= esc($d['nom'], 'attr') ?>"
+                    class="img-card" />
                 <div class="p-3">
                     <h5><?php echo esc($d['nom']); ?></h5>
                     <p><?php echo esc($d['tranche_age']); ?></p>
@@ -163,13 +163,28 @@
             <?php } ?>
         </div>
 
+        <h3 class="title-section">Derniers podiums & résultats</h3>
+        <?php if (!empty($palmares)): ?>
+        <div class="card-item news-card">
+            <p class="small text-muted mb-2">
+                Cliquez pour voir tous les résultats de nos nageurs et nageuses.
+            </p>
+            <a href="<?= base_url('palmares') ?>" class="text-decoration-none small fw-bold"
+                style="color: var(--secondary);">
+                Afficher tous les résultats <i class="bi bi-arrow-right-short"></i>
+            </a>
+        </div>
+        <?php else: ?>
+        <p class=" text-center text-muted">Aucun résultat récent affichés.</p>
+        <?php endif; ?>
+
         <h3 class="title-section">Nos disciplines</h3>
         <div class="grid-responsive">
-            <?php if (!empty($disciplines)) { ?>
-            <?php foreach ($disciplines as $d) { ?>
+            <?php if (!empty($disciplines)): ?>
+            <?php foreach ($disciplines as $d): ?>
             <div class="card-item hover-effect">
-                <img src="<?php echo esc(base_url('uploads/' . $d['image']), 'attr'); ?>"
-                    alt="<?php echo esc($d['nom'], 'attr'); ?>" class="img-card" />
+                <img src="<?= esc(base_url('uploads/' . $d['image']), 'attr'); ?>" alt="<?= esc($d['nom'], 'attr') ?>"
+                    class="img-card" />
                 <div class="p-3">
                     <h5><?php echo esc($d['nom']); ?></h5>
                     <p><?php echo esc($d['description']); ?></p>

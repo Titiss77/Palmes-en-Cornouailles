@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
-use App\Controllers\Root;  // Note: Ensure this is intended to be used as a library object
+use App\Controllers\Root;
 use App\Models\Public\Donnees;
 use App\Models\Public\GroupeModel;
 use App\Models\Public\PartenaireModel;
@@ -17,6 +17,7 @@ class Home extends BaseController
     protected $root;
     protected $generalData;
     protected $partenaireModel;
+    protected $palmaresModel;  // AJOUT
 
     public function __construct()
     {
@@ -30,6 +31,7 @@ class Home extends BaseController
 
     public function index()
     {
+        
         $data = [
             'cssPage' => 'Public/accueil.css',
             'disciplines' => $this->donneesModel->getDisciplines(),
@@ -38,7 +40,7 @@ class Home extends BaseController
             'piscines' => $this->donneesModel->getPiscines(),
             'actualites' => $this->donneesModel->getActualites(),
             'groupes' => $this->groupeModel->getGroupes(),
-            'partenaires' => $this->partenaireModel->getPartenaires(),
+            'partenaires' => $this->partenaireModel->getPartenaires()
         ];
 
         return $this->_render('Public/v_accueil', $data);
@@ -113,19 +115,5 @@ class Home extends BaseController
         ];
 
         return $this->_render('Public/v_confidentialite', $data);
-    }
-
-    /**
-     * Helper to merge page-specific data with global data (Header, Footer, Styles).
-     */
-    private function _render(string $view, array $pageData = [])
-    {
-        $globalData = [
-            'root' => $this->root->getRootStyles(),
-            'general' => $this->generalData,
-            'titrePage' => $pageData['titrePage'] ?? $this->generalData['nomClub'],  // Default to Club Name
-        ];
-
-        return view($view, array_merge($globalData, $pageData));
     }
 }
