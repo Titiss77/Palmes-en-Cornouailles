@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Controllers\Public;
 
@@ -17,7 +15,6 @@ class Home extends BaseController
     protected $root;
     protected $generalData;
     protected $partenaireModel;
-    protected $palmaresModel;  // AJOUT
 
     public function __construct()
     {
@@ -25,13 +22,11 @@ class Home extends BaseController
         $this->groupeModel = new GroupeModel();
         $this->root = new Root();
         $this->partenaireModel = new PartenaireModel();
-
         $this->generalData = $this->donneesModel->getGeneral();
     }
 
     public function index()
     {
-        
         $data = [
             'cssPage' => 'Public/accueil.css',
             'disciplines' => $this->donneesModel->getDisciplines(),
@@ -40,7 +35,7 @@ class Home extends BaseController
             'piscines' => $this->donneesModel->getPiscines(),
             'actualites' => $this->donneesModel->getActualites(),
             'groupes' => $this->groupeModel->getGroupes(),
-            'partenaires' => $this->partenaireModel->getPartenaires()
+            'partenaires' => $this->partenaireModel->getPartenaires(),
         ];
 
         return $this->_render('Public/v_accueil', $data);
@@ -52,7 +47,6 @@ class Home extends BaseController
             'cssPage' => 'Public/groupes.css',
             'groupes' => $this->groupeModel->getGroupes(),
         ];
-
         return $this->_render('Public/v_groupes', $data);
     }
 
@@ -64,7 +58,6 @@ class Home extends BaseController
             'calendriers' => $this->donneesModel->getCalendriers(),
             'calendrierCompet' => $this->donneesModel->getCalendrier(),
         ];
-
         return $this->_render('Public/v_calendriers', $data);
     }
 
@@ -76,7 +69,6 @@ class Home extends BaseController
             'boutique' => $this->donneesModel->getBoutique(),
             'liensautres' => $this->donneesModel->getLiensAutres(),
         ];
-
         return $this->_render('Public/v_boutique', $data);
     }
 
@@ -87,22 +79,17 @@ class Home extends BaseController
             'titrePage' => 'actu',
             'actualites' => $this->donneesModel->getUneActualites($slug),
         ];
-
         return $this->_render('Public/v_actu', $data);
     }
 
-    // app/Controllers/Public/Home.php
-
     public function mentions_legales()
     {
-        // Vous pouvez passer des données au layout si nécessaire
         $data = [
             'titrePage' => 'Mentions Légales',
             'cssPage' => 'Public/legal.css',
             'general' => $this->generalData,
             'president' => $this->donneesModel->getPresident(),
         ];
-
         return $this->_render('Public/v_mentions_legales', $data);
     }
 
@@ -113,7 +100,20 @@ class Home extends BaseController
             'cssPage' => 'Public/legal.css',
             'general' => $this->generalData,
         ];
-
         return $this->_render('Public/v_confidentialite', $data);
+    }
+
+    /**
+     * Helper to merge page-specific data with global data (Header, Footer, Styles).
+     */
+    private function _render(string $view, array $pageData = [])
+    {
+        $globalData = [
+            'root' => $this->root->getRootStyles(),
+            'general' => $this->generalData,
+            'titrePage' => $pageData['titrePage'] ?? $this->generalData['nomClub'],
+        ];
+
+        return view($view, array_merge($globalData, $pageData));
     }
 }

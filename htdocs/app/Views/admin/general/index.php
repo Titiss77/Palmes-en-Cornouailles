@@ -1,16 +1,13 @@
 <?php echo $this->extend('admin/Layout/l_global'); ?>
 <?php echo $this->section('contenu'); ?>
 <?php echo $this->include('admin/retour'); ?>
-
 <div class="site-container">
     <div class="d-flex align-items-center mb-4">
         <h3 class="title-section mb-0">Configuration Générale</h3>
     </div>
-
     <?php if (session()->getFlashdata('success')) { ?>
     <div class="alert alert-success text-center mb-4"><?php echo session()->getFlashdata('success'); ?></div>
     <?php } ?>
-
     <?php if (session()->getFlashdata('errors')) { ?>
     <div class="alert alert-danger mb-4 p-3">
         <ul class="mb-0 ps-3">
@@ -20,13 +17,10 @@
         </ul>
     </div>
     <?php } ?>
-
     <div class="card-item p-4">
         <form action="<?php echo base_url('admin/general/update'); ?>" method="post" enctype="multipart/form-data">
             <?php echo csrf_field(); ?>
-
             <h5 class="text-primary border-bottom pb-2 mb-3"><i class="bi bi-building"></i> Identité & Contact</h5>
-
             <div class="grid-2 gap-4">
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Nom du club *</label>
@@ -44,19 +38,16 @@
                         value="<?php echo old('adresse', $item['adresse']); ?>">
                 </div>
             </div>
-
             <div class="form-group mb-3">
                 <label class="fw-bold mb-1">Description générale</label>
                 <textarea name="description" rows="3"
                     class="form-input w-100 p-2"><?php echo old('description', $item['description']); ?></textarea>
             </div>
-
             <div class="form-group mb-3">
                 <label class="fw-bold mb-1">Philosophie du club</label>
                 <textarea name="philosophie" rows="3"
                     class="form-input w-100 p-2"><?php echo old('philosophie', $item['philosophie']); ?></textarea>
             </div>
-
             <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-graph-up"></i> Chiffres Clés</h5>
             <div class="grid-2 gap-4">
                 <div class="form-group mb-3">
@@ -70,15 +61,21 @@
                         value="<?php echo old('nombreHommes', $item['nombreHommes']); ?>">
                 </div>
             </div>
-
-            <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-link-45deg"></i> Liens & Réseaux</h5>
-
-            <div class="form-group mb-3">
-                <label class="fw-bold mb-1">Dossier d'inscription</label>
+            
+            <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-megaphone"></i> Campagne de Réinscription</h5>
+            <div class="form-group mb-3 border p-3 rounded bg-light">
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" role="switch" id="campagne_active" name="campagne_active" value="1" <?php echo (old('campagne_active', $item['campagne_active'] ?? 0) == 1) ? 'checked' : ''; ?>>
+                    <label class="form-check-label fw-bold" for="campagne_active">Activer la campagne de réinscription</label>
+                </div>
+                <small class="text-muted d-block mb-3">Si activé, le bloc d'annonce apparaîtra sur la page d'accueil et le bouton sera visible sur la page contact.</small>
+                
+                <label class="fw-bold mb-1">Lien du formulaire d'inscription</label>
                 <input type="url" name="lienFormulaire" class="form-input w-100 p-2"
-                    value="<?php echo old('lienFormulaire', $item['lienFormulaire'] ?? $item['LienFormulaire'] ?? ''); ?>">
+                    value="<?php echo old('lienFormulaire', $item['lienFormulaire'] ?? ''); ?>" placeholder="https://...">
             </div>
 
+            <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-link-45deg"></i> Liens & Réseaux</h5>
             <div class="grid-2 gap-4">
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1"><i class="bi bi-facebook text-primary"></i> Facebook</label>
@@ -91,7 +88,6 @@
                         value="<?php echo old('lienInstagram', $item['lienInstagram']); ?>">
                 </div>
             </div>
-
             <div class="grid-2 gap-4">
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Lien FFESSM</label>
@@ -109,26 +105,21 @@
                         value="<?php echo old('lienDecatPro', $item['lienDecatPro']); ?>">
                 </div>
             </div>
-
             <div class="form-group mb-3">
                 <label class="fw-bold mb-1">Projet Sportif (Titre ou Lien)</label>
                 <input type="text" name="projetSportif" class="form-input w-100 p-2"
                     value="<?php echo old('projetSportif', $item['projetSportif']); ?>">
             </div>
-
             <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-images"></i> Gestion des Images</h5>
-
             <div class="mb-4 border p-3 rounded bg-light images-gen">
                 <div class="d-flex align-items-center mb-2">
                     <img src="<?php echo base_url('favicon.ico?v='.time()); ?>"
                         class="me-3 bg-white border rounded p-1 img-favicon">
-
                     <input type="file" name="image" class="form-input flex-grow-1 p-2" accept="image/*">
                 </div>
                 <small class="text-muted"><i class="bi bi-info-circle"></i> Le fichier sera renommé
                     <code>favicon.ico</code> et remplacera l'actuel à la racine.</small>
             </div>
-
             <div class="mb-4 border p-3 rounded bg-light images-gen">
                 <div class="d-flex align-items-center mb-2">
                     <?php if (!empty($item['groupe_path'])) { ?>
@@ -140,7 +131,6 @@
                     <input type="file" name="image_groupe" class="form-input flex-grow-1 p-2" accept="image/*">
                 </div>
             </div>
-
             <div class="text-end">
                 <button type="submit" class="btn-home btn-lg"><i class="bi bi-check-circle"></i> Enregistrer les
                     modifications</button>

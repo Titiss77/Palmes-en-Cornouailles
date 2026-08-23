@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Models\admin;
 
@@ -19,6 +17,7 @@ class GeneralModel extends Model
         'nombreNageurs', 'nombreHommes', 'projetSportif', 'lienFormulaire',
         'lienFacebook', 'lienInstagram', 'lienffessm', 'lienDrive',
         'mailClub', 'adresse', 'image_id', 'image_groupe_id', 'logoffessm_id', 'lienDecatPro',
+        'campagne_active'
     ];
 
     /**

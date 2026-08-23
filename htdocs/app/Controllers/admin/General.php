@@ -18,7 +18,6 @@ class General extends BaseAdminController
     public function index()
     {
         $data = $this->getCommonData('Identité du Club', 'admin/page.css');
-
         $item = $this->generalModel->getGeneralWithRelations();
 
         if (!$item) {
@@ -30,11 +29,11 @@ class General extends BaseAdminController
                 'lienFormulaire' => '',
                 'lienFacebook' => '', 'lienInstagram' => '', 'lienffessm' => '', 'lienDrive' => '', 'lienDecatPro' => '',
                 'logo_path' => null, 'groupe_path' => null, 'ffessm_path' => null,
+                'campagne_active' => 0,
             ];
         }
 
         $data['item'] = $item;
-
         return view('admin/general/index', $data);
     }
 
@@ -78,6 +77,7 @@ class General extends BaseAdminController
             'lienffessm' => $this->request->getPost('lienffessm'),
             'lienDrive' => $this->request->getPost('lienDrive'),
             'lienDecatPro' => $this->request->getPost('lienDecatPro'),
+            'campagne_active' => $this->request->getPost('campagne_active') ? 1 : 0,
         ];
 
         // On met à jour les IDs seulement pour les images gérées en base
@@ -87,6 +87,7 @@ class General extends BaseAdminController
         if ($ffessmLogoId) {
             $data['logoffessm_id'] = $ffessmLogoId;
         }
+
         // On ne touche plus à 'image_id' pour le logo principal
 
         if ($id) {
