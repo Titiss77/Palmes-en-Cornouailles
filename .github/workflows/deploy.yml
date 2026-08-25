@@ -47,7 +47,7 @@ jobs:
           protocol: ftp
           # Utilisez le chemin exact vers le dossier htdocs du site 1
           local-dir: palmes-en-cornouaille.fr/htdocs/
-          server-dir: /palmes-en-cornouaille.fr/htdocs/
+          server-dir: palmes-en-cornouaille.fr/htdocs/
           state-name: .ftp-deploy-sync-state.json
           exclude: |
             **/.git*
@@ -80,7 +80,7 @@ jobs:
           protocol: ftp
           # Utilisez le chemin exact vers le dossier htdocs du site 2
           local-dir: palmes-en-cornouailles.22web.org/htdocs/
-          server-dir: /palmes-en-cornouailles.22web.org/htdocs/
+          server-dir: palmes-en-cornouailles.22web.org/htdocs/
           state-name: .ftp-deploy-sync-state.json
           exclude: |
             **/.git*
