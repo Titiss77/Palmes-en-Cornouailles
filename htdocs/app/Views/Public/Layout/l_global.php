@@ -16,8 +16,10 @@ $menuItems = [
     <link rel="icon" type="image/png" href="<?= base_url('uploads/' . $general['image']); ?>">
     <?php endif; ?>
     <?= view('css/dynamic_root', ['root' => $root]); ?>
-    <link rel="stylesheet" href="<?= base_url('Assets/css/Public/global.css'); ?>">
-    <link rel="stylesheet" href="<?= base_url('Assets/css/' . $cssPage); ?>">
+    <link rel="stylesheet"
+        href="<?= base_url('Assets/css/Public/global.css?v=' . filemtime(FCPATH . 'Assets/css/Public/global.css')); ?>">
+    <link rel="stylesheet"
+        href="<?= base_url('Assets/css/' . $cssPage . '?v=' . filemtime(FCPATH . 'Assets/css/' . $cssPage)); ?>">
 </head>
 <nav>
     <div class="nav-brand">

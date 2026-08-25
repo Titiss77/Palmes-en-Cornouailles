@@ -11,7 +11,7 @@
 
     <?php if (isset($general['campagne_active']) && $general['campagne_active'] == 1): ?>
     <div class="cta-reinscription">
-        <h2><i class="bi bi-megaphone-fill"></i> Campagne de Réinscriptions</h2>
+        <h2><i class="bi bi-megaphone-fill"></i> Campagne d'inscriptions</h2>
         <p class="mb-3">Les dossiers d'inscriptions et les informations tarifaires pour la nouvelle saison sont
             disponibles.</p>
         <a href="<?php echo base_url('/contact'); ?>" class="btn-reinscription">
