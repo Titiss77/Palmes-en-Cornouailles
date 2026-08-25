@@ -267,14 +267,6 @@ img {
     transition: all 0.3s ease-in-out;
 }
 
-.img-logo,
-.img-font {
-    display: grid;
-    justify-items: center;
-    justify-content: center;
-    gap: 2rem;
-}
-
 /* =========================================
    RESPONSIVE (Tablette & Mobile)
    ========================================= */

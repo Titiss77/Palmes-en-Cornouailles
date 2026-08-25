@@ -416,6 +416,14 @@ input[type="file"]::file-selector-button:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.img-logo,
+.img-font {
+    display: grid;
+    justify-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
 /* Responsive pour mobiles */
 @media (max-width: 600px) {
     .grid-2 {
