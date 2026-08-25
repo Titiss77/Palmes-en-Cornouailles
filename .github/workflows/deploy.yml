@@ -20,7 +20,7 @@ jobs:
       - name: 📦 Préparation de tous les sites (Composer & Cache)
         run: |
           # Ajoute bien tous tes chemins séparés par des espaces
-          for site in htdocs palmes-en-cornouaille.fr/htdocs palmes-en-cornouaille.22web.org/htdocs; do
+          for site in palmes-en-cornouaille.fr/htdocs palmes-en-cornouailles.22web.org/htdocs; do
             if [ -d "$site" ]; then
               echo "Préparation de $site..."
               cd $site
