@@ -9,6 +9,34 @@ concurrency:
   group: deploy-byethost
   cancel-in-progress: false
 
+env:
+  # === NOUVELLE VARIABLE ICI ===
+  SITE_NAME: "palmes-en-cornouaille.fr"
+  
+  EXCLUDES: &ftp_excludes |
+    **/.git*
+    **/.git*/**
+    **/.github/**
+    **/.env
+    **/spark
+    **/phpunit.xml.dist
+    **/README.md
+    **/LICENSE
+    **/composer.json
+    **/composer.lock
+    **/tests/**
+    **/user_guide_src/**
+    **/vendor/phpunit/**
+    **/vendor/fakerphp/**
+    **/vendor/symfony/**
+    **/vendor/mockery/**
+    **/sites_non_lances/**
+    **/writable/cache/**
+    **/writable/logs/**
+    **/writable/session/**
+    **/public/uploads/**
+    **/uploads/**
+
 jobs:
   web-deploy:
     name: 🎉 Déploiement FTP
@@ -17,56 +45,32 @@ jobs:
       - name: 🚚 Récupération du code
         uses: actions/checkout@v4
 
-      - name: 📦 Préparation de tous les sites (Composer & Cache)
+      - name: 📦 Préparation du site (Composer & Cache)
         run: |
-          # Ajoute bien tous tes chemins séparés par des espaces
-          for site in palmes-en-cornouaille.fr/htdocs palmes-en-cornouailles.22web.org/htdocs; do
-            if [ -d "$site" ]; then
-              echo "Préparation de $site..."
-              cd $site
-              
-              if [ -f "composer.json" ]; then
-                # Va générer un vendor tout neuf sans les dépendances de dev
-                composer install --no-dev --optimize-autoloader
-              fi
-              
-              if [ -d "writable/cache" ]; then
-                rm -rf writable/cache/*
-              fi
-              
-              cd - > /dev/null
+          # Utilisation de la variable d'environnement
+          site="${{ env.SITE_NAME }}/htdocs"
+          if [ -d "$site" ]; then
+            echo "Préparation de $site..."
+            cd "$site"
+            
+            if [ -f "composer.json" ]; then
+              composer install --no-dev --optimize-autoloader --no-progress --no-interaction
             fi
-          done
+            
+            [ -d "writable/cache" ] && rm -f writable/cache/*
+            
+            cd - > /dev/null
+          fi
 
-      - name: 📂 Déploiement Site 1 (palmes-en-cornouaille.fr)
+      - name: 📂 Déploiement Site (${{ env.SITE_NAME }})
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          local-dir: palmes-en-cornouaille.fr/htdocs/
-          server-dir: palmes-en-cornouaille.fr/htdocs/
-          # On change le nom pour éviter le blocage de ByetHost
+          # Injection de la variable dans les chemins
+          local-dir: ${{ env.SITE_NAME }}/htdocs/
+          server-dir: ${{ env.SITE_NAME }}/htdocs/
           state-name: sync-state.txt
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            **/.env
-            **/spark
-            **/phpunit.xml.dist
-            **/README.md
-            **/LICENSE
-            **/composer.json
-            **/composer.lock
-            **/tests/**
-            **/user_guide_src/**
-            **/vendor/phpunit/**
-            **/vendor/fakerphp/**
-            **/vendor/symfony/**
-            **/vendor/mockery/**
-            **/sites_non_lances/**
-            **/writable/cache/**
-            **/writable/logs/**
-            **/writable/session/**
+          exclude: *ftp_excludes
