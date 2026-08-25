@@ -38,16 +38,51 @@ jobs:
             fi
           done
 
-      - name: 📂 Synchronisation FTP Globale
+      - name: 📂 Déploiement Site 1 (palmes-en-cornouaille.fr)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          server-dir: /
-          state-name: palmes-en-cornouaille.fr/htdocs/.ftp-deploy-sync-state.json
-          
+          # On cible directement le sous-dossier local et distant
+          local-dir: palmes-en-cornouaille.fr/htdocs/
+          server-dir: /palmes-en-cornouaille.fr/htdocs/
+          # On laisse le nom par défaut sans sous-dossier
+          state-name: .ftp-deploy-sync-state.json
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.env
+            **/spark
+            **/phpunit.xml.dist
+            **/README.md
+            **/LICENSE
+            **/composer.json
+            **/composer.lock
+            **/tests/**
+            **/user_guide_src/**
+            **/vendor/phpunit/**
+            **/vendor/fakerphp/**
+            **/vendor/symfony/**
+            **/vendor/mockery/**
+            **/sites_non_lances/**
+            **/writable/cache/**
+            **/writable/logs/**
+            **/writable/session/**
+
+      - name: 📂 Déploiement Site 2 (palmes-en-cornouailles.22web.org)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          # On cible le deuxième site
+          local-dir: palmes-en-cornouailles.22web.org/htdocs/
+          server-dir: /palmes-en-cornouailles.22web.org/htdocs/
+          state-name: .ftp-deploy-sync-state.json
           exclude: |
             **/.git*
             **/.git*/**
