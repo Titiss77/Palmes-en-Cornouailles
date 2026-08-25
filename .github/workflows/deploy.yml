@@ -5,18 +5,15 @@ on:
     branches:
       - main
 
-concurrency:
-  group: deploy-byethost
-  cancel-in-progress: false
-
 jobs:
   web-deploy:
     name: 🎉 Déploiement FTP
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Récupération du code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
+<<<<<<< HEAD
       - name: 📦 Préparation de tous les sites (Composer & Cache)
         run: |
           # Ajoute bien tous tes chemins séparés par des espaces
@@ -39,12 +36,16 @@ jobs:
           done
 
       - name: 📂 Déploiement Site 1 (palmes-en-cornouaille.fr)
+=======
+      - name: 📂 Synchronisation FTP
+>>>>>>> parent of 87a6110 (Update deploy.yml)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
+<<<<<<< HEAD
           # On cible directement le sous-dossier local et distant
           local-dir: /
           server-dir: /palmes-en-cornouaille.fr/htdocs/
@@ -83,24 +84,23 @@ jobs:
           local-dir: /
           server-dir: /palmes-en-cornouailles.22web.org/htdocs/
           state-name: .ftp-deploy-sync-state.json
+=======
+          server-dir: palmes-en-cornouaille.fr/
+
+          # 👇 AJOUTEZ CETTE LIGNE POUR DÉLOCALISER LE FICHIER DE SYNCHRO
+          state-name: htdocs/.ftp-deploy-sync-state.json
+
+>>>>>>> parent of 87a6110 (Update deploy.yml)
           exclude: |
             **/.git*
             **/.git*/**
             **/.github/**
-            **/.env
-            **/spark
-            **/phpunit.xml.dist
-            **/README.md
-            **/LICENSE
-            **/composer.json
-            **/composer.lock
-            **/tests/**
-            **/user_guide_src/**
-            **/vendor/phpunit/**
-            **/vendor/fakerphp/**
-            **/vendor/symfony/**
-            **/vendor/mockery/**
-            **/sites_non_lances/**
-            **/writable/cache/**
-            **/writable/logs/**
-            **/writable/session/**
+            !**/.gitignore
+            tests/**
+            user_guide_src/**
+            phpunit.xml.dist
+            .env
+            spark
+            README.md
+            LICENSE
+            .ftp-deploy-sync-state.json
