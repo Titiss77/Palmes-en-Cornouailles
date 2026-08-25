@@ -1,4 +1,4 @@
-/htdocs/writable
-/htdocs/.env
-/htdocs/*.sql
+palmes-en-cornouaille.fr/htdocs/writable
+palmes-en-cornouaille.fr/htdocs/.env
+palmes-en-cornouaille.fr/htdocs/*.sql
 /htdocs/.ftp-deploy-sync-state.json
