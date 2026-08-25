@@ -5,36 +5,67 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-byethost
+  cancel-in-progress: false
+
 jobs:
   web-deploy:
     name: 🎉 Déploiement FTP
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Récupération du code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: 📂 Synchronisation FTP
+      - name: 📦 Préparation de tous les sites (Composer & Cache)
+        run: |
+          # Ajoute bien tous tes chemins séparés par des espaces
+          for site in htdocs palmes-en-cornouaille/htdocs; do
+            if [ -d "$site" ]; then
+              echo "Préparation de $site..."
+              cd $site
+              
+              if [ -f "composer.json" ]; then
+                # Va générer un vendor tout neuf sans les dépendances de dev
+                composer install --no-dev --optimize-autoloader
+              fi
+              
+              if [ -d "writable/cache" ]; then
+                rm -rf writable/cache/*
+              fi
+              
+              cd - > /dev/null
+            fi
+          done
+
+      - name: 📂 Synchronisation FTP Globale
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          server-dir: palmes-en-cornouaille.fr/
-
-          # 👇 AJOUTEZ CETTE LIGNE POUR DÉLOCALISER LE FICHIER DE SYNCHRO
-          state-name: htdocs/.ftp-deploy-sync-state.json
-
+          server-dir: /
+          state-name: palmes-en-cornouaille.fr/.ftp-deploy-sync-state.json
+          
           exclude: |
             **/.git*
             **/.git*/**
             **/.github/**
-            !**/.gitignore
-            tests/**
-            user_guide_src/**
-            phpunit.xml.dist
-            .env
-            spark
-            README.md
-            LICENSE
-            .ftp-deploy-sync-state.json
+            **/.env
+            **/spark
+            **/phpunit.xml.dist
+            **/README.md
+            **/LICENSE
+            **/composer.json
+            **/composer.lock
+            **/tests/**
+            **/user_guide_src/**
+            **/vendor/phpunit/**
+            **/vendor/fakerphp/**
+            **/vendor/symfony/**
+            **/vendor/mockery/**
+            **/sites_non_lances/**
+            **/writable/cache/**
+            **/writable/logs/**
+            **/writable/session/**
