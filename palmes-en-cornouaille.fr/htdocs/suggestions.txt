@@ -32,6 +32,8 @@ FAIT :
 RESTE A FAIRE :
 - Finir la mise en page du css pour le palmarès
 
+- jen ai marre
+
 
 
 
