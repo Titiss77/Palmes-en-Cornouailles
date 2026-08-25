@@ -1,0 +1,217 @@
+DEBUG - 2026-06-18 20:29:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 20:30:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 20:34:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 20:34:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 20:34:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 20:34:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 20:34:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:56:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:56:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:57:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:58:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:59:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:59:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:59:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:59:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 21:59:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:00:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:06:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:07:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-06-18 22:12:15 --> mysqli_sql_exception: Unknown column 'LienFormulaire' in 'field list' in C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php:387
+Stack trace:
+#0 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php(387): mysqli->query('SELECT `LienFor...', 0)
+#1 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `LienFor...')
+#2 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `LienFor...')
+#3 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `LienFor...', Array, false)
+#4 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\app\Models\Public\InscriptionModel.php(36): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\app\Controllers\Public\Contact.php(35): App\Models\Public\InscriptionModel->getForm()
+#6 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(887): App\Controllers\Public\Contact->index()
+#7 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Contact))
+#8 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(340): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\public\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-06-18 22:12:15 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'LienFormulaire' in 'field list'
+[Method: GET, Route: contact]
+in SYSTEMPATH\Database\BaseConnection.php on line 700.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1', [], false)
+ 2 APPPATH\Models\Public\InscriptionModel.php(36): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Public\Contact.php(35): App\Models\Public\InscriptionModel->getForm()
+ 4 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\Public\Contact->index()
+ 5 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Contact))
+ 6 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-18 22:12:15 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'LienFormulaire' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 392.
+ 1 SYSTEMPATH\Database\BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1')
+ 2 SYSTEMPATH\Database\BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1', [], false)
+ 4 APPPATH\Models\Public\InscriptionModel.php(36): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Public\Contact.php(35): App\Models\Public\InscriptionModel->getForm()
+ 6 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\Public\Contact->index()
+ 7 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Contact))
+ 8 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-18 22:12:15 --> [Caused by] mysqli_sql_exception: Unknown column 'LienFormulaire' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 387.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(387): mysqli->query('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1')
+ 3 SYSTEMPATH\Database\BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `LienFormulaire`
+FROM `general`
+ LIMIT 1', [], false)
+ 5 APPPATH\Models\Public\InscriptionModel.php(36): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Public\Contact.php(35): App\Models\Public\InscriptionModel->getForm()
+ 7 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\Public\Contact->index()
+ 8 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Contact))
+ 9 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-06-18 22:13:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:13:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:13:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:14:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:15:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:16:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:17:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-06-18 22:17:19 --> ErrorException: Undefined array key "lienFormulaire"
+[Method: GET, Route: admin/general]
+in APPPATH\Views\admin\general\index.php on line 79.
+ 1 APPPATH\Views\admin\general\index.php(79): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "lienFormulaire"', 'C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php', 79)
+ 2 SYSTEMPATH\View\View.php(225): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php')
+ 3 SYSTEMPATH\View\View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1181): CodeIgniter\View\View->render('admin/general/index', [], true)
+ 5 APPPATH\Controllers\admin\General.php(37): view('admin/general/index', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\admin\General->index()
+ 7 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\General))
+ 8 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-06-18 22:18:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-06-18 22:18:10 --> ErrorException: Undefined array key "lienFormulaire"
+[Method: GET, Route: admin/general]
+in APPPATH\Views\admin\general\index.php on line 79.
+ 1 APPPATH\Views\admin\general\index.php(79): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "lienFormulaire"', 'C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php', 79)
+ 2 SYSTEMPATH\View\View.php(225): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php')
+ 3 SYSTEMPATH\View\View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1181): CodeIgniter\View\View->render('admin/general/index', [], true)
+ 5 APPPATH\Controllers\admin\General.php(37): view('admin/general/index', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\admin\General->index()
+ 7 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\General))
+ 8 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-06-18 22:18:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-06-18 22:18:10 --> ErrorException: Undefined array key "lienFormulaire"
+[Method: GET, Route: admin/general]
+in APPPATH\Views\admin\general\index.php on line 79.
+ 1 APPPATH\Views\admin\general\index.php(79): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "lienFormulaire"', 'C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php', 79)
+ 2 SYSTEMPATH\View\View.php(225): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php')
+ 3 SYSTEMPATH\View\View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1181): CodeIgniter\View\View->render('admin/general/index', [], true)
+ 5 APPPATH\Controllers\admin\General.php(37): view('admin/general/index', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\admin\General->index()
+ 7 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\General))
+ 8 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-06-18 22:19:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-06-18 22:19:15 --> ErrorException: Undefined array key "lienFormulaire"
+[Method: GET, Route: admin/general]
+in APPPATH\Views\admin\general\index.php on line 79.
+ 1 APPPATH\Views\admin\general\index.php(79): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "lienFormulaire"', 'C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php', 79)
+ 2 SYSTEMPATH\View\View.php(225): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php')
+ 3 SYSTEMPATH\View\View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1181): CodeIgniter\View\View->render('admin/general/index', [], true)
+ 5 APPPATH\Controllers\admin\General.php(38): view('admin/general/index', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\admin\General->index()
+ 7 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\General))
+ 8 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-06-18 22:19:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-06-18 22:19:19 --> ErrorException: Undefined array key "lienFormulaire"
+[Method: GET, Route: admin/general]
+in APPPATH\Views\admin\general\index.php on line 79.
+ 1 APPPATH\Views\admin\general\index.php(79): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "lienFormulaire"', 'C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php', 79)
+ 2 SYSTEMPATH\View\View.php(225): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php')
+ 3 SYSTEMPATH\View\View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1181): CodeIgniter\View\View->render('admin/general/index', [], true)
+ 5 APPPATH\Controllers\admin\General.php(38): view('admin/general/index', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\admin\General->index()
+ 7 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\General))
+ 8 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-06-18 22:20:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-06-18 22:20:02 --> ErrorException: Undefined array key "lienFormulaire"
+[Method: GET, Route: admin/general]
+in APPPATH\Views\admin\general\index.php on line 79.
+ 1 APPPATH\Views\admin\general\index.php(79): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "lienFormulaire"', 'C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php', 79)
+ 2 SYSTEMPATH\View\View.php(225): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\general\\index.php')
+ 3 SYSTEMPATH\View\View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1181): CodeIgniter\View\View->render('admin/general/index', [], true)
+ 5 APPPATH\Controllers\admin\General.php(38): view('admin/general/index', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(887): App\Controllers\admin\General->index()
+ 7 SYSTEMPATH\CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\General))
+ 8 SYSTEMPATH\CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-06-18 22:24:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:25:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-06-18 22:26:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

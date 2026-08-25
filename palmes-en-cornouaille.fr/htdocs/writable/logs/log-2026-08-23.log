@@ -1,0 +1,347 @@
+ERROR - 2026-08-23 09:30:18 --> mysqli_sql_exception: Table 'ma_base_ci.general' doesn't exist in /var/www/html/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(327): mysqli->query('SELECT `i`.`pat...', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`pat...')
+#2 /var/www/html/system/Database/BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`pat...')
+#3 /var/www/html/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`pat...', Array, false)
+#4 /var/www/html/app/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/app/Controllers/Public/Home.php(27): App\Models\Public\Donnees->getGeneral()
+#6 /var/www/html/system/CodeIgniter.php(903): App\Controllers\Public\Home->__construct()
+#7 /var/www/html/system/CodeIgniter.php(498): CodeIgniter\CodeIgniter->createController()
+#8 /var/www/html/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-08-23 09:30:18 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'ma_base_ci.general' doesn't exist
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 692.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 2 APPPATH/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH/Controllers/Public/Home.php(27): App\Models\Public\Donnees->getGeneral()
+ 4 SYSTEMPATH/CodeIgniter.php(903): App\Controllers\Public\Home->__construct()
+ 5 SYSTEMPATH/CodeIgniter.php(498): CodeIgniter\CodeIgniter->createController()
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:30:18 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'ma_base_ci.general' doesn't exist
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 332.
+ 1 SYSTEMPATH/Database/BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 2 SYSTEMPATH/Database/BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 4 APPPATH/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH/Controllers/Public/Home.php(27): App\Models\Public\Donnees->getGeneral()
+ 6 SYSTEMPATH/CodeIgniter.php(903): App\Controllers\Public\Home->__construct()
+ 7 SYSTEMPATH/CodeIgniter.php(498): CodeIgniter\CodeIgniter->createController()
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:30:19 --> [Caused by] mysqli_sql_exception: Table 'ma_base_ci.general' doesn't exist
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 327.
+ 1 SYSTEMPATH/Database/MySQLi/Connection.php(327): mysqli->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', 0)
+ 2 SYSTEMPATH/Database/BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 4 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 5 APPPATH/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH/Controllers/Public/Home.php(27): App\Models\Public\Donnees->getGeneral()
+ 7 SYSTEMPATH/CodeIgniter.php(903): App\Controllers\Public\Home->__construct()
+ 8 SYSTEMPATH/CodeIgniter.php(498): CodeIgniter\CodeIgniter->createController()
+ 9 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-23 09:31:39 --> mysqli_sql_exception: Table 'ma_base_ci.general' doesn't exist in /var/www/html/system/Database/MySQLi/Connection.php:387
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(387): mysqli->query('SELECT `i`.`pat...', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`pat...')
+#2 /var/www/html/system/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`pat...')
+#3 /var/www/html/system/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`pat...', Array, false)
+#4 /var/www/html/app/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/app/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+#6 /var/www/html/system/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+#7 /var/www/html/system/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+#8 /var/www/html/system/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(340): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-08-23 09:31:39 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'ma_base_ci.general' doesn't exist
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 700.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 2 APPPATH/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+ 4 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 5 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 6 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:31:39 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'ma_base_ci.general' doesn't exist
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 392.
+ 1 SYSTEMPATH/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 2 SYSTEMPATH/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 4 APPPATH/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+ 6 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 7 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 8 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:31:39 --> [Caused by] mysqli_sql_exception: Table 'ma_base_ci.general' doesn't exist
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 387.
+ 1 SYSTEMPATH/Database/MySQLi/Connection.php(387): mysqli->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', 0)
+ 2 SYSTEMPATH/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 4 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 5 APPPATH/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+ 7 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 8 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 9 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-08-23 09:33:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:34:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:34:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:35:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:35:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:36:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:36:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:39:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:42:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:42:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:42:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:42:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:43:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-08-23 09:43:21 --> Error: Call to undefined method App\Controllers\Public\Home::_render()
+[Method: GET, Route: /]
+in APPPATH/Controllers/Public/Home.php on line 46.
+ 1 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+ 2 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+ 3 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-23 09:44:25 --> mysqli_sql_exception: Unknown column 'g.campagne_active' in 'field list' in /var/www/html/system/Database/MySQLi/Connection.php:387
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(387): mysqli->query('SELECT `i`.`pat...', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`pat...')
+#2 /var/www/html/system/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`pat...')
+#3 /var/www/html/system/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`pat...', Array, false)
+#4 /var/www/html/app/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/app/Controllers/Public/Home.php(29): App\Models\Public\Donnees->getGeneral()
+#6 /var/www/html/system/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+#7 /var/www/html/system/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+#8 /var/www/html/system/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(340): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-08-23 09:44:25 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'g.campagne_active' in 'field list'
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 700.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 2 APPPATH/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH/Controllers/Public/Home.php(29): App\Models\Public\Donnees->getGeneral()
+ 4 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 5 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 6 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:44:25 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'g.campagne_active' in 'field list'
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 392.
+ 1 SYSTEMPATH/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 2 SYSTEMPATH/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 4 APPPATH/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH/Controllers/Public/Home.php(29): App\Models\Public\Donnees->getGeneral()
+ 6 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 7 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 8 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:44:25 --> [Caused by] mysqli_sql_exception: Unknown column 'g.campagne_active' in 'field list'
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 387.
+ 1 SYSTEMPATH/Database/MySQLi/Connection.php(387): mysqli->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', 0)
+ 2 SYSTEMPATH/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 4 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, `g`.`campagne_active`, `g`.`lienFormulaire`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 5 APPPATH/Models/Public/Donnees.php(21): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH/Controllers/Public/Home.php(29): App\Models\Public\Donnees->getGeneral()
+ 7 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 8 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 9 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:45:38 --> Error: Call to undefined method App\Controllers\Public\Home::_render()
+[Method: GET, Route: /]
+in APPPATH/Controllers/Public/Home.php on line 46.
+ 1 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+ 2 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+ 3 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-08-23 09:45:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:45:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-08-23 09:46:06 --> Error: Call to undefined method App\Controllers\Public\Home::_render()
+[Method: GET, Route: /]
+in APPPATH/Controllers/Public/Home.php on line 46.
+ 1 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+ 2 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+ 3 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-23 09:50:17 --> Error: Call to undefined method App\Controllers\Public\Home::_render()
+[Method: GET, Route: /]
+in APPPATH/Controllers/Public/Home.php on line 46.
+ 1 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+ 2 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+ 3 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-08-23 09:50:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:51:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:51:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:51:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:51:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:52:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:52:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 09:52:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-08-23 09:52:59 --> ParseError: syntax error, unexpected character 0x07, expecting "{"
+[Method: GET, Route: admin/general]
+in APPPATH/Models/admin/GeneralModel.php on line 3.
+ 1 SYSTEMPATH/Autoloader/Autoloader.php(343): CodeIgniter\Autoloader\Autoloader->includeFile('/var/www/html/app/Models/admin/GeneralModel.php')
+ 2 SYSTEMPATH/Autoloader/Autoloader.php(250): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Models\\admin\\GeneralModel')
+ 3 APPPATH/Controllers/admin/General.php(15): CodeIgniter\Autoloader\Autoloader->loadClass('App\\Models\\admin\\GeneralModel')
+ 4 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\admin\General->__construct()
+ 5 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 6 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-08-23 16:58:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 16:58:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 16:59:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 16:59:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-23 16:59:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-08-23 16:59:37 --> ParseError: syntax error, unexpected character 0x07, expecting "{"
+[Method: GET, Route: admin/general]
+in APPPATH/Models/admin/GeneralModel.php on line 3.
+ 1 SYSTEMPATH/Autoloader/Autoloader.php(343): CodeIgniter\Autoloader\Autoloader->includeFile('/var/www/html/app/Models/admin/GeneralModel.php')
+ 2 SYSTEMPATH/Autoloader/Autoloader.php(250): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Models\\admin\\GeneralModel')
+ 3 APPPATH/Controllers/admin/General.php(15): CodeIgniter\Autoloader\Autoloader->loadClass('App\\Models\\admin\\GeneralModel')
+ 4 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\admin\General->__construct()
+ 5 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 6 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(73): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-08-23 17:00:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

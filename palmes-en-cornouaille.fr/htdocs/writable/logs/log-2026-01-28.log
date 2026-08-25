@@ -1,0 +1,52 @@
+DEBUG - 2026-01-28 08:34:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-28 08:34:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-01-28 08:51:46 --> Error connecting to the database: mysqli_sql_exception: Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu in C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('sql313.byethost...', 'b13_39213320', Object(SensitiveParameterValue), 'b13_39213320_db...', 3306, '', 0)
+#1 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `m`.`nom...', Array, false)
+#4 C:\xampp\htdocs\www\Site-du-PEC\htdocs\app\Models\Public\InscriptionModel.php(15): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\www\Site-du-PEC\htdocs\app\Controllers\Public\Contact.php(43): App\Models\Public\InscriptionModel->getMateriel()
+#6 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\CodeIgniter.php(933): App\Controllers\Public\Contact->index()
+#7 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Contact))
+#8 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\www\Site-du-PEC\htdocs\public\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu in C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `m`.`nom...', Array, false)
+#3 C:\xampp\htdocs\www\Site-du-PEC\htdocs\app\Models\Public\InscriptionModel.php(15): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\www\Site-du-PEC\htdocs\app\Controllers\Public\Contact.php(43): App\Models\Public\InscriptionModel->getMateriel()
+#5 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\CodeIgniter.php(933): App\Controllers\Public\Contact->index()
+#6 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Contact))
+#7 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\www\Site-du-PEC\htdocs\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\www\Site-du-PEC\htdocs\public\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-01-28 08:51:46 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu
+[Method: GET, Route: contact]
+in SYSTEMPATH\Database\BaseConnection.php on line 467.
+ 1 SYSTEMPATH\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `m`.`nom`, `m`.`description`, `m`.`idPret`, `i`.`path` as `image`, `p`.`nom` as `nomPret`
+FROM `materiel` `m`
+LEFT JOIN `images` `i` ON `m`.`image_id` = `i`.`id`
+LEFT JOIN `pret` `p` ON `p`.`id` = `m`.`idPret`', [], false)
+ 3 APPPATH\Models\Public\InscriptionModel.php(15): CodeIgniter\Database\BaseBuilder->get()
+ 4 APPPATH\Controllers\Public\Contact.php(43): App\Models\Public\InscriptionModel->getMateriel()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Public\Contact->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Contact))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-01-28 08:52:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-28 08:52:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-28 08:52:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

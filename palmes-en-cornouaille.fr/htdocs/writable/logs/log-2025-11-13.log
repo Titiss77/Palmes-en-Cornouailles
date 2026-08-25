@@ -1,0 +1,354 @@
+CRITICAL - 2025-11-13 10:52:04 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:52:07 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:52:31 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:52:34 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:52:38 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:52:40 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:52:46 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:53:17 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:53:19 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:53:23 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 10:53:27 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 12:57:21 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 12:58:25 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 12:58:27 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 12:59:04 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 12:59:18 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 12:59:42 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 12:59:53 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:01:23 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:01:24 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 29.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:01:54 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:01:55 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 29.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:02:59 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:03:10 --> ErrorException: Cannot modify header information - headers already sent by (output started at E:\2025-2026-btssio2\BLOC2\250925-web\252206-Decouverte-CodeIgniter\CodeIgniter\app\Config\Events.php:33)
+[Method: GET, Route: /]
+in SYSTEMPATH\Debug\Toolbar.php on line 471.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'Cannot modify header information - headers already sent by (output started at E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Config\\Events.php:33)', 'E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\system\\Debug\\Toolbar.php', 471)
+ 2 SYSTEMPATH\Debug\Toolbar.php(471): header('Content-Type: application/javascript')
+ 3 APPPATH\Config\Events.php(47): CodeIgniter\Debug\Toolbar->respond()
+ 4 SYSTEMPATH\Events\Events.php(155): CodeIgniter\Events\Events::Config\{closure}()
+ 5 SYSTEMPATH\CodeIgniter.php(339): CodeIgniter\Events\Events::trigger('pre_system')
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:03:12 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:03:39 --> ParseError: syntax error, unexpected token ".", expecting "," or ";"
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 5.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Controllers\\Blog.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Blog')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Blog')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\Blog', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:04:00 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:04:39 --> ParseError: syntax error, unexpected token ".", expecting "," or ";"
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 5.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('E:\\2025-2026-btssio2\\BLOC2\\250925-web\\252206-Decouverte-CodeIgniter\\CodeIgniter\\app\\Controllers\\Blog.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\Blog')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\Blog')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\Blog', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:04:47 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:05:09 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:05:47 --> Error: Class "App\Controllers\Billets" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:06:01 --> Error: Class "app\Models\Billet" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:06:46 --> Error: Class "app\Models\Billet" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-11-13 13:06:47 --> Error: Class "app\Models\Billet" not found
+[Method: GET, Route: lesBillets]
+in APPPATH\Controllers\Blog.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Blog->lesBillets()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Blog))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

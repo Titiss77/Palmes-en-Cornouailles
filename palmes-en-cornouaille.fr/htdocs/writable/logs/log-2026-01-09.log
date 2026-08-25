@@ -1,0 +1,135 @@
+ERROR - 2026-01-09 16:27:53 --> mysqli_sql_exception: Table 'disciplines' already exists in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `d...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `d...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `d...')
+#3 D:\www\Site-du-PEC\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `d...')
+#4 D:\www\Site-du-PEC\app\Database\Migrations\2026-01-05-000002_CreateDisciplines.php(18): CodeIgniter\Database\Forge->createTable('disciplines')
+#5 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateDisciplines->up()
+#6 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 D:\www\Site-du-PEC\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 D:\www\Site-du-PEC\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 D:\www\Site-du-PEC\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+DEBUG - 2026-01-09 16:28:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-01-09 16:28:18 --> mysqli_sql_exception: Table 'pec_database.general' doesn't exist in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n\t\tSELECT imag...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n\t\tSELECT imag...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n\t\tSELECT imag...')
+#3 D:\www\Site-du-PEC\app\Models\Donnees.php(30): CodeIgniter\Database\BaseConnection->query('\r\n\t\tSELECT imag...')
+#4 D:\www\Site-du-PEC\app\Controllers\Home.php(51): App\Models\Donnees->getGeneral()
+#5 D:\www\Site-du-PEC\system\CodeIgniter.php(933): App\Controllers\Home->bureau()
+#6 D:\www\Site-du-PEC\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#7 D:\www\Site-du-PEC\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 D:\www\Site-du-PEC\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 D:\www\Site-du-PEC\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 D:\www\Site-du-PEC\public\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-01-09 16:28:18 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'pec_database.general' doesn't exist
+[Method: GET, Route: bureau]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\Donnees.php(30): CodeIgniter\Database\BaseConnection->query('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		')
+ 2 APPPATH\Controllers\Home.php(51): App\Models\Donnees->getGeneral()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->bureau()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-09 16:28:18 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'pec_database.general' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		')
+ 3 APPPATH\Models\Donnees.php(30): CodeIgniter\Database\BaseConnection->query('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		')
+ 4 APPPATH\Controllers\Home.php(51): App\Models\Donnees->getGeneral()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->bureau()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-09 16:28:18 --> [Caused by] mysqli_sql_exception: Table 'pec_database.general' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		')
+ 4 APPPATH\Models\Donnees.php(30): CodeIgniter\Database\BaseConnection->query('
+		SELECT image, nomClub, description, philosophie, 
+		nombreNageurs, 
+		ROUND(nombreHommes / nombreNageurs * 100, 1) as pourcentH, 
+		ROUND((nombreNageurs-nombreHommes) / nombreNageurs * 100, 1) as pourcentF,
+		projetSportif, lienFacebook, lienInstagram
+		FROM `general` LIMIT 1
+		')
+ 5 APPPATH\Controllers\Home.php(51): App\Models\Donnees->getGeneral()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->bureau()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-01-09 16:28:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:34:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:35:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:35:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:36:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:36:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:37:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:41:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-09 16:52:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

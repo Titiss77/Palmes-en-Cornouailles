@@ -1,0 +1,333 @@
+ERROR - 2026-02-10 16:54:07 --> Error connecting to the database: mysqli_sql_exception: Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée in C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'b7_41112099', Object(SensitiveParameterValue), 'b7_41112099_pal...', 3306, '', 0)
+#1 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1525): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1545): CodeIgniter\Database\BaseConnection->listTables()
+#5 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(231): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\MigrateRollback.php(101): CodeIgniter\Database\MigrationRunner->regress(0)
+#8 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRollback->run(Array)
+#9 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate:rollbac...', Array)
+#10 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\MigrateRefresh.php(86): CodeIgniter\CLI\BaseCommand->call('migrate:rollbac...', Array)
+#11 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée in C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1525): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1545): CodeIgniter\Database\BaseConnection->listTables()
+#4 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(231): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\MigrateRollback.php(101): CodeIgniter\Database\MigrationRunner->regress(0)
+#7 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRollback->run(Array)
+#8 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate:rollbac...', Array)
+#9 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\MigrateRefresh.php(86): CodeIgniter\CLI\BaseCommand->call('migrate:rollbac...', Array)
+#10 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#11 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#12 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#13 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+ERROR - 2026-02-10 16:54:11 --> Error connecting to the database: mysqli_sql_exception: Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée in C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'b7_41112099', Object(SensitiveParameterValue), 'b7_41112099_pal...', 3306, '', 0)
+#1 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1525): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1545): CodeIgniter\Database\BaseConnection->listTables()
+#5 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(162): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée in C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1525): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(1545): CodeIgniter\Database\BaseConnection->listTables()
+#4 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MigrationRunner.php(162): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#7 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#8 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#9 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#10 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#11 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#12 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#13 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+DEBUG - 2026-02-10 16:55:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:13:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:14:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:14:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:14:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:14:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:14:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:14:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:21:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:21:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:21:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:29:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:29:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:30:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:30:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:30:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:30:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:31:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:31:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:31:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:31:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:31:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:31:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:36:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:36:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-02-10 17:52:20 --> mysqli_sql_exception: Unknown column 'membres.prenom' in 'field list' in C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `palmare...', 0)
+#1 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `palmare...')
+#2 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `palmare...')
+#3 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `palmare...', Array, false)
+#4 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\BaseModel.php(679): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\app\Models\admin\PalmaresModel.php(27): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\app\Controllers\Public\Home.php(48): App\Models\admin\PalmaresModel->getPalmaresWithRelations()
+#8 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(933): App\Controllers\Public\Home->index()
+#9 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+#10 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\public\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-02-10 17:52:20 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'membres.prenom' in 'field list'
+[Method: GET, Route: /]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC', [], false)
+ 2 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Models\admin\PalmaresModel.php(27): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH\Controllers\Public\Home.php(48): App\Models\admin\PalmaresModel->getPalmaresWithRelations()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Public\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-10 17:52:20 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'membres.prenom' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC', [], false)
+ 4 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Models\admin\PalmaresModel.php(27): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH\Controllers\Public\Home.php(48): App\Models\admin\PalmaresModel->getPalmaresWithRelations()
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Public\Home->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-10 17:52:20 --> [Caused by] mysqli_sql_exception: Unknown column 'membres.prenom' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `palmares`.*, `membres`.`nom` as `nom_nageur`, `membres`.`prenom` as `prenom_nageur`, `images`.`path` as `image_path`, `images`.`alt` as `image_alt`
+FROM `palmares`
+JOIN `membres` ON `membres`.`id` = `palmares`.`membre_id`
+LEFT JOIN `images` ON `images`.`id` = `palmares`.`image_id`
+ORDER BY `date_epreuve` DESC', [], false)
+ 5 SYSTEMPATH\Model.php(286): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(679): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\admin\PalmaresModel.php(27): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Public\Home.php(48): App\Models\admin\PalmaresModel->getPalmaresWithRelations()
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Public\Home->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-02-10 17:58:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:58:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:58:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:58:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:58:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 17:59:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-02-10 17:59:56 --> ErrorException: Undefined array key "palmares"
+[Method: GET, Route: admin]
+in APPPATH\Views\admin\section.php on line 24.
+ 1 APPPATH\Views\admin\section.php(24): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "palmares"', 'C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\section.php', 24)
+ 2 APPPATH\Views\admin\v_dashboard.php(7): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\section.php')
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\www\\Palmes-en-Cornouailles\\htdocs\\app\\Views\\admin\\v_dashboard.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('admin/v_dashboard', [], true)
+ 6 APPPATH\Controllers\admin\Dashboard.php(40): view('admin/v_dashboard', [...])
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\admin\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-02-10 18:00:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:00:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:01:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:04:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:04:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:04:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:04:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-02-10 18:04:48 --> mysqli_sql_exception: Unknown column 'nom_nageur' in 'field list' in C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `pa...', 0)
+#1 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `pa...')
+#2 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `pa...')
+#3 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `pa...', Array, false)
+#4 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\BaseModel.php(843): CodeIgniter\Model->doInsert(Array)
+#6 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Model.php(800): CodeIgniter\BaseModel->insert(Array, true)
+#7 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\app\Controllers\admin\Palmares.php(66): CodeIgniter\Model->insert(Array)
+#8 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(933): App\Controllers\admin\Palmares->create()
+#9 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\Palmares))
+#10 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\www\Palmes-en-Cornouailles\htdocs\public\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-02-10 18:04:48 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'nom_nageur' in 'field list'
+[Method: POST, Route: admin/palmares]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (:nom_nageur:, :prenom_nageur:, :competition:, :epreuve:, :temps:, :classement:, :date_epreuve:, :image_id:, :created_at:, :updated_at:)', [...], false)
+ 2 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 4 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], true)
+ 5 APPPATH\Controllers\admin\Palmares.php(66): CodeIgniter\Model->insert([...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\admin\Palmares->create()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\Palmares))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-10 18:04:48 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'nom_nageur' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (\'Titiss\', \'Mathis\', \'Mathis Titiss\', \'gtrgrtgt\\\'g\', \'10\', \'1\', \'2026-02-09\', NULL, \'2026-02-10 18:04:48\', \'2026-02-10 18:04:48\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (\'Titiss\', \'Mathis\', \'Mathis Titiss\', \'gtrgrtgt\\\'g\', \'10\', \'1\', \'2026-02-09\', NULL, \'2026-02-10 18:04:48\', \'2026-02-10 18:04:48\')')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (:nom_nageur:, :prenom_nageur:, :competition:, :epreuve:, :temps:, :classement:, :date_epreuve:, :image_id:, :created_at:, :updated_at:)', [...], false)
+ 4 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 6 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], true)
+ 7 APPPATH\Controllers\admin\Palmares.php(66): CodeIgniter\Model->insert([...])
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\admin\Palmares->create()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\Palmares))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-02-10 18:04:48 --> [Caused by] mysqli_sql_exception: Unknown column 'nom_nageur' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (\'Titiss\', \'Mathis\', \'Mathis Titiss\', \'gtrgrtgt\\\'g\', \'10\', \'1\', \'2026-02-09\', NULL, \'2026-02-10 18:04:48\', \'2026-02-10 18:04:48\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (\'Titiss\', \'Mathis\', \'Mathis Titiss\', \'gtrgrtgt\\\'g\', \'10\', \'1\', \'2026-02-09\', NULL, \'2026-02-10 18:04:48\', \'2026-02-10 18:04:48\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (\'Titiss\', \'Mathis\', \'Mathis Titiss\', \'gtrgrtgt\\\'g\', \'10\', \'1\', \'2026-02-09\', NULL, \'2026-02-10 18:04:48\', \'2026-02-10 18:04:48\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `palmares` (`nom_nageur`, `prenom_nageur`, `competition`, `epreuve`, `temps`, `classement`, `date_epreuve`, `image_id`, `created_at`, `updated_at`) VALUES (:nom_nageur:, :prenom_nageur:, :competition:, :epreuve:, :temps:, :classement:, :date_epreuve:, :image_id:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], true)
+ 8 APPPATH\Controllers\admin\Palmares.php(66): CodeIgniter\Model->insert([...])
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\admin\Palmares->create()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\admin\Palmares))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-02-10 18:05:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:05:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:05:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:05:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:05:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:09:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:09:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:09:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:09:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:13:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:14:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:15:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:15:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:15:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:16:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:16:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:17:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:17:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:17:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:17:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:17:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:18:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:18:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:19:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:20:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:21:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:21:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:21:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:23:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-02-10 18:23:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

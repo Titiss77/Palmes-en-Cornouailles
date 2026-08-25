@@ -1,0 +1,459 @@
+DEBUG - 2026-01-07 09:02:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:02:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:02:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:04:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:05:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:09:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:09:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:12:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:14:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:15:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:16:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:16:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:17:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 09:17:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-01-07 09:24:51 --> mysqli_sql_exception: Table 'pec_database.boutique' doesn't exist in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT nom, des...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT nom, des...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT nom, des...')
+#3 D:\www\Site-du-PEC\app\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, des...')
+#4 D:\www\Site-du-PEC\app\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+#5 D:\www\Site-du-PEC\system\CodeIgniter.php(933): App\Controllers\Home->boutique()
+#6 D:\www\Site-du-PEC\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#7 D:\www\Site-du-PEC\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 D:\www\Site-du-PEC\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 D:\www\Site-du-PEC\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 D:\www\Site-du-PEC\public\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-01-07 09:24:52 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'pec_database.boutique' doesn't exist
+[Method: GET, Route: boutique]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, description, prix, image FROM `boutique`')
+ 2 APPPATH\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->boutique()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 09:24:52 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'pec_database.boutique' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT nom, description, prix, image FROM `boutique`')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT nom, description, prix, image FROM `boutique`')
+ 3 APPPATH\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, description, prix, image FROM `boutique`')
+ 4 APPPATH\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->boutique()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 09:24:52 --> [Caused by] mysqli_sql_exception: Table 'pec_database.boutique' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT nom, description, prix, image FROM `boutique`', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT nom, description, prix, image FROM `boutique`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT nom, description, prix, image FROM `boutique`')
+ 4 APPPATH\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, description, prix, image FROM `boutique`')
+ 5 APPPATH\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->boutique()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-01-07 09:26:49 --> mysqli_sql_exception: Table 'pec_database.boutique' doesn't exist in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT nom, des...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT nom, des...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT nom, des...')
+#3 D:\www\Site-du-PEC\app\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, des...')
+#4 D:\www\Site-du-PEC\app\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+#5 D:\www\Site-du-PEC\system\CodeIgniter.php(933): App\Controllers\Home->boutique()
+#6 D:\www\Site-du-PEC\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#7 D:\www\Site-du-PEC\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 D:\www\Site-du-PEC\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 D:\www\Site-du-PEC\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 D:\www\Site-du-PEC\public\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-01-07 09:26:49 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'pec_database.boutique' doesn't exist
+[Method: GET, Route: boutique]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, description, prix, image FROM `boutique`')
+ 2 APPPATH\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->boutique()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 09:26:49 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'pec_database.boutique' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT nom, description, prix, image FROM `boutique`')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT nom, description, prix, image FROM `boutique`')
+ 3 APPPATH\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, description, prix, image FROM `boutique`')
+ 4 APPPATH\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->boutique()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 09:26:49 --> [Caused by] mysqli_sql_exception: Table 'pec_database.boutique' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT nom, description, prix, image FROM `boutique`', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT nom, description, prix, image FROM `boutique`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT nom, description, prix, image FROM `boutique`')
+ 4 APPPATH\Models\Donnees.php(106): CodeIgniter\Database\BaseConnection->query('SELECT nom, description, prix, image FROM `boutique`')
+ 5 APPPATH\Controllers\Home.php(65): App\Models\Donnees->getBoutique()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->boutique()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 10:00:54 --> ErrorException: Undefined variable $coaches
+[Method: GET, Route: boutique]
+in APPPATH\Views\v_boutique.php on line 15.
+ 1 APPPATH\Views\v_boutique.php(15): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $coaches', 'D:\\www\\Site-du-PEC\\app\\Views\\v_boutique.php', 15)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\www\\Site-du-PEC\\app\\Views\\v_boutique.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('v_boutique', [], true)
+ 5 APPPATH\Controllers\Home.php(68): view('v_boutique', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->boutique()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-01-07 10:17:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 10:17:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 10:18:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-01-07 10:25:09 --> ErrorException: Undefined array key "fichier_pdf"
+[Method: GET, Route: calendriers]
+in APPPATH\Views\v_calendriers.php on line 43.
+ 1 APPPATH\Views\v_calendriers.php(43): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "fichier_pdf"', 'D:\\www\\Site-du-PEC\\app\\Views\\v_calendriers.php', 43)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\www\\Site-du-PEC\\app\\Views\\v_calendriers.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('v_calendriers', [], true)
+ 5 APPPATH\Controllers\Home.php(42): view('v_calendriers', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->calendriers()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 10:28:04 --> TypeError: Cannot access offset of type string on string
+[Method: GET, Route: calendriers]
+in APPPATH\Views\v_calendriers.php on line 39.
+ 1 SYSTEMPATH\View\View.php(224): include()
+ 2 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('v_calendriers', [], true)
+ 4 APPPATH\Controllers\Home.php(42): view('v_calendriers', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->calendriers()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-01-07 10:46:21 --> mysqli_sql_exception: Column count doesn't match value count at row 1 in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `me...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `me...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `me...')
+#3 D:\www\Site-du-PEC\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `me...', NULL, false)
+#4 D:\www\Site-du-PEC\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 D:\www\Site-du-PEC\app\Database\Seeds\PersonnelSeeder.php(28): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 D:\www\Site-du-PEC\system\Database\Seeder.php(149): App\Database\Seeds\PersonnelSeeder->run()
+#7 D:\www\Site-du-PEC\app\Database\Seeds\MasterSeeder.php(16): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 D:\www\Site-du-PEC\system\Database\Seeder.php(149): App\Database\Seeds\MasterSeeder->run()
+#9 D:\www\Site-du-PEC\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#10 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#11 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#12 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#13 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+ERROR - 2026-01-07 10:48:38 --> mysqli_sql_exception: Column count doesn't match value count at row 1 in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `me...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `me...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `me...')
+#3 D:\www\Site-du-PEC\system\Database\BaseBuilder.php(1841): CodeIgniter\Database\BaseConnection->query('INSERT INTO `me...', NULL, false)
+#4 D:\www\Site-du-PEC\system\Database\BaseBuilder.php(2230): CodeIgniter\Database\BaseBuilder->batchExecute('_insertBatch', 100)
+#5 D:\www\Site-du-PEC\app\Database\Seeds\PersonnelSeeder.php(28): CodeIgniter\Database\BaseBuilder->insertBatch(Array)
+#6 D:\www\Site-du-PEC\system\Database\Seeder.php(149): App\Database\Seeds\PersonnelSeeder->run()
+#7 D:\www\Site-du-PEC\app\Database\Seeds\MasterSeeder.php(16): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#8 D:\www\Site-du-PEC\system\Database\Seeder.php(149): App\Database\Seeds\MasterSeeder->run()
+#9 D:\www\Site-du-PEC\system\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#10 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run(Array)
+#11 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#12 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#13 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+ERROR - 2026-01-07 11:05:59 --> mysqli_sql_exception: Referencing column 'idAuteur' and referenced column 'id' in foreign key constraint 'actualites_idAuteur_foreign' are incompatible. in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `a...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `a...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `a...')
+#3 D:\www\Site-du-PEC\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `a...')
+#4 D:\www\Site-du-PEC\app\Database\Migrations\2026-01-07-000011_CreateActualites.php(24): CodeIgniter\Database\Forge->createTable('actualites')
+#5 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateActualites->up()
+#6 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 D:\www\Site-du-PEC\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 D:\www\Site-du-PEC\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 D:\www\Site-du-PEC\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+ERROR - 2026-01-07 11:11:18 --> mysqli_sql_exception: Referencing column 'idAuteur' and referenced column 'id' in foreign key constraint 'actualites_idAuteur_foreign' are incompatible. in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `a...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `a...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `a...')
+#3 D:\www\Site-du-PEC\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `a...')
+#4 D:\www\Site-du-PEC\app\Database\Migrations\2026-01-07-000011_CreateActualites.php(24): CodeIgniter\Database\Forge->createTable('actualites')
+#5 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateActualites->up()
+#6 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 D:\www\Site-du-PEC\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 D:\www\Site-du-PEC\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 D:\www\Site-du-PEC\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+ERROR - 2026-01-07 11:15:17 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1 PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_' at line 7 in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `p...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `p...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `p...')
+#3 D:\www\Site-du-PEC\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `p...')
+#4 D:\www\Site-du-PEC\app\Database\Migrations\2026-01-05-000003_CreatePiscines.php(19): CodeIgniter\Database\Forge->createTable('piscines')
+#5 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreatePiscines->up()
+#6 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 D:\www\Site-du-PEC\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 D:\www\Site-du-PEC\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 D:\www\Site-du-PEC\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+ERROR - 2026-01-07 11:16:41 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1 PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_' at line 7 in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `p...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `p...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `p...')
+#3 D:\www\Site-du-PEC\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `p...')
+#4 D:\www\Site-du-PEC\app\Database\Migrations\2026-01-05-000003_CreatePiscines.php(19): CodeIgniter\Database\Forge->createTable('piscines')
+#5 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreatePiscines->up()
+#6 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 D:\www\Site-du-PEC\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 D:\www\Site-du-PEC\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 D:\www\Site-du-PEC\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+ERROR - 2026-01-07 11:17:43 --> mysqli_sql_exception: Referencing column 'membre_id' and referenced column 'id' in foreign key constraint 'membre_fonction_membre_id_foreign' are incompatible. in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `m...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `m...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `m...')
+#3 D:\www\Site-du-PEC\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `m...')
+#4 D:\www\Site-du-PEC\app\Database\Migrations\2026-01-05-000005_CreateBureau.php(37): CodeIgniter\Database\Forge->createTable('membre_fonction')
+#5 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateBureau->up()
+#6 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 D:\www\Site-du-PEC\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 D:\www\Site-du-PEC\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 D:\www\Site-du-PEC\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+ERROR - 2026-01-07 11:18:46 --> mysqli_sql_exception: Table 'membres' already exists in D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\www\Site-du-PEC\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `m...', 0)
+#1 D:\www\Site-du-PEC\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `m...')
+#2 D:\www\Site-du-PEC\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `m...')
+#3 D:\www\Site-du-PEC\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `m...')
+#4 D:\www\Site-du-PEC\app\Database\Migrations\2026-01-05-000005_CreateBureau.php(20): CodeIgniter\Database\Forge->createTable('membres')
+#5 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateBureau->up()
+#6 D:\www\Site-du-PEC\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 D:\www\Site-du-PEC\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 D:\www\Site-du-PEC\system\CLI\BaseCommand.php(119): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 D:\www\Site-du-PEC\system\Commands\Database\MigrateRefresh.php(87): CodeIgniter\CLI\BaseCommand->call('migrate', Array)
+#11 D:\www\Site-du-PEC\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\www\Site-du-PEC\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\www\Site-du-PEC\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#14 D:\www\Site-du-PEC\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 D:\www\Site-du-PEC\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+CRITICAL - 2026-01-07 12:04:19 --> ErrorException: Undefined array key "date_publication"
+[Method: GET, Route: actualites]
+in APPPATH\Views\v_actualites.php on line 18.
+ 1 APPPATH\Views\v_actualites.php(18): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "date_publication"', 'D:\\www\\Site-du-PEC\\app\\Views\\v_actualites.php', 18)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\www\\Site-du-PEC\\app\\Views\\v_actualites.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('v_actualites', [], true)
+ 5 APPPATH\Controllers\Home.php(81): view('v_actualites', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->actualite()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 12:05:01 --> ErrorException: Undefined array key "extrait"
+[Method: GET, Route: actualites]
+in APPPATH\Views\v_actualites.php on line 19.
+ 1 APPPATH\Views\v_actualites.php(19): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "extrait"', 'D:\\www\\Site-du-PEC\\app\\Views\\v_actualites.php', 19)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\www\\Site-du-PEC\\app\\Views\\v_actualites.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('v_actualites', [], true)
+ 5 APPPATH\Controllers\Home.php(81): view('v_actualites', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->actualite()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 12:10:13 --> Error: Call to undefined function character_limiter()
+[Method: GET, Route: actualites]
+in APPPATH\Views\v_actualites.php on line 39.
+ 1 SYSTEMPATH\View\View.php(224): include()
+ 2 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('v_actualites', [], true)
+ 4 APPPATH\Controllers\Home.php(81): view('v_actualites', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->actualite()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-01-07 12:26:22 --> Error: Call to undefined function character_limiter()
+[Method: GET, Route: actualites]
+in APPPATH\Views\actualites\_card.php on line 25.
+ 1 SYSTEMPATH\View\View.php(224): include()
+ 2 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('actualites/_card', [], true)
+ 4 APPPATH\Views\actualites\_section_news.php(9): view('actualites/_card', [...])
+ 5 SYSTEMPATH\View\View.php(224): include('D:\\www\\Site-du-PEC\\app\\Views\\actualites\\_section_news.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('actualites/_section_news', [], true)
+ 8 APPPATH\Views\v_actualites.php(6): view('actualites/_section_news', [...])
+ 9 SYSTEMPATH\View\View.php(224): include('D:\\www\\Site-du-PEC\\app\\Views\\v_actualites.php')
+10 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+11 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('v_actualites', [], true)
+12 APPPATH\Controllers\Home.php(83): view('v_actualites', [...])
+13 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Home->actualite()
+14 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+15 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+16 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+17 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+18 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-01-07 12:42:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:28:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:28:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:35:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:44:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:51:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:52:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-01-07 14:53:18 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "admin/v_login.php"
+[Method: GET, Route: login]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('admin/v_login.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('admin/v_login', [], true)
+ 3 APPPATH\Controllers\Admin\Login.php(29): view('admin/v_login', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin\Login->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin\Login))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-01-07 14:53:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:53:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:54:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:54:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:54:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:58:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 14:58:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:00:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-01-07 15:00:38 --> ErrorException: Undefined variable $cssPage
+[Method: GET, Route: admin]
+in APPPATH\Views\admin\l_admin.php on line 12.
+ 1 APPPATH\Views\admin\l_admin.php(12): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cssPage', 'D:\\www\\Site-du-PEC\\app\\Views\\admin\\l_admin.php', 12)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\www\\Site-du-PEC\\app\\Views\\admin\\l_admin.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\View\View.php(240): CodeIgniter\View\View->render('admin/l_admin', [], true)
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('admin/v_dashboard', [], true)
+ 6 APPPATH\Controllers\Admin\Dashboard.php(33): view('admin/v_dashboard', [...])
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Admin\Dashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin\Dashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(68): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-01-07 15:02:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:02:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:02:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:02:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:11:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:12:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:15:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:17:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:17:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:21:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:21:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:21:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:22:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:23:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:23:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:27:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:28:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:28:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:28:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:28:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:28:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:29:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:29:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:29:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:31:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:31:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:32:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:35:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:35:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:38:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:38:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:39:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:39:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:40:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:41:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:44:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:56:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:56:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:57:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:57:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:57:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:57:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 15:57:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 16:01:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-01-07 16:01:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

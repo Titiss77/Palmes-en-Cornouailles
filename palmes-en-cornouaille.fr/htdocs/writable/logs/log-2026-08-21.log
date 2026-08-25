@@ -1,0 +1,274 @@
+ERROR - 2026-08-21 13:18:22 --> mysqli_sql_exception: Table 'ma_base_ci.general' doesn't exist in /var/www/html/system/Database/MySQLi/Connection.php:387
+Stack trace:
+#0 /var/www/html/system/Database/MySQLi/Connection.php(387): mysqli->query('SELECT `i`.`pat...', 0)
+#1 /var/www/html/system/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`pat...')
+#2 /var/www/html/system/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`pat...')
+#3 /var/www/html/system/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`pat...', Array, false)
+#4 /var/www/html/app/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/app/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+#6 /var/www/html/system/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+#7 /var/www/html/system/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+#8 /var/www/html/system/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 /var/www/html/system/Boot.php(340): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 /var/www/html/public/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-08-21 13:18:22 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'ma_base_ci.general' doesn't exist
+[Method: GET, Route: /]
+in SYSTEMPATH/Database/BaseConnection.php on line 700.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 2 APPPATH/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+ 4 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 5 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 6 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:18:22 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'ma_base_ci.general' doesn't exist
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 392.
+ 1 SYSTEMPATH/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 2 SYSTEMPATH/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 4 APPPATH/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+ 6 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 7 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 8 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:18:22 --> [Caused by] mysqli_sql_exception: Table 'ma_base_ci.general' doesn't exist
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 387.
+ 1 SYSTEMPATH/Database/MySQLi/Connection.php(387): mysqli->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', 0)
+ 2 SYSTEMPATH/Database/BaseConnection.php(747): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 3 SYSTEMPATH/Database/BaseConnection.php(659): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`')
+ 4 SYSTEMPATH/Database/BaseBuilder.php(1240): CodeIgniter\Database\BaseConnection->query('SELECT `i`.`path` as `image`, `ig`.`path` as `image_groupe`, `il`.`path` as `logoffessm`, `g`.`nomClub`, `g`.`mailClub`, `g`.`adresse`, `g`.`description`, `g`.`philosophie`, `g`.`nombreNageurs`, `g`.`projetSportif`, `g`.`lienFacebook`, `g`.`lienInstagram`, `g`.`lienffessm`, `g`.`lienDrive`, ROUND(g.nombreHommes / g.nombreNageurs * 100, 1) as pourcentH, ROUND((g.nombreNageurs - g.nombreHommes) / g.nombreNageurs * 100, 1) as pourcentF
+FROM `general` `g`
+LEFT JOIN `images` `i` ON `g`.`image_id` = `i`.`id`
+LEFT JOIN `images` `ig` ON `g`.`image_groupe_id` = `ig`.`id`
+LEFT JOIN `images` `il` ON `g`.`logoffessm_id` = `il`.`id`', [], false)
+ 5 APPPATH/Models/Public/Donnees.php(23): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH/Controllers/Public/Home.php(28): App\Models\Public\Donnees->getGeneral()
+ 7 SYSTEMPATH/CodeIgniter.php(857): App\Controllers\Public\Home->__construct()
+ 8 SYSTEMPATH/CodeIgniter.php(567): CodeIgniter\CodeIgniter->createController()
+ 9 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:20:25 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: GET, Route: /]
+in SYSTEMPATH/Session/Handlers/FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', '/var/www/html/system/Session/Handlers/FileHandler.php', 73)
+ 2 SYSTEMPATH/Session/Handlers/FileHandler.php(73): ini_set('session.save_path', '/var/www/html/writable/session')
+ 3 SYSTEMPATH/Config/Services.php(695): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '172.18.0.1')
+ 4 SYSTEMPATH/Config/BaseService.php(202): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH/Config/BaseService.php(389): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH/Config/Services.php(666): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH/Config/BaseService.php(211): CodeIgniter\Config\Services::session()
+ 8 SYSTEMPATH/Config/BaseService.php(223): CodeIgniter\Config\BaseService::__callStatic('session', [])
+ 9 SYSTEMPATH/Common.php(1007): CodeIgniter\Config\BaseService::get('session')
+10 SYSTEMPATH/Common.php(980): service('session')
+11 APPPATH/Views/Public/Layout/l_global.php(2): session()
+12 SYSTEMPATH/View/View.php(225): include('/var/www/html/app/Views/Public/Layout/l_global.php')
+13 SYSTEMPATH/View/View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+14 SYSTEMPATH/View/View.php(241): CodeIgniter\View\View->render('Public/Layout/l_global', [], true)
+15 SYSTEMPATH/Common.php(1181): CodeIgniter\View\View->render('Public/v_accueil', [], true)
+16 APPPATH/Controllers/Public/Home.php(129): view('Public/v_accueil', [...])
+17 APPPATH/Controllers/Public/Home.php(44): App\Controllers\Public\Home->_render('Public/v_accueil', [...])
+18 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+19 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+20 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+21 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+22 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+23 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:21:06 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: GET, Route: /]
+in SYSTEMPATH/Session/Handlers/FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', '/var/www/html/system/Session/Handlers/FileHandler.php', 73)
+ 2 SYSTEMPATH/Session/Handlers/FileHandler.php(73): ini_set('session.save_path', '/var/www/html/writable/session')
+ 3 SYSTEMPATH/Config/Services.php(695): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '172.18.0.1')
+ 4 SYSTEMPATH/Config/BaseService.php(202): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH/Config/BaseService.php(389): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH/Config/Services.php(666): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH/Config/BaseService.php(211): CodeIgniter\Config\Services::session()
+ 8 SYSTEMPATH/Config/BaseService.php(223): CodeIgniter\Config\BaseService::__callStatic('session', [])
+ 9 SYSTEMPATH/Common.php(1007): CodeIgniter\Config\BaseService::get('session')
+10 SYSTEMPATH/Common.php(980): service('session')
+11 APPPATH/Views/Public/Layout/l_global.php(2): session()
+12 SYSTEMPATH/View/View.php(225): include('/var/www/html/app/Views/Public/Layout/l_global.php')
+13 SYSTEMPATH/View/View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+14 SYSTEMPATH/View/View.php(241): CodeIgniter\View\View->render('Public/Layout/l_global', [], true)
+15 SYSTEMPATH/Common.php(1181): CodeIgniter\View\View->render('Public/v_accueil', [], true)
+16 APPPATH/Controllers/Public/Home.php(129): view('Public/v_accueil', [...])
+17 APPPATH/Controllers/Public/Home.php(44): App\Controllers\Public\Home->_render('Public/v_accueil', [...])
+18 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+19 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+20 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+21 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+22 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+23 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:28:09 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: GET, Route: /]
+in SYSTEMPATH/Session/Handlers/FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', '/var/www/html/system/Session/Handlers/FileHandler.php', 73)
+ 2 SYSTEMPATH/Session/Handlers/FileHandler.php(73): ini_set('session.save_path', '/var/www/html/writable/session')
+ 3 SYSTEMPATH/Config/Services.php(695): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '172.18.0.1')
+ 4 SYSTEMPATH/Config/BaseService.php(202): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH/Config/BaseService.php(389): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH/Config/Services.php(666): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH/Config/BaseService.php(211): CodeIgniter\Config\Services::session()
+ 8 SYSTEMPATH/Config/BaseService.php(223): CodeIgniter\Config\BaseService::__callStatic('session', [])
+ 9 SYSTEMPATH/Common.php(1007): CodeIgniter\Config\BaseService::get('session')
+10 SYSTEMPATH/Common.php(980): service('session')
+11 APPPATH/Views/Public/Layout/l_global.php(2): session()
+12 SYSTEMPATH/View/View.php(225): include('/var/www/html/app/Views/Public/Layout/l_global.php')
+13 SYSTEMPATH/View/View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+14 SYSTEMPATH/View/View.php(241): CodeIgniter\View\View->render('Public/Layout/l_global', [], true)
+15 SYSTEMPATH/Common.php(1181): CodeIgniter\View\View->render('Public/v_accueil', [], true)
+16 APPPATH/Controllers/Public/Home.php(129): view('Public/v_accueil', [...])
+17 APPPATH/Controllers/Public/Home.php(44): App\Controllers\Public\Home->_render('Public/v_accueil', [...])
+18 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+19 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+20 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+21 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+22 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+23 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:29:18 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: GET, Route: /]
+in SYSTEMPATH/Session/Handlers/FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', '/var/www/html/system/Session/Handlers/FileHandler.php', 73)
+ 2 SYSTEMPATH/Session/Handlers/FileHandler.php(73): ini_set('session.save_path', '/var/www/html/writable/session')
+ 3 SYSTEMPATH/Config/Services.php(695): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '172.18.0.1')
+ 4 SYSTEMPATH/Config/BaseService.php(202): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH/Config/BaseService.php(389): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH/Config/Services.php(666): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH/Config/BaseService.php(211): CodeIgniter\Config\Services::session()
+ 8 SYSTEMPATH/Config/BaseService.php(223): CodeIgniter\Config\BaseService::__callStatic('session', [])
+ 9 SYSTEMPATH/Common.php(1007): CodeIgniter\Config\BaseService::get('session')
+10 SYSTEMPATH/Common.php(980): service('session')
+11 APPPATH/Views/Public/Layout/l_global.php(2): session()
+12 SYSTEMPATH/View/View.php(225): include('/var/www/html/app/Views/Public/Layout/l_global.php')
+13 SYSTEMPATH/View/View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+14 SYSTEMPATH/View/View.php(241): CodeIgniter\View\View->render('Public/Layout/l_global', [], true)
+15 SYSTEMPATH/Common.php(1181): CodeIgniter\View\View->render('Public/v_accueil', [], true)
+16 APPPATH/Controllers/Public/Home.php(129): view('Public/v_accueil', [...])
+17 APPPATH/Controllers/Public/Home.php(44): App\Controllers\Public\Home->_render('Public/v_accueil', [...])
+18 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+19 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+20 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+21 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+22 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+23 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:29:26 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: GET, Route: /]
+in SYSTEMPATH/Session/Handlers/FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', '/var/www/html/system/Session/Handlers/FileHandler.php', 73)
+ 2 SYSTEMPATH/Session/Handlers/FileHandler.php(73): ini_set('session.save_path', '/var/www/html/writable/session')
+ 3 SYSTEMPATH/Config/Services.php(695): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '172.18.0.1')
+ 4 SYSTEMPATH/Config/BaseService.php(202): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH/Config/BaseService.php(389): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH/Config/Services.php(666): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH/Config/BaseService.php(211): CodeIgniter\Config\Services::session()
+ 8 SYSTEMPATH/Config/BaseService.php(223): CodeIgniter\Config\BaseService::__callStatic('session', [])
+ 9 SYSTEMPATH/Common.php(1007): CodeIgniter\Config\BaseService::get('session')
+10 SYSTEMPATH/Common.php(980): service('session')
+11 APPPATH/Views/Public/Layout/l_global.php(2): session()
+12 SYSTEMPATH/View/View.php(225): include('/var/www/html/app/Views/Public/Layout/l_global.php')
+13 SYSTEMPATH/View/View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+14 SYSTEMPATH/View/View.php(241): CodeIgniter\View\View->render('Public/Layout/l_global', [], true)
+15 SYSTEMPATH/Common.php(1181): CodeIgniter\View\View->render('Public/v_accueil', [], true)
+16 APPPATH/Controllers/Public/Home.php(129): view('Public/v_accueil', [...])
+17 APPPATH/Controllers/Public/Home.php(44): App\Controllers\Public\Home->_render('Public/v_accueil', [...])
+18 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+19 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+20 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+21 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+22 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+23 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:32:06 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: GET, Route: /]
+in SYSTEMPATH/Session/Handlers/FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', '/var/www/html/system/Session/Handlers/FileHandler.php', 73)
+ 2 SYSTEMPATH/Session/Handlers/FileHandler.php(73): ini_set('session.save_path', '/var/www/html/writable/session')
+ 3 SYSTEMPATH/Config/Services.php(695): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '172.18.0.1')
+ 4 SYSTEMPATH/Config/BaseService.php(202): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH/Config/BaseService.php(389): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH/Config/Services.php(666): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH/Config/BaseService.php(211): CodeIgniter\Config\Services::session()
+ 8 SYSTEMPATH/Config/BaseService.php(223): CodeIgniter\Config\BaseService::__callStatic('session', [])
+ 9 SYSTEMPATH/Common.php(1007): CodeIgniter\Config\BaseService::get('session')
+10 SYSTEMPATH/Common.php(980): service('session')
+11 APPPATH/Views/Public/Layout/l_global.php(2): session()
+12 SYSTEMPATH/View/View.php(225): include('/var/www/html/app/Views/Public/Layout/l_global.php')
+13 SYSTEMPATH/View/View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+14 SYSTEMPATH/View/View.php(241): CodeIgniter\View\View->render('Public/Layout/l_global', [], true)
+15 SYSTEMPATH/Common.php(1181): CodeIgniter\View\View->render('Public/v_accueil', [], true)
+16 APPPATH/Controllers/Public/Home.php(129): view('Public/v_accueil', [...])
+17 APPPATH/Controllers/Public/Home.php(44): App\Controllers\Public\Home->_render('Public/v_accueil', [...])
+18 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+19 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+20 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+21 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+22 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+23 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-21 13:33:27 --> ErrorException: ini_set(): Session ini settings cannot be changed after headers have already been sent
+[Method: GET, Route: /]
+in SYSTEMPATH/Session/Handlers/FileHandler.php on line 73.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'ini_set(): Session ini settings cannot be changed after headers have already been sent', '/var/www/html/system/Session/Handlers/FileHandler.php', 73)
+ 2 SYSTEMPATH/Session/Handlers/FileHandler.php(73): ini_set('session.save_path', '/var/www/html/writable/session')
+ 3 SYSTEMPATH/Config/Services.php(695): CodeIgniter\Session\Handlers\FileHandler->__construct(Object(Config\Session), '172.18.0.1')
+ 4 SYSTEMPATH/Config/BaseService.php(202): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 5 SYSTEMPATH/Config/BaseService.php(389): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 6 SYSTEMPATH/Config/Services.php(666): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 7 SYSTEMPATH/Config/BaseService.php(211): CodeIgniter\Config\Services::session()
+ 8 SYSTEMPATH/Config/BaseService.php(223): CodeIgniter\Config\BaseService::__callStatic('session', [])
+ 9 SYSTEMPATH/Common.php(1007): CodeIgniter\Config\BaseService::get('session')
+10 SYSTEMPATH/Common.php(980): service('session')
+11 APPPATH/Views/Public/Layout/l_global.php(2): session()
+12 SYSTEMPATH/View/View.php(225): include('/var/www/html/app/Views/Public/Layout/l_global.php')
+13 SYSTEMPATH/View/View.php(228): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+14 SYSTEMPATH/View/View.php(241): CodeIgniter\View\View->render('Public/Layout/l_global', [], true)
+15 SYSTEMPATH/Common.php(1181): CodeIgniter\View\View->render('Public/v_accueil', [], true)
+16 APPPATH/Controllers/Public/Home.php(129): view('Public/v_accueil', [...])
+17 APPPATH/Controllers/Public/Home.php(44): App\Controllers\Public\Home->_render('Public/v_accueil', [...])
+18 SYSTEMPATH/CodeIgniter.php(887): App\Controllers\Public\Home->index()
+19 SYSTEMPATH/CodeIgniter.php(576): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Public\Home))
+20 SYSTEMPATH/CodeIgniter.php(238): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+21 SYSTEMPATH/Boot.php(340): CodeIgniter\CodeIgniter->run()
+22 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+23 FCPATH/index.php(69): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-08-21 13:34:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-21 13:35:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-21 13:35:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-21 13:35:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-21 13:35:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-08-21 13:40:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
