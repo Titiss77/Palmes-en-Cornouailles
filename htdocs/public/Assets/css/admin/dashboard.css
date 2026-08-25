@@ -87,3 +87,10 @@
 .grey-text {
     color: #80808080;
 }
+
+.img-logo, .img-font {
+    display: grid;
+        justify-items: center;
+        justify-content: center;
+        gap: 2rem;
+}

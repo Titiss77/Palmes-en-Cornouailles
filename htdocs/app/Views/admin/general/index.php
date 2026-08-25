@@ -118,11 +118,10 @@
             </div>
             <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-images"></i> Gestion des Images</h5>
             <div class="mb-4 border p-3 rounded bg-light images-gen">
-                <div class="d-flex align-items-center mb-2">
+                <div class="img-logo d-flex align-items-center mb-2">
                     <?php if (!empty($item['logo_path'])) { ?>
                     <img src="<?php echo base_url('uploads/'.$item['logo_path']); ?>"
-                        class="me-3 bg-white border rounded p-1 img-favicon"
-                        style="width: 50px; height: 50px; object-fit: contain;">
+                        class="me-3 bg-white border rounded p-1 img-favicon" style="max-width: 15rem;">
                     <?php } else { ?>
                     <span class="text-muted me-3">Aucun logo</span>
                     <?php } ?>
@@ -130,10 +129,10 @@
                 </div>
             </div>
             <div class="mb-4 border p-3 rounded bg-light images-gen">
-                <div class="d-flex align-items-center mb-2">
+                <div class="img-font d-flex align-items-center mb-2">
                     <?php if (!empty($item['groupe_path'])) { ?>
                     <img src="<?php echo base_url('uploads/'.$item['groupe_path']); ?>"
-                        class="me-3 bg-white border rounded p-1 img-groupe">
+                        class="me-3 bg-white border rounded p-1 img-groupe" style="max-width: 30rem;">
                     <?php } else { ?>
                     <span class="text-muted me-3">Aucune photo</span>
                     <?php } ?>
