@@ -61,18 +61,24 @@
                         value="<?php echo old('nombreHommes', $item['nombreHommes']); ?>">
                 </div>
             </div>
-            
-            <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-megaphone"></i> Campagne de Réinscription</h5>
+
+            <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-megaphone"></i> Campagne de
+                Réinscription</h5>
             <div class="form-group mb-3 border p-3 rounded bg-light">
                 <div class="form-check form-switch mb-2">
-                    <input class="form-check-input" type="checkbox" role="switch" id="campagne_active" name="campagne_active" value="1" <?php echo (old('campagne_active', $item['campagne_active'] ?? 0) == 1) ? 'checked' : ''; ?>>
-                    <label class="form-check-label fw-bold" for="campagne_active">Activer la campagne de réinscription</label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="campagne_active"
+                        name="campagne_active" value="1"
+                        <?php echo (old('campagne_active', $item['campagne_active'] ?? 0) == 1) ? 'checked' : ''; ?>>
+                    <label class="form-check-label fw-bold" for="campagne_active">Activer la campagne de
+                        réinscription</label>
                 </div>
-                <small class="text-muted d-block mb-3">Si activé, le bloc d'annonce apparaîtra sur la page d'accueil et le bouton sera visible sur la page contact.</small>
-                
+                <small class="text-muted d-block mb-3">Si activé, le bloc d'annonce apparaîtra sur la page d'accueil et
+                    le bouton sera visible sur la page contact.</small>
+
                 <label class="fw-bold mb-1">Lien du formulaire d'inscription</label>
                 <input type="url" name="lienFormulaire" class="form-input w-100 p-2"
-                    value="<?php echo old('lienFormulaire', $item['lienFormulaire'] ?? ''); ?>" placeholder="https://...">
+                    value="<?php echo old('lienFormulaire', $item['lienFormulaire'] ?? ''); ?>"
+                    placeholder="https://...">
             </div>
 
             <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-link-45deg"></i> Liens & Réseaux</h5>
@@ -113,12 +119,15 @@
             <h5 class="text-primary border-bottom pb-2 mb-3 mt-4"><i class="bi bi-images"></i> Gestion des Images</h5>
             <div class="mb-4 border p-3 rounded bg-light images-gen">
                 <div class="d-flex align-items-center mb-2">
-                    <img src="<?php echo base_url('favicon.ico?v='.time()); ?>"
-                        class="me-3 bg-white border rounded p-1 img-favicon">
+                    <?php if (!empty($item['logo_path'])) { ?>
+                    <img src="<?php echo base_url('uploads/'.$item['logo_path']); ?>"
+                        class="me-3 bg-white border rounded p-1 img-favicon"
+                        style="width: 50px; height: 50px; object-fit: contain;">
+                    <?php } else { ?>
+                    <span class="text-muted me-3">Aucun logo</span>
+                    <?php } ?>
                     <input type="file" name="image" class="form-input flex-grow-1 p-2" accept="image/*">
                 </div>
-                <small class="text-muted"><i class="bi bi-info-circle"></i> Le fichier sera renommé
-                    <code>favicon.ico</code> et remplacera l'actuel à la racine.</small>
             </div>
             <div class="mb-4 border p-3 rounded bg-light images-gen">
                 <div class="d-flex align-items-center mb-2">

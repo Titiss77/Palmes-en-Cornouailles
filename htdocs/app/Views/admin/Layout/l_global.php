@@ -12,7 +12,7 @@ $menuItems = [
 <head>
     <title><?= $titrePage; ?></title>
     <?php if (!empty($general['image'])): ?>
-    <link rel="icon" type="image/png" href="<?= base_url($general['image']); ?>">
+    <link rel="icon" type="image/png" href="<?= base_url('uploads/' . $general['image']); ?>">
     <?php endif; ?>
     <?= view('css/dynamic_root', ['root' => $root]); ?>
     <link rel="stylesheet" href="<?= base_url('Assets/css/Public/global.css'); ?>">
@@ -20,7 +20,7 @@ $menuItems = [
 </head>
 <nav>
     <div class="nav-brand">
-        <img src="<?= base_url('' . $general['image']); ?>" alt="logo du club" />
+        <img src="<?= base_url('uploads/' . $general['image']); ?>" alt="logo du club" />
         <h2><?= $general['nomClub']; ?></h2>
     </div>
 

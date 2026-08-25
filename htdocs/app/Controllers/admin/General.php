@@ -49,14 +49,8 @@ class General extends BaseAdminController
         $existing = $this->generalModel->first();
         $id = $existing ? $existing['id'] : null;
 
-        // --- GESTION SPÉCIALE DU LOGO PRINCIPAL (FAVICON) ---
-        // On n'utilise pas handleImageUpload car on veut écraser un fichier précis à la racine
-        $fileLogo = $this->request->getFile('image');
-        if ($fileLogo && $fileLogo->isValid() && !$fileLogo->hasMoved()) {
-            // On déplace le fichier à la racine (FCPATH) et on le renomme 'favicon.ico'
-            // Le 3ème paramètre 'true' permet d'écraser le fichier existant
-            $fileLogo->move(FCPATH, 'favicon.ico', true);
-        }
+        // Traitement standard du logo (PNG/JPG)
+        $logoId = $this->handleImageUpload('image', 'general', 'logo_club');
 
         // --- GESTION DES AUTRES IMAGES (Classique BDD) ---
         $groupeId = $this->handleImageUpload('image_groupe', 'general');
@@ -81,6 +75,9 @@ class General extends BaseAdminController
         ];
 
         // On met à jour les IDs seulement pour les images gérées en base
+        if ($logoId) {
+            $data['image_id'] = $logoId;
+        }
         if ($groupeId) {
             $data['image_groupe_id'] = $groupeId;
         }
