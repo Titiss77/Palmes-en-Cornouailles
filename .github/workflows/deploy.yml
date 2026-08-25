@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           # On cible directement le sous-dossier local et distant
-          local-dir: palmes-en-cornouaille.fr/htdocs/
+          local-dir: /
           server-dir: /palmes-en-cornouaille.fr/htdocs/
           # On laisse le nom par défaut sans sous-dossier
           state-name: .ftp-deploy-sync-state.json
@@ -80,7 +80,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           # On cible le deuxième site
-          local-dir: palmes-en-cornouailles.22web.org/htdocs/
+          local-dir: /
           server-dir: /palmes-en-cornouailles.22web.org/htdocs/
           state-name: .ftp-deploy-sync-state.json
           exclude: |
