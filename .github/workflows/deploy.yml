@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           server-dir: /
-          state-name: palmes-en-cornouaille.fr/htdocs/.ftp-deploy-sync-state.json
+          state-name: palmes-en-cornouaille.fr/.ftp-deploy-sync-state.json
           
           exclude: |
             **/.git*
