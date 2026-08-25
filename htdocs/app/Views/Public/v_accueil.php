@@ -10,69 +10,6 @@
     </section>
 
     <?php if (isset($general['campagne_active']) && $general['campagne_active'] == 1): ?>
-    <!-- SECTION CAMPAGNE DE REINSCRIPTION -->
-    <style>
-    .cta-reinscription {
-        background-color: var(--secondary);
-        color: var(--white);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 2.5rem 2rem;
-        margin: 2rem 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .cta-reinscription h2 {
-        color: var(--white);
-        margin-bottom: 15px;
-        font-size: 1.75rem;
-    }
-
-    .cta-reinscription .btn-reinscription {
-        background-color: var(--white);
-        color: var(--secondary);
-        font-weight: bold;
-        border-radius: var(--radius);
-        padding: 12px 25px;
-        text-decoration: none;
-        display: inline-block;
-        margin: 10px;
-        transition: all 0.3s ease;
-    }
-
-    .cta-reinscription .btn-reinscription:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    }
-
-    /* --- ADAPTATION MOBILE --- */
-    @media (max-width: 768px) {
-        .cta-reinscription {
-            padding: 1.5rem 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .cta-reinscription h2 {
-            font-size: 1.3rem;
-            /* Titre légèrement plus petit */
-        }
-
-        .cta-reinscription p {
-            font-size: 0.95rem;
-            /* Texte ajusté */
-        }
-
-        .cta-reinscription .btn-reinscription {
-            width: 100%;
-            /* Bouton pleine largeur pour faciliter le clic au doigt */
-            padding: 15px;
-        }
-    }
-    </style>
     <div class="cta-reinscription">
         <h2><i class="bi bi-megaphone-fill"></i> Campagne de Réinscriptions</h2>
         <p class="mb-3">Les dossiers d'inscriptions et les informations tarifaires pour la nouvelle saison sont

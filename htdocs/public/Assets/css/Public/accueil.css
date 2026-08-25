@@ -314,6 +314,42 @@ a:hover {
 
 /* --- RESPONSIVE ACCUEIL --- */
 
+.cta-reinscription {
+    background-color: var(--secondary);
+    color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2.5rem 2rem;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.cta-reinscription h2 {
+    color: var(--white);
+    margin-bottom: 15px;
+    font-size: 1.75rem;
+}
+
+.cta-reinscription .btn-reinscription {
+    background-color: var(--white);
+    color: var(--secondary);
+    font-weight: bold;
+    border-radius: var(--radius);
+    padding: 12px 25px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 10px;
+    transition: all 0.3s ease;
+}
+
+.cta-reinscription .btn-reinscription:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
 @media (max-width: 768px) {
 
     /* 1. HERO BANNER */
@@ -321,6 +357,7 @@ a:hover {
         /* On réduit drastiquement la taille du titre */
         font-size: 2.5rem;
         padding: 1rem;
+        color: var(--bg-light);
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
     }
 
@@ -360,5 +397,20 @@ a:hover {
     .contenu {
         justify-content: center;
         flex-wrap: wrap;
+    }
+
+    .cta-reinscription {
+        padding: 1.5rem 1rem;
+        margin: 1.5rem 0;
+    }
+
+    .cta-reinscription h2 {
+        font-size: 1.3rem;
+        /* Titre légèrement plus petit */
+    }
+
+    .cta-reinscription p {
+        font-size: 0.95rem;
+        /* Texte ajusté */
     }
 }
