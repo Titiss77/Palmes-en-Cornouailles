@@ -45,48 +45,15 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          # Utilisez le chemin exact vers le dossier htdocs du site 1
           local-dir: palmes-en-cornouaille.fr/htdocs/
           server-dir: palmes-en-cornouaille.fr/htdocs/
-          state-name: .ftp-deploy-sync-state.json
+          # On change le nom pour éviter le blocage de ByetHost
+          state-name: sync-state.txt
           exclude: |
             **/.git*
             **/.git*/**
             **/.github/**
             **/.env
-            **/spark
-            **/phpunit.xml.dist
-            **/README.md
-            **/LICENSE
-            **/composer.json
-            **/composer.lock
-            **/tests/**
-            **/user_guide_src/**
-            **/vendor/phpunit/**
-            **/vendor/fakerphp/**
-            **/vendor/symfony/**
-            **/vendor/mockery/**
-            **/sites_non_lances/**
-            **/writable/cache/**
-            **/writable/logs/**
-            **/writable/session/**
-
-      - name: 📂 Déploiement Site 2 (palmes-en-cornouailles.22web.org)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
-          # Utilisez le chemin exact vers le dossier htdocs du site 2
-          local-dir: palmes-en-cornouailles.22web.org/htdocs/
-          server-dir: palmes-en-cornouailles.22web.org/htdocs/
-          state-name: .ftp-deploy-sync-state.json
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            #**/.env
             **/spark
             **/phpunit.xml.dist
             **/README.md
