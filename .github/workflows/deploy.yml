@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           # Utilisez le chemin exact vers le dossier htdocs du site 1
-          local-dir: Palmes-en-Cornouailles-69440bb2c8505e9ddab4d9fe06e515e3d3fb411b/palmes-en-cornouaille.fr/htdocs/
+          local-dir: palmes-en-cornouaille.fr/htdocs/
           server-dir: /palmes-en-cornouaille.fr/htdocs/
           state-name: .ftp-deploy-sync-state.json
           exclude: |
