@@ -18,7 +18,6 @@
             Accéder au formulaire <i class="bi bi-arrow-right"></i>
         </a>
     </div>
-    <!-- FIN SECTION CAMPAGNE DE REINSCRIPTION -->
     <?php endif; ?>
 
     <div class="main-layout-with-sidebar mt-5">

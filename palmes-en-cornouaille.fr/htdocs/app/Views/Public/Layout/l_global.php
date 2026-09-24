@@ -15,15 +15,12 @@ $menuItems = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?= base_url() ?>">
     <meta property="og:title" content="<?= $titrePage; ?>">
     <meta property="og:description"
         content="Bienvenue au <?= $titrePage; ?>. Nous sommes ravis de vous accueillir sur le site officiel de notre club de natation basé à Quimper.">
     <meta property="og:image" content="<?= base_url('uploads/' . $general['image']); ?>">
-
-    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="<?= base_url() ?>">
     <meta name="twitter:title" content="<?= $titrePage; ?>">
