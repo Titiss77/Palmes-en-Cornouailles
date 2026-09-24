@@ -272,9 +272,7 @@ class View implements RendererInterface
                 $this->renderVars['file'] = clean_path($this->renderVars['file']);
                 $this->renderVars['file'] = ++$this->viewsCount.' '.$this->renderVars['file'];
 
-                $output = '<!-- DEBUG-VIEW START '.$this->renderVars['file'].' -->'.PHP_EOL
-                    .$output.PHP_EOL
-                    .'<!-- DEBUG-VIEW ENDED '.$this->renderVars['file'].' -->'.PHP_EOL;
+                //$output = '<!-- DEBUG-VIEW START '.$this->renderVars['file'].' -->'.PHP_EOL .$output.PHP_EOL.'<!-- DEBUG-VIEW ENDED '.$this->renderVars['file'].' -->'.PHP_EOL;
             }
         }
 
@@ -316,193 +314,193 @@ class View implements RendererInterface
             ob_start();
             eval('?>'.$view);
 
-            return ob_get_clean() ?: '';
-        })($view);
+return ob_get_clean() ?: '';
+})($view);
 
-        $this->logPerformance($start, microtime(true), $this->excerpt($view));
-        $this->tempData = null;
+$this->logPerformance($start, microtime(true), $this->excerpt($view));
+$this->tempData = null;
 
-        return $output;
-    }
+return $output;
+}
 
-    /**
-     * Extract first bit of a long string and add ellipsis.
-     */
-    public function excerpt(string $string, int $length = 20): string
-    {
-        return (mb_strlen($string) > $length) ? mb_substr($string, 0, $length - 3).'...' : $string;
-    }
+/**
+* Extract first bit of a long string and add ellipsis.
+*/
+public function excerpt(string $string, int $length = 20): string
+{
+return (mb_strlen($string) > $length) ? mb_substr($string, 0, $length - 3).'...' : $string;
+}
 
-    /**
-     * Sets several pieces of view data at once.
-     *
-     * @param null|non-empty-string $context The context to escape it for.
-     *                                       If 'raw', no escaping will happen.
-     *
-     * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
-     */
-    public function setData(array $data = [], ?string $context = null): RendererInterface
-    {
-        if (null !== $context) {
-            $data = \esc($data, $context);
-        }
+/**
+* Sets several pieces of view data at once.
+*
+* @param null|non-empty-string $context The context to escape it for.
+* If 'raw', no escaping will happen.
+*
+* @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
+*/
+public function setData(array $data = [], ?string $context = null): RendererInterface
+{
+if (null !== $context) {
+$data = \esc($data, $context);
+}
 
-        $this->tempData ??= $this->data;
-        $this->tempData = array_merge($this->tempData, $data);
+$this->tempData ??= $this->data;
+$this->tempData = array_merge($this->tempData, $data);
 
-        return $this;
-    }
+return $this;
+}
 
-    /**
-     * Sets a single piece of view data.
-     *
-     * @param mixed                 $value
-     * @param null|non-empty-string $context The context to escape it for.
-     *                                       If 'raw', no escaping will happen.
-     *
-     * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
-     */
-    public function setVar(string $name, $value = null, ?string $context = null): RendererInterface
-    {
-        if (null !== $context) {
-            $value = esc($value, $context);
-        }
+/**
+* Sets a single piece of view data.
+*
+* @param mixed $value
+* @param null|non-empty-string $context The context to escape it for.
+* If 'raw', no escaping will happen.
+*
+* @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
+*/
+public function setVar(string $name, $value = null, ?string $context = null): RendererInterface
+{
+if (null !== $context) {
+$value = esc($value, $context);
+}
 
-        $this->tempData ??= $this->data;
-        $this->tempData[$name] = $value;
+$this->tempData ??= $this->data;
+$this->tempData[$name] = $value;
 
-        return $this;
-    }
+return $this;
+}
 
-    /**
-     * Removes all of the view data from the system.
-     */
-    public function resetData(): RendererInterface
-    {
-        $this->data = [];
+/**
+* Removes all of the view data from the system.
+*/
+public function resetData(): RendererInterface
+{
+$this->data = [];
 
-        return $this;
-    }
+return $this;
+}
 
-    /**
-     * Returns the current data that will be displayed in the view.
-     *
-     * @return array<string, mixed>
-     */
+/**
+* Returns the current data that will be displayed in the view.
+*
+* @return array<string, mixed>
+    */
     public function getData(): array
     {
-        return $this->tempData ?? $this->data;
+    return $this->tempData ?? $this->data;
     }
 
     /**
-     * Specifies that the current view should extend an existing layout.
-     */
+    * Specifies that the current view should extend an existing layout.
+    */
     public function extend(string $layout): void
     {
-        $this->layout = $layout;
+    $this->layout = $layout;
     }
 
     /**
-     * Starts holds content for a section within the layout.
-     *
-     * @param string $name Section name
-     */
+    * Starts holds content for a section within the layout.
+    *
+    * @param string $name Section name
+    */
     public function section(string $name): void
     {
-        $this->sectionStack[] = $name;
+    $this->sectionStack[] = $name;
 
-        ob_start();
+    ob_start();
     }
 
     /**
-     * Captures the last section.
-     *
-     * @throws RuntimeException
-     */
+    * Captures the last section.
+    *
+    * @throws RuntimeException
+    */
     public function endSection(): void
     {
-        $contents = ob_get_clean();
+    $contents = ob_get_clean();
 
-        if ([] === $this->sectionStack) {
-            throw new RuntimeException('View themes, no current section.');
-        }
+    if ([] === $this->sectionStack) {
+    throw new RuntimeException('View themes, no current section.');
+    }
 
-        $section = array_pop($this->sectionStack);
+    $section = array_pop($this->sectionStack);
 
-        // Ensure an array exists so we can store multiple entries for this.
-        if (!array_key_exists($section, $this->sections)) {
-            $this->sections[$section] = [];
-        }
+    // Ensure an array exists so we can store multiple entries for this.
+    if (!array_key_exists($section, $this->sections)) {
+    $this->sections[$section] = [];
+    }
 
-        $this->sections[$section][] = $contents;
+    $this->sections[$section][] = $contents;
     }
 
     /**
-     * Renders a section's contents.
-     *
-     * @param bool $saveData if true, saves data for subsequent calls,
-     *                       if false, cleans the data after displaying
-     */
+    * Renders a section's contents.
+    *
+    * @param bool $saveData if true, saves data for subsequent calls,
+    * if false, cleans the data after displaying
+    */
     public function renderSection(string $sectionName, bool $saveData = false): string
     {
-        if (!isset($this->sections[$sectionName])) {
-            return '';
-        }
+    if (!isset($this->sections[$sectionName])) {
+    return '';
+    }
 
-        $output = '';
+    $output = '';
 
-        foreach ($this->sections[$sectionName] as $key => $contents) {
-            $output .= $contents;
-            if (false === $saveData) {
-                unset($this->sections[$sectionName][$key]);
-            }
-        }
+    foreach ($this->sections[$sectionName] as $key => $contents) {
+    $output .= $contents;
+    if (false === $saveData) {
+    unset($this->sections[$sectionName][$key]);
+    }
+    }
 
-        return $output;
+    return $output;
     }
 
     /**
-     * Used within layout views to include additional views.
-     *
-     * @param null|array<string, mixed> $options
-     * @param bool                      $saveData
-     */
-    public function include(string $view, ?array $options = null, $saveData = true): string
-    {
+    * Used within layout views to include additional views.
+    *
+    * @param null|array<string, mixed> $options
+        * @param bool $saveData
+        */
+        public function include(string $view, ?array $options = null, $saveData = true): string
+        {
         return $this->render($view, $options, $saveData);
-    }
+        }
 
-    /**
-     * Returns the performance data that might have been collected
-     * during the execution. Used primarily in the Debug Toolbar.
-     *
-     * @return list<array{start: float, end: float, view: string}>
-     */
-    public function getPerformanceData(): array
-    {
-        return $this->performanceData;
-    }
+        /**
+        * Returns the performance data that might have been collected
+        * during the execution. Used primarily in the Debug Toolbar.
+        *
+        * @return list<array{start: float, end: float, view: string}>
+            */
+            public function getPerformanceData(): array
+            {
+            return $this->performanceData;
+            }
 
-    /**
-     * Logs performance data for rendering a view.
-     */
-    protected function logPerformance(float $start, float $end, string $view): void
-    {
-        if ($this->debug) {
+            /**
+            * Logs performance data for rendering a view.
+            */
+            protected function logPerformance(float $start, float $end, string $view): void
+            {
+            if ($this->debug) {
             $this->performanceData[] = [
-                'start' => $start,
-                'end' => $end,
-                'view' => $view,
+            'start' => $start,
+            'end' => $end,
+            'view' => $view,
             ];
-        }
-    }
+            }
+            }
 
-    protected function prepareTemplateData(bool $saveData): void
-    {
-        $this->tempData ??= $this->data;
+            protected function prepareTemplateData(bool $saveData): void
+            {
+            $this->tempData ??= $this->data;
 
-        if ($saveData) {
+            if ($saveData) {
             $this->data = $this->tempData;
-        }
-    }
-}
+            }
+            }
+            }
