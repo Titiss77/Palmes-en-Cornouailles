@@ -35,7 +35,7 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
     # Si la requête n'est pas déjà dans le dossier public
-    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_URI} !public/
     # Redirige toutes les requêtes vers le dossier public
-    RewriteRule ^(.*)$ /public/$1 [L,QSA]
+    RewriteRule ^(.*)$ public/$1 [L,QSA]
 </IfModule>
