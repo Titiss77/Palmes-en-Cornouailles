@@ -107,15 +107,14 @@ $menuItems = [
     mobileBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
         mobileBtn.classList.toggle('active');
-    }); // <-- AJOUT : Il manquait la fermeture de l'événement click du bouton
+    });
 
-    // Fermer le menu si on clique sur un lien
     document.querySelectorAll('.nav-menu li a').forEach(link => {
         link.addEventListener('click', () => {
             navMenu.classList.remove('active');
             mobileBtn.classList.remove('active');
         });
-    }); // <-- AJOUT : Il manquait la fermeture de la boucle forEach
+    });
     </script>
 
 </html>
