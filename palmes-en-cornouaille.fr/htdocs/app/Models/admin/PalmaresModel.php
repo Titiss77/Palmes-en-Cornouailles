@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\admin;
 
 use CodeIgniter\Model;
@@ -8,25 +10,26 @@ class PalmaresModel extends Model
 {
     protected $table = 'palmares';
     protected $primaryKey = 'id';
-    
+
     // MAJ des champs autorisés
     protected $allowedFields = [
-        'nom_nageur', 
-        'prenom_nageur', 
-        'competition', 
-        'epreuve', 
-        'temps', 
-        'classement', 
-        'date_epreuve', 
-        'image_id'
+        'nom_nageur',
+        'prenom_nageur',
+        'competition',
+        'epreuve',
+        'temps',
+        'classement',
+        'date_epreuve',
+        'image_id',
     ];
-    
+
     protected $useTimestamps = true;
 
     public function getPalmaresWithRelations($id = null)
     {
         $builder = $this->select('palmares.*, images.path as image_path, images.alt as image_alt, statut')
-                        ->join('images', 'images.id = palmares.image_id', 'left');
+            ->join('images', 'images.id = palmares.image_id', 'left')
+        ;
 
         if ($id) {
             return $builder->where('palmares.id', $id)->first();

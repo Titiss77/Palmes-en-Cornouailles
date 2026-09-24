@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Controllers\Public;
 
@@ -61,28 +63,29 @@ class Contact extends BaseController
                 'rules' => 'required|not_in_list[pas_choisi]',
                 'errors' => [
                     'required' => 'Veuillez indiquer le motif de votre demande.',
-                    'not_in_list' => 'Veuillez sélectionner un destinataire valide dans la liste.'
-                ]
+                    'not_in_list' => 'Veuillez sélectionner un destinataire valide dans la liste.',
+                ],
             ],
             'email' => [
                 'rules' => 'required|valid_email',
                 'errors' => [
                     'required' => "L'adresse email est obligatoire.",
-                    'valid_email' => 'Veuillez saisir une adresse email valide (ex: jean@domaine.com).'
-                ]
+                    'valid_email' => 'Veuillez saisir une adresse email valide (ex: jean@domaine.com).',
+                ],
             ],
             'message' => [
                 'rules' => 'required|min_length[10]',
                 'errors' => [
                     'required' => 'Vous ne pouvez pas envoyer un message vide.',
-                    'min_length' => 'Votre message est trop court (10 caractères minimum).'
-                ]
+                    'min_length' => 'Votre message est trop court (10 caractères minimum).',
+                ],
             ],
         ];
 
         if (!$this->validate($rules)) {
             $erreurs = $this->validator->getErrors();
             $messageErreur = implode('<br>', $erreurs);
+
             return redirect()->back()->withInput()->with('error', $messageErreur);
         }
 
@@ -101,7 +104,7 @@ class Contact extends BaseController
         ];
 
         // 5. Envoi immédiat au club
-        $sujet = 'Nouveau message de contact : ' . $emailUser;
+        $sujet = 'Nouveau message de contact : '.$emailUser;
         $messageHtml = view('emails/receive_contact', $emailData);
 
         if ($this->_sendEmail($destEmail, $sujet, $messageHtml, $emailUser)) {

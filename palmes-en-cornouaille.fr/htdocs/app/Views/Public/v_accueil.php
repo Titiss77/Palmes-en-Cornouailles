@@ -2,14 +2,14 @@
 <?php echo $this->section('contenu'); ?>
 <div class="site-container">
     <section class="hero-banner full-bleed">
-        <img src="<?php echo esc(base_url('uploads/' . $general['image_groupe']), 'attr'); ?>" alt="Photo du club"
+        <img src="<?php echo esc(base_url('uploads/'.$general['image_groupe']), 'attr'); ?>" alt="Photo du club"
             loading="lazy" />
         <div class="hero-overlay">
             <h1 class="hero-title"><?php echo esc($general['nomClub']); ?></h1>
         </div>
     </section>
 
-    <?php if (isset($general['campagne_active']) && $general['campagne_active'] == 1): ?>
+    <?php if (isset($general['campagne_active']) && 1 == $general['campagne_active']) { ?>
     <div class="cta-reinscription">
         <h2><i class="bi bi-megaphone-fill"></i> Campagne d'inscriptions</h2>
         <p class="mb-3">Les dossiers d'inscriptions et les informations tarifaires pour la nouvelle saison sont
@@ -18,7 +18,7 @@
             Accéder au formulaire <i class="bi bi-arrow-right"></i>
         </a>
     </div>
-    <?php endif; ?>
+    <?php } ?>
 
     <div class="main-layout-with-sidebar mt-5">
         <div class="main-content">
@@ -46,7 +46,7 @@
         <div class="grid-responsive">
             <?php foreach ($groupes as $d) { ?>
             <div class="card-item hover-effect" style="background:<?php echo esc($d['codeCouleur'], 'attr'); ?>;">
-                <img src="<?php echo esc(base_url('uploads/' . $d['image']), 'attr'); ?>"
+                <img src="<?php echo esc(base_url('uploads/'.$d['image']), 'attr'); ?>"
                     alt="<?php echo esc($d['nom'], 'attr'); ?>" class="img-card" />
                 <div class="p-3">
                     <h5><?php echo esc($d['nom']); ?></h5>
@@ -69,13 +69,13 @@
                     </h5>
                     <?php
                     $dateRef = $item['date_evenement'] ?? $item['created_at'];
-                    $dateLabel = !empty($item['date_evenement']) ? 'Le' : 'Publié le';
-                    ?>
+                $dateLabel = !empty($item['date_evenement']) ? 'Le' : 'Publié le';
+                ?>
                     <p class="small text-muted mb-2">
                         <i class="bi bi-calendar3"></i> <?php echo $dateLabel; ?>
                         <?php echo date('d/m/Y', strtotime($dateRef)); ?>
                     </p>
-                    <a href="<?php echo base_url('actu/' . esc($item['slug'], 'url')); ?>"
+                    <a href="<?php echo base_url('actu/'.esc($item['slug'], 'url')); ?>"
                         class="text-decoration-none small fw-bold" style="color: var(--secondary);">
                         Plus de détails <i class="bi bi-arrow-right-short"></i>
                     </a>
@@ -91,7 +91,7 @@
             <?php if (!empty($disciplines)) { ?>
             <?php foreach ($disciplines as $d) { ?>
             <div class="card-item hover-effect">
-                <img src="<?php echo esc(base_url('uploads/' . $d['image']), 'attr'); ?>"
+                <img src="<?php echo esc(base_url('uploads/'.$d['image']), 'attr'); ?>"
                     alt="<?php echo esc($d['nom'], 'attr'); ?>" class="img-card" />
                 <div class="p-3">
                     <h5><?php echo esc($d['nom']); ?></h5>
@@ -108,7 +108,7 @@
             <?php if (!empty($coaches)) { ?>
             <?php foreach ($coaches as $c) { ?>
             <div class="coach-item text-center p-3">
-                <img src="<?php echo esc(base_url('uploads/' . $c['photo']), 'attr'); ?>"
+                <img src="<?php echo esc(base_url('uploads/'.$c['photo']), 'attr'); ?>"
                     alt="<?php echo esc($c['nom'], 'attr'); ?>" class="img-circle mb-3" />
                 <h4><?php echo esc($c['nom']); ?></h4>
             </div>
@@ -122,7 +122,7 @@
             <?php if (!empty($coachesForm)) { ?>
             <?php foreach ($coachesForm as $c) { ?>
             <div class="coach-item text-center p-3">
-                <img src="<?php echo esc(base_url('uploads/' . $c['photo']), 'attr'); ?>"
+                <img src="<?php echo esc(base_url('uploads/'.$c['photo']), 'attr'); ?>"
                     alt="<?php echo esc($c['nom'], 'attr'); ?>" class="img-circle mb-3" />
                 <h4><?php echo esc($c['nom']); ?></h4>
             </div>
@@ -136,15 +136,15 @@
             <?php if (!empty($piscines)) { ?>
             <?php foreach ($piscines as $p) { ?>
             <div class="piscine-card card-item h-100 d-flex flex-column">
-                <img src="<?php echo esc(base_url('uploads/' . ($p['photo'] ?? 'piscines/default_piscine.jpg')), 'attr'); ?>"
+                <img src="<?php echo esc(base_url('uploads/'.($p['photo'] ?? 'piscines/default_piscine.jpg')), 'attr'); ?>"
                     alt="<?php echo esc($p['nom'], 'attr'); ?>" class="img-card"
                     style="height: 200px; object-fit: cover;" />
                 <div class="piscine-info p-3 d-flex flex-column flex-grow-1">
                     <h5><?php echo esc($p['nom']); ?></h5>
                     <?php
-                    $adresseEncoded = rawurlencode($p['adresse']);
-                    $lienMaps = "https://www.google.com/maps/search/?api=1&query={$adresseEncoded}";
-                    ?>
+                $adresseEncoded = rawurlencode($p['adresse']);
+                $lienMaps = "https://www.google.com/maps/search/?api=1&query={$adresseEncoded}";
+                ?>
                     <p class="mb-3">
                         <a href="<?php echo $lienMaps; ?>" target="_blank" rel="noopener noreferrer" class="maps-link"
                             title="Ouvrir dans Google Maps">
@@ -169,7 +169,7 @@
         <div class="partenaires-item text-center p-3">
             <div class="contenu">
                 <img class="img-card-2"
-                    src="<?php echo esc(base_url('uploads/' . $partenaire['image_url']), 'attr'); ?>"
+                    src="<?php echo esc(base_url('uploads/'.$partenaire['image_url']), 'attr'); ?>"
                     alt="<?php echo esc($partenaire['description'], 'attr'); ?>">
                 <i class="bi bi-arrow-right fleche"></i>
             </div>

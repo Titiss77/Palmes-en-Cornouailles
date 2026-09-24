@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 $sections = [
     [
         'section' => 'accueil',
@@ -10,7 +12,7 @@ $sections = [
                 'desc' => 'Configuration générale du club',
                 'icon' => 'bi-sliders',
                 'url' => 'admin/general',
-                'btn' => 'Modifier les infos'
+                'btn' => 'Modifier les infos',
             ],
             [
                 'count' => $count['actualites'],
@@ -18,7 +20,7 @@ $sections = [
                 'desc' => 'Articles',
                 'icon' => 'bi-newspaper',
                 'url' => 'admin/actualites',
-                'btn' => 'Gérer les contenus'
+                'btn' => 'Gérer les contenus',
             ],
             [
                 'count' => $count['palmares'],
@@ -26,7 +28,7 @@ $sections = [
                 'desc' => 'Résultats des compétitions',
                 'icon' => 'bi-trophy',
                 'url' => 'admin/palmares',
-                'btn' => 'Gérer les contenus'
+                'btn' => 'Gérer les contenus',
             ],
             [
                 'count' => $count['disciplines'],
@@ -34,7 +36,7 @@ $sections = [
                 'desc' => "Types d'activités & Sports proposés",
                 'icon' => 'bi-geo-alt',
                 'url' => 'admin/disciplines',
-                'btn' => 'Gérer les disciplines'
+                'btn' => 'Gérer les disciplines',
             ],
             [
                 'count' => $count['membres'],
@@ -42,7 +44,7 @@ $sections = [
                 'desc' => 'Bureau, Coachs & Fonctions',
                 'icon' => 'bi-people',
                 'url' => 'admin/membres',
-                'btn' => "Gérer l'équipe"
+                'btn' => "Gérer l'équipe",
             ],
             [
                 'count' => $count['piscines'],
@@ -50,7 +52,7 @@ $sections = [
                 'desc' => "Piscines & Bassins d'entraînement",
                 'icon' => 'bi-geo-alt',
                 'url' => 'admin/piscines',
-                'btn' => 'Gérer les sites'
+                'btn' => 'Gérer les sites',
             ],
             [
                 'count' => $count['partenaires'],
@@ -58,9 +60,9 @@ $sections = [
                 'desc' => 'Organismes & Collaborateurs',
                 'icon' => 'bi-people',
                 'url' => 'admin/partenaires',
-                'btn' => 'Gérer les partenaires'
+                'btn' => 'Gérer les partenaires',
             ],
-        ]
+        ],
     ],
     [
         'section' => 'contact',
@@ -73,7 +75,7 @@ $sections = [
                 'desc' => 'Configuration des tarifs de chaques groupes',
                 'icon' => 'bi-sliders',
                 'url' => 'admin/groupes',
-                'btn' => 'Modifier les infos'
+                'btn' => 'Modifier les infos',
             ],
             [
                 'count' => $count['materiel'],
@@ -81,7 +83,7 @@ $sections = [
                 'desc' => 'Inventaire & Prêts de palmes',
                 'icon' => 'bi-tools',
                 'url' => 'admin/materiel',
-                'btn' => 'Gérer le stock'
+                'btn' => 'Gérer le stock',
             ],
             [
                 'count' => $count['membres'],
@@ -89,8 +91,8 @@ $sections = [
                 'desc' => 'Modifications des membres en général',
                 'icon' => 'bi-people',
                 'url' => 'admin/membres',
-                'btn' => "Gérer l'équipe"
+                'btn' => "Gérer l'équipe",
             ],
-        ]
-    ]
+        ],
+    ],
 ];

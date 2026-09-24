@@ -34,6 +34,7 @@ class General extends BaseAdminController
         }
 
         $data['item'] = $item;
+
         return view('admin/general/index', $data);
     }
 

@@ -68,7 +68,7 @@
                 <div class="form-check form-switch mb-2">
                     <input class="form-check-input" type="checkbox" role="switch" id="campagne_active"
                         name="campagne_active" value="1"
-                        <?php echo (old('campagne_active', $item['campagne_active'] ?? 0) == 1) ? 'checked' : ''; ?>>
+                        <?php echo (1 == old('campagne_active', $item['campagne_active'] ?? 0)) ? 'checked' : ''; ?>>
                     <label class="form-check-label fw-bold" for="campagne_active">Activer la campagne de
                         réinscription</label>
                 </div>

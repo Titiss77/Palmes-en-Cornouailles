@@ -1,39 +1,39 @@
-<?= $this->extend('admin/Layout/l_global') ?>
+<?php echo $this->extend('admin/Layout/l_global'); ?>
 
-<?= $this->section('contenu') ?>
-<?= $this->include('admin/retour') ?>
+<?php echo $this->section('contenu'); ?>
+<?php echo $this->include('admin/retour'); ?>
 
 <div class="site-container">
     <div class="d-flex align-items-center mb-4">
-        <a href="<?= base_url('admin/palmares') ?>" class="text-decoration-none me-3 text-dark">
+        <a href="<?php echo base_url('admin/palmares'); ?>" class="text-decoration-none me-3 text-dark">
             <i class="bi bi-arrow-left-circle"></i>
         </a>
         <h3 class="title-section mb-0">Ajouter une performance</h3>
     </div>
 
-    <?php if (session()->getFlashdata('errors')): ?>
+    <?php if (session()->getFlashdata('errors')) { ?>
     <div class="alert alert-danger mb-4 p-3">
         <ul class="mb-0 ps-3">
-            <?php foreach (session()->getFlashdata('errors') as $error): ?>
-            <li><?= esc($error) ?></li>
-            <?php endforeach; ?>
+            <?php foreach (session()->getFlashdata('errors') as $error) { ?>
+            <li><?php echo esc($error); ?></li>
+            <?php } ?>
         </ul>
     </div>
-    <?php endif; ?>
+    <?php } ?>
 
     <div class="card-item p-4">
-        <form action="<?= base_url('admin/palmares') ?>" method="post" enctype="multipart/form-data">
-            <?= csrf_field() ?>
+        <form action="<?php echo base_url('admin/palmares'); ?>" method="post" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
 
             <div class="grid-2 gap-4">
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Nom du nageur</label>
-                    <input type="text" name="nom_nageur" class="form-input w-100 p-2" value="<?= old('nom_nageur') ?>">
+                    <input type="text" name="nom_nageur" class="form-input w-100 p-2" value="<?php echo old('nom_nageur'); ?>">
                 </div>
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Prénom du nageur *</label>
                     <input type="text" name="prenom_nageur" class="form-input w-100 p-2"
-                        value="<?= old('prenom_nageur') ?>" required>
+                        value="<?php echo old('prenom_nageur'); ?>" required>
                 </div>
             </div>
 
@@ -41,12 +41,12 @@
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Lieu de la compétition *</label>
                     <input type="text" name="competition" class="form-input w-100 p-2"
-                        placeholder="Ex: Championnats Départementaux" value="<?= old('competition') ?>" required>
+                        placeholder="Ex: Championnats Départementaux" value="<?php echo old('competition'); ?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label class="fw-bold mb-1">Date de la compétition *</label>
                     <input type="date" name="date_epreuve" class="form-input w-100 p-2"
-                        value="<?= old('date_epreuve') ?>" required>
+                        value="<?php echo old('date_epreuve'); ?>" required>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label class="fw-bold mb-1">Course *</label>
-                        <input type="text" name="epreuve" class="form-input w-100 p-2" value="<?= old('epreuve') ?>"
+                        <input type="text" name="epreuve" class="form-input w-100 p-2" value="<?php echo old('epreuve'); ?>"
                             required>
                     </div>
                 </div>
@@ -62,14 +62,14 @@
                     <div class="form-group">
                         <label class="fw-bold mb-1">Classement *</label>
                         <input type="number" name="classement" class="form-input w-100 p-2" placeholder="1, 2, 3..."
-                            value="<?= old('classement') ?>" required>
+                            value="<?php echo old('classement'); ?>" required>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label class="fw-bold mb-1">Temps (Optionnel)</label>
                         <input type="text" name="temps" class="form-input w-100 p-2" placeholder="mm:ss.ms"
-                            value="<?= old('temps') ?>">
+                            value="<?php echo old('temps'); ?>">
                     </div>
                 </div>
             </div>
@@ -87,4 +87,4 @@
         </form>
     </div>
 </div>
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>

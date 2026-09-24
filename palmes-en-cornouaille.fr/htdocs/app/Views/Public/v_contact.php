@@ -38,13 +38,13 @@ $destinataires = [
                     class="btn-home d-inline-flex align-items-center gap-2 text-decoration-none">
                     <i class="bi bi-download"></i> Télécharger le certificat
                 </a>
-                
-                <?php if (isset($general['campagne_active']) && $general['campagne_active'] == 1 && !empty($general['lienFormulaire'])): ?>
+
+                <?php if (isset($general['campagne_active']) && 1 == $general['campagne_active'] && !empty($general['lienFormulaire'])) { ?>
                 <a href="<?php echo esc($general['lienFormulaire']); ?>" target="_blank"
                     class="btn-home d-inline-flex align-items-center gap-2 text-decoration-none mt-2" style="background-color: var(--secondary);">
                     Accéder au formulaire d'inscription
                 </a>
-                <?php endif; ?>
+                <?php } ?>
             </ul>
         </section>
         <section class="card-item">
@@ -76,7 +76,7 @@ $destinataires = [
             <?php foreach ($membres as $m) { ?>
             <div class="trombi-card">
                 <div class="photo-container">
-                    <img src="<?php echo base_url('uploads/' . esc($m['photo'])); ?>"
+                    <img src="<?php echo base_url('uploads/'.esc($m['photo'])); ?>"
                         alt="<?php echo esc($m['nom']); ?>">
                 </div>
                 <div class="info">

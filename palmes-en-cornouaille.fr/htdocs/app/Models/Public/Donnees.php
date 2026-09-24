@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models\Public;
 
@@ -40,7 +42,7 @@ class Donnees extends Model
                 'pourcentH' => 50,
                 'pourcentF' => 50,
                 'campagne_active' => 0,
-                'lienFormulaire' => ''
+                'lienFormulaire' => '',
             ];
         }
 
@@ -161,6 +163,7 @@ class Donnees extends Model
         if (empty($result)) {
             return ['lienDecatPro' => '#'];
         }
+
         return $result;
     }
 
@@ -192,6 +195,7 @@ class Donnees extends Model
                         ->update(['statut' => 'archive'])
                     ;
                 }
+
                 continue;
             }
             $actusFiltres[] = $actu;

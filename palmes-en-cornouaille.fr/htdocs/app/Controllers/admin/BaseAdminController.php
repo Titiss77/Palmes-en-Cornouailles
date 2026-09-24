@@ -67,14 +67,14 @@ class BaseAdminController extends BaseController
                 if (empty($extension)) {
                     $extension = $file->guessExtension();
                 }
-                
+
                 // AJOUT DU TIMESTAMP (time) POUR CASSER LE CACHE ET FORCER UN NOUVEL ID
-                $newName = $this->sanitizeFilename($customName) . '_' . time() . '.' . $extension;
+                $newName = $this->sanitizeFilename($customName).'_'.time().'.'.$extension;
             } else {
                 // Comportement par défaut (nom d'origine + timestamp pour sécuriser aussi)
                 $extension = $file->getExtension() ?: $file->guessExtension();
                 $baseName = pathinfo($file->getName(), PATHINFO_FILENAME);
-                $newName = $this->sanitizeFilename($baseName) . '_' . time() . '.' . $extension;
+                $newName = $this->sanitizeFilename($baseName).'_'.time().'.'.$extension;
             }
             // FIN MODIFICATION --------------------------------
 

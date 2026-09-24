@@ -65,7 +65,6 @@ class Dashboard extends BaseAdminController
             'materiel' => $db->table('materiel')->countAll(),
             'disciplines' => $db->table('disciplines')->countAll(),
             'utilisateurs' => $db->table('utilisateurs')->countAll(),
-            
         ];
 
         return view('admin/v_dashboard', $data);

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Controllers\Public;
 
@@ -47,6 +49,7 @@ class Home extends BaseController
             'cssPage' => 'Public/groupes.css',
             'groupes' => $this->groupeModel->getGroupes(),
         ];
+
         return $this->_render('Public/v_groupes', $data);
     }
 
@@ -58,6 +61,7 @@ class Home extends BaseController
             'calendriers' => $this->donneesModel->getCalendriers(),
             'calendrierCompet' => $this->donneesModel->getCalendrier(),
         ];
+
         return $this->_render('Public/v_calendriers', $data);
     }
 
@@ -69,6 +73,7 @@ class Home extends BaseController
             'boutique' => $this->donneesModel->getBoutique(),
             'liensautres' => $this->donneesModel->getLiensAutres(),
         ];
+
         return $this->_render('Public/v_boutique', $data);
     }
 
@@ -79,6 +84,7 @@ class Home extends BaseController
             'titrePage' => 'actu',
             'actualites' => $this->donneesModel->getUneActualites($slug),
         ];
+
         return $this->_render('Public/v_actu', $data);
     }
 
@@ -90,6 +96,7 @@ class Home extends BaseController
             'general' => $this->generalData,
             'president' => $this->donneesModel->getPresident(),
         ];
+
         return $this->_render('Public/v_mentions_legales', $data);
     }
 
@@ -100,6 +107,7 @@ class Home extends BaseController
             'cssPage' => 'Public/legal.css',
             'general' => $this->generalData,
         ];
+
         return $this->_render('Public/v_confidentialite', $data);
     }
 

@@ -1,59 +1,60 @@
-<?= $this->extend('Public/Layout/l_global') ?>
+<?php echo $this->extend('Public/Layout/l_global'); ?>
 
-<?= $this->section('contenu') ?>
+<?php echo $this->section('contenu'); ?>
 
 <div class="site-container">
-    <a href="<?= base_url('/') ?>" class="text-decoration-none me-3 text-dark">
+    <a href="<?php echo base_url('/'); ?>" class="text-decoration-none me-3 text-dark">
         <i class="bi bi-arrow-left-circle"></i>
     </a>
 
     <h3 class="title-section">Derniers podiums & résultats</h3>
 
     <div class="grid-responsive">
-        <?php foreach ($palmares as $p): ?>
+        <?php foreach ($palmares as $p) { ?>
         <div class="card-item hover-effect result-card">
-            <?php if (!empty($p['image_path'])): ?>
-            <img src="<?= esc(base_url('uploads/' . $p['image_path']), 'attr'); ?>"
-                alt="<?= esc($p['competition'], 'attr') ?>" class="img-card"
+            <?php if (!empty($p['image_path'])) { ?>
+            <img src="<?php echo esc(base_url('uploads/'.$p['image_path']), 'attr'); ?>"
+                alt="<?php echo esc($p['competition'], 'attr'); ?>" class="img-card"
                 style="height: 200px; object-fit: cover;" />
-            <?php endif; ?>
+            <?php } ?>
 
             <div class="badge bg-warning text-dark mt-2 p-2 w-100">
                 <?php
-                if ($p['classement'] == 1)
+                if (1 == $p['classement']) {
                     echo '🥇 1ère Place';
-                elseif ($p['classement'] == 2)
+                } elseif (2 == $p['classement']) {
                     echo '🥈 2ème Place';
-                elseif ($p['classement'] == 3)
+                } elseif (3 == $p['classement']) {
                     echo '🥉 3ème Place';
-                else
-                    echo esc($p['classement']) . 'ème Place';
-                ?>
+                } else {
+                    echo esc($p['classement']).'ème Place';
+                }
+            ?>
             </div>
 
             <div class="p-3">
                 <h5 class="text-primary mb-1">
-                    <?= esc($p['prenom_nageur']) ?> <?= esc($p['nom_nageur']) ?>
+                    <?php echo esc($p['prenom_nageur']); ?> <?php echo esc($p['nom_nageur']); ?>
                 </h5>
 
                 <p class="mb-1">
-                    <i class="bi bi-stopwatch"></i> <?= esc($p['epreuve']); ?>
-                    <?php if (!empty($p['temps'])): ?>
-                    - <strong><?= esc($p['temps']); ?></strong>
-                    <?php endif; ?>
+                    <i class="bi bi-stopwatch"></i> <?php echo esc($p['epreuve']); ?>
+                    <?php if (!empty($p['temps'])) { ?>
+                    - <strong><?php echo esc($p['temps']); ?></strong>
+                    <?php } ?>
                 </p>
 
                 <small class="text-muted d-block mt-2 text-end">
-                    Le <?= date('d/m/Y', strtotime($p['date_epreuve'])); ?>
-                    à <?= esc($p['competition']); ?>
+                    Le <?php echo date('d/m/Y', strtotime($p['date_epreuve'])); ?>
+                    à <?php echo esc($p['competition']); ?>
                 </small>
             </div>
         </div>
-        <?php endforeach; ?>
+        <?php } ?>
     </div>
 
 
 
 </div>
 
-<?= $this->endSection() ?>
+<?php echo $this->endSection(); ?>
