@@ -24,18 +24,18 @@ $menuItems = [
     <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?= base_url() ?>">
-    <meta property="og:title" content="Palmes en Cornouaille">
+    <meta property="og:title" content="<?= $titrePage; ?>">
     <meta property="og:description"
-        content="Bienvenue au Palmes en Cornouaille. Nous sommes ravis de vous accueillir sur le site officiel de notre club de natation basé à Quimper.">
-    <meta property="og:image" content="<?= base_url('favicon.png') ?>">
+        content="Bienvenue au <?= $titrePage; ?>. Nous sommes ravis de vous accueillir sur le site officiel de notre club de natation basé à Quimper.">
+    <meta property="og:image" content="<?= base_url('uploads/' . $general['image']); ?>">
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="<?= base_url() ?>">
-    <meta name="twitter:title" content="Palmes en Cornouaille">
+    <meta name="twitter:title" content="<?= $titrePage; ?>">
     <meta name="twitter:description"
-        content="Bienvenue au Palmes en Cornouaille. Nous sommes ravis de vous accueillir sur le site officiel de notre club de natation basé à Quimper.">
-    <meta name="twitter:image" content="<?= base_url('favicon.png') ?>">
+        content="Bienvenue au <?= $titrePage; ?>. Nous sommes ravis de vous accueillir sur le site officiel de notre club de natation basé à Quimper.">
+    <meta name="twitter:image" content="<?= base_url('uploads/' . $general['image']); ?>">
 </head>
 <nav>
     <div class="nav-brand">
