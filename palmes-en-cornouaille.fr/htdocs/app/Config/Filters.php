@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Config;
 
 use App\Filters\AuthFilter;
+use App\Filters\HtmlMinifier;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -38,6 +39,7 @@ class Filters extends BaseFilters
         'pagecache' => PageCache::class,
         'performance' => PerformanceMetrics::class,
         'auth' => AuthFilter::class,
+        'minifier' => HtmlMinifier::class,
     ];
 
     /**
@@ -59,7 +61,7 @@ class Filters extends BaseFilters
             'pagecache',  // Web Page Caching
         ],
         'after' => [
-            'pagecache',   // Web Page Caching
+            //'pagecache',   // Web Page Caching
             'performance', // Performance Metrics
             'toolbar',     // Debug Toolbar
         ],
@@ -78,6 +80,7 @@ class Filters extends BaseFilters
             // 'invalidchars',
         ],
         'after' => [
+            'minifier',
             // 'honeypot',
             // 'secureheaders',
         ],
