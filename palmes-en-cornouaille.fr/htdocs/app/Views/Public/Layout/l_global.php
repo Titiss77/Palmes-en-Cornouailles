@@ -36,6 +36,7 @@ $menuItems = [
     <meta name="twitter:description"
         content="Bienvenue au <?= $titrePage; ?>. Nous sommes ravis de vous accueillir sur le site officiel de notre club de natation basé à Quimper.">
     <meta name="twitter:image" content="<?= base_url('uploads/' . $general['image']); ?>">
+    <meta name="google-site-verification" content="_Pqc_5SFjGzJ_NlCLVTMh730dnVEgzJ9o__o2hl3A3k" />
 </head>
 <nav>
     <div class="nav-brand">
