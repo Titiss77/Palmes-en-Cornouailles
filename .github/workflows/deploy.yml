@@ -34,8 +34,6 @@ env:
     **/writable/cache/**
     **/writable/logs/**
     **/writable/session/**
-    **/public/uploads/**
-    **/uploads/**
 
 jobs:
   web-deploy:
