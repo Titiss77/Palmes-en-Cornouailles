@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/</loc>
+    </url>
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/groupes</loc>
+    </url>
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/palmares</loc>
+    </url>
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/calendriers</loc>
+    </url>
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/boutique</loc>
+    </url>
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/contact</loc>
+    </url>
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/mentions-legales</loc>
+    </url>
+
+    <url>
+        <loc>https://palmes-en-cornouaille.fr/politique-confidentialite</loc>
+    </url>
+
+</urlset>

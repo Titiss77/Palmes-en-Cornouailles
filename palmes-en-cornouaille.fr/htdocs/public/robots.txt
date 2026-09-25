@@ -1,2 +1,4 @@
 User-agent: *
-Disallow: 
+Disallow:
+
+Sitemap: https://palmes-en-cornouaille.fr/sitemap.xml
